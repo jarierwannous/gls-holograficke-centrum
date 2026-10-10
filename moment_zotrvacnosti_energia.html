@@ -137,6 +137,21 @@
   .body-select{width:100%;border:1px solid var(--line);border-radius:11px;padding:9px 10px;background:#fff;color:var(--ink);font-weight:650}
   .body-kind-note{margin-top:8px;padding:9px 10px;border-radius:11px;background:#f8fafc;border:1px solid var(--line);font-size:.8rem;line-height:1.42;color:var(--muted)}
   .advanced-tag{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#f1f5f9;color:#64748b;font-size:.7rem;font-weight:750;vertical-align:middle}
+  .view-toggle{display:flex;gap:3px;padding:3px;border:1px solid var(--line);border-radius:12px;background:#f8fafc}
+  .view-btn{border:0;background:transparent;color:#64748b;border-radius:9px;padding:7px 11px;font-weight:800;cursor:pointer;min-width:46px}
+  .view-btn.active{background:#fff;color:#1746a2;box-shadow:0 1px 5px rgba(15,23,42,.10)}
+  .three-stage{position:absolute;inset:0;z-index:2;background:
+    radial-gradient(circle at 50% 42%,rgba(37,99,235,.08),rgba(37,99,235,0) 48%),
+    linear-gradient(#fbfdff,#f0f5fb)}
+  .three-stage canvas{display:block;width:100%!important;height:100%!important;cursor:grab;touch-action:none}
+  .three-stage canvas:active{cursor:grabbing}
+  .three-status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;text-align:center;color:var(--muted);font-size:.9rem;line-height:1.5;pointer-events:none}
+  .three-hint{position:absolute;right:12px;top:12px;z-index:5;background:rgba(255,255,255,.88);border:1px solid var(--line);backdrop-filter:blur(8px);border-radius:10px;padding:6px 9px;font-size:.72rem;color:var(--muted);pointer-events:none}
+  .stage-tool{position:absolute;z-index:7;right:12px;bottom:12px;border:1px solid #cbd8ea;background:rgba(255,255,255,.94);color:#334155;border-radius:11px;padding:8px 11px;font-weight:750;cursor:pointer;box-shadow:0 3px 12px rgba(15,23,42,.08)}
+  .stage-tool.active{background:#fff4e6;border-color:#e4b36a;color:#8a4307}
+  .stage-tool.secondary{right:auto;left:12px;bottom:auto;top:12px}
+  .mode-note{font-size:.74rem;color:var(--muted);line-height:1.35;margin-top:6px}
+
   @media(max-width:980px){
     .main{grid-template-columns:1fr}
     .derivation{grid-column:1}
@@ -163,6 +178,10 @@
       <p>Od sústavy hmotných bodov k vzťahu <span class="small-formula"><i>E</i><sub>k</sub> = ½<i>Iω</i>²</span></p>
     </div>
     <div class="transport">
+      <div class="view-toggle" role="group" aria-label="Režim zobrazenia">
+        <button class="view-btn active" id="view2DBtn" type="button" aria-pressed="true">2D</button>
+        <button class="view-btn" id="view3DBtn" type="button" aria-pressed="false">3D</button>
+      </div>
       <button class="icon-btn primary" id="playBtn" title="Spustiť / pozastaviť">⏸ Pozastaviť</button>
       <button class="icon-btn" id="resetBtn" title="Vynulovať polohu">↺ Reset polohy</button>
     </div>
@@ -192,6 +211,12 @@
           <g id="axisLayer"></g>
           <g id="ballsLayer"></g>
         </svg>
+        <div id="threeStage" class="three-stage hidden" aria-label="3D animácia momentu zotrvačnosti">
+          <div id="threeStatus" class="three-status">Načítavam 3D zobrazenie…</div>
+          <div class="three-hint">ťahaj = otoč kameru · koliesko/pinch = priblíž</div>
+        </div>
+        <button id="resetCameraBtn" class="stage-tool secondary hidden" type="button">⌂ Pohľad</button>
+        <button id="explodeBtn" class="stage-tool hidden" type="button">↔ Rozložiť teleso</button>
         <div class="center-note" id="stageNote">Spoločná uhlová rýchlosť ω → spoločná obvodová rýchlosť v = rω</div>
       </div>
 
@@ -328,6 +353,8 @@
   const colors = ['#2563eb','#e11d48','#0f766e','#b45309','#7c3aed','#0891b2'];
   const state = {
     scene: 1,
+    view3D: false,
+    exploded3D: false,
     playing: true,
     phase: 0,
     lastTime: performance.now(),
@@ -1117,9 +1144,582 @@
   $('tab2').addEventListener('click',()=>setScene(2));
   $('tab3').addEventListener('click',()=>setScene(3));
 
+  window.MI_APP = {
+    state,
+    updateAll,
+    setScene,
+    fmt,
+    bodyExactInertia,
+    bodyApproxInertia,
+    radiusForBall,
+    trackRadiusMeters,
+    assignment,
+    colors
+  };
+
   updateAll(true);
   requestAnimationFrame(animate);
 })();
 </script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+const app = window.MI_APP;
+const state = app.state;
+
+const view2DBtn = document.getElementById('view2DBtn');
+const view3DBtn = document.getElementById('view3DBtn');
+const sim2D = document.getElementById('sim');
+const threeStage = document.getElementById('threeStage');
+const threeStatus = document.getElementById('threeStatus');
+const explodeBtn = document.getElementById('explodeBtn');
+const resetCameraBtn = document.getElementById('resetCameraBtn');
+
+let THREE, OrbitControls;
+let renderer, scene, camera, controls;
+let contentRoot, rotator, axisRoot;
+let lastSignature = '';
+let ready = false;
+let exploded = false;
+let resizeObserver = null;
+
+const PALETTE = [0x2563eb,0xe11d48,0x0f766e,0xb45309,0x7c3aed,0x0891b2];
+const BLUE = 0x2563eb;
+const BLUE_SOFT = 0x8fb6f2;
+const BLUE_ALT = 0x4f8df7;
+const BLUE_LIGHT = 0xbdd8ff;
+const BROWN = 0xb45309;
+const INK = 0x26364b;
+const TRACK = 0x8da0b9;
+
+function setView(use3D){
+  state.view3D = !!use3D;
+  view2DBtn.classList.toggle('active', !use3D);
+  view3DBtn.classList.toggle('active', use3D);
+  view2DBtn.setAttribute('aria-pressed', String(!use3D));
+  view3DBtn.setAttribute('aria-pressed', String(use3D));
+  sim2D.classList.toggle('hidden', use3D);
+  threeStage.classList.toggle('hidden', !use3D);
+  resetCameraBtn.classList.toggle('hidden', !use3D);
+  explodeBtn.classList.toggle('hidden', !(use3D && state.scene === 3));
+  if(use3D){
+    ensure3D();
+    requestResize();
+  }
+}
+
+view2DBtn.addEventListener('click', () => setView(false));
+view3DBtn.addEventListener('click', () => setView(true));
+
+explodeBtn.addEventListener('click', () => {
+  exploded = !exploded;
+  state.exploded3D = exploded;
+  explodeBtn.classList.toggle('active', exploded);
+  explodeBtn.textContent = exploded ? '↔ Spojiť teleso' : '↔ Rozložiť teleso';
+  lastSignature = '';
+});
+
+resetCameraBtn.addEventListener('click', resetCamera);
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if(state.view3D) resetCamera();
+});
+
+function resetCamera(){
+  if(!camera || !controls) return;
+  camera.position.set(6.2,4.6,7.5);
+  controls.target.set(0,0,0);
+  controls.update();
+}
+
+async function ensure3D(){
+  if(ready || renderer) return;
+  threeStatus.textContent = 'Načítavam 3D knižnicu…';
+  try{
+    THREE = await import('three');
+    ({OrbitControls} = await import('three/addons/controls/OrbitControls.js'));
+    initThree();
+  }catch(err){
+    console.error(err);
+    threeStatus.innerHTML = '3D režim sa nepodarilo načítať. <b>2D aplikácia zostáva plne funkčná.</b><br>3D vyžaduje internetové pripojenie pri prvom načítaní.';
+  }
+}
+
+function initThree(){
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf6f9fd);
+
+  camera = new THREE.PerspectiveCamera(40, 1, 0.05, 100);
+  resetCameraBare();
+
+  renderer = new THREE.WebGLRenderer({antialias:true, alpha:false});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  threeStage.insertBefore(renderer.domElement, threeStatus);
+  threeStatus.classList.add('hidden');
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.07;
+  controls.minDistance = 3.2;
+  controls.maxDistance = 16;
+  controls.maxPolarAngle = Math.PI * 0.93;
+  controls.target.set(0,0,0);
+
+  const hemi = new THREE.HemisphereLight(0xffffff, 0xb8c7d9, 2.2);
+  scene.add(hemi);
+  const key = new THREE.DirectionalLight(0xffffff, 2.8);
+  key.position.set(5,8,5);
+  key.castShadow = true;
+  scene.add(key);
+  const fill = new THREE.DirectionalLight(0xcfe2ff, 1.2);
+  fill.position.set(-5,2,-4);
+  scene.add(fill);
+
+  const floor = new THREE.Mesh(
+    new THREE.CircleGeometry(5.8, 96),
+    new THREE.MeshStandardMaterial({color:0xeaf0f7, roughness:0.95, metalness:0, transparent:true, opacity:0.7})
+  );
+  floor.rotation.x = -Math.PI/2;
+  floor.position.y = -2.75;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  const grid = new THREE.GridHelper(10, 20, 0xc6d2e1, 0xdde5ef);
+  grid.position.y = -2.735;
+  grid.material.transparent = true;
+  grid.material.opacity = .38;
+  scene.add(grid);
+
+  axisRoot = new THREE.Group();
+  scene.add(axisRoot);
+  buildAxis();
+
+  contentRoot = new THREE.Group();
+  scene.add(contentRoot);
+
+  resizeObserver = new ResizeObserver(requestResize);
+  resizeObserver.observe(threeStage);
+
+  ready = true;
+  lastSignature = '';
+  requestResize();
+  renderLoop();
+}
+
+function resetCameraBare(){
+  if(camera) camera.position.set(6.2,4.6,7.5);
+}
+
+function requestResize(){
+  if(!renderer || !camera || threeStage.classList.contains('hidden')) return;
+  const rect = threeStage.getBoundingClientRect();
+  const w = Math.max(320, Math.round(rect.width));
+  const h = Math.max(260, Math.round(rect.height));
+  renderer.setSize(w,h,false);
+  camera.aspect = w/h;
+  camera.updateProjectionMatrix();
+}
+
+function disposeObject(obj){
+  obj.traverse(child => {
+    if(child.geometry) child.geometry.dispose?.();
+    if(child.material){
+      const mats = Array.isArray(child.material) ? child.material : [child.material];
+      mats.forEach(m => {
+        if(m.map) m.map.dispose?.();
+        m.dispose?.();
+      });
+    }
+  });
+}
+
+function clearContent(){
+  if(!contentRoot) return;
+  while(contentRoot.children.length){
+    const child = contentRoot.children.pop();
+    disposeObject(child);
+  }
+  rotator = new THREE.Group();
+  contentRoot.add(rotator);
+}
+
+function buildAxis(){
+  while(axisRoot.children.length){
+    const c = axisRoot.children.pop();
+    disposeObject(c);
+  }
+  const shaft = new THREE.Mesh(
+    new THREE.CylinderGeometry(.035,.035,6.2,16),
+    new THREE.MeshStandardMaterial({color:INK, roughness:.55})
+  );
+  shaft.position.y = 0;
+  axisRoot.add(shaft);
+
+  const cone = new THREE.Mesh(
+    new THREE.ConeGeometry(.12,.34,24),
+    new THREE.MeshStandardMaterial({color:INK, roughness:.45})
+  );
+  cone.position.y = 3.18;
+  axisRoot.add(cone);
+
+  // Kruhová šípka smeru rotácie. Orientujeme ju v rovine XZ tak,
+  // aby zodpovedala kladnej rotácii rotator.rotation.y.
+  const arrowRadius = .58;
+  const arrowArc = Math.PI * 1.55;
+
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(arrowRadius,.022,10,80,arrowArc),
+    new THREE.MeshStandardMaterial({color:BLUE,roughness:.42,metalness:.05})
+  );
+  ring.rotation.x = -Math.PI/2;
+  ring.position.y = 2.55;
+  axisRoot.add(ring);
+
+  // Hrot umiestnime presne na koniec oblúka a natočíme ho do smeru dotyčnice.
+  const u = arrowArc;
+  const arrow = new THREE.Mesh(
+    new THREE.ConeGeometry(.09,.22,20),
+    new THREE.MeshStandardMaterial({color:BLUE,roughness:.4})
+  );
+
+  const endPoint = new THREE.Vector3(
+    arrowRadius * Math.cos(u),
+    2.55,
+    -arrowRadius * Math.sin(u)
+  );
+
+  const tangent = new THREE.Vector3(
+    -Math.sin(u),
+    0,
+    -Math.cos(u)
+  ).normalize();
+
+  arrow.position.copy(endPoint);
+  arrow.quaternion.setFromUnitVectors(
+    new THREE.Vector3(0,1,0),
+    tangent
+  );
+  axisRoot.add(arrow);
+}
+
+function makeTrack(radius, opacity=.55){
+  const mesh = new THREE.Mesh(
+    new THREE.TorusGeometry(radius,.018,8,128),
+    new THREE.MeshStandardMaterial({color:TRACK,roughness:.7,transparent:true,opacity})
+  );
+  mesh.rotation.x = Math.PI/2;
+  return mesh;
+}
+
+function makeSprite(text, color='#334155', scale=.42){
+  const c = document.createElement('canvas');
+  const ctx = c.getContext('2d');
+  const dpr = 2;
+  c.width = 256*dpr; c.height = 80*dpr;
+  ctx.scale(dpr,dpr);
+  ctx.font = '700 32px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const m = ctx.measureText(text);
+  const pad = 14;
+  ctx.fillStyle = 'rgba(255,255,255,.90)';
+  roundRect(ctx, 128-(m.width/2+pad), 40-24, m.width+pad*2, 48, 12);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(100,116,139,.22)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.fillText(text,128,41);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const mat = new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
+  const s = new THREE.Sprite(mat);
+  s.scale.set(scale*2.8,scale*.88,1);
+  return s;
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  if(typeof ctx.roundRect === 'function'){
+    ctx.roundRect(x,y,w,h,r);
+  }else{
+    const rr=Math.min(r,w/2,h/2);
+    ctx.moveTo(x+rr,y);
+    ctx.lineTo(x+w-rr,y);
+    ctx.quadraticCurveTo(x+w,y,x+w,y+rr);
+    ctx.lineTo(x+w,y+h-rr);
+    ctx.quadraticCurveTo(x+w,y+h,x+w-rr,y+h);
+    ctx.lineTo(x+rr,y+h);
+    ctx.quadraticCurveTo(x,y+h,x,y+h-rr);
+    ctx.lineTo(x,y+rr);
+    ctx.quadraticCurveTo(x,y,x+rr,y);
+    ctx.closePath();
+  }
+}
+
+function makeBall(i, radius, theta){
+  const mass = state.masses[i];
+  const size = .13 + Math.sqrt(mass)*.07;
+  const g = new THREE.Group();
+  g.position.set(radius*Math.cos(theta),0,radius*Math.sin(theta));
+
+  const ball = new THREE.Mesh(
+    new THREE.SphereGeometry(size,32,20),
+    new THREE.MeshStandardMaterial({color:PALETTE[i%PALETTE.length],roughness:.32,metalness:.05})
+  );
+  ball.castShadow = true;
+  ball.receiveShadow = true;
+  g.add(ball);
+
+  const lab = makeSprite(`m${i+1}`,'#334155',.34);
+  lab.position.set(0,size+.20,0);
+  g.add(lab);
+  return g;
+}
+
+function signature(){
+  const base = [
+    state.scene,state.ballCount,state.commonRadius,state.trackCount,
+    state.bodyType,state.bodyRadius,state.bodyLength,state.sliceCount,
+    exploded
+  ];
+  for(let i=0;i<state.ballCount;i++){
+    base.push(state.masses[i], state.trackAssignments[i]);
+  }
+  return base.join('|');
+}
+
+function rebuildIfNeeded(){
+  const sig = signature();
+  if(sig===lastSignature) return;
+  lastSignature=sig;
+  clearContent();
+
+  explodeBtn.classList.toggle('hidden', !(state.view3D && state.scene===3));
+  if(state.scene===1) buildSceneOne();
+  else if(state.scene===2) buildSceneTwo();
+  else buildBodyScene();
+}
+
+function buildSceneOne(){
+  contentRoot.add(makeTrack(state.commonRadius,.72));
+  for(let i=0;i<state.ballCount;i++){
+    const theta=i*(Math.PI*2/state.ballCount);
+    rotator.add(makeBall(i,state.commonRadius,theta));
+  }
+  addRadiusGuide(state.commonRadius,'r');
+}
+
+function buildSceneTwo(){
+  for(let j=0;j<state.trackCount;j++){
+    contentRoot.add(makeTrack(app.trackRadiusMeters(j), .38+.12*j));
+  }
+  for(let i=0;i<state.ballCount;i++){
+    const theta=i*(Math.PI*2/state.ballCount);
+    rotator.add(makeBall(i,app.radiusForBall(i),theta));
+  }
+}
+
+function addRadiusGuide(r,label){
+  const pts = [new THREE.Vector3(0,.02,0),new THREE.Vector3(r,.02,0)];
+  const geom = new THREE.BufferGeometry().setFromPoints(pts);
+  const line = new THREE.Line(geom,new THREE.LineBasicMaterial({color:0xaab8c9,transparent:true,opacity:.75}));
+  contentRoot.add(line);
+  const spr=makeSprite(label,'#64748b',.25);
+  spr.position.set(r*.52,.12,0);
+  contentRoot.add(spr);
+}
+
+function bodyMaterial(color=BLUE,opacity=.62){
+  return new THREE.MeshPhysicalMaterial({
+    color, roughness:.30, metalness:.02, transparent:opacity<1, opacity,
+    side:THREE.DoubleSide, clearcoat:.18, depthWrite:opacity>.35
+  });
+}
+
+function segmentStyle(j, focus=false){
+  if(focus){
+    return {color:BROWN, opacity:0.94, emissive:0x5e2605, emissiveIntensity:0.18};
+  }
+  return j % 2 === 0
+    ? {color:BLUE, opacity:0.78, emissive:0x0e2b67, emissiveIntensity:0.06}
+    : {color:BLUE_LIGHT, opacity:0.58, emissive:0x2d5f9f, emissiveIntensity:0.035};
+}
+
+function buildBodyScene(){
+  if(state.bodyType==='rod') buildRod();
+  else if(state.bodyType==='shell') buildShell();
+  else if(state.bodyType==='sphere') buildSphere();
+  else buildDisk();
+}
+
+function focusIndex(){
+  return Math.max(1,Math.min(state.sliceCount-2,Math.floor(state.sliceCount*.63)));
+}
+
+function buildDisk(){
+  const R=state.bodyRadius, N=state.sliceCount, f=focusIndex(), dr=R/N;
+
+  const base = new THREE.Mesh(
+    new THREE.CylinderGeometry(R,R,.14,96),
+    bodyMaterial(BLUE_SOFT, exploded?.10:.17)
+  );
+  base.castShadow=true;
+  base.receiveShadow=true;
+  rotator.add(base);
+
+  for(let j=0;j<N;j++){
+    const r1=j*dr, r2=(j+1)*dr;
+    const gap=Math.min(0.022, dr*0.11);
+    const inner=Math.max(.001, r1 + gap*0.45);
+    const outer=Math.max(inner + .004, r2 - gap*0.45);
+    const geom=new THREE.RingGeometry(inner, outer, 96, 1);
+    const style=segmentStyle(j, j===f);
+    const mat=bodyMaterial(style.color, j===f ? style.opacity : (exploded ? Math.min(.86, style.opacity+.06) : style.opacity));
+    mat.emissive = new THREE.Color(style.emissive);
+    mat.emissiveIntensity = style.emissiveIntensity;
+    const ring=new THREE.Mesh(geom,mat);
+    ring.rotation.x=-Math.PI/2;
+    ring.position.y = exploded ? (j-(N-1)/2)*Math.min(.075,1.5/N) : .095 + (j%2===0 ? .004 : -.004);
+    ring.castShadow=false;
+    rotator.add(ring);
+    if(j===f){
+      const lab=makeSprite('Δm → dm','#8a4307',.38);
+      lab.position.set((r1+r2)/2+.35,ring.position.y+.18,0);
+      rotator.add(lab);
+    }
+  }
+}
+
+function buildRod(){
+  const L=state.bodyLength,N=state.sliceCount,f=focusIndex(),dx=L/N;
+  const scale=exploded?1.13:1;
+  for(let j=0;j<N;j++){
+    const x=-L/2+(j+.5)*dx;
+    const style=segmentStyle(j, j===f);
+    const mat=bodyMaterial(style.color, j===f ? style.opacity : .82);
+    mat.emissive = new THREE.Color(style.emissive);
+    mat.emissiveIntensity = style.emissiveIntensity;
+    const seg=new THREE.Mesh(
+      new THREE.BoxGeometry(dx*.84,.20,.26),
+      mat
+    );
+    seg.position.x=x*scale;
+    seg.castShadow=true; seg.receiveShadow=true;
+    rotator.add(seg);
+    if(j===f){
+      const lab=makeSprite('Δm → dm','#8a4307',.38);
+      lab.position.set(seg.position.x,.36,0);
+      rotator.add(lab);
+    }
+  }
+}
+
+function buildShell(){
+  const R=state.bodyRadius,N=state.sliceCount,f=focusIndex();
+  for(let j=0;j<N;j++){
+    const t1=j*Math.PI/N;
+    const t2=(j+1)*Math.PI/N;
+    const gap=Math.min(0.03, Math.PI/N*0.11);
+    const phiLength=Math.max(0.003, (t2-t1)-gap);
+    const geom=new THREE.SphereGeometry(R,64,8,0,Math.PI*2,t1+gap/2,phiLength);
+    const style=segmentStyle(j, j===f);
+    const opacity = j===f ? 0.90 : (exploded ? 0.74 : (j%2===0 ? 0.64 : 0.42));
+    const mat=bodyMaterial(style.color, opacity);
+    mat.emissive = new THREE.Color(style.emissive);
+    mat.emissiveIntensity = j===f ? 0.16 : 0.05;
+    const band=new THREE.Mesh(geom,mat);
+    band.scale.setScalar(j%2===0 ? 1.0 : 0.996);
+    if(exploded){
+      const tm=(t1+t2)/2;
+      band.position.y=(Math.cos(tm))*0.70;
+    }
+    rotator.add(band);
+    if(j===f){
+      const tm=(t1+t2)/2;
+      const rp=R*Math.sin(tm);
+      const y=R*Math.cos(tm)+(exploded?Math.cos(tm)*.70:0);
+      const lab=makeSprite('pás dm','#8a4307',.36);
+      lab.position.set(rp+.38,y+.10,0);
+      rotator.add(lab);
+    }
+  }
+  addSphereRotationCue(R);
+}
+
+function buildSphere(){
+  const R=state.bodyRadius,N=state.sliceCount,f=focusIndex(),dr=R/N;
+  const outer=new THREE.Mesh(
+    new THREE.SphereGeometry(R,64,36),
+    bodyMaterial(BLUE_SOFT,.06)
+  );
+  rotator.add(outer);
+
+  const maxDraw = Math.min(N,22);
+  const shellIndices = new Set([f]);
+  for(let q=0;q<maxDraw;q++){
+    shellIndices.add(Math.min(N-1,Math.floor((q+.5)*N/maxDraw)));
+  }
+  const orderedShells=[...shellIndices].sort((a,b)=>a-b);
+  for(const j of orderedShells){
+    const r=(j+.5)*dr;
+    const style=segmentStyle(j, j===f);
+    const opacity = j===f ? 0.56 : (exploded ? (j%2===0 ? 0.26 : 0.17) : (j%2===0 ? 0.18 : 0.10));
+    const mat=bodyMaterial(style.color, opacity);
+    mat.emissive = new THREE.Color(style.emissive);
+    mat.emissiveIntensity = j===f ? 0.14 : 0.035;
+    mat.wireframe = j!==f && !exploded;
+    mat.depthWrite=false;
+    const shell=new THREE.Mesh(new THREE.SphereGeometry(r,48,24), mat);
+    if(exploded){
+      shell.position.y=(j-(N-1)/2)*Math.min(.065,1.35/N);
+    }
+    rotator.add(shell);
+    if(j===f){
+      const lab=makeSprite('sférická vrstva dm','#8a4307',.40);
+      lab.position.set(r+.38,shell.position.y+.18,0);
+      rotator.add(lab);
+    }
+  }
+  addSphereRotationCue(R);
+}
+
+function addSphereRotationCue(R){
+  const meridian=new THREE.Mesh(
+    new THREE.TorusGeometry(R,.018,8,120),
+    new THREE.MeshStandardMaterial({color:INK,roughness:.55,transparent:true,opacity:.72})
+  );
+  meridian.rotation.y=Math.PI/2;
+  rotator.add(meridian);
+
+  const marker=new THREE.Mesh(
+    new THREE.SphereGeometry(.075,20,12),
+    new THREE.MeshStandardMaterial({color:INK,roughness:.35})
+  );
+  marker.position.set(R,0,0);
+  rotator.add(marker);
+}
+
+function renderLoop(){
+  if(!ready) return;
+  requestAnimationFrame(renderLoop);
+  if(!state.view3D) return;
+  rebuildIfNeeded();
+  if(rotator) rotator.rotation.y = state.phase;
+  controls.update();
+  renderer.render(scene,camera);
+}
+
+setView(false);
+</script>
+
 </body>
 </html>
