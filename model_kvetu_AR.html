@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#f7faf5" />
+<title>Stavba kvetu – 3D a AR | diagnostika povrchu</title>
+<style>
+:root{--ink:#1d3932;--muted:#72837a;--forest:#255e4c;--line:#e2ebe3;--paper:#fffdfa;--pale:#f1f7ef;--pink:#d94e87;--shadow:0 10px 35px rgba(27,62,48,.07)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#f6f8f3}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #84bdaa;outline-offset:3px}
+.app{max-width:1700px;margin:0 auto;min-height:100vh;padding:21px 28px 24px;display:flex;flex-direction:column;gap:17px}
+.header{display:flex;justify-content:space-between;align-items:center;gap:20px}.eyebrow{display:flex;align-items:center;gap:9px;color:#548374;font-weight:800;font-size:11px;letter-spacing:.17em;text-transform:uppercase;margin-bottom:5px}.eyebrow:before{content:"";width:8px;height:8px;background:#8fcab0;border-radius:50%}.header h1{margin:0;font-size:clamp(25px,3vw,37px);letter-spacing:-.055em;line-height:1.17;font-weight:800}.header p{margin:7px 0 0;color:#7d8d80;font-size:13px}.brand{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 13px;color:#527465;font-weight:800;font-size:12px;box-shadow:var(--shadow)}.brand svg{width:22px;height:22px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:18px;min-height:610px;flex:1}
+.stage{border:1px solid #dfece3;position:relative;min-height:620px;background:radial-gradient(ellipse 72% 70% at 53% 40%,#fffef8 0,#f4f8ed 58%,#e7f1e9 100%);border-radius:23px;overflow:hidden;box-shadow:var(--shadow);isolation:isolate}
+.stage::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#618e6b09 1px,transparent 1px),linear-gradient(90deg,#618e6b09 1px,transparent 1px);background-size:38px 38px;pointer-events:none}
+.stage::after{content:"";position:absolute;left:50%;bottom:12%;width:45%;height:7%;background:radial-gradient(ellipse,#8d9b8140,transparent 70%);transform:translateX(-50%);filter:blur(11px);pointer-events:none;z-index:-1}
+#flowerCanvas{display:block;width:100%;height:100%;position:absolute;inset:0;touch-action:none;cursor:grab}#flowerCanvas.dragging{cursor:grabbing}
+.stage-top{position:absolute;top:20px;left:20px;right:20px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;pointer-events:none}.pill{pointer-events:auto;border:1px solid #dceade;background:#ffffffd9;backdrop-filter:blur(8px);border-radius:13px;padding:10px 13px;box-shadow:0 5px 22px #2d66420a;font-size:12px;color:#557e6a;font-weight:750;display:flex;align-items:center;gap:9px}.pulse{height:8px;width:8px;background:#70b795;box-shadow:0 0 0 4px #a9d9bd65;border-radius:50%}.icon-btn{border:1px solid #dce9df;background:#fff;display:inline-flex;align-items:center;justify-content:center;min-height:36px;min-width:36px;border-radius:11px;color:#436a58;transition:.2s}.icon-btn:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 5px 12px #1a493219}.icon-btn svg{width:17px;height:17px}
+.stage-bottom{position:absolute;bottom:18px;left:18px;right:18px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;pointer-events:none}.stage-bottom>*{pointer-events:auto}.hint{font-size:11px;color:#6e897c;background:#ffffffc2;border:1px solid #e2eee5;border-radius:12px;padding:10px 13px;backdrop-filter:blur(6px)}.hint strong{color:#456e5b}.controls{display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid #dce9df;border-radius:11px;background:#fffdfc;color:#49695b;min-height:38px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;font-weight:730;font-size:12px;transition:.16s}.btn.active{background:#2a684e;color:#fff;border-color:#2a684e}.btn svg{width:15px;height:15px}.btn.small{font-size:11px;padding:0 11px;min-height:33px}
+.sidebar{border:1px solid #e5ebe3;background:#fffcf9;border-radius:23px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:620px}.tabs{padding:15px 15px 0;display:grid;grid-template-columns:1fr 1fr;gap:7px}.tab{border:none;background:#f0f3ed;color:#829086;font-size:12px;font-weight:800;padding:12px;border-radius:11px}.tab.active{color:#fff;background:#275e4c;box-shadow:0 4px 14px #2e73532a}.sideview{padding:21px 19px 18px;flex:1;min-height:0;display:flex;flex-direction:column}.sideview[hidden]{display:none}.sectionlabel{font-size:10px;letter-spacing:.15em;color:#95a299;text-transform:uppercase;font-weight:850}.sideview h2{font-size:21px;letter-spacing:-.045em;margin:6px 0 6px;line-height:1.2}.sideview p.lead{color:#7d8a81;line-height:1.5;margin:0 0 16px;font-size:12px}
+.parts{display:flex;flex-direction:column;gap:5px;overflow-y:auto;max-height:350px;padding-right:3px}.part{border:1px solid transparent;border-radius:12px;display:grid;grid-template-columns:28px 1fr 21px;align-items:center;gap:8px;padding:9px 10px;background:transparent;color:#456053;text-align:left;width:100%;min-height:44px}.part:hover{background:#f5f6ef}.part.active{background:#eaf4e9;border-color:#d1e5d5}.part.hiddenpart{opacity:.49}.part-text{min-width:0}.part-text strong{display:block;font-size:12px;font-weight:800}.part-text small{display:block;font-size:10px;color:#8b978b;margin-top:1px}.dot{width:23px;height:23px;border-radius:7px;display:grid;place-items:center;box-shadow:inset 0 -2px 0 #00000010}.dot:after{content:"";background:#ffffffdd;border-radius:50%;width:8px;height:8px}.visibility{border:0;background:none;padding:4px;color:#7a9884;cursor:pointer;display:flex;align-items:center}.visibility svg{width:17px;height:17px}.part.hiddenpart .visibility{color:#b8bfb7}
+.info{margin-top:14px;padding:16px;border-radius:15px;background:#f3f6ed;border:1px solid #e4ebdf}.info-title{display:flex;align-items:center;justify-content:space-between;gap:6px}.info-title h3{margin:0;font-size:16px;letter-spacing:-.025em}.info-category{font-size:9px;font-weight:800;letter-spacing:.07em;color:#709484;background:#e5eee5;border-radius:8px;padding:5px 7px;white-space:nowrap}.info p{font-size:12px;line-height:1.6;color:#687b6d;margin:8px 0}.fact{padding-top:10px;margin-top:10px;border-top:1px dashed #d1dfd0;font-size:11px;line-height:1.5;color:#4e765d}.fact strong{color:#285d43}.side-foot{margin-top:auto;padding-top:15px}.rowlabel{display:flex;justify-content:space-between;color:#486c5a;font-size:11px;font-weight:800;margin-bottom:7px}.range{width:100%;accent-color:#367d5e;cursor:pointer}.range-ends{display:flex;justify-content:space-between;color:#9aa99c;font-size:10px}.cut-info{font-size:11px;line-height:1.55;color:#6e8272;margin:9px 0 0;padding-left:2px}
+.quiz-card{background:#edf5eb;border:1px solid #daead7;border-radius:16px;padding:18px;margin-top:9px}.quiz-top{display:flex;justify-content:space-between;color:#6e8b79;font-size:11px;font-weight:850;letter-spacing:.06em}.quiz-question{font-size:22px;line-height:1.32;font-weight:850;letter-spacing:-.035em;margin:19px 0}.quiz-feedback{min-height:45px;color:#65806b;font-size:12px;line-height:1.5}.next{width:100%;border:0;color:#fff;background:#26644d;border-radius:11px;min-height:43px;font-size:12px;font-weight:800}.next:disabled{opacity:.45;cursor:not-allowed}.quiz-note{font-size:12px;line-height:1.7;color:#78877c;margin:17px 3px}.scorebar{height:7px;border-radius:10px;background:#e0e9dd;overflow:hidden;margin:12px 0 0}.scorefill{height:100%;background:#61ad81;width:0%;transition:width .25s}
+.footer{display:flex;justify-content:space-between;align-items:center;gap:16px;color:#829085;font-size:11px;padding:0 3px}.footer strong{color:#527b63}.toast{position:absolute;top:69px;left:50%;transform:translateX(-50%) translateY(-12px);opacity:0;pointer-events:none;border-radius:12px;padding:11px 15px;background:#285b49;color:#fff;font-size:12px;font-weight:750;box-shadow:0 10px 25px #2f554238;transition:.25s;max-width:min(88%,490px);text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:1100px){.app{padding:16px}.workspace{grid-template-columns:minmax(0,1fr) 320px;gap:12px}.stage{min-height:630px}}
+@media(max-width:850px){.workspace{grid-template-columns:1fr}.stage{height:580px;min-height:580px}.sidebar{min-height:unset}.parts{max-height:250px}.footer{flex-wrap:wrap}.brand{display:none}}
+@media(max-width:520px){.app{padding:11px;gap:12px}.header h1{font-size:26px}.header p{font-size:11px}.stage{height:530px;min-height:530px;border-radius:17px}.stage-top{top:10px;left:10px;right:10px}.stage-bottom{left:9px;right:9px;bottom:10px;justify-content:center}.hint{display:none}.btn{min-height:35px;font-size:10px;padding:0 9px}.controls{justify-content:center}.pill{font-size:10px;padding:9px}.sidebar{border-radius:17px}.footer{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+
+
+/* --- AR rozšírenie: bežný 3D režim zostáva nezmenený a funkčný aj offline --- */
+.ar-launch{display:flex;flex-wrap:wrap;gap:9px;margin:0;align-items:center;background:#ecf6ee;border:1px solid #d9e9d9;padding:12px 15px;border-radius:16px}
+.ar-launch .ar-prompt{flex:1;min-width:215px;font-size:12px;line-height:1.5;color:#567465}.ar-launch strong{color:#255a46;font-size:13px}
+.ar-launch .btn-ar{border:0;border-radius:10px;padding:11px 14px;color:white;background:#276951;font-weight:800;font-size:12px;cursor:pointer}.ar-launch .btn-ar.secondary{background:white;color:#245d49;border:1px solid #cfe5d5}
+.ar-launch .ar-hint{font-size:10px;color:#688676}
+#arHost{position:fixed;inset:0;z-index:600;display:none;background:radial-gradient(ellipse at 45% 30%,#fbfcf5,#cee4db)}
+#arHost.active{display:block}#arHost.marker-mode{background:transparent!important}
+body.ar-active.marker-session>video,body.ar-active.marker-session>.arjs-video{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;object-fit:cover!important;z-index:590!important}#arHost a-scene{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
+#arOverlay{position:fixed;inset:0;z-index:850;display:none;pointer-events:none;color:#244435}#arOverlay.active{display:block}#arOverlay>*{pointer-events:auto}
+.ar-topbar{position:absolute;top:max(10px,env(safe-area-inset-top));left:12px;right:12px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.ar-brand{background:#fffffff0;box-shadow:0 8px 26px #0002;padding:11px 13px;border:1px solid #ffffffdd;border-radius:14px;backdrop-filter:blur(12px);line-height:1.4;max-width:75vw}
+.ar-brand strong{display:block;font-size:14px}.ar-brand small{display:block;color:#628271;font-size:11px;margin-top:1px}
+.ar-quit{border:0;border-radius:12px;background:#fff;color:#245442;box-shadow:0 8px 26px #0002;min-height:41px;padding:0 13px;font-weight:850;white-space:nowrap}
+.ar-bottom{position:absolute;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:9px;pointer-events:none!important}
+.ar-bottom>*{pointer-events:auto}
+.ar-message{background:#173e35e9;color:#f3fffa;border-radius:13px;padding:10px 14px;font-size:12px;line-height:1.4;max-width:580px;text-align:center;box-shadow:0 5px 20px #0003}
+.ar-panel.collapsed{display:none}.ar-panel{width:min(100%,570px);max-height:min(63dvh,490px);overflow:auto;border-radius:19px;background:#fffffff4;backdrop-filter:blur(18px);padding:15px;border:1px solid #fff;box-shadow:0 15px 50px #0004}
+.ar-tools{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}.ar-tools button{background:#eff5ef;color:#315f4a;border:1px solid #dbe8de;border-radius:9px;padding:10px 12px;font-size:12px;font-weight:800}.ar-tools button.on{background:#225e49;color:white;border-color:#225e49}
+.ar-line{display:flex;align-items:center;gap:9px;margin:11px 0;font-size:12px;color:#416655;font-weight:750}
+.ar-line label{flex:1;min-width:0}.ar-line input[type=range]{flex:2;min-width:90px;accent-color:#25674b}.ar-line select{flex:2;min-width:80px;padding:7px 8px;border:1px solid #d6e4d9;border-radius:8px;color:#2e5242;background:white}
+.ar-details{border-radius:12px;background:#ecf5ea;padding:11px 13px;font-size:11px;line-height:1.6;color:#557362;min-height:59px}.ar-details b{display:block;color:#245a45;font-size:13px}
+.ar-inline-buttons{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.ar-inline-buttons button,.ar-inline-buttons a{border:1px solid #d2e3d6;border-radius:9px;padding:9px 11px;background:white;color:#2d6650;font-size:12px;font-weight:750;text-decoration:none}
+.ar-error{position:absolute;top:76px;left:50%;transform:translateX(-50%);background:#fff7ec;color:#87522c;padding:12px;border:1px solid #f3d6ac;border-radius:12px;max-width:min(90vw,540px);font-size:12px;line-height:1.5;pointer-events:auto;display:none;box-shadow:0 8px 23px #0003}
+#arHost .a-enter-ar-button{z-index:700!important;bottom:205px!important;right:15px!important}
+body.ar-active{overflow:hidden}body.ar-active .app{visibility:hidden}
+@media(max-width:580px){.ar-panel{padding:10px 12px;border-radius:14px;max-height:54dvh}.ar-brand{padding:8px 10px}.ar-brand strong{font-size:12px}.ar-message{font-size:11px}.ar-tools button{padding:8px 9px}.ar-line{margin:8px 0}.ar-launch{padding:11px}}
+@media print{body>*:not(#printMarker){display:none!important}#printMarker{display:block!important}.print-page{display:flex!important;align-items:center;flex-direction:column;padding:12mm;color:#111!important}.print-page img{width:135mm;height:135mm;object-fit:contain;image-rendering:pixelated}.print-page h1{font-family:Arial,sans-serif;text-align:center;font-size:22pt;margin:0 0 15mm}.print-page p{font:12pt Arial,sans-serif}}
+#printMarker{display:none}
+
+/* OPRAVA: Kamera AR.js musí byť pod TRANSPARENTNÝM WebGL plátnom,
+   nie za nepriehľadným pozadím. Videoprvok presunieme do #arVideoLayer. */
+#arHost.marker-mode{background:#071c18!important}
+#arHost.marker-mode #arVideoLayer{position:absolute;inset:0;z-index:1;overflow:hidden;background:#071c18;pointer-events:none}
+#arHost.marker-mode #arVideoLayer video,
+#arHost.marker-mode #arVideoLayer #arjs-video{display:block!important;visibility:visible!important;opacity:1!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;z-index:1!important}
+#arHost.marker-mode a-scene{z-index:2!important;background:transparent!important;pointer-events:auto}
+#arHost.marker-mode a-scene .a-canvas{background:transparent!important;pointer-events:auto}
+#arHost.marker-mode a-scene canvas{background:transparent!important}
+#arStartXRTop{display:none;position:absolute;top:calc(env(safe-area-inset-top) + 74px);left:50%;transform:translateX(-50%);width:min(85vw,320px);z-index:900;padding:16px 15px;border-radius:16px;background:#216d51;color:white;border:2px solid #e8fff1;box-shadow:0 9px 24px #0003;font-size:15px;font-weight:850;text-align:center;pointer-events:auto}
+#cameraTester{position:fixed;inset:0;z-index:1200;background:#11251e;display:none;color:white;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:18px}
+#cameraTester.active{display:flex}
+#cameraTester video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#101c18}
+#cameraTestInfo{position:absolute;bottom:80px;left:14px;right:14px;text-align:center;background:#153f36e9;padding:13px;border-radius:14px;line-height:1.55;font-size:14px}
+/* Kontrola ARCore a núdzové umiestnenie bez rozpoznanej roviny. */
+#arTrackingStatus{margin-top:7px;color:#25634f;font-size:11px;font-weight:750}
+#arFallback{display:none;background:#fff1cf;color:#785317;border-color:#e9ce91}
+#arRetrySurface{display:none;background:#e1f4e8;color:#255e46;border-color:#b5d9c2}
+#arAim{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:46px;height:46px;border:2px dashed rgba(255,255,255,.85);border-radius:50%;filter:drop-shadow(0 1px 2px #0007);display:none;pointer-events:none}
+#arAim::after{content:'+';position:absolute;inset:0;text-align:center;line-height:39px;font-size:24px;color:#fff;font-weight:500}
+#arAim.visible{display:block}
+#arPlaceOnSurface{display:none;position:absolute;bottom:calc(115px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:910;border:2px solid white;border-radius:14px;padding:13px 18px;box-shadow:0 8px 22px #0007;background:#147d52;color:#fff;font-size:15px;font-weight:900;white-space:nowrap;pointer-events:auto}
+#arSurfaceDiag{display:none;margin-top:7px;max-width:250px;white-space:normal;overflow-wrap:anywhere;color:#406253;font-size:10px;line-height:1.4}
+body.ar-active:not(.marker-session) #arSurfaceDiag{display:block}
+/* Ovládanie zaostrenia: dostupné iba pre getUserMedia (test + HIRO).
+   AR bez značky používa kameru systému WebXR, nie MediaStreamTrack. */
+#cameraFocusControls{position:absolute;bottom:150px;left:16px;right:16px;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+#cameraFocusControls>*{pointer-events:auto}
+#cameraFocusControls button{padding:11px 17px;background:#fff;color:#235943;border:none;border-radius:11px;font-weight:850;box-shadow:0 5px 18px #0005}
+#cameraFocusStatus{font-size:12px;line-height:1.35;background:#103b32dd;color:#fff;padding:9px 12px;border-radius:10px;text-align:center;max-width:95%}
+#arFocusNow{display:none}
+#arFocusStatus{display:block;font-size:10px;font-weight:600;line-height:1.4;margin-top:5px;color:#496d59}
+#focusTapRing{display:none;position:fixed;width:58px;height:58px;z-index:760;pointer-events:none;transform:translate(-50%,-50%);border:2px solid #eaffb2;border-radius:50%;box-shadow:0 0 0 3px #0c3d3180;animation:focusPulse .65s ease-out}
+@keyframes focusPulse{from{scale:1.24;opacity:1}to{scale:.80;opacity:0}}
+#cameraTestVideo{cursor:crosshair}
+#cameraTestClose{position:absolute;top:calc(env(safe-area-inset-top) + 18px);right:14px;border:0;border-radius:12px;background:white;color:#234b3b;padding:12px 17px;font-weight:850;font-size:14px}
+
+
+</style>
+</head>
+<body>
+<div class="app">
+ <header class="header"><div><div class="eyebrow">Biológia · interaktívny model</div><h1>Stavba kvetu <span style="font-weight:500;color:#91ae97">/ 3D</span></h1><p>Preskúmaj vonkajšie aj vnútorné časti kvetu a zisti, na čo slúžia.</p></div>
+ <div class="brand"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 16C7 7 16 2 16 2s9 5 0 14ZM16 16C25 7 30 16 30 16s-5 9-14 0ZM16 16C25 25 16 30 16 30s-9-5 0-14ZM16 16C7 25 2 16 2 16s5-9 14 0Z" fill="#83bfa0"/><circle cx="16" cy="16" r="4" fill="#d9a45f"/></svg> PRÍRODOVEDNÉ LABORATÓRIUM</div></header>
+
+<div class="ar-launch" aria-label="Rozšírená realita">
+  <div class="ar-prompt"><strong>🌸 Pozri si kvet priamo na lavici!</strong><br>Rozšírená realita: dva spôsoby pozorovania toho istého 3D modelu.<div class="ar-hint">3D applet vyššie funguje aj offline. AR vyžaduje HTTPS, kameru a internet na načítanie knižníc.</div></div>
+  <button class="btn-ar" id="modeSurface" type="button">📱 AR bez značky</button>
+  <button class="btn-ar secondary" id="modeMarker" type="button">▣ AR so značkou</button>
+  <button class="btn-ar secondary" id="cameraTestEntry" type="button">📷 Otestovať kameru</button>
+  <button class="btn-ar secondary" id="printEntry" type="button">⎙ Vytlačiť značku</button>
+</div>
+
+ <main class="workspace">
+ <section class="stage" id="stage" aria-label="Interaktívna 3D vizualizácia kvetu">
+ <canvas id="flowerCanvas" aria-label="Otočiteľný trojrozmerný model kvetu. Ťahaním myši otáčate, kolieskom približujete; časti sa dajú vybrať kliknutím."></canvas>
+ <div class="stage-top"><div class="pill"><span class="pulse"></span> 3D model · schematický kvet</div><button class="icon-btn" id="reset" title="Obnoviť pôvodný pohľad" aria-label="Obnoviť pôvodný pohľad"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div>
+ <div class="toast" id="toast" role="status" aria-live="polite"></div>
+ <div class="stage-bottom"><div class="hint"><strong>↔</strong> Ťahaj a otáčaj &nbsp; · &nbsp; <strong>⊕</strong> Približuj &nbsp; · &nbsp; <strong>◎</strong> Klikni na časť</div><div class="controls">
+ <button class="btn active" id="labelsBtn" aria-pressed="true">◇ Názvy</button><button class="btn" id="cutBtn" aria-pressed="false">◐ Rez semenníkom</button><button class="btn" id="rotateBtn" aria-pressed="false">↻ Otáčanie</button><button class="btn" id="pollenBtn">✺ Opelenie</button>
+ </div></div>
+ </section>
+ <aside class="sidebar">
+ <div class="tabs"><button class="tab active" data-tab="study">Preskúmať</button><button class="tab" data-tab="quiz">Kvíz</button></div>
+ <div id="study" class="sideview"><div class="sectionlabel">Anatómia kvetu</div><h2>Časti a ich funkcie</h2><p class="lead">Vyber časť v zozname alebo priamo v 3D modeli. Symbol oka ju skryje alebo zobrazí.</p><div class="parts" id="parts"></div>
+ <div class="info" id="info"><div class="info-title"><h3 id="infoName">Korunné lupienky</h3><span class="info-category" id="infoCategory">OKVETIE</span></div><p id="infoText"></p><div class="fact" id="infoFact"></div></div>
+ <div class="side-foot"><div class="rowlabel"><label for="explode">Rozloženie kvetu</label><span id="explodeValue">0 %</span></div><input class="range" id="explode" type="range" min="0" max="100" step="1" value="0"/><div class="range-ends"><span>Zložený kvet</span><span>Oddelené časti</span></div><p class="cut-info">Model predstavuje <strong>zjednodušený obojpohlavný kvet</strong>, nie konkrétny rastlinný druh. Počet a tvar častí sa u druhov líši.</p></div>
+ </div>
+ <div id="quiz" class="sideview" hidden><div class="sectionlabel">Aktívne učenie</div><h2>Dokážeš ich určiť?</h2><p class="lead">Klikni v 3D modeli na správnu časť. Pomocné názvy sa počas kvízu skryjú.</p><div class="quiz-card"><div class="quiz-top"><span id="qProgress">OTÁZKA 1 / 8</span><span id="qScore">0 BODOV</span></div><div class="scorebar"><div class="scorefill" id="scoreFill"></div></div><div class="quiz-question" id="qQuestion">Nájdi korunný lupienok.</div><div class="quiz-feedback" id="qFeedback">Otáčaj kvet a klikni priamo na hľadanú štruktúru.</div><button class="next" id="nextQuestion" disabled>Ďalšia otázka →</button></div><p class="quiz-note">Tip: Niektoré kvetné obaly sa pri otázke dočasne skryjú, aby bolo možné označiť aj vnútorné časti.</p><div class="side-foot"><button class="btn" id="restartQuiz">↻ Začať kvíz odznova</button></div></div>
+ </aside>
+ </main>
+ <footer class="footer"><span><strong>Tip na hodinu:</strong> Najprv skry korunné lupienky, potom použi rez semenníkom a spusti opelenie.</span><span>3D náhľad offline · režimy AR načítavajú knižnice z internetu</span></footer>
+</div>
+<script>
+'use strict';
+// Self-contained educational software 3D renderer (Canvas 2D), no network or libraries required.
+const TAU=Math.PI*2, PI=Math.PI;
+const $=id=>document.getElementById(id);
+const canvas=$('flowerCanvas'), stage=$('stage'), ctx=canvas.getContext('2d',{alpha:true});
+let W=700,H=650,dpr=1,triangles=[], lastTick=0, toastTimer=0;
+const state={yaw:-.52,pitch:.42,zoom:1.0,selected:null,showLabels:true,cut:false,rotate:false,explode:0,mode:'study',pollenStart:0,pollenActive:false,visibility:{}};
+const PARTS={
+ petal:{name:'Korunné lupienky',short:'Koruna',cat:'OKVETIE',color:'#e97ba5',desc:'Farebné lupienky spolu vytvárajú korunu kvetu. Často lákajú opeľovače farbou, tvarom a niekedy aj vôňou.',fact:'Korunné lupienky nie sú samičím ani samčím pohlavným orgánom.'},
+ sepal:{name:'Kališné lístky',short:'Kalich',cat:'OKVETIE',color:'#6cad76',desc:'Zelené lístky pod korunou tvoria kalich. Najmä v púčiku chránia vyvíjajúce sa vnútorné časti kvetu.',fact:'Kalich a koruna spolu vytvárajú rozlíšené kvetné obaly.'},
+ stamen:{name:'Tyčinky',short:'Tyčinka',cat:'SAMČÍ ORGÁN',color:'#e7a354',desc:'Tyčinka sa skladá z nitky a prašníka. V prašníku sa tvorí peľ. Peľové zrná predstavujú samčie gametofyty, v ktorých vznikajú spermické bunky.',fact:'Peľ nie je to isté ako spermia; je to štruktúra nesúca samčí gametofyt.'},
+ stigma:{name:'Blizna',short:'Blizna',cat:'SAMIČÍ ORGÁN',color:'#c3aa4a',desc:'Blizna je vrchná prijímacia časť piestika. Pri opelení na ňu dopadá peľ; môže byť lepkavá alebo inak prispôsobená jeho zachytávaniu.',fact:'Opelenie je prenos peľu na bliznu, nie samotné oplodnenie.'},
+ style:{name:'Čnelka',short:'Čnelka',cat:'SAMIČÍ ORGÁN',color:'#91bb6a',desc:'Čnelka spája bliznu so semenníkom. Po vyklíčení peľu ňou môže rásť peľová láčka smerom k vajíčku.',fact:'Blizna, čnelka a semenník sú časti piestika.'},
+ ovary:{name:'Semenník',short:'Semenník',cat:'SAMIČÍ ORGÁN',color:'#67a96a',desc:'Spodná časť piestika, v ktorej sa nachádzajú vajíčka. Po oplodnení a ďalšom vývine sa semenník u mnohých rastlín mení na plod.',fact:'Vajíčka sa po oplodnení vyvíjajú na semená. Semenník sa často vyvíja na plod.'},
+ ovule:{name:'Vajíčka',short:'Vajíčko',cat:'VO VNÚTRI SEMENNÍKA',color:'#ead49a',desc:'Vajíčka ležia v semenníku. Obsahujú samičí gametofyt a po oplodnení sa z nich vytvárajú semená.',fact:'Vajíčko a semeno nie sú totožné: semeno vzniká až po oplodnení a vývine.'},
+ receptacle:{name:'Kvetné lôžko',short:'Kvetné lôžko',cat:'PODPORNÁ ČASŤ',color:'#7dba78',desc:'Rozšírená vrcholová časť kvetnej osi. Nesie kvetné obaly, tyčinky a piestik.',fact:'Usporiadanie kvetných orgánov na lôžku je dôležitým znakom rastlín.'},
+ stem:{name:'Kvetná stopka',short:'Stopka',cat:'PODPORNÁ ČASŤ',color:'#478c63',desc:'Spája kvet s rastlinou, mechanicky ho podopiera a umožňuje prúdenie vody a látok k jeho orgánom.',fact:'Nie všetky kvety majú výraznú kvetnú stopku; niektoré sú sediace.'},
+ leaf:{name:'Listy na stonke',short:'List',cat:'KONTEXT MODELU',color:'#63ac74',desc:'Zelené listy sú tu znázornené pre orientáciu v modeli. Nejde o korunné ani kališné lístky; ich hlavnou funkciou je fotosyntéza.',fact:'Listy na stonke nie sú súčasťou vlastného kvetu.'}
+};
+Object.keys(PARTS).forEach(k=>state.visibility[k]=true);
+let meshes=[];
+function V(x,y,z,c){return{x,y,z,c}}
+function mix(a,b,t){return a.map((q,i)=>q*(1-t)+b[i]*t)}
+function addMesh(group,vertices,faces,opt={}){meshes.push({group,vertices,faces,...opt})}
+function sphere(group,cx,cy,cz,rx,ry,rz,col,nlon=16,nlat=10,opt={}){
+ const verts=[],faces=[];
+ for(let iy=0;iy<=nlat;iy++){const phi=PI*iy/nlat;for(let ix=0;ix<=nlon;ix++){const theta=TAU*ix/nlon;const sy=Math.cos(phi),sx=Math.sin(phi)*Math.cos(theta),sz=Math.sin(phi)*Math.sin(theta);const tone=.95+.12*sy;verts.push(V(cx+rx*sx,cy+ry*sy,cz+rz*sz,col.map(v=>v*tone)));}}
+ for(let iy=0;iy<nlat;iy++)for(let ix=0;ix<nlon;ix++){let a=iy*(nlon+1)+ix,b=a+1,c=a+nlon+1,d=c+1;faces.push([a,c,b],[b,c,d]);}
+ addMesh(group,verts,faces,opt);
+}
+function tube(group,points,rad,col,ns=9,opt={}){
+ const verts=[],faces=[];
+ for(let i=0;i<points.length;i++){
+  const p=points[i],prev=points[Math.max(0,i-1)],next=points[Math.min(points.length-1,i+1)];
+  let tx=next[0]-prev[0],ty=next[1]-prev[1],tz=next[2]-prev[2],ln=Math.hypot(tx,ty,tz)||1;tx/=ln;ty/=ln;tz/=ln;
+  let ax=0,ay=0,az=1;if(Math.abs(tz)>.93){ax=1;az=0}
+  let ux=ty*az-tz*ay,uy=tz*ax-tx*az,uz=tx*ay-ty*ax,un=Math.hypot(ux,uy,uz)||1;ux/=un;uy/=un;uz/=un;
+  let vx=ty*uz-tz*uy,vy=tz*ux-tx*uz,vz=tx*uy-ty*ux;
+  for(let j=0;j<=ns;j++){const a=TAU*j/ns,r=typeof rad==='function'?rad(i,points.length):rad;verts.push(V(p[0]+r*(ux*Math.cos(a)+vx*Math.sin(a)),p[1]+r*(uy*Math.cos(a)+vy*Math.sin(a)),p[2]+r*(uz*Math.cos(a)+vz*Math.sin(a)),col));}
+ }
+ for(let i=0;i<points.length-1;i++)for(let j=0;j<ns;j++){const a=i*(ns+1)+j,b=a+1,c=a+ns+1,d=c+1;faces.push([a,c,b],[b,c,d]);}
+ addMesh(group,verts,faces,opt);
+}
+function petal(n){
+ const theta=TAU*n/5 +.12, rx=Math.cos(theta),rz=Math.sin(theta),tx=-rz,tz=rx;const verts=[],faces=[],ns=22,nw=10;
+ for(let i=0;i<=ns;i++){let s=i/ns,baseR=.2+1.79*s+.08*Math.sin(PI*s),baseY=.10+2.10*s-.96*s*s;
+  const halfW=1.00*Math.pow(Math.sin(PI*s),.64)*(.77+.30*s);
+  for(let j=0;j<=nw;j++){let t=2*j/nw-1,w=t*halfW,ruffle=.06*Math.sin(s*5.5*PI+t*PI*.7)*Math.pow(s,2);
+   let r=baseR-.10*(1-t*t)*Math.sin(PI*s),y=baseY+.24*s*t*t-.09*(1-t*t)*Math.sin(PI*s)+ruffle;
+   const f=Math.min(1,s*.92+.11*Math.abs(t));const c=mix([255,205,151],[240,117,161],Math.min(1,f*.85));
+   const cc=mix(c,[204,53,116],Math.pow(Math.abs(t),3)*.22 + Math.max(0,s-.72)*.35);
+   verts.push(V(rx*r+tx*w,y,rz*r+tz*w,cc));
+  }
+ }
+ for(let i=0;i<ns;i++)for(let j=0;j<nw;j++){let a=i*(nw+1)+j,b=a+1,c=a+nw+1,d=c+1;faces.push([a,c,b],[b,c,d]);}
+ addMesh('petal',verts,faces,{instance:n,angle:theta});
+ // delicate, subtle midrib at base
+ const ve=[];for(let i=0;i<=10;i++){let s=.04+i/10*.65;ve.push([rx*(.2+1.79*s-.08*Math.sin(PI*s)),.10+2.10*s-.96*s*s-.08*Math.sin(PI*s)+.012,rz*(.2+1.79*s-.08*Math.sin(PI*s))])}
+ tube('petal',ve,.012,[248,183,158],5,{instance:n,angle:theta});
+}
+function sepal(n){
+ const theta=TAU*(n+.48)/5,rx=Math.cos(theta),rz=Math.sin(theta),tx=-rz,tz=rx,verts=[],faces=[],ns=14,nw=6;
+ for(let i=0;i<=ns;i++){let s=i/ns,half=.35*Math.pow(Math.sin(PI*s),.69),r=.21+1.27*s,y=-.03+.58*s-.17*s*s;
+ for(let j=0;j<=nw;j++){let u=j/nw*2-1;verts.push(V(rx*r+tx*u*half,y-.05*u*u*Math.sin(PI*s),rz*r+tz*u*half,mix([93,159,100],[71,143,92],s)));}}
+ for(let i=0;i<ns;i++)for(let j=0;j<nw;j++){let a=i*(nw+1)+j,b=a+1,c=a+nw+1,d=c+1;faces.push([a,c,b],[b,c,d]);}
+ addMesh('sepal',verts,faces,{instance:n,angle:theta});
+}
+function leaf(side,y){
+ // Two slender elliptical leaves branching from the kvetná stopka.
+ const theta=side===1?-.44:PI-.33,rx=Math.cos(theta),rz=Math.sin(theta),tx=-rz,tz=rx;
+ const verts=[],faces=[],ns=15,nw=6;
+ for(let i=0;i<=ns;i++){const s=i/ns,r=.11+1.21*s,yv=y+.51*s+.13*Math.sin(PI*s),half=.42*Math.pow(Math.sin(PI*s),.85);
+ for(let j=0;j<=nw;j++){let u=j/nw*2-1;verts.push(V(rx*r+tx*u*half,yv-.10*u*u*Math.sin(PI*s),rz*r+tz*u*half,mix([65,136,85],[94,171,105],s)));}}
+ for(let i=0;i<ns;i++)for(let j=0;j<nw;j++){let a=i*(nw+1)+j,b=a+1,c=a+nw+1,d=c+1;faces.push([a,c,b],[b,c,d]);}
+ addMesh('leaf',verts,faces,{instance:side,angle:theta});
+ tube('leaf',[[0,y-.03,0],[rx*.14,y+.05,rz*.14],[rx*.48,y+.21,rz*.48]],.039,[65,128,82],7,{instance:side,angle:theta});
+ const vein=[];for(let i=0;i<=9;i++){let s=i/9,rr=.11+1.21*s;vein.push([rx*rr,y+.51*s+.13*Math.sin(PI*s)+.012,rz*rr])}
+ tube('leaf',vein,.012,[159,196,121],5,{instance:side,angle:theta});
+}
+function ovaryHalf(){
+ // Longitudinally split half of an ovary, opening on plane z=0.
+ const cx=0,cy=.35,rx=.34,ry=.45,rz=.32,verts=[],faces=[],nu=22,nphi=13;
+ for(let iy=0;iy<=nphi;iy++){let phi=PI*iy/nphi;for(let iu=0;iu<=nu;iu++){let a=PI*iu/nu;verts.push(V(cx+rx*Math.sin(phi)*Math.cos(a),cy+ry*Math.cos(phi),-rz*Math.sin(phi)*Math.sin(a),[108,175,109]));}}
+ for(let i=0;i<nphi;i++)for(let j=0;j<nu;j++){let a=i*(nu+1)+j,b=a+1,c=a+nu+1,d=c+1;faces.push([a,b,c],[b,d,c]);}
+ addMesh('ovary',verts,faces,{cutOnly:true});
+ // Cream-colored oval plane represents tissue exposed by a lengthwise cut.
+ const cross=[V(0,cy,.005,[251,235,188])],f=[];const steps=40;
+ for(let i=0;i<=steps;i++){let a=TAU*i/steps;cross.push(V(.325*Math.cos(a),cy+.431*Math.sin(a),.005,[220,192,133]));}
+ for(let i=1;i<=steps;i++)f.push([0,i,i+1]);
+ addMesh('ovary',cross,f,{cutOnly:true});
+ // Two chambers (stylized dividing membrane) and a central placenta.
+ tube('ovary',[[0,.02,.025],[0,.35,.025],[0,.71,.025]],.015,[200,173,116],7,{cutOnly:true});
+ for(let iy=0;iy<4;iy++){const x=(iy%2===0?-.145:.145),y=.19+Math.floor(iy/2)*.27;
+ tube('ovule',[[0,y-.03,.025],[x*.75,y,.06]],.018,[184,166,99],7,{cutOnly:true});
+ sphere('ovule',x,y,.082,.074,.10,.047,[251,231,175],12,8,{cutOnly:true});}
+}
+function generate(){meshes=[];
+ tube('stem',[[0,-2.75,0],[0,-2.32,0],[.025,-1.66,-.02],[.01,-.95,0],[0,-.18,0]],(i,n)=>.090+.015*i/n,[70,135,86],13);
+ leaf(1,-1.65);leaf(-1,-2.22);
+ sphere('receptacle',0,-.075,0,.37,.255,.36,[114,174,105],18,11);
+ for(let i=0;i<5;i++)sepal(i);
+ for(let i=0;i<5;i++)petal(i);
+ // Ovary and inner reproductive anatomy
+ sphere('ovary',0,.37,0,.35,.445,.34,[124,187,112],18,12,{wholeOnly:true});
+ ovaryHalf();
+ for(let i=0;i<5;i++){
+  const a=TAU*(i+.22)/5,rx=Math.cos(a),rz=Math.sin(a);
+  const path=[[rx*.20,.12,rz*.20],[rx*.32,.43,rz*.32],[rx*.42,.82,rz*.42],[rx*.53,1.26,rz*.53],[rx*.51,1.45,rz*.51]];
+  tube('stamen',path,.035,[233,216,148],9,{instance:i,angle:a});
+  // Two pollen-bearing lobes form a legible anther.
+  const x=rx*.51,z=rz*.51,tax=-rz,taz=rx;
+  sphere('stamen',x+tax*.085,1.53,z+taz*.085,.078,.23,.078,[225,150,61],14,9,{instance:i,angle:a});
+  sphere('stamen',x-tax*.085,1.53,z-taz*.085,.078,.23,.078,[237,171,79],14,9,{instance:i,angle:a});
+ }
+ tube('style',[[0,.70,0],[.006,.93,0],[.024,1.27,.013],[.018,1.70,.012]],(i,n)=>.076-.017*i/n,[172,193,94],13);
+ sphere('stigma',.018,1.81,.012,.16,.12,.15,[203,190,93],17,10);
+ for(let i=0;i<3;i++){let a=TAU*i/3;sphere('stigma',.018+.09*Math.cos(a),1.82,.012+.09*Math.sin(a),.088,.08,.081,[221,198,111],12,8)}
+}
+generate();
+const anchors={petal:[1.31,1.04,.55],sepal:[-.91,.28,-.56],stamen:[.46,1.5,.22],stigma:[.02,1.88,.02],style:[.02,1.25,.01],ovary:[0,.37,0],ovule:[.14,.42,.08],receptacle:[.17,-.14,0],stem:[0,-1.75,0],leaf:[.7,-1.4,-.32]};
+const groups=Object.keys(PARTS);
+function offset(m){const f=state.explode*1.16;if(!f)return[0,0,0];let a=m.angle||0,idx=m.instance||0;
+ switch(m.group){case'petal':return[Math.cos(a)*.69*f,.18*f,Math.sin(a)*.69*f];case'sepal':return[Math.cos(a)*.73*f,-.2*f,Math.sin(a)*.73*f];case'stamen':return[Math.cos(a)*.52*f,.13*f,Math.sin(a)*.52*f];case'leaf':return[Math.cos(a)*.18*f,-.33*f,Math.sin(a)*.18*f];case'stem':return[0,-.43*f,0];case'stigma':return[0,.4*f,0];case'style':return[0,.29*f,0];case'ovary':case'ovule':return[0,-.15*f,0];case'receptacle':return[0,-.31*f,0];default:return[0,0,0];}
+}
+function camera(x,y,z){const cy=Math.cos(state.yaw),sy=Math.sin(state.yaw),cp=Math.cos(state.pitch),sp=Math.sin(state.pitch);
+ const xx=x*cy+z*sy,zz=-x*sy+z*cy,yy=y*cp-zz*sp,zz2=y*sp+zz*cp;
+ const base=Math.min(W/5.7,H/5.20)*state.zoom,scale=base*7.5/(7.5-zz2);
+ return{x:W*.50+xx*scale,y:H*.505-(yy+.39)*scale,z:zz2,scale,xx,yy,zz:zz2};
+}
+function resize(){const r=stage.getBoundingClientRect();W=Math.max(300,Math.round(r.width));H=Math.max(320,Math.round(r.height));dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);canvas.style.width=W+'px';canvas.style.height=H+'px';render()}
+function drawBG(){
+ const gx=ctx.createRadialGradient(W*.50,H*.55,8,W*.50,H*.55,Math.min(W,H)*.55);gx.addColorStop(0,'rgba(255,255,250,.42)');gx.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=gx;ctx.fillRect(0,0,W,H);
+ ctx.save();ctx.strokeStyle='rgba(106,158,127,.095)';ctx.lineWidth=1;
+ ctx.beginPath();ctx.ellipse(W*.5,H*.495,Math.min(W*.32,235),Math.min(H*.38,230),0,0,TAU);ctx.stroke();
+ ctx.beginPath();ctx.ellipse(W*.5,H*.495,Math.min(W*.39,292),Math.min(H*.46,289),0,0,TAU);ctx.stroke();ctx.restore();
+}
+let pickTriangles=[];
+function render(){
+ if(!W||!H)return;
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);drawBG();const draw=[];
+ for(const m of meshes){if(!state.visibility[m.group])continue;if(m.wholeOnly&&state.cut||m.cutOnly&&!state.cut)continue;
+  const of=offset(m),vv=m.vertices.map(v=>{const p=camera(v.x+of[0],v.y+of[1],v.z+of[2]);return{...p,c:v.c}});
+  for(const tri of m.faces){const p=vv[tri[0]],q=vv[tri[1]],r=vv[tri[2]];
+   if(!p||!q||!r)continue;
+   const A={x:q.xx-p.xx,y:q.yy-p.yy,z:q.zz-p.zz},B={x:r.xx-p.xx,y:r.yy-p.yy,z:r.zz-p.zz};
+   const nx=A.y*B.z-A.z*B.y,ny=A.z*B.x-A.x*B.z,nz=A.x*B.y-A.y*B.x,nl=Math.hypot(nx,ny,nz)||1;
+   let lighting=.79+Math.max(0,(nx*.42+ny*.6+nz*.66)/nl)*.22;
+   if(state.selected&&state.mode==='study'&&state.selected===m.group)lighting=Math.min(1.28,lighting*1.09);
+   const c=[0,1,2].map(i=>Math.min(255,Math.max(0,Math.round((p.c[i]+q.c[i]+r.c[i])/3*lighting))));
+   const faded=state.selected&&state.mode==='study'&&state.selected!==m.group;
+   const alpha=faded?.31:1;
+   draw.push({p,q,r,depth:(p.z+q.z+r.z)/3,group:m.group,c,alpha});
+  }
+ }
+ draw.sort((a,b)=>a.depth-b.depth);pickTriangles=draw;
+ // A painter's algorithm renders every actual triangle: geometry responds to rotation and zoom in 3D.
+ for(const t of draw){ctx.beginPath();ctx.moveTo(t.p.x,t.p.y);ctx.lineTo(t.q.x,t.q.y);ctx.lineTo(t.r.x,t.r.y);ctx.closePath();ctx.globalAlpha=t.alpha;ctx.fillStyle=`rgb(${t.c.join(',')})`;ctx.fill();ctx.strokeStyle=ctx.fillStyle;ctx.lineWidth=.86;ctx.lineJoin='round';ctx.stroke();}
+ ctx.globalAlpha=1;
+ if(state.pollenActive)renderPollen(performance.now());
+ if(state.showLabels&&state.mode==='study')drawLabels();
+}
+function anchorFor(k){let p=anchors[k];if(!p)return null;
+ const approx={group:k,angle: k==='petal'?TAU*0/5+.12:k==='sepal'?TAU*.48/5: k==='stamen'?TAU*.22/5:0,instance:0};
+ let of=offset(approx);return camera(p[0]+of[0],p[1]+of[1],p[2]+of[2]);
+}
+function drawLabels(){const shown=['petal','sepal','stamen','stigma','style','ovary','stem'];if(state.cut)shown.splice(6,0,'ovule');
+ const labs=[];for(const k of shown){if(!state.visibility[k])continue;if(k==='ovary'&&state.visibility.petal&&state.explode<.43&&!state.cut)continue;const p=anchorFor(k);if(!p)continue;
+ const side=p.x < W*.49?-1:1;labs.push({k,p,side,y:p.y});}
+ for(const side of [-1,1]){
+  let items=labs.filter(a=>a.side===side).sort((a,b)=>a.y-b.y),last=62;
+  for(const l of items){l.labelY=Math.max(last+12,Math.min(H-82,l.y));last=l.labelY+28;}
+  if(items.length&&last>H-56){let shift=last-(H-56);for(const l of items)l.labelY-=shift;}
+ }
+ for(const l of labs){const sz=W<580?10:11,p=l.p,k=l.k,txt=PARTS[k].short,w=ctx.measureText(txt).width+24;
+  ctx.font=`700 ${sz}px system-ui, -apple-system, sans-serif`;
+  const ww=ctx.measureText(txt).width+22;
+  const anchorX=l.side<0?Math.max(14,p.x-35-ww):Math.min(W-ww-14,p.x+35),yy=l.labelY;
+  ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(l.side<0?anchorX+ww:anchorX,yy+9);ctx.strokeStyle='rgba(72,111,88,.45)';ctx.lineWidth=1.1;ctx.stroke();
+  ctx.beginPath();ctx.arc(p.x,p.y,3.1,0,TAU);ctx.fillStyle=PARTS[k].color;ctx.fill();ctx.beginPath();ctx.arc(p.x,p.y,5.7,0,TAU);ctx.strokeStyle='#fffef9';ctx.lineWidth=1.8;ctx.stroke();
+  ctx.fillStyle='rgba(255,255,252,.90)';roundRect(ctx,anchorX,yy-3,ww,24,8);ctx.fill();ctx.strokeStyle='#dae9db';ctx.lineWidth=.85;ctx.stroke();
+  ctx.fillStyle='#426b55';ctx.textBaseline='middle';ctx.fillText(txt,anchorX+11,yy+9);
+ }
+}
+function roundRect(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function bez(a,b,c,d,t){return (1-t)**3*a+3*(1-t)**2*t*b+3*(1-t)*t*t*c+t*t*t*d}
+function renderPollen(now){const t=Math.min(1,(now-state.pollenStart)/3100),a=TAU*.22/5,start=camera(Math.cos(a)*.51,1.68,Math.sin(a)*.51),end=camera(.018,1.82,.012),px=bez(start.x,start.x+48,end.x+70,end.x,t),py=bez(start.y,start.y-64,end.y-75,end.y,t);
+ ctx.save();const halo=ctx.createRadialGradient(px,py,0,px,py,18);halo.addColorStop(0,'rgba(245,171,42,.65)');halo.addColorStop(1,'rgba(245,171,42,0)');ctx.fillStyle=halo;ctx.beginPath();ctx.arc(px,py,18,0,TAU);ctx.fill();ctx.fillStyle='#eab548';ctx.strokeStyle='#fff8c8';ctx.lineWidth=2;ctx.beginPath();ctx.arc(px,py,6.7,0,TAU);ctx.fill();ctx.stroke();ctx.restore();
+ if(t>=1){state.pollenActive=false;showToast('Peľ sa dostal na bliznu: prebehlo opelenie. Oplodnenie je ďalší proces.');}
+}
+function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3600)}
+function partIcon(visible){return visible?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 3 21 21M10.6 5.9A11.2 11.2 0 0 1 12 6c6.5 0 10 6 10 6a19 19 0 0 1-3.1 3.6M6.3 7.5C3.5 9.2 2 12 2 12s3.5 6 10 6a11.5 11.5 0 0 0 4.3-.8"/></svg>'}
+function makeParts(){const root=$('parts');root.innerHTML='';for(const k of groups){const v=PARTS[k],el=document.createElement('div');el.className='part'+(state.selected===k?' active':'')+(!state.visibility[k]?' hiddenpart':'');el.setAttribute('data-group',k);
+ el.innerHTML=`<span class="dot" style="background:${v.color}"></span><span class="part-text"><strong>${v.name}</strong><small>${v.cat.toLowerCase()}</small></span><button class="visibility" aria-label="${state.visibility[k]?'Skryť':'Zobraziť'} ${v.name}" title="${state.visibility[k]?'Skryť':'Zobraziť'}">${partIcon(state.visibility[k])}</button>`;
+ el.addEventListener('click',e=>{if(e.target.closest('.visibility')){state.visibility[k]=!state.visibility[k];if(k==='ovule'&&state.visibility[k]&&!state.cut)state.cut=true;makeParts();setBtns();render();return}selectPart(k)});root.appendChild(el)} }
+function selectPart(k){if(state.mode==='quiz'){answer(k);return}if(k==='ovule'&&!state.cut){state.cut=true;setBtns()}if(!state.visibility[k])state.visibility[k]=true;state.selected=k;makeParts();updateInfo();render()}
+function updateInfo(){const k=state.selected||'petal',p=PARTS[k];$('infoName').textContent=p.name;$('infoCategory').textContent=p.cat;$('infoText').textContent=p.desc;$('infoFact').innerHTML='<strong>Vedeli ste?</strong> '+p.fact}
+function setBtns(){for(const [id,key] of [['labelsBtn','showLabels'],['cutBtn','cut'],['rotateBtn','rotate']]){const b=$(id);b.classList.toggle('active',!!state[key]);b.setAttribute('aria-pressed',String(!!state[key]))} }
+$('labelsBtn').onclick=()=>{state.showLabels=!state.showLabels;setBtns();render()};
+$('cutBtn').onclick=()=>{state.cut=!state.cut;state.selected=null;setBtns();makeParts();updateInfo();render();if(state.cut)showToast('Pozdĺžny rez semenníkom: vidno vajíčka vo vnútri.')};
+$('rotateBtn').onclick=()=>{state.rotate=!state.rotate;setBtns();if(state.rotate)requestAnimationFrame(tick)};
+$('pollenBtn').onclick=()=>{state.pollenActive=true;state.pollenStart=performance.now();requestAnimationFrame(tick);showToast('Opelenie: sleduj prenos peľu z prašníka na bliznu.')};
+$('reset').onclick=()=>{state.yaw=-.52;state.pitch=.42;state.zoom=1;state.selected=null;state.explode=0;state.cut=false;state.rotate=false;state.pollenActive=false;$('explode').value=0;$('explodeValue').textContent='0 %';groups.forEach(k=>state.visibility[k]=true);setBtns();makeParts();updateInfo();render()};
+$('explode').addEventListener('input',e=>{state.explode=Number(e.target.value)/100;$('explodeValue').textContent=e.target.value+' %';render()});
+function tick(now){if(state.rotate){let dt=lastTick?Math.min((now-lastTick)/1000,.06):.016;state.yaw+=dt*.30}lastTick=now;render();if(state.rotate||state.pollenActive)requestAnimationFrame(tick)}
+let down=null;
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);down={x:e.clientX,y:e.clientY,yaw:state.yaw,pitch:state.pitch,moved:false};canvas.classList.add('dragging')});
+canvas.addEventListener('pointermove',e=>{if(!down)return;let dx=e.clientX-down.x,dy=e.clientY-down.y;if(Math.hypot(dx,dy)>4)down.moved=true;state.yaw=down.yaw+dx*.0083;state.pitch=Math.max(-.82,Math.min(1.13,down.pitch+dy*.0069));render()});
+canvas.addEventListener('pointerup',e=>{canvas.classList.remove('dragging');if(down&&!down.moved){const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;pick(x,y)}down=null});
+canvas.addEventListener('pointercancel',()=>{down=null;canvas.classList.remove('dragging')});
+canvas.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(.62,Math.min(2.15,state.zoom*Math.exp(-e.deltaY*.001)));render()},{passive:false});
+// Touch-pinch zoom, including mobile devices.
+let activeTouches=new Map(),pinchBase=null;
+canvas.addEventListener('pointerdown',e=>{activeTouches.set(e.pointerId,{x:e.clientX,y:e.clientY});if(activeTouches.size===2){const p=[...activeTouches.values()];pinchBase={distance:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),zoom:state.zoom};down=null}},true);
+canvas.addEventListener('pointermove',e=>{if(activeTouches.has(e.pointerId))activeTouches.set(e.pointerId,{x:e.clientX,y:e.clientY});if(activeTouches.size===2&&pinchBase){const p=[...activeTouches.values()],dist=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);state.zoom=Math.max(.62,Math.min(2.15,pinchBase.zoom*dist/pinchBase.distance));render()}},true);
+['pointerup','pointercancel'].forEach(n=>canvas.addEventListener(n,e=>{activeTouches.delete(e.pointerId);if(activeTouches.size<2)pinchBase=null},true));
+function inTri(x,y,a,b,c){const den=(b.y-c.y)*(a.x-c.x)+(c.x-b.x)*(a.y-c.y);if(Math.abs(den)<.001)return false;const u=((b.y-c.y)*(x-c.x)+(c.x-b.x)*(y-c.y))/den,v=((c.y-a.y)*(x-c.x)+(a.x-c.x)*(y-c.y))/den;return u>=-.01&&v>=-.01&&u+v<=1.01}
+function pick(x,y){for(let i=pickTriangles.length-1;i>=0;i--){const t=pickTriangles[i];if(inTri(x,y,t.p,t.q,t.r)){selectPart(t.group);return}}if(state.mode==='study'){state.selected=null;makeParts();updateInfo();render()}}
+// Quiz uses the exact same three-dimensional selectable geometry as exploration.
+const quizParts=['petal','sepal','stamen','stigma','style','ovary','stem','receptacle'];let quizOrder=[],qi=0,correct=0,answered=false;
+function resetQuiz(){quizOrder=[...quizParts];for(let i=quizOrder.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[quizOrder[i],quizOrder[j]]=[quizOrder[j],quizOrder[i]]}qi=0;correct=0;answered=false;groups.forEach(k=>state.visibility[k]=true);state.cut=false;state.explode=0;$('explode').value=0;$('explodeValue').textContent='0 %';setBtns();makeParts();updateQuestion();render()}
+function updateQuestion(){const k=quizOrder[qi];groups.forEach(g=>state.visibility[g]=true);if(['sepal','ovary','receptacle'].includes(k))state.visibility.petal=false;if(k==='receptacle'){state.visibility.sepal=false;state.visibility.ovary=false}$('qProgress').textContent=`OTÁZKA ${qi+1} / ${quizOrder.length}`;$('qScore').textContent=correct+' BODOV';$('scoreFill').style.width=(qi/quizOrder.length*100)+'%';$('qQuestion').textContent='Nájdi: '+PARTS[k].name.toLowerCase()+'.';$('qFeedback').textContent='Klikni priamo na správnu časť kvetu.';$('nextQuestion').disabled=true;$('nextQuestion').textContent='Ďalšia otázka →';answered=false}
+function answer(k){if(answered)return;const expected=quizOrder[qi];if(k===expected){answered=true;correct++;$('qScore').textContent=correct+' BODOV';$('qFeedback').textContent='✓ Správne! '+PARTS[k].desc;$('qFeedback').style.color='#26734c';$('nextQuestion').disabled=false;$('scoreFill').style.width=((qi+1)/quizOrder.length*100)+'%';$('nextQuestion').textContent=qi===quizOrder.length-1?'Zobraziť výsledok →':'Ďalšia otázka →'}else{$('qFeedback').textContent='To je '+PARTS[k].name.toLowerCase()+'. Skús označiť inú časť.';$('qFeedback').style.color='#ab7041'}}
+function advanceQuiz(){
+ if(!answered)return;
+ if(answered==='done'){resetQuiz();return}
+ if(qi<quizOrder.length-1){qi++;updateQuestion();render();return}
+ $('qProgress').textContent='KVÍZ DOKONČENÝ';
+ $('qQuestion').textContent=`Výsledok: ${correct} / ${quizOrder.length}`;
+ $('qFeedback').textContent='Výborne! Teraz môžeš precvičovanie spustiť znova alebo preskúmať ďalšie časti kvetu.';
+ $('nextQuestion').textContent='Zopakovať kvíz ↻';$('nextQuestion').disabled=false;answered='done';
+}
+$('nextQuestion').onclick=advanceQuiz;
+$('restartQuiz').onclick=()=>{resetQuiz();$('nextQuestion').onclick=advanceQuiz};
+for(const btn of document.querySelectorAll('.tab'))btn.addEventListener('click',()=>{const target=btn.dataset.tab;state.mode=target;document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===btn));$('study').hidden=target!=='study';$('quiz').hidden=target!=='quiz';state.selected=null;if(target==='quiz'){resetQuiz();$('nextQuestion').onclick=advanceQuiz}else{groups.forEach(g=>state.visibility[g]=true);makeParts();updateInfo()}render()});
+window.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;switch(e.key){case'ArrowLeft':state.yaw-=.16;break;case'ArrowRight':state.yaw+=.16;break;case'ArrowUp':state.pitch=Math.max(-.82,state.pitch-.1);break;case'ArrowDown':state.pitch=Math.min(1.13,state.pitch+.1);break;case'+':state.zoom=Math.min(2.15,state.zoom*1.1);break;case'-':state.zoom=Math.max(.62,state.zoom/1.1);break;default:return}e.preventDefault();render()});
+makeParts();updateInfo();setBtns();resetQuiz();state.mode='study';
+const observer=new ResizeObserver(resize);observer.observe(stage);requestAnimationFrame(resize);
+</script>
+
+<div id="cameraTester" aria-label="Samostatný test kamery">
+ <video id="cameraTestVideo" autoplay muted playsinline></video>
+ <div id="cameraFocusControls">
+  <button id="cameraFocusNow" type="button">◎ Skúsiť zaostriť</button>
+  <div id="cameraFocusStatus" role="status">Ťukni na obraz alebo zvoľ zaostrenie</div>
+ </div>
+ <button id="cameraTestClose" type="button">✕ Zavrieť kameru</button>
+ <div id="cameraTestInfo" role="status">Žiadam o prístup ku kamere…</div>
+</div>
+<div id="arHost" aria-label="Pohľad cez kameru s modelom kvetu"></div>
+<div id="arOverlay" aria-label="Ovládanie rozšírenej reality">
+ <div class="ar-topbar">
+  <div class="ar-brand"><strong id="arModeLabel">🌸 Kvet v rozšírenej realite</strong><small id="arTopHelp">Načítavam AR…</small><div id="arTrackingStatus" role="status">Priestorové sledovanie: čaká</div><div id="arSurfaceDiag" role="status">XR diagnostika: čaká na reláciu.</div><small id="arFocusStatus"></small></div>
+  <button type="button" class="ar-quit" id="arClose">✕ Ukončiť AR</button>
+ </div>
+ <button type="button" id="arStartXRTop">📱 Spustiť kameru a AR na lavici</button><div id="arAim" aria-hidden="true"></div><button type="button" id="arPlaceOnSurface">✓ Položiť kvet na lavicu</button>
+ <div id="arError" class="ar-error" role="alert"></div><div id="focusTapRing" aria-hidden="true"></div>
+ <canvas id="arLabelsCanvas" aria-hidden="true"></canvas>
+ <div class="ar-bottom">
+  <div id="arMessage" class="ar-message" role="status" aria-live="polite">Pripravujem 3D scénu…</div>
+  <button type="button" class="ar-quit" id="arPanelToggle" style="min-height:38px">Skryť ovládanie ▾</button>
+  <div class="ar-panel" id="arPanel">
+   <div class="ar-tools">
+    <button type="button" id="arPetals">Skryť korunu</button>
+    <button type="button" id="arCut">◐ Rez semenníkom</button>
+    <button type="button" id="arLabels">🏷 Názvy: zapnuté</button>
+    <button type="button" id="arReset">↻ Obnoviť</button>
+    <button type="button" id="arQuiz">? Kvíz</button>
+   </div>
+   <div class="ar-line"><label for="arExplode">Rozloženie</label><input id="arExplode" type="range" min="0" max="100" value="0"><span id="arExplodeVal">0 %</span></div>
+   <div class="ar-line"><label for="arScale">Veľkosť kvetu</label><input id="arScale" type="range" min="55" max="170" value="100"><span id="arScaleVal">100 %</span></div>
+   <div class="ar-line"><label for="arBrightness">Jas modelu</label><input id="arBrightness" type="range" min="55" max="115" value="82"><span id="arBrightnessVal">82 %</span></div>
+   <div class="ar-line"><label for="arPart">Preskúmaj časť</label><select id="arPart"><option value="">– vyber orgán –</option></select></div>
+   <div id="arDetails" class="ar-details">Vyber časť kvetu a pozri si jej biologickú funkciu.</div>
+   <div class="ar-inline-buttons">
+     <button type="button" id="arShowAll">Zobraziť všetky orgány</button>
+     <button type="button" id="arSwitch">⇄ Zmeniť AR režim</button>
+     <button type="button" id="arPrint">⎙ Značka HIRO</button>
+     <button type="button" id="arStartXR" style="display:none;background:#246b50;color:white">▶ Spustiť AR na lavici</button>
+     <button type="button" id="arLeaveXR" style="display:none">⤫ Vystúpiť z AR</button>
+     <button type="button" id="arFallback">🌸 Zobraziť kvet predo mnou</button>
+     <button type="button" id="arRetrySurface">◎ Skúsiť rozpoznať lavicu znova</button>
+     <button type="button" id="arFocusNow">◎ Skúsiť zaostriť kameru</button>
+   </div>
+  </div>
+ </div>
+</div>
+<div id="printMarker" aria-hidden="true"><div class="print-page">
+ <h1>AR značka HIRO · Kvet</h1>
+ <img id="hiroPrintImage" src="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" alt="Oficiálna štvorcová značka HIRO pre AR.js">
+ <p>Položte tento list naplocho na lavicu. V aplikácii zvoľte režim „AR so značkou“.</p>
+ <p>Skutočná veľkosť pri tlači: približne 13,5 × 13,5 cm. Nemeňte kontrast a neorezávajte čierny rámik.</p>
+ </div></div>
+
+
+<script>
+// AR DOPLNOK pôvodného appletu. Dáta kvetu (`meshes`, `PARTS`) sa recyklujú
+// z pôvodného Canvas rendereru. AR verzia nevytvára len prekryvný obrázok.
+(function () {
+'use strict';
+const el=id=>document.getElementById(id);
+const S={mode:null,scene:null,anchor:null,group:null,items:[],labelSprites:{},labelAnchors:{},labelLoop:false,cut:false,explode:0,scale:100,brightness:82,showLabels:true,visible:{},selected:'',quiz:false,questionIndex:0,score:0,answered:false,tracked:false,xrActive:false,surfaceFound:false,surfaceTimer:null,manual:false};
+const G=Object.keys(PARTS);
+for(const k of G){S.visible[k]=true;state.visibility[k]=true;}
+// Pri pôvodnej inicializácii kvízu môže byť náhodne skrytá koruna.
+// Pri štarte výučbového režimu zobrazíme celý kvet.
+makeParts();render();
+const quizzes=['petal','sepal','stamen','stigma','style','ovary','ovule','receptacle'];
+let arSceneReady=false,autoCollapsed=false;
+let markerWatch=null, markerVideoFound=false, cameraStream=null, markerLoadTimer=null;
+let focusBusy=false, lastFocusRing=null;
+// Rozhranie MediaStreamTrack umožňuje vyžiadať ostrenie, ale nie je dostupné vo WebXR.
+function videoTrack(video){return video?.srcObject?.getVideoTracks?.()[0]||null;}
+function focusCapabilities(track){try{return track?.getCapabilities?.()||{}}catch{return {}}}
+function focusModes(track){const m=focusCapabilities(track).focusMode;return Array.isArray(m)?m:[]}
+function focusReport(video){
+ const t=videoTrack(video),settings=t?.getSettings?.()||{};
+ const w=video?.videoWidth||settings.width||'?';const h=video?.videoHeight||settings.height||'?';
+ const m=focusModes(t);
+ return {t,m,detail:`Obraz ${w} × ${h}${m.length?' · režimy ostrenia: '+m.join(', '):' · ovládanie ostrenia nehlási prehliadač'}`};
+}
+function focusMessage(text,kind){
+ if(kind==='marker')el('arFocusStatus').textContent=text;
+ else el('cameraFocusStatus').textContent=text;
+}
+function tapRing(x,y){
+ const ring=el('focusTapRing');if(!ring)return;
+ ring.style.left=x+'px';ring.style.top=y+'px';ring.style.display='block';
+ ring.style.animation='none';void ring.offsetWidth;ring.style.animation='focusPulse .65s ease-out';
+ clearTimeout(lastFocusRing);lastFocusRing=setTimeout(()=>{ring.style.display='none'},680);
+}
+// Žiadosť o preostrenie. Chrome v Androide môže sprístupniť continuous/single-shot;
+// skutočný focus bod a vzdialenosť však prehliadače často nepodporujú.
+async function requestCameraFocus(video,kind,point){
+ const {t,m,detail}=focusReport(video);
+ if(!t){focusMessage('Čakám na video zo zadnej kamery…',kind);return;}
+ if(focusBusy)return;
+ focusBusy=true;
+ try{
+  const supported=navigator.mediaDevices?.getSupportedConstraints?.()||{};
+  const attempts=[];
+  const mode=m.includes('single-shot')?'single-shot':m.includes('continuous')?'continuous':null;
+  if(mode){
+   // Skutočný bod záujmu využijeme iba ak ho webový prehliadač deklaruje.
+   if(point&&supported.pointsOfInterest){
+    const vw=video.videoWidth||640,vh=video.videoHeight||480;
+    const ox=Math.round(point.x*vw),oy=Math.round(point.y*vh);
+    attempts.push({advanced:[{focusMode:mode,pointsOfInterest:[{x:ox,y:oy}]}]});
+   }
+   attempts.push({advanced:[{focusMode:mode}]});
+  }
+  let applied=false,usedPoint=false;
+  for(const a of attempts){try{await t.applyConstraints(a);applied=true;usedPoint=!!a.advanced[0].pointsOfInterest;break}catch(e){/* skúšame jednoduchší režim */}}
+  // Ojedinele nie je focusMode v capabilities, ale aplikovanie je možné.
+  if(!applied&&m.length===0&&supported.focusMode){
+   try{await t.applyConstraints({advanced:[{focusMode:'continuous'}]});applied=true}catch(e){}
+  }
+  if(applied)focusMessage(`${usedPoint?'✓ Požiadavka na bodové zaostrenie odoslaná.':'✓ Požiadavka na automatické zaostrovanie odoslaná.'} ${detail}. Výsledok závisí od telefónu.`,kind);
+  else focusMessage(`Priame ovládanie zaostrenia nie je v tomto prehliadači dostupné. ${detail}. Skús väčší odstup a viac svetla.`,kind);
+ }finally{focusBusy=false;}
+}
+async function startContinuousFocus(video,kind){
+ const {t,m,detail}=focusReport(video);
+ if(!t)return;
+ let requested=false;
+ if(m.includes('continuous')){
+  try{await t.applyConstraints({advanced:[{focusMode:'continuous'}]});requested=true}catch(e){}
+ }
+ focusMessage(`${requested?'Automatické zaostrovanie vyžiadané. ':'Automatické zaostrovanie riadi prehliadač. '}${detail}`,kind);
+}
+function focusPointFromEvent(video,event){
+ const r=video.getBoundingClientRect();
+ const x=Math.max(0,Math.min(1,(event.clientX-r.left)/r.width));
+ const y=Math.max(0,Math.min(1,(event.clientY-r.top)/r.height));
+ return {x,y};
+}
+
+function toggleControls(show){el('arPanel').classList.toggle('collapsed',!show);el('arPanelToggle').textContent=show?'Skryť ovládanie ▾':'Zobraziť ovládanie ▴'}
+el('arPanelToggle').onclick=()=>toggleControls(el('arPanel').classList.contains('collapsed')); 
+function notice(t){el('arMessage').textContent=t}
+function tracking(t){el('arTrackingStatus').textContent=t}
+function scanningTimeout(){
+ clearTimeout(S.surfaceTimer);
+ S.surfaceTimer=setTimeout(()=>{
+  if(S.mode==='surface'&&S.xrActive&&!S.surfaceFound&&!S.manual){
+   tracking('AR beží · lavica ešte nerozpoznaná');
+   notice('Skús svetlú, matnú lavicu s knihou alebo obrázkom. Pomaly pohybuj mobilom do strán. Ak sa plocha nenájde, zvoľ zobrazenie bez ukotvenia.');
+   el('arFallback').style.display='inline-block';
+  }
+ },14000);
+}
+function error(t){el('arError').textContent=t;el('arError').style.display='block'}
+function clearError(){el('arError').style.display='none'}
+// Overenie kamery nezávislé od 3D knižníc; slúži na rozlíšenie
+// blokovaného povolenia od problému s vrstvami WebGL.
+function cameraFailure(e){
+ if(e?.message&&/(HTTPS|file:\/\/|zabezpečenú)/i.test(e.message))return e.message;
+ const name=e&&e.name||'';
+ if(!navigator.mediaDevices?.getUserMedia)return 'Prehliadač nepodporuje prístup ku kamere cez túto stránku. Otvor HTTPS adresu v Chrome.';
+ if(name==='NotAllowedError'||name==='PermissionDeniedError'||name==='SecurityError')return 'Prístup ku kamere bol zamietnutý. V Chrome otvor nastavenia tejto stránky → Povolenia → Kamera → Povoliť. Over aj povolenie kamery pre Chrome v Androide.';
+ if(name==='NotFoundError'||name==='DevicesNotFoundError')return 'Prehliadač nenašiel kameru. Skontroluj zariadenie a jeho nastavenia.';
+ if(name==='NotReadableError'||name==='TrackStartError')return 'Kamera je obsadená alebo nedostupná. Zatvor iné aplikácie používajúce kameru a obnov stránku.';
+ return 'Kamera sa nespustila'+(e?.message?': '+e.message:'. Skús Chrome a obnov stránku.');
+}
+function cameraPrerequisite(){
+ if(location.protocol==='file:')throw new Error('Súbor je otvorený lokálne (file://). Pre AR použi HTTPS na GitHub Pages, nie prehliadač súborov.');
+ if(!window.isSecureContext)throw new Error('Kamera vyžaduje zabezpečenú HTTPS stránku (GitHub Pages).');
+ if(!navigator.mediaDevices?.getUserMedia)throw new Error('Táto stránka alebo prehliadač neposkytuje prístup ku kamere.');
+}
+async function previewCamera(){
+ el('cameraTester').classList.add('active');el('cameraTestInfo').textContent='Pripravujem kameru; keď sa zobrazí žiadosť o povolenie, potvrď ju.';
+ try{
+  cameraPrerequisite();
+  const stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}});
+  if(!el('cameraTester').classList.contains('active')){stream.getTracks().forEach(t=>t.stop());return;}
+  cameraStream=stream;
+  const video=el('cameraTestVideo');video.srcObject=stream;video.muted=true;video.playsInline=true;
+  await video.play();el('cameraTestInfo').textContent='✓ Kamera funguje. Pozri, či je tento obraz ostrý, a porovnaj ho s AR. Ťukni na obraz a vyskúšaj ostrenie.';await startContinuousFocus(video,'test');
+ }catch(e){el('cameraTestInfo').textContent=cameraFailure(e);}
+}
+function closePreview(){
+ if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null;}
+ const v=el('cameraTestVideo');v.pause();v.srcObject=null;el('cameraTester').classList.remove('active');
+}
+el('cameraTestEntry').onclick=previewCamera;
+el('cameraFocusNow').onclick=()=>requestCameraFocus(el('cameraTestVideo'),'test');
+el('cameraTestVideo').addEventListener('click',e=>{tapRing(e.clientX,e.clientY);requestCameraFocus(el('cameraTestVideo'),'test',focusPointFromEvent(el('cameraTestVideo'),e))});
+el('arFocusNow').onclick=()=>requestCameraFocus(el('arVideoLayer')?.querySelector('video'),'marker');
+el('arStartXRTop').onclick=()=>el('arStartXR').click();
+el('cameraTestClose').onclick=closePreview;
+function attachMarkerVideo(){
+ // AR.js pridáva video obyčajne do document.body; umiestnime ho do
+ // explicitnej spodnej vrstvy, kde nemôže byť zakryté pozadím a-scene.
+ const v=document.querySelector('#arjs-video')||document.querySelector('video.arjs-video');
+ const layer=el('arVideoLayer');
+ if(!v||!layer)return false;
+ if(v.parentNode!==layer)layer.appendChild(v);
+ v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.muted=true;
+ markerVideoFound=true;
+  if(v.readyState>=2){notice('✓ Kamera je pripravená. Namier ju na celú značku HIRO.');startContinuousFocus(v,'marker');}
+  else v.addEventListener('loadedmetadata',()=>startContinuousFocus(v,'marker'),{once:true});
+ return true;
+}
+function startMarkerWatch(){
+ markerVideoFound=false;
+ // Udalosti sú uvedené v oficiálnom rozhraní AR.js.
+ const onCamOk=()=>{attachMarkerVideo();notice('✓ Kamera povolená. Namier ju na značku HIRO.')};
+ const onVideo=()=>{attachMarkerVideo();};
+ const onCamFail=e=>error(cameraFailure(e?.detail?.error||e?.error||e));
+ document.addEventListener('camera-init',onCamOk);
+ document.addEventListener('arjs-video-loaded',onVideo);
+ window.addEventListener('camera-error',onCamFail);
+ document.addEventListener('camera-error',onCamFail);
+ markerWatch=new MutationObserver(()=>{if(!markerVideoFound)attachMarkerVideo()});
+ markerWatch.observe(document.body,{subtree:true,childList:true});
+ // Ak sa do 12 sekúnd ani neobjaví videoprvok, daj žiakovi jasnú informáciu.
+ clearTimeout(markerLoadTimer);
+ markerLoadTimer=setTimeout(()=>{
+  const v=el('arVideoLayer')?.querySelector('video');
+  if(!v||!v.videoWidth)error('Obraz z kamery sa nespustil. Skús najprv „Otestovať kameru“ na úvodnej obrazovke, povoľ kameru v Chrome a znova otvor AR.');
+ },12000);
+}
+function scripts(src){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.async=false;s.onload=resolve;s.onerror=()=>reject(Error('Nepodarilo sa načítať externú knižnicu '+src));document.head.appendChild(s)})}
+function printHiro(){const img=el('hiroPrintImage'); if(!img.complete||!img.naturalWidth){if(!confirm('Pre načítanie tlačovej značky potrebuješ internet. Ak sa obrázok ešte nenačítal, otvorí sa originálny obrázok. Pokračovať?'))return;window.open(img.src,'_blank','noopener');return;}window.print()}
+function home(){location.href=location.href.split('?')[0].split('#')[0]}
+function changeMode(){const target=S.mode==='marker'?'surface':'marker'; location.href=location.href.split('?')[0]+'?ar='+target}
+el('modeSurface').onclick=()=>start('surface');el('modeMarker').onclick=()=>start('marker');
+el('printEntry').onclick=printHiro;el('arPrint').onclick=printHiro;el('arClose').onclick=()=>{if(S.xrActive&&S.scene?.renderer?.xr?.getSession()){S.scene.renderer.xr.getSession().end().finally(home)}else home()};el('arSwitch').onclick=changeMode;
+function initSelectors(){const select=el('arPart');for(const k of G){const opt=document.createElement('option');opt.value=k;opt.textContent=PARTS[k].name;select.appendChild(opt)} }
+initSelectors();
+// Rovnaké polohy oddeľovania jednotlivých orgánov ako v pôvodnom 3D modeli.
+function separation(m){const f=S.explode/100*1.16;if(!f)return[0,0,0];const a=m.angle||0;
+ switch(m.group){case'petal':return[Math.cos(a)*.69*f,.18*f,Math.sin(a)*.69*f];case'sepal':return[Math.cos(a)*.73*f,-.2*f,Math.sin(a)*.73*f];case'stamen':return[Math.cos(a)*.52*f,.13*f,Math.sin(a)*.52*f];case'leaf':return[Math.cos(a)*.18*f,-.33*f,Math.sin(a)*.18*f];case'stem':return[0,-.43*f,0];case'stigma':return[0,.4*f,0];case'style':return[0,.29*f,0];case'ovary':case'ovule':return[0,-.15*f,0];case'receptacle':return[0,-.31*f,0];default:return[0,0,0]}
+}
+const LABEL_POSITIONS={
+ petal:[1.9,2.75,.15],
+ sepal:[1.7,1.25,.3],
+ stamen:[1.45,2.35,.15],
+ stigma:[.25,3.55,.15],
+ style:[1.15,3.05,.18],
+ ovary:[1.2,1.82,.15],
+ ovule:[1.35,2.0,-.1],
+ receptacle:[1.7,1.42,-.12],
+ stem:[1.35,.2,.12],
+ leaf:[2.05,.82,.25]
+};
+const LABEL_HINTS={
+ petal:[1,0,0], sepal:[1,0,0], stamen:[1,0.3,0], stigma:[0,1,0], style:[1,0,0],
+ ovary:[1,0,0], ovule:[1,0,0], receptacle:[1,0,0], stem:[1,0,0], leaf:[1,0,0]
+};
+function roundRectPath(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+function drawARLabels(){
+ const canvas=el('arLabelsCanvas'); if(!canvas||!S.scene||!S.group)return;
+ const host=el('arHost'); const rect=host.getBoundingClientRect();
+ const dpr=Math.max(1,window.devicePixelRatio||1);
+ const w=Math.max(1,Math.round(rect.width)), h=Math.max(1,Math.round(rect.height));
+ if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';}
+ const c=canvas.getContext('2d'); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,w,h);
+ if(!S.showLabels||S.quiz||!el('arOverlay').classList.contains('active')) return;
+ const cam=(S.scene.renderer?.xr?.isPresenting ? S.scene.renderer.xr.getCamera(S.scene.camera) : S.scene.camera);
+ if(!cam) return;
+ const T=AFRAME.THREE; const keys=['petal','sepal','stamen','stigma','style','ovary','stem']; if(S.cut) keys.splice(6,0,'ovule');
+ const labs=[];
+ for(const k of keys){
+   if(S.visible[k]===false) continue;
+   if(k==='ovary'&&S.visible.petal&&S.explode<43&&!S.cut) continue;
+   const anchor=S.labelAnchors[k]; if(!anchor) continue;
+   const v=new T.Vector3(); anchor.getWorldPosition(v); v.project(cam);
+   if(v.z>1||v.z<-1) continue;
+   const x=(v.x*0.5+0.5)*w, y=(-v.y*0.5+0.5)*h;
+   const side=x < w*0.49 ? -1 : 1; labs.push({k,x,y,side,depth:v.z});
+ }
+ labs.sort((a,b)=>a.depth-b.depth);
+ for(const side of [-1,1]){
+   let items=labs.filter(a=>a.side===side).sort((a,b)=>a.y-b.y), last=62;
+   for(const l of items){ l.labelY=Math.max(last+12, Math.min(h-82,l.y)); last=l.labelY+28; }
+   if(items.length && last>h-56){ const shift=last-(h-56); for(const l of items) l.labelY-=shift; }
+ }
+ c.font=`700 ${w<580?10:11}px system-ui, -apple-system, sans-serif`; c.textBaseline='middle';
+ for(const l of labs){
+   const txt=PARTS[l.k].short; const ww=c.measureText(txt).width+22; const anchorX=l.side<0?Math.max(14,l.x-35-ww):Math.min(w-ww-14,l.x+35), yy=l.labelY;
+   c.beginPath(); c.moveTo(l.x,l.y); c.lineTo(l.side<0?anchorX+ww:anchorX,yy+9); c.strokeStyle='rgba(72,111,88,.52)'; c.lineWidth=1.15; c.stroke();
+   c.beginPath(); c.arc(l.x,l.y,3.1,0,Math.PI*2); c.fillStyle=PARTS[l.k].color; c.fill(); c.beginPath(); c.arc(l.x,l.y,5.7,0,Math.PI*2); c.strokeStyle='#fffef9'; c.lineWidth=1.8; c.stroke();
+   c.fillStyle='rgba(255,255,252,.92)'; roundRectPath(c,anchorX,yy-3,ww,24,8); c.fill(); c.strokeStyle='#dae9db'; c.lineWidth=.85; c.stroke();
+   c.fillStyle='#426b55'; c.fillText(txt,anchorX+11,yy+9);
+ }
+}
+function startARLabelLoop(){ if(S.labelLoop) return; S.labelLoop=true; const step=()=>{ if(!S.labelLoop) return; drawARLabels(); requestAnimationFrame(step);}; requestAnimationFrame(step);}
+function stopARLabelLoop(){ S.labelLoop=false; const canvas=el('arLabelsCanvas'); if(canvas){ const c=canvas.getContext('2d'); c.clearRect(0,0,canvas.width,canvas.height);} }
+function recomputeLabelAnchors(){
+ if(!S.group)return;
+ for(const key of Object.keys(S.labelAnchors)){
+  const anchor=S.labelAnchors[key];
+  if(!anchor) continue;
+  let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity,found=false;
+  for(const o of S.items){
+   if(o.userData.source.group!==key || !o.visible) continue;
+   const g=o.geometry; if(!g.boundingBox) g.computeBoundingBox();
+   const b=g.boundingBox, ox=o.position.x, oy=o.position.y, oz=o.position.z;
+   minX=Math.min(minX,b.min.x+ox); minY=Math.min(minY,b.min.y+oy); minZ=Math.min(minZ,b.min.z+oz);
+   maxX=Math.max(maxX,b.max.x+ox); maxY=Math.max(maxY,b.max.y+oy); maxZ=Math.max(maxZ,b.max.z+oz);
+   found=true;
+  }
+  if(!found){
+   const p=LABEL_POSITIONS[key]||[1.4,1.5,0]; anchor.position.set(p[0],p[1],p[2]); anchor.visible=false; continue;
+  }
+  const cx=(minX+maxX)/2, cy=(minY+maxY)/2, cz=(minZ+maxZ)/2;
+  const hint=LABEL_HINTS[key]||[1,0,0];
+  const px=hint[0]>0.5?maxX:hint[0]<-0.5?minX:cx;
+  const py=hint[1]>0.5?maxY:hint[1]<-0.5?minY:cy;
+  const pz=hint[2]>0.5?maxZ:hint[2]<-0.5?minZ:cz;
+  let ex=0,ey=0,ez=0;
+  if(key==='stigma') ey=0.05; else if(key==='style') ex=0.04;
+  else if(key==='stamen') { ex=0.02; ey=0.02; }
+  else if(key==='ovary') ex=0.03; else if(key==='ovule') ex=0.02;
+  else if(key==='stem') ex=0.03; else if(key==='petal'||key==='sepal'||key==='leaf'||key==='receptacle') ex=0.04;
+  anchor.position.set(px+ex,py+ey,pz+ez); anchor.visible=true;
+ }
+}
+function updateARLabels(){
+ if(!S.group)return;
+ recomputeLabelAnchors();
+ for(const [key,obj] of Object.entries(S.labelAnchors)){
+   if(!obj) continue;
+   const visible=(S.visible[key]!==false) && S.showLabels && !S.quiz && (!(key==='ovule'||key==='ovary') || S.cut || key==='ovary');
+   obj.visible=!!(visible && obj.visible);
+ }
+ const btn=el('arLabels');
+ if(btn){btn.textContent=S.showLabels?'🏷 Názvy: zapnuté':'🏷 Názvy: vypnuté'; btn.classList.toggle('on',S.showLabels);}
+}
+function createFlower(){
+ const T=AFRAME.THREE,root=new T.Group();
+ // Každá trojuholníková plocha dostane pôvodnú farbu vrcholov.
+ // Sú to tie isté vrcholy, polomery, tyčinky, peľnice a vajíčka ako v Canvas verzii.
+ for(const m of meshes){const pos=[],col=[];
+  for(const face of m.faces){for(const index of face){const v=m.vertices[index];pos.push(v.x,v.y,v.z);col.push(Math.min(1,v.c[0]/255),Math.min(1,v.c[1]/255),Math.min(1,v.c[2]/255))}}
+  const geom=new T.BufferGeometry();geom.setAttribute('position',new T.Float32BufferAttribute(pos,3));geom.setAttribute('color',new T.Float32BufferAttribute(col,3));geom.computeVertexNormals();
+  const material=new T.MeshLambertMaterial({vertexColors:true,side:T.DoubleSide,emissive:new T.Color(0x0f1110),emissiveIntensity:.025,transparent:false});
+  const object=new T.Mesh(geom,material);object.userData.part=m.group;object.userData.source=m;object.frustumCulled=false;
+  root.add(object);S.items.push(object);
+ }
+ S.labelAnchors={};
+ for(const key of Object.keys(LABEL_POSITIONS)){
+  const anchor=new T.Object3D(); anchor.userData.part=key; const p=LABEL_POSITIONS[key]; anchor.position.set(p[0],p[1],p[2]); S.labelAnchors[key]=anchor; root.add(anchor);
+ }
+ S.group=root;return root;
+}
+function applyModel(){if(!S.group)return;
+ const unit=(S.mode==='marker'?.20:.084)*(S.scale/100);
+ S.group.scale.setScalar(unit);S.group.position.y=2.75*unit; // spodok stopky presne na lavici / značke
+ for(const o of S.items){const m=o.userData.source,k=m.group;
+  o.visible=S.visible[k]!==false && (!m.cutOnly||S.cut) && (!m.wholeOnly||!S.cut);
+  const d=separation(m);o.position.set(...d);
+  o.material.color.setScalar(S.brightness/100);
+  if(S.selected&&k===S.selected)o.material.emissive.setHex(0x4a2f24);else o.material.emissive.setHex(0x0f1110);
+ }
+ updateARLabels();
+ el('arPetals').textContent=S.visible.petal?'Skryť korunu':'Zobraziť korunu';el('arPetals').classList.toggle('on',!S.visible.petal);
+ el('arCut').classList.toggle('on',S.cut);el('arQuiz').classList.toggle('on',S.quiz);
+ el('arExplodeVal').textContent=S.explode+' %';el('arScaleVal').textContent=S.scale+' %'; el('arBrightnessVal').textContent=S.brightness+' %';
+}
+function updateText(){if(S.quiz){const key=quizzes[S.questionIndex%quizzes.length];el('arDetails').innerHTML='<b>Kvíz: otázka '+(S.questionIndex+1)+' / '+quizzes.length+' · '+S.score+' bodov</b>Ukáž v zozname alebo ťuknutím na model: '+PARTS[key].name+'.';return}
+ if(!S.selected){el('arDetails').textContent='Vyber orgán v zozname alebo ťukni priamo na časť kvetu (mimo režimu snímania povrchu).';return}
+ const part=PARTS[S.selected];el('arDetails').innerHTML='<b>'+part.name+'</b>'+part.desc;
+}
+function choosePart(k){if(S.quiz){quizAnswer(k);return}S.selected=k;if(k==='ovule'){S.cut=true;S.visible.petal=false;}if(k==='ovary')S.visible.ovary=true;
+ el('arPart').value=k;applyModel();updateText();}
+function quizAnswer(k){const answer=quizzes[S.questionIndex];if(S.answered)return;
+ if(k===answer){S.score++;S.answered=true;notice('✓ Správne! '+PARTS[k].name);S.questionIndex++;S.answered=false;
+  if(S.questionIndex>=quizzes.length){S.quiz=false;notice('Kvíz dokončený: '+S.score+' / '+quizzes.length+'.');S.questionIndex=0;}else{setTimeout(()=>{S.selected='';updateText()},1200)}
+ }else notice('Skús ešte raz. Označil/a si: '+PARTS[k].name.toLowerCase());
+ updateText();applyModel();
+}
+function setupClicks(){
+ el('arPetals').onclick=()=>{S.visible.petal=!S.visible.petal;applyModel()};
+ el('arCut').onclick=()=>{S.cut=!S.cut;if(S.cut){S.visible.petal=false;S.visible.ovule=true;S.visible.ovary=true}applyModel()};
+ el('arLabels').onclick=()=>{S.showLabels=!S.showLabels;applyModel(); if(!S.showLabels) notice('Názvy častí sú skryté.'); else notice('Názvy častí sú zobrazené.');};
+ el('arShowAll').onclick=()=>{for(const k of G)S.visible[k]=true;S.cut=false;S.selected='';el('arPart').value='';applyModel();updateText()};
+ el('arExplode').oninput=e=>{S.explode=Number(e.target.value);applyModel()};
+ el('arScale').oninput=e=>{S.scale=Number(e.target.value);applyModel()};
+ el('arBrightness').oninput=e=>{S.brightness=Number(e.target.value);applyModel()};
+ el('arPart').onchange=e=>{if(e.target.value)choosePart(e.target.value);else{S.selected='';applyModel();updateText()}};
+ el('arQuiz').onclick=()=>{S.quiz=!S.quiz;S.questionIndex=0;S.score=0;S.answered=false;S.selected='';if(S.quiz){for(const k of G)S.visible[k]=true;S.visible.petal=false;S.cut=true;}applyModel();updateText()};
+ el('arReset').onclick=()=>{for(const k of G)S.visible[k]=true;S.explode=0;S.scale=100;S.cut=false;S.quiz=false;S.selected='';S.showLabels=true;S.brightness=82;el('arExplode').value=0;el('arScale').value=100;el('arBrightness').value=82;el('arPart').value='';applyModel();updateText()};
+}
+function markerEvents(){const marker=el('flowerMarker');marker.addEventListener('markerFound',()=>{S.tracked=true;tracking('Značka HIRO: rozpoznaná');if(!autoCollapsed){autoCollapsed=true;toggleControls(false)}notice('Značka rozpoznaná. Obíď kvet s mobilom a skúmaj jeho orgány.');});
+ marker.addEventListener('markerLost',()=>{S.tracked=false;tracking('Značka HIRO: hľadajú sa body');notice('Značka zmizla zo záberu. Namier kameru na celú štvorcovú značku HIRO.');});
+ const arjs=el('arHost');arjs.addEventListener('click',e=>{});
+}
+function pickFlower(event){ // výber pomocou lúča kamery, ak nie sme vo fáze výberu plochy
+ if(!S.scene||!S.group||S.mode==='surface'&&S.xrActive)return;
+ const scene=S.scene,rect=scene.canvas?.getBoundingClientRect();if(!rect)return;
+ const pointer=new AFRAME.THREE.Vector2((event.clientX-rect.left)/rect.width*2-1,-((event.clientY-rect.top)/rect.height*2-1));
+ const raycaster=new AFRAME.THREE.Raycaster();raycaster.setFromCamera(pointer,scene.camera);
+ const hits=raycaster.intersectObjects(S.items.filter(o=>o.visible),false);if(hits.length)choosePart(hits[0].object.userData.part);
+}
+
+// Priama WebXR detekcia povrchu (bez závislosti od A-Frame ar-hit-test).
+// Rozlišuje: povolený hit-test, snímky XR, sledovanú pozíciu a skutočné zásahy.
+function registerFlowerSurfaceHit(){
+ if(AFRAME.components['flower-surface-hit'])return;
+ AFRAME.registerComponent('flower-surface-hit', {
+  init:function(){
+   const T=AFRAME.THREE;
+   this.source=null;this.session=null;this.lastPosition=null;this.lastQuaternion=null;
+   this.frames=0;this.viewerPoses=0;this.hits=0;this.emptyHits=0;
+   this.scanning=false;this.placed=false;this.found=false;this.nextDiag=0;
+   this.reticle=new T.Group();
+   const ring=new T.Mesh(new T.RingGeometry(0.072,0.091,48),new T.MeshBasicMaterial({color:0x37f2a0,side:T.DoubleSide,transparent:true,opacity:.92,depthTest:false}));
+   ring.rotation.x=-Math.PI/2;this.reticle.add(ring);
+   const dot=new T.Mesh(new T.CircleGeometry(.013,24),new T.MeshBasicMaterial({color:0xffffff,side:T.DoubleSide,depthTest:false}));
+   dot.rotation.x=-Math.PI/2;dot.position.y=.002;this.reticle.add(dot);
+   this.reticle.visible=false;this.el.object3D.add(this.reticle);
+   this.onSelect=()=>{if(!this.placed&&this.lastPosition)this.place();};
+   this.el.addEventListener('enter-vr',()=>{
+    if(this.el.is('ar-mode'))this.start();
+   });
+   this.el.addEventListener('exit-vr',()=>this.stop());
+  },
+  start:async function(){
+   const session=this.el.renderer?.xr?.getSession();
+   if(!session||this.session===session&&this.source)return;
+   this.stop();this.session=session;this.scanning=true;this.placed=false;
+   this.frames=0;this.viewerPoses=0;this.hits=0;this.emptyHits=0;this.found=false;this.nextDiag=0;
+   this.el.emit('flower-surface-status',{message:'AR spustené · žiadam o zdroj hit-testu'});
+   try{
+    if(typeof session.requestHitTestSource!=='function') throw new Error('Táto AR relácia nepodporuje WebXR hit-test API.');
+    const viewer=await session.requestReferenceSpace('viewer');
+    if(this.session!==session)return;
+    const source=await session.requestHitTestSource({space:viewer});
+    if(this.session!==session){source.cancel?.();return;}
+    this.source=source;
+    session.addEventListener('select',this.onSelect);
+    this.el.emit('flower-surface-start');
+   }catch(e){
+    if(this.session===session){
+     this.scanning=false;
+     this.el.emit('flower-surface-error',{message:(e?.name?e.name+': ':'')+(e?.message||String(e))});
+    }
+   }
+  },
+  tick:function(time){
+   if(!this.scanning||this.placed||!this.source)return;
+   const frame=this.el.frame;
+   if(frame){
+    this.frames++;
+    try{
+     const referenceSpace=this.el.renderer.xr.getReferenceSpace();
+     if(referenceSpace){
+      if(frame.getViewerPose(referenceSpace))this.viewerPoses++;
+      const results=frame.getHitTestResults(this.source);
+      if(results.length){
+       const pose=results[0].getPose(referenceSpace);
+       if(pose){
+        this.hits++;
+        const T=AFRAME.THREE;
+        this.lastPosition=new T.Vector3().copy(pose.transform.position);
+        this.lastQuaternion=new T.Quaternion().copy(pose.transform.orientation);
+        this.reticle.position.copy(this.lastPosition);
+        this.reticle.quaternion.copy(this.lastQuaternion);
+        this.reticle.visible=true;
+        if(!this.found){this.found=true;this.el.emit('flower-surface-found');}
+       }
+      }else this.emptyHits++;
+     }
+    }catch(e){this.scanning=false;this.el.emit('flower-surface-error',{message:'Chyba vyhodnotenia zásahu: '+e.message});}
+   }
+   if(time>this.nextDiag){
+    this.nextDiag=time+1100;
+    this.el.emit('flower-surface-diagnostic',{frames:this.frames,poses:this.viewerPoses,hits:this.hits,empty:this.emptyHits,ready:!!this.source});
+   }
+  },
+  place:function(){
+   if(!this.lastPosition||!this.lastQuaternion)return false;
+   const anchor=document.getElementById('flowerAnchor');if(!anchor)return false;
+   anchor.object3D.position.copy(this.lastPosition);
+   anchor.object3D.quaternion.copy(this.lastQuaternion);
+   anchor.object3D.visible=true;
+   this.placed=true;this.reticle.visible=false;
+   this.el.emit('flower-surface-placed');
+   return true;
+  },
+  manual:function(){this.placed=true;this.reticle.visible=false;},
+  restart:function(){
+   this.placed=false;this.found=false;this.lastPosition=null;this.lastQuaternion=null;
+   this.reticle.visible=false;this.hits=0;this.emptyHits=0;this.frames=0;this.viewerPoses=0;
+   if(!this.source&&this.session)this.start();
+  },
+  stop:function(){
+   if(this.session)this.session.removeEventListener('select',this.onSelect);
+   if(this.source){try{this.source.cancel();}catch(e){}}
+   this.source=null;this.session=null;this.scanning=false;
+   if(this.reticle)this.reticle.visible=false;
+  },
+  remove:function(){this.stop();this.el.object3D.remove(this.reticle);}
+ });
+}
+
+function createScene(mode){
+ const host=el('arHost');host.innerHTML='';
+ if(mode==='marker'){const bg=document.createElement('div');bg.id='arVideoLayer';host.appendChild(bg);startMarkerWatch();}
+ const scene=document.createElement('a-scene');S.scene=scene;scene.id='flowerARScene';
+ scene.setAttribute('embedded','');scene.setAttribute('renderer','antialias: true; colorManagement: true; alpha: true');
+ scene.setAttribute('loading-screen','enabled: false');
+ scene.style.background='transparent';
+ scene.setAttribute('background','transparent: true');
+ if(mode==='marker'){
+  scene.setAttribute('xr-mode-ui','enabled: false');
+  // Vyššie požadované rozlíšenie: pôvodných 640x480 je na mobile viditeľne rozmazaných po zväčšení.
+  // Kamerové API môže použiť nižšie rozlíšenie, ak vyššie nie je dostupné.
+  scene.setAttribute('arjs','sourceType: webcam; sourceWidth: 1280; sourceHeight: 720; displayWidth: 1280; displayHeight: 720; videoTexture: false; debugUIEnabled: false; trackingMethod: best; detectionMode: mono_and_matrix;');
+  scene.innerHTML='<a-marker id="flowerMarker" preset="hiro" emitevents="true" smooth="true" smooth-count="5"><a-entity id="flowerAnchor"></a-entity></a-marker><a-entity camera></a-entity><a-entity light="type: ambient; intensity: 1.65; color: #ffffff"></a-entity><a-entity light="type: directional; intensity: .60; color: #fff4e5" position="-1 3 2"></a-entity>';
+ }else{
+  scene.setAttribute('xr-mode-ui','XRMode: ar; enabled: true; enterAREnabled: true; enterVREnabled: false');
+  scene.setAttribute('webxr','requiredFeatures: hit-test; optionalFeatures: dom-overlay; overlayElement: #arOverlay; referenceSpaceType: local');
+  scene.setAttribute('flower-surface-hit','');
+  // Hit-test nastavíme až PO skonštruovaní 3D geometrie: potom má správny rozmer cieľa.
+  scene.innerHTML='<a-entity id="flowerAnchor" position="0 0 -1.2" visible="false"></a-entity><a-entity camera position="0 1.6 0" look-controls="enabled: true"></a-entity><a-entity light="type: ambient; intensity: 0.95"></a-entity><a-entity light="type: directional; intensity: .38" position="-1 3 2"></a-entity>';
+  // Nahrádza len hlásenie A-Frame „skúmam“, ktoré nepotvrdzovalo výsledok.
+  scene.addEventListener('flower-surface-start',()=>{
+   tracking('WebXR hit-test zapnutý · hľadám lavicu');
+   notice('Hit-test je pripravený. Namier stred obrazovky na matnú plochu a pomaly prejdi mobilom do strán.');
+   scanningTimeout();
+  });
+  scene.addEventListener('flower-surface-status',e=>tracking(e.detail.message));
+  scene.addEventListener('flower-surface-diagnostic',e=>{
+   const d=e.detail;
+   el('arSurfaceDiag').textContent=`WebXR diagnostika · snímky: ${d.frames} · sledovaná poloha: ${d.poses} · zásahy na plochu: ${d.hits}`;
+   if(!S.surfaceFound&&d.frames>90&&d.poses===0){
+    tracking('⚠ AR nemá platné polohové sledovanie');
+   }else if(!S.surfaceFound&&d.poses>20&&d.hits===0){
+    tracking('AR sleduje polohu · zatiaľ 0 zásahov na povrch');
+   }
+  });
+  scene.addEventListener('flower-surface-error',e=>{
+   const msg=e.detail.message;
+   tracking('⚠ Hit-test nefunguje');
+   error('Vyhľadávanie povrchu nebolo možné: '+msg);
+   el('arSurfaceDiag').textContent='Diagnostika: '+msg;
+   el('arFallback').style.display='inline-block';
+  });
+  scene.addEventListener('flower-surface-found',()=>{
+   S.surfaceFound=true;clearTimeout(S.surfaceTimer);
+   tracking('✓ Povrch nájdený · zelený kruh na lavici');
+   el('arPlaceOnSurface').style.display='block';
+   notice('Povrch nájdený! Namier zelený kruh na miesto na lavici a stlač „Položiť kvet na lavicu“.');
+  });
+  scene.addEventListener('flower-surface-placed',()=>{
+   S.surfaceFound=true;clearTimeout(S.surfaceTimer);
+   tracking('✓ Kvet umiestnený na rozpoznaný povrch');
+   el('arAim').classList.remove('visible');
+   el('arPlaceOnSurface').style.display='none';
+   el('arRetrySurface').style.display='inline-block';
+   notice('Kvet je na lavici. Môžeš ho obísť a preskúmať jeho orgány.');
+  });
+  scene.addEventListener('enter-vr',()=>{
+   if(scene.is('ar-mode')){
+    S.xrActive=true;S.manual=false;S.surfaceFound=false;
+    toggleControls(false);
+    el('arStartXR').style.display='none';el('arStartXRTop').style.display='none';
+    el('arLeaveXR').style.display='inline-block';el('arFallback').style.display='inline-block';
+    el('arAim').classList.add('visible');
+    el('arPlaceOnSurface').style.display='none';
+    el('arSurfaceDiag').textContent='WebXR diagnostika: čakám na snímky a výsledky hit-testu.';
+    const anchor=el('flowerAnchor');anchor.setAttribute('visible',false);
+    tracking('ARCore spustené · hľadá povrch');
+    notice('AR je spustené, ale rozpoznanie lavice ešte čaká. Mier na matný povrch s detailmi.');
+    scanningTimeout();
+   }
+  });
+  scene.addEventListener('exit-vr',()=>{
+   S.xrActive=false;S.manual=false;S.surfaceFound=false;clearTimeout(S.surfaceTimer);
+   el('arFallback').style.display='none';el('arRetrySurface').style.display='none';
+   el('arAim').classList.remove('visible');
+   el('arPlaceOnSurface').style.display='none';
+   el('arLeaveXR').style.display='none';el('arStartXR').style.display='inline-block';
+   el('arStartXRTop').style.display='block';
+   tracking('AR relácia ukončená');notice('AR ukončené. Môžeš ho znova spustiť.');
+  });
+ }
+ scene.addEventListener('loaded',()=>{
+  if(scene.canvas){scene.canvas.style.background='transparent';}
+  S.anchor=el('flowerAnchor');S.anchor.object3D.add(createFlower());
+  applyModel();setupClicks();updateText();startARLabelLoop();arSceneReady=true;
+  // Detektor „flower-surface-hit“ je pripojený ešte pred vstupom do WebXR;
+  // nevypočítava žiadny komplikovaný pôdorys modelu.
+
+  if(mode==='marker'){markerEvents();tracking('Značka HIRO: hľadám');notice('Povoľ kameru a namier ju na vytlačenú značku HIRO.');}
+  else{notice('Kamera sa zapne až po stlačení zeleného tlačidla „Spustiť kameru a AR na lavici“.');el('arStartXR').style.display='inline-block';el('arStartXRTop').style.display='block';
+    const check=()=>navigator.xr?.isSessionSupported('immersive-ar').then(ok=>{if(!ok)error('Tento prehliadač alebo mobil nepodporuje WebXR AR. Vyskúšaj Chrome na kompatibilnom Androide alebo režim so značkou.');}).catch(()=>error('Podporu WebXR sa nepodarilo overiť. Skús Chrome na Androide.'));
+    if(navigator.xr)check();else error('WebXR nie je dostupné. Skús Android s ARCore a Chrome; režim so značkou môže fungovať aj na ďalších mobiloch.');
+  }
+  scene.addEventListener('click',pickFlower);
+  if(mode==='marker'){scene.addEventListener('pointerup',e=>{
+   // Ťuknutie na pohľad HIRO vyžiada opätovné zaostrenie, neprekrýva kvíz.
+   const v=el('arVideoLayer')?.querySelector('video');if(!v)return;
+   tapRing(e.clientX,e.clientY);requestCameraFocus(v,'marker',focusPointFromEvent(v,e));
+  });}
+ });
+ host.appendChild(scene);
+}
+el('arPlaceOnSurface').onclick=()=>{if(!S.scene?.components['flower-surface-hit']?.place())notice('Zatiaľ nemám platný bod na lavici. Namier na plochu a skús znovu.');};
+el('arStartXR').onclick=async()=>{
+ const scene=S.scene;
+ if(!scene||!arSceneReady){notice('Ešte načítavam 3D scénu.');return;}
+ if(!navigator.xr){error('Tento prehliadač nemá WebXR. Použi režim so značkou.');return;}
+ try{
+  if(typeof scene.enterAR==='function')await scene.enterAR();
+  else {const native=scene.querySelector('.a-enter-ar-button')||document.querySelector('.a-enter-ar-button');if(native)native.click();else error('Nenašlo sa systémové tlačidlo AR. Skús vstúpiť do AR pomocou tlačidla prehliadača.')}
+ }catch(e){error('AR sa nepodarilo spustiť: '+e.message)}
+};
+// Núdzový režim: ukáže kvet približne meter pred kamerou vo WebXR scéne.
+// Zámerne netvrdíme, že bol rozpoznaný povrch alebo vznikla kotva.
+el('arFallback').onclick=()=>{
+ if(!S.xrActive||!S.scene||!S.anchor){notice('Najprv spusti AR reláciu.');return;}
+ const cam=S.scene.renderer?.xr?.getCamera?.() || S.scene.camera;
+ if(!cam){error('Kamera WebXR ešte nie je pripravená.');return;}
+ const T=AFRAME.THREE;
+ const here=new T.Vector3(),heading=new T.Vector3();
+ cam.getWorldPosition(here);cam.getWorldDirection(heading);
+ heading.y=0;if(heading.lengthSq()<.01)heading.set(0,0,-1);
+ heading.normalize();
+ S.manual=true;
+ // Vypneme iba vyhľadávanie povrchu; model zostáva vo svete WebXR.
+ S.scene.components['flower-surface-hit']?.manual();
+ S.anchor.object3D.position.copy(here).addScaledVector(heading,0.9);
+ S.anchor.object3D.position.y-=0.22;
+ S.anchor.object3D.quaternion.identity();
+ S.anchor.object3D.visible=true;
+ el('arFallback').style.display='none';el('arRetrySurface').style.display='inline-block';
+ el('arAim').classList.remove('visible');el('arPlaceOnSurface').style.display='none';clearTimeout(S.surfaceTimer);
+ tracking('Kvet pred kamerou · bez rozpoznania lavice');
+ notice('Núdzové zobrazenie: kvet je približne 90 cm pred tebou, nie je ukotvený na lavici. Na presné umiestnenie skús „Rozpoznať lavicu znova“.');
+};
+el('arRetrySurface').onclick=()=>{
+ if(!S.xrActive||!S.scene)return;
+ S.manual=false;S.surfaceFound=false;
+ S.anchor.object3D.visible=false;
+ S.anchor.object3D.position.set(0,0,-1.2);
+ S.scene.components['flower-surface-hit']?.restart();
+ el('arFallback').style.display='inline-block';el('arRetrySurface').style.display='none';
+ el('arAim').classList.add('visible');el('arPlaceOnSurface').style.display='none';
+ tracking('WebXR: hľadá povrch znova');
+ notice('Namier na matnú lavicu s viditeľnou kresbou. Pomaly pohybuj telefónom.');
+ scanningTimeout();
+};
+el('arLeaveXR').onclick=()=>{const session=S.scene?.renderer?.xr?.getSession();if(session)session.end()};
+async function start(mode){
+ if(S.mode)return; S.mode=mode;
+ document.body.classList.add('ar-active');if(mode==='marker')document.body.classList.add('marker-session');el('arHost').classList.add('active');if(mode==='marker')el('arHost').classList.add('marker-mode');el('arOverlay').classList.add('active');clearError();
+ el('arModeLabel').textContent=mode==='marker'?'▣ Kvet · AR so značkou':'🌸 Kvet · AR bez značky';
+ el('arTopHelp').textContent=mode==='marker'?'Hľadaj vzor HIRO':'WebXR · vyhľadanie lavice';
+ el('arPrint').style.display=mode==='marker'?'inline-block':'none';
+ el('arFocusNow').style.display=mode==='marker'?'inline-block':'none';
+ el('arFocusStatus').textContent=mode==='marker'?'Kamera HIRO: po štarte preverím ostrenie. Ťukni na obraz alebo použi tlačidlo.':'V AR bez značky riadi ostrenie systém ARCore. WebXR neponúka ovládanie zaostrenia ťuknutím.';
+ tracking(mode==='marker'?'Značka HIRO: čakám na kameru':'WebXR: kontrolujem podporu');
+ notice('Načítavam AR knižnice (vyžaduje internet)…');
+ try{
+  if(mode==='marker')cameraPrerequisite();
+  else if(!window.isSecureContext||location.protocol==='file:')throw new Error('AR vyžaduje HTTPS stránku. Otvor súbor cez GitHub Pages, nie lokálne.');
+  if(!window.AFRAME)await scripts('https://aframe.io/releases/1.6.0/aframe.min.js');
+  if(mode==='surface')registerFlowerSurfaceHit();
+  if(mode==='marker')await scripts('https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js');
+  createScene(mode);
+ }catch(e){error(e.message||'AR sa nepodarilo inicializovať.');notice('AR sa nespustilo. Použi test kamery alebo pôvodné 3D zobrazenie.');}
+}
+// Autostart pre URL typu .../model_kvetu_AR.html?ar=marker, použiteľný v QR kódoch.
+const params=new URLSearchParams(location.search);const auto=params.get('ar');if(auto==='marker'||auto==='surface')start(auto);
+})();
+</script>
+
+</body></html>
