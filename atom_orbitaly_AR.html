@@ -214,7 +214,7 @@ function surfaceMesh(n,l,j,detail='medium'){const key=n+':'+l+':'+j+':'+detail;i
  statics.surface.set(key,meshes);return meshes;
 }
 function cloudPoints(n,l,j){const key=n+':'+l+':'+j;if(statics.cloud.has(key))return statics.cloud.get(key);
- const rng=randFactory(n*15551+l*1013+j*37+10),rad=radialData(n,l),pts=[],count=3300;
+ const rng=randFactory(n*15551+l*1013+j*37+10),rad=radialData(n,l),pts=[],count=5200;
  for(let i=0;i<count;i++){
  let x,y,z,f,tries=0;do{z=2*rng()-1;const a=rng()*Math.PI*2,t=Math.sqrt(1-z*z);x=t*Math.cos(a);y=t*Math.sin(a);f=angular(l,j,x,y,z);tries++;}while(rng()>Math.min(1,f*f/(MAXANG[l][j]*MAXANG[l][j]))&&tries<300);
  const rSample=rng();let lo=0,hi=rad.cdf.length-1;while(lo<hi){const mid=(lo+hi)>>1;if(rad.cdf[mid]<rSample)lo=mid+1;else hi=mid;}
@@ -270,13 +270,13 @@ function renderScene(){if(cw<10)return;
   ctx.fill();
  }
  }else{
- const maxPoints=multi?(cw<520?8500:14000):3500,totalWanted=orbitals.reduce((a,o)=>a+o.occupation*1500,0),limit=Math.min(1,maxPoints/Math.max(1,totalWanted)),projected=[];
- for(const orb of orbitals){if(!orb.occupation)continue;const count=Math.max(1,Math.floor(orb.occupation*1500*limit)),points=cloudPoints(orb.n,orb.l,orb.slot),factor=orbitalSizeFactor(orb,phyScale),interval=points.length/count;
+ const maxPoints=multi?(cw<520?12000:19000):5200,totalWanted=orbitals.reduce((a,o)=>a+o.occupation*2300,0),limit=Math.min(1,maxPoints/Math.max(1,totalWanted)),projected=[];
+ for(const orb of orbitals){if(!orb.occupation)continue;const count=Math.max(1,Math.floor(orb.occupation*2300*limit)),points=cloudPoints(orb.n,orb.l,orb.slot),factor=orbitalSizeFactor(orb,phyScale),interval=points.length/count;
  for(let i=0;i<count;i++){const p=points[Math.min(points.length-1,Math.floor((i+.35)*interval))],rot=rotate({x:p.x*factor,y:p.y*factor,z:p.z*factor}),pr=project(rot);projected.push({x:pr.x,y:pr.y,z:rot.z,sign:p.sign,color:orb.color,focus:orb.focus});}
  }
  projected.sort((a,b)=>a.z-b.z);
  for(const p of projected){const brightness=multi?(p.sign>=0?1:.55):.98,alpha=multi?(state.focusOrbital?(p.focus?.64:.28):.48):clamp(.22+(p.z+1.6)*.09,.20,.56),color=multi?p.color.map(v=>Math.round(v*brightness)):null;
- ctx.beginPath();ctx.arc(p.x,p.y,clamp(1.15+state.zoom*.8,.9,3),0,2*Math.PI);ctx.fillStyle=multi?`rgba(${color.join(',')},${alpha})`:rgba(p.sign,.98,alpha);ctx.fill();}
+ ctx.beginPath();ctx.arc(p.x,p.y,clamp(1.28+state.zoom*.86,1.0,3.2),0,2*Math.PI);ctx.fillStyle=multi?`rgba(${color.join(',')},${alpha})`:rgba(p.sign,.98,alpha);ctx.fill();}
  }
  renderRadialNodes(orbitals,phyScale);
  const center=project(rotate({x:0,y:0,z:0})),glow=ctx.createRadialGradient(center.x,center.y,0,center.x,center.y,26);glow.addColorStop(0,'#ffffffaf');glow.addColorStop(.2,'#bce7ff8c');glow.addColorStop(1,'#7ecfff00');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(center.x,center.y,26,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(center.x,center.y,3.8,0,Math.PI*2);ctx.fillStyle='#efffff';ctx.fill();
@@ -326,7 +326,7 @@ const startBtn=$ar('arEnter'), supportText=$ar('arAvailability'), overlay=$ar('a
 let xrSession=null,xrRef=null,xrHitSource=null,xrGL=null,xrProgram=null,xrUniforms=null,xrAttrs=null;
 let arDraws=[],arSceneKey='',arSceneCount=0,arFrameSeen=false,arHitPos=null,arPlaced=false,arLockedPos=null;
 let arAngle=0,arSize=1,arBrightness=.85,arPanelHidden=false,arBusy=false,arGlLost=false;
-const MAX_AR_ORBITALS=72, MAX_AR_POINTS=11000, MAX_AR_TRIANGLES=26000;
+const MAX_AR_ORBITALS=72, MAX_AR_POINTS=18000, MAX_AR_TRIANGLES=26000;
 const vshader=`attribute vec3 aPos;attribute vec4 aCol;uniform mat4 uProjection;uniform mat4 uView;uniform mat4 uModel;uniform float uPointSize;uniform float uBrightness;varying vec4 vCol;void main(){gl_Position=uProjection*uView*uModel*vec4(aPos,1.0);gl_PointSize=uPointSize;vCol=vec4(clamp(aCol.rgb*uBrightness,0.0,1.0),aCol.a);}`;
 const fshader=`precision mediump float;varying vec4 vCol;uniform float uPoints;void main(){if(uPoints>0.5){vec2 d=gl_PointCoord-vec2(0.5);float r=length(d);if(r>0.5)discard;gl_FragColor=vec4(vCol.rgb,vCol.a*(1.0-smoothstep(0.35,0.5,r)));}else{gl_FragColor=vCol;}}`;
 function arText(s){$ar('arStatus').textContent=s;}
@@ -352,11 +352,11 @@ function buildARGeometry(){if(!xrGL)return;const scene=currentOrbitals().slice(0
  }
  buildDraw(vertices,xrGL.TRIANGLES,1);
  }else{
- const wanted=scene.reduce((a,o)=>a+o.occupation*1500,0),ratio=Math.min(1,MAX_AR_POINTS/Math.max(1,wanted));
- for(const o of scene){if(!o.occupation)continue;const source=cloudPoints(o.n,o.l,o.slot),count=Math.min(source.length,Math.floor(o.occupation*1500*ratio)),f=orbitalSizeFactor(o,phyScale);if(count<1)continue;
+ const wanted=scene.reduce((a,o)=>a+o.occupation*2300,0),ratio=Math.min(1,MAX_AR_POINTS/Math.max(1,wanted));
+ for(const o of scene){if(!o.occupation)continue;const source=cloudPoints(o.n,o.l,o.slot),count=Math.min(source.length,Math.floor(o.occupation*2300*ratio)),f=orbitalSizeFactor(o,phyScale);if(count<1)continue;
  for(let j=0;j<count;j++){const v=source[Math.min(source.length-1,Math.floor(j*source.length/count))];const color=phaseColor(o,v.sign),alpha=scene.length===1?.68:(state.focusOrbital?(o.focus?.66:.31):.54);addVertex(points,v.x*f,v.y*f,v.z*f,color,alpha);}
  }
- buildDraw(points,xrGL.POINTS,4.3);
+ buildDraw(points,xrGL.POINTS,5.1);
  }
  if(state.showNodes){const selected=state.display==='single'?scene:scene.filter(o=>o.focus).slice(0,1);for(const o of selected){const f=orbitalSizeFactor(o,phyScale);for(const rho of o.rad.nodes){const r=rho*f;for(let plane=0;plane<2;plane++){for(let i=0;i<72;i++){for(const t of [i,i+1]){const a=t*2*Math.PI/72;let x=0,y=0,z=0;if(plane===0){x=Math.cos(a)*r;y=Math.sin(a)*r;}else{x=Math.cos(a)*r;z=Math.sin(a)*r;}addVertex(nodes,x,y,z,[255,222,133],.78);}}}}}}
  buildDraw(nodes,xrGL.LINES,1);
