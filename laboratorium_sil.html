@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laboratórium síl – Newtonove zákony</title>
+<style>
+:root{--bg:#f2f5fa;--paper:#fff;--ink:#14253d;--muted:#5e7084;--line:#d9e3ee;--blue:#2358b8;--teal:#118377;--orange:#db6c22;--red:#b83938;--shadow:0 8px 30px #1c365614}*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:var(--ink);font-size:17px;line-height:1.45}button,input,select{font:inherit}button,select{cursor:pointer}button{border:1px solid #bfcbdd;background:#fff;border-radius:11px;padding:11px 16px;min-height:45px;color:var(--ink);font-weight:650}button:hover{background:#ebf2fb}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #ed9c40;outline-offset:2px}.primary{background:var(--blue);border-color:var(--blue);color:#fff}.primary:hover{background:#16448f}.success{background:var(--teal);border-color:var(--teal);color:#fff}.success:hover{background:#087366}.secondary{background:#edf2f9}.danger{color:var(--red)}.container{max-width:1470px;margin:auto;padding:18px 23px 55px}header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:17px}h1{margin:0;font-size:clamp(25px,3vw,38px);letter-spacing:-.025em}h2{font-size:22px;margin:0 0 9px}p{margin:7px 0}header p{color:var(--muted)}.tag{display:inline-block;padding:5px 11px;background:#e4edfc;border-radius:20px;font-size:13px;font-weight:750;letter-spacing:.04em;text-transform:uppercase;color:#2452a0}.layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(345px,1fr);gap:16px;align-items:start}.panel{background:var(--paper);border-radius:17px;border:1px solid var(--line);box-shadow:var(--shadow);padding:17px;margin-bottom:16px}.selector{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.selector select{flex:1;min-width:200px}.selector>*{max-width:100%}select{border:1px solid #bfcddd;background:#fff;border-radius:9px;padding:10px;min-height:45px;color:var(--ink)}.situation{border-left:4px solid var(--blue);background:#eef4ff;padding:11px 14px;border-radius:8px;margin-top:14px}.situation strong{display:block}.context{font-size:15px;color:var(--muted);margin-top:7px}.sceneWrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid #c7d8e8;background:#e8f3ff}canvas{display:block;width:100%;height:auto;aspect-ratio:1000 / 460;touch-action:pan-y}.sceneInfo{position:absolute;left:11px;top:10px;background:#ffffffeb;padding:5px 9px;border-radius:7px;color:#20334b;font-size:14px;max-width:52%}.sceneLegend{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--muted);margin-top:9px}.dot{width:10px;height:10px;display:inline-block;border-radius:50%;margin-right:5px}.forces{display:grid;gap:9px;max-height:530px;overflow:auto;padding-right:3px}.force{border:1px solid #dae3ed;border-radius:11px;padding:11px;background:#fafcff}.force.active{background:#eef5ff;border-color:#8bace3}.forcehead{display:flex;gap:9px;align-items:center}.forcehead input{width:22px;height:22px;accent-color:var(--blue);cursor:pointer}.force label{font-size:16px;font-weight:650;cursor:pointer}.forceopts{margin:10px 0 0 31px;display:grid;grid-template-columns:minmax(0,1fr) minmax(116px,.9fr);gap:8px 11px;align-items:center}.forceopts .full{grid-column:1/-1}.forceopts input[type=range]{width:100%;accent-color:var(--blue)}.number{font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted)}.small{font-size:14px;color:var(--muted)}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:13px}.controls button{flex:0 0 auto}.status{padding:11px 13px;background:#f1f4f8;border-radius:10px;margin-top:13px;min-height:50px}.choicegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:11px 0}.choice{border:1px solid #d1dbe9;border-radius:10px;display:flex;gap:8px;align-items:center;padding:8px;background:#fbfdff;font-size:15px}.choice input{width:18px;height:18px;accent-color:var(--blue)}.result{border:1px solid #b7e0d4;background:#f0fbf7;border-radius:11px;padding:13px;margin-top:13px}.result.bad{border-color:#f0cdb2;background:#fff8f1}.result[hidden], [hidden]{display:none!important}.result h3{margin:0 0 5px;font-size:19px}.status strong{color:var(--ink)}.meter{display:grid;grid-template-columns:1fr 1fr;gap:9px 15px;margin-top:12px}.metric{background:#f4f7fb;border-radius:8px;padding:8px}.metric strong{display:block;font-size:19px;font-variant-numeric:tabular-nums}.metric small{color:var(--muted)}.footer{margin-top:10px;padding:15px 0;color:#596b80;font-size:14px}.rowline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.pill{font-size:13px;background:#e5edf7;padding:5px 9px;border-radius:30px}.collapsible summary{cursor:pointer;font-weight:700}.collapsible p{color:var(--muted)}.checkline{display:flex;align-items:center;gap:9px;font-size:15px}.checkline input{width:18px;height:18px;accent-color:var(--teal)}.feedback{font-weight:700}.progress{font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted)}.sourceLinks a{color:#1a5ca8}hr{border:0;border-top:1px solid var(--line);margin:15px 0}
+.vector-expression{white-space:nowrap;font-family:Georgia,"Times New Roman",serif;display:inline-flex;align-items:baseline;vertical-align:baseline;font-size:1.05em}
+.vector-expression .vector-base{position:relative;font-style:italic;margin-right:.035em}
+.vector-expression .vector-base::before{content:"";position:absolute;top:-.035em;left:0;right:0;height:1.5px;background:currentColor}
+.vector-expression .vector-base::after{content:"";position:absolute;top:-.18em;right:0;width:.31em;height:.31em;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;transform:rotate(45deg)}
+.vector-expression sub{font-size:.65em;line-height:0;margin-left:.03em}
+.forcehead .vector-expression{font-size:1.2em;margin-left:4px;font-weight:normal}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.forces{max-height:none}.container{padding:12px 12px 30px}}@media(max-width:520px){.panel{padding:12px}.choicegrid{grid-template-columns:1fr}.container{padding:9px}.selector{display:grid;grid-template-columns:1fr 1fr}.selector select{grid-column:1/-1;width:100%}header{align-items:flex-start}header .tag{display:none}.controls button{flex:1;min-width:120px}.sceneInfo{font-size:11px}.forceopts{grid-template-columns:1fr}.forceopts .full{grid-column:1}}
+
+.sceneWrap {background:linear-gradient(180deg,#c1e1fb,#eff8fe);isolation:isolate}
+.sceneWrap canvas#stage{touch-action:pan-y;cursor:default}
+.sceneWrap canvas#stage:active{cursor:default}
+
+.camtools{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.camtools button{min-height:36px;padding:6px 10px;font-size:14px}
+#stage{background:#b9daf4}
+/* Mandatory learning sequence: the scene remains explorable while motion and answers are locked. */
+.stepTrack{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 17px}
+.trackItem{border:1px solid #cbd6e3;background:#edf1f6;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:9px;font-size:14px;color:#52677d;min-height:62px}
+.trackItem .num{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;border:1px solid #b7c6d7;background:#fff;font-weight:800}
+.trackItem.active{background:#e9f1ff;border-color:#769cdd;color:#214d9c}
+.trackItem.active .num{background:#255ab5;color:white;border-color:#255ab5}
+.trackItem.done{background:#e9f7f1;border-color:#99d2b9;color:#176c50}
+.trackItem.done .num{background:#17785e;color:white;border-color:#17785e}
+.flowHint{border:1px solid #b7d1ed;border-left:5px solid #2358b8;background:#f2f7ff;padding:11px 14px;border-radius:11px;margin:-4px 0 17px;font-size:16px}
+.stepPanel.isLocked{border-color:#d5dbe4;background:#f8fafc}
+.stepPanel.isLocked .lockedInner{opacity:.51}
+.stepPanel.isCurrent{border-color:#90b5e9;box-shadow:0 3px 18px #2858b916}
+.workflowActions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:13px}
+.lockMsg{font-size:14px;color:#5b697b;margin:8px 0}
+button:disabled,select:disabled,input:disabled{cursor:not-allowed}
+button:disabled{background:#edf1f5;color:#8493a6;border-color:#d8e0e7}
+input:disabled,select:disabled{opacity:.65}
+#noForceLine{display:flex;align-items:flex-start;gap:10px;font-size:15px;margin:12px 0}
+#noForceLine input{width:19px;height:19px;flex:none;margin-top:2px}
+.previewNote{font-size:14px;color:#48627c;padding:8px 10px;background:#f1f6fd;border-radius:9px;margin-top:9px}
+@media(max-width:700px){.stepTrack{grid-template-columns:repeat(2,minmax(0,1fr))}.trackItem{min-height:52px;padding:9px}}
+@media(max-width:400px){.stepTrack{gap:5px}.trackItem{font-size:12px;gap:5px}.trackItem .num{width:25px;height:25px}}
+.wizardNav{display:flex;justify-content:flex-start;align-items:center;gap:10px;margin:0 0 16px}.wizardNav button{min-width:120px}.layout.singleStep{grid-template-columns:1fr}.layout.singleStep aside{display:none}.hiddenStep{display:none!important}.simulationPanel.previewMode .controls,.simulationPanel.previewMode .meter{display:none}.simulationPanel.previewMode .status{margin-top:10px}
+.stepTrack{display:flex;gap:0;margin-bottom:10px}.trackItem{display:none;min-height:44px;padding:7px 12px}.trackItem.active{display:flex}.wizardNav:has(#backStep[hidden]){display:none}.simulationPanel.previewMode #status{display:none}
+</style></head><body><main class="container">
+<header><div><span class="tag">Interaktívna fyzika · gymnázium</span><h1>Laboratórium síl</h1><p>1. a 2. Newtonov pohybový zákon: zostav model, predpovedz pohyb a over ho. 2D scény s názorným pohybom a reakciami prostredia.</p></div><span class="pill" id="counter" aria-live="polite"></span></header>
+<nav class="stepTrack" aria-label="Povinný postup úlohy">
+ <div class="trackItem active" id="flow1"><span class="num">1</span><span>Vyber sily</span></div>
+ <div class="trackItem" id="flow2"><span class="num">2</span><span>Predpovedz pohyb</span></div>
+ <div class="trackItem" id="flow3"><span class="num">3</span><span>Spusti 2D pokus</span></div>
+ <div class="trackItem" id="flow4"><span class="num">4</span><span>Over výsledok</span></div>
+</nav>
+<div id="flowHint" class="flowHint" role="status" aria-live="polite">Krok 1/4: Označ sily pôsobiace na teleso a potvrď svoj model.</div><div class="wizardNav"><button id="backStep" hidden>← Späť</button></div>
+<div class="layout"><section aria-label="Situácia a simulácia">
+<div class="panel"><div class="selector"><label for="category"><strong>Kategória</strong></label><select id="category"><option value="all">Všetky situácie</option><option value="stoji">Stojí</option><option value="rovno">Rovnomerný pohyb</option><option value="zrych">Zrýchlený pohyb</option></select><select id="situationSelect" aria-label="Vyber situáciu"></select><button id="random">Náhodná úloha</button></div><div class="situation"><strong id="situationTitle"></strong><div id="situationGoal"></div><div class="context" id="initialState"></div></div><p class="small" id="hintRule">Najprv si prezri 2D situáciu. Všetky sily okrem gravitačnej začínajú na 0 % Fg, takže ich veľkosť musíš nastaviť sám. Animácia sa odomkne až po predpovedi.</p></div>
+<div class="panel stepPanel isLocked simulationPanel" id="simulationPanel"><div class="rowline"><h2>2D scéna a pokus</h2><span class="camtools"><label class="checkline"><input type="checkbox" id="showArrows" checked> Šípky síl</label></span></div><div class="sceneWrap"><canvas id="stage" width="1000" height="460" role="img" aria-label="2D nákres situácie a animácia telesa podľa zvolených síl"></canvas><div class="sceneInfo" id="sceneInfo">Pripravené</div></div><p class="previewNote" id="scenePreviewNote">2D situáciu vidíš už teraz. Telesá sa nepohnú, kým nepotvrdíš predpoveď.</p><div class="sceneLegend"><span><span class="dot" style="background:#e8a43a"></span>Tvoj model</span><span id="referenceLegend" hidden><span class="dot" style="background:#118377"></span>Správny model (priesvitný)</span><span><span class="dot" style="background:#245abd"></span>Sily</span><span><span class="dot" style="background:#d62828"></span>Výslednica síl</span></div><div class="controls" id="simControls"><button class="primary" id="play">▶ Spustiť</button><button id="pause">⏸ Pauza</button><button id="restart">↻ Od začiatku</button><button id="goVerification" disabled>Prejsť na overenie ↓</button><label for="speed" class="small">Rýchlosť prehrávania</label><select id="speed"><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></div><div class="meter" id="simMeter"><div class="metric"><small>Výslednica tvojich síl</small><strong id="netForce">—</strong></div><div class="metric"><small>Okamžité zrýchlenie</small><strong id="acceleration">—</strong></div><div class="metric"><small>Rýchlosť v</small><strong id="velocity">—</strong></div><div class="metric"><small>Čas modelu</small><strong id="time">0,00 s</strong></div></div><div class="status" id="status" aria-live="polite">Vyber sily, uprav ich veľkosti a pred spustením vyslov predpoveď.</div></div>
+<div class="panel stepPanel isLocked" id="predictionPanel"><div class="rowline"><h2>Čo by sa podľa teba stalo?</h2><span class="pill">Krok 2 · predpoveď</span></div><p class="small">Pred spustením rozhodni, ako sa teleso začne správať <strong>podľa síl, ktoré zostavíš</strong>. Môžeš vybrať viac odpovedí.</p><div class="choicegrid" id="predictions"><label class="choice"><input type="checkbox" value="stay"> Zostane stáť</label><label class="choice"><input type="checkbox" value="uniform"> Pôjde rovnomerne</label><label class="choice"><input type="checkbox" value="speedup"> Bude zrýchľovať (rásť veľkosť v)</label><label class="choice"><input type="checkbox" value="slowdown"> Bude spomaľovať</label><label class="choice"><input type="checkbox" value="turn"> Zmení smer pohybu</label><label class="choice"><input type="checkbox" value="fall"> Bude padať / klesať</label></div><div class="small">Rozhoduje výslednica síl a počiatočná rýchlosť, nie samotná existencia pohybu.</div>
+<p class="lockMsg" id="predictionLock">Najprv potvrď model síl v kroku 1.</p>
+<div class="workflowActions"><button type="button" class="primary" id="confirmPrediction" disabled>Potvrdiť predpoveď a odomknúť pokus →</button><button type="button" id="editPrediction" hidden>Zmeniť predpoveď</button></div></div>
+<div class="panel stepPanel isLocked" id="verificationPanel"><div class="rowline"><h2>Overenie modelu</h2><span class="pill">Krok 4 · vysvetlenie</span></div><p class="small">Správne sily sa odkryjú až po tom, ako potvrdíš predpoveď a spustíš svoj 2D pokus.</p><div class="controls"><button class="success" id="check">Porovnať s fyzikou</button><button class="secondary" id="compare">▶ Prehrať oba modely</button><button id="new">Ďalšia situácia →</button></div><div class="result" id="result" hidden></div></div>
+</section><aside aria-label="Panel síl"><div class="panel stepPanel isCurrent" id="forcePanel"><div class="rowline"><h2>Aké sily pôsobia?</h2><span class="pill">Krok 1 · zostav model</span></div><p class="small">Zapni sily, nastav ich <strong>smer</strong> a <strong>veľkosť</strong>. <strong>Upozornenie:</strong> všetky sily okrem gravitačnej začínajú na hodnote 0 % Fg, takže ich musíš doplniť sám. Predvolený smer je len pomôcka, nie hotová odpoveď.</p><div id="massExperiment" class="situation" hidden><label for="massSlider"><strong>Experiment: meníš hmotnosť telesa</strong></label><input id="massSlider" type="range" min="1" max="10" step="1" value="2" style="width:100%;accent-color:var(--blue)"><output id="massOut">2 kg</output><p class="small">Rovnaká sila v newtonoch, iná hmotnosť. Referenčná hodnota 100 % Fg = 20 N je tu pevná jednotka nastavovania sily, nejde o aktuálnu gravitáciu telesa.</p></div><div class="forces" id="forces"></div>
+<label id="noForceLine"><input type="checkbox" id="noForce"> Podľa mňa nepôsobí žiadna z uvedených síl (vedomá voľba).</label>
+<div class="workflowActions"><button class="primary" id="confirmForces" type="button" disabled>Potvrdiť sily a pokračovať →</button><button id="editForces" type="button" hidden>Upraviť sily</button></div>
+<p class="lockMsg" id="forcesLock">Vyber aspoň jednu silu alebo vedome potvrď, že žiadna nepôsobí.</p>
+<div class="controls"><button id="clear">Odstrániť všetky sily</button><button id="reset">Obnoviť úlohu</button></div><hr><details class="collapsible"><summary>Čo znamená 100 % Fg?</summary><p>Je to veľkosť gravitačnej sily pri hmotnosti uvedenej v zadaní: Fg = m · g. Používame g = 10 m/s². Napr. pri m = 2 kg je 100 % Fg = 20 N a 50 % Fg = 10 N. V simulácii sa pri nesprávnom modeli môžu vyskytnúť zámerne nereálne výsledky.</p></details></div>
+<div class="panel" id="teacherPanel" hidden><h2>Učiteľské poznámky</h2><p class="small">Súčasťou cvičenia je aj <em>nesprávna</em> sila „sila pohybu“ a pri letiacich predmetoch „sila hodu“. Po opustení ruky tieto sily na teleso nepôsobia.</p><p class="small">Podložka sa automaticky nesnaží opravovať nesprávne zvolené sily: ide o myšlienkový experiment. Rozlomenie stola, zaborenie do vozovky a pružinový odraz sú názorné hypotetické animácie, nie výpočty pevnosti materiálu. Pri odstránení reakcie podložky fyzikálne nemôže zostať bežný neporušený stôl súčasne v kontakte s padajúcou knihou.</p><p class="small">Odpor vzduchu alebo vody je v tomto prvom modeli zjednodušene reprezentovaný zvolenou približne konštantnou silou počas krátkeho úseku pohybu. Nejde o presný aerodynamický model.</p><details class="collapsible"><summary>Použité inšpirácie a odkazy</summary><p class="sourceLinks"><a target="_blank" rel="noopener" href="https://www.physicsclassroom.com/shwave/fbd.cfm">Physics Classroom – Free Body Diagrams</a><br><a target="_blank" rel="noopener" href="https://openstax.org/books/university-physics-volume-1/pages/5-7-drawing-free-body-diagrams">OpenStax – Drawing Free-Body Diagrams</a><br><a target="_blank" rel="noopener" href="https://phet.colorado.edu/en/simulations/forces-and-motion-basics">PhET – Forces and Motion</a><br><a target="_blank" rel="noopener" href="https://phet.colorado.edu/en/simulations/projectile-motion">PhET – Projectile Motion</a></p></details></div></aside></div>
+<div class="footer">Offline vzdelávací model • Všetky sily sú vonkajšie sily pôsobiace na označené teleso • Pohyb sa počíta podľa F = m·a; pri náraze na zem sa ukážka zastaví • Zjednodušené 2D scény; fyzikálny model počíta pohyb v dvoch rozmeroch (x, y).</div></main>
+<script>
+'use strict';
+const G=10, dirs={R:[1,0],L:[-1,0],U:[0,1],D:[0,-1],RU:[Math.SQRT1_2,Math.SQRT1_2],RD:[Math.SQRT1_2,-Math.SQRT1_2],LU:[-Math.SQRT1_2,Math.SQRT1_2],LD:[-Math.SQRT1_2,-Math.SQRT1_2]};
+const dirLabel={R:'→ vpravo',L:'← vľavo',U:'↑ hore',D:'↓ dole',RU:'↗ šikmo hore',RD:'↘ šikmo dole',LU:'↖ šikmo hore',LD:'↙ šikmo dole'};
+const forceSubscripts={g:'g',n:'N',p:'p',f:'t',tr:'h',r:'o',br:'b',rope:'l',lh:'ľ',rh:'p',air:'vz',bu:'A',th:'T',mag:'m',fh:'hodu',fm:'pohybu',kick:'k',w:'vody',wind:'vetra',custom:'x'};
+const forceColors={g:'#245abd',n:'#7f4cd1',p:'#2a9d8f',f:'#9c6644',tr:'#f4a261',r:'#6c757d',br:'#e76f51',rope:'#0081a7',lh:'#8338ec',rh:'#ff006e',air:'#4d908e',bu:'#43aa8b',th:'#f8961e',mag:'#577590',fh:'#c1121f',fm:'#495057',kick:'#8ac926',w:'#277da1',wind:'#90be6d',custom:'#adb5bd',result:'#d62828'};
+const forceInfo={g:'Gravitačná sila Zeme',n:'Tlaková sila podložky',p:'Sila človeka pri tlačení',f:'Trecia sila podložky',tr:'Hnacia sila vozovky na kolesá',r:'Odpor prostredia',br:'Brzdná sila vozovky',rope:'Ťahová sila lana',lh:'Sila človeka zľava',rh:'Sila človeka sprava',air:'Odpor vzduchu',bu:'Vztlaková sila',th:'Ťahová sila motora rakety',mag:'Magnetická sila',fh:'„Sila hodu“ (návrh žiaka)',fm:'„Sila pohybu“ (návrh žiaka)',kick:'Sila nohy pri kope',w:'Odpor vody',wind:'Sila vetra',custom:'Iná vonkajšia sila – vlastný pokus'};
+function F(id,mag,dir,real=true){return {id,mag,dir,real}}
+const g=()=>F('g',100,'D'), n=(v=100)=>F('n',v,'U');
+const bogus=(dir='R')=>F('fm',35,dir,false), thrown=(dir='R')=>F('fh',40,dir,false);
+const scenarios=[];
+function S(id,cat,title,scene,goal,story,mass,x,y,vx,vy,fs,extra={}){scenarios.push({id,cat,title,scene,goal,story,mass,x,y,vx,vy,fs:[...fs,F('custom',35,'R',false)],extra});}
+function currentSubject(){return current?.extra?.subject||'crate';}
+function currentContext(){return current?.extra?.context||'';}
+function motionTaskText(s){return s.extra?.task==='predict'?'Zostav sily podľa popisu, zohľadni uvedené zanedbania alebo porovnania síl a predpovedz pohyb. Potom over svoj model.':'Navrhni sily, ich smery a veľkosti tak, aby zodpovedali opísanej situácii. Potom over svoj model.';}
+function addPair(baseId,cat,titleBase,scene,goalInfer,goalPredict,story,mass,x,y,vx,vy,fsInfer,fsPredict,extra={}){
+  S(baseId+'a',cat,titleBase+' · typ 1',scene,goalPredict,story,mass,x,y,vx,vy,fsPredict,{...extra,task:'predict'});
+  S(baseId+'b',cat,titleBase+' · typ 2',scene,goalInfer,story,mass,x,y,vx,vy,fsInfer,{...extra,task:'infer'});
+}
+const noTouchBall=[F('fh',40,'R',false),F('air',20,'L',false),bogus('RU')];
+// STOJACE TELESÁ
+addPair('book_rest','stoji','Kniha na stole','table','Kniha pokojne leží na vodorovnom stole.','Kniha pokojne leží na vodorovnom stole. Vieš, že na ňu nepôsobí žiadna vodorovná sila.','Stôl je neporušený.',2,0,0,0,0,[g(),n(),F('p',40,'R',false),bogus()],[g(),n(),F('p',40,'R',false),bogus()],{subject:'book'});
+addPair('crate_static','stoji','Debna a malé tlačenie','floor','Debna zostáva stáť na mieste, hoci do nej človek tlačí doprava.','Človek tlačí do debny doprava, ale debna zostáva stáť na mieste. Uvažuj aj trenie.','Podlaha je drsná.',5,0,0,0,0,[g(),n(),F('p',20,'R'),F('f',20,'L'),bogus()],[g(),n(),F('p',20,'R'),F('f',20,'L'),bogus()],{subject:'crate',context:'pusher'});
+addPair('car_park','stoji','Zaparkované auto','road','Auto stojí na rovnej ceste.','Auto stojí na rovnej ceste. Vieš, že motor nevytvára hnaciu silu a auto sa nepohybuje.','Cesta je vodorovná.',1200,0,0,0,0,[g(),n(),F('tr',30,'R',false),bogus()],[g(),n(),F('tr',30,'R',false),bogus()],{subject:'car'});
+addPair('tug_rest','stoji','Vozík držiaci dvaja ľudia','floor','Dvaja ľudia ťahajú vozík opačnými smermi, ale vozík stojí.','Dvaja ľudia ťahajú vozík opačnými smermi. Vozík zostáva stáť. Trenie zanedbaj.','Obaja držia napnuté laná.',50,0,0,0,0,[g(),n(),F('lh',55,'L'),F('rh',55,'R'),bogus()],[g(),n(),F('lh',55,'L'),F('rh',55,'R'),bogus()],{subject:'tug',context:'tug'});
+addPair('elevator_rest','stoji','Výťah v pokoji','lift','Výťah stojí v šachte.','Výťah stojí v šachte. Vieš, že kabína sa nepohybuje.','Lano je napnuté.',600,0,5,0,0,[g(),F('rope',100,'U'),bogus('U')],[g(),F('rope',100,'U'),bogus('U')],{subject:'elevator'});
+addPair('boat_rest','stoji','Loď na hladine','water','Loď pokojne pláva na hladine.','Loď pokojne pláva na hladine. Vieš, že zvisle sa nepohybuje a hladina je pokojná.','Bez vetra a prúdu.',500,0,0,0,0,[g(),F('bu',100,'U'),F('n',100,'U',false),bogus()],[g(),F('bu',100,'U'),F('n',100,'U',false),bogus()],{subject:'boat'});
+addPair('puck_rest','stoji','Puk v pokoji na ľade','ice','Hokejový puk leží na ľade a nepohybuje sa.','Hokejový puk leží na ľade a nepohybuje sa. Uvažuj iba sily, ktoré naň pôsobia pri pokoji.','Ľad je vodorovný.',0.2,0,0,0,0,[g(),n(),F('kick',50,'R',false),bogus()],[g(),n(),F('kick',50,'R',false),bogus()],{subject:'puck'});
+addPair('ball_rest','stoji','Lopta na zemi','floor','Lopta leží na zemi a stojí.','Lopta leží na zemi a stojí.','Rovná podlaha.',0.6,0,0,0,0,[g(),n(),F('kick',45,'R',false),bogus()],[g(),n(),F('kick',45,'R',false),bogus()],{subject:'ball'});
+
+// ROVNOMERNÝ POHYB
+addPair('puck_uniform','rovno','Puk po ľade','ice','Puk sa po údere pohybuje po ľade konštantnou rýchlosťou.','Puk bol udretý po ľade a ďalej sa pohybuje bez zmeny rýchlosti. Trenie zanedbaj.','Hokejka sa puku už nedotýka.',0.2,0,0,3,0,[g(),n(),F('kick',70,'R',false),bogus()],[g(),n(),F('kick',70,'R',false),bogus()],{subject:'puck'});
+addPair('car_uniform','rovno','Auto ustálenou rýchlosťou','road','Auto sa pohybuje doprava konštantnou rýchlosťou po rovnej ceste.','Auto ide po rovnej ceste konštantnou rýchlosťou. Hnacia sila a odpory sa navzájom vyrovnajú.','Bežné jazdné podmienky.',1100,0,0,3,0,[g(),n(),F('tr',18,'R'),F('r',18,'L'),bogus()],[g(),n(),F('tr',18,'R'),F('r',18,'L'),bogus()],{subject:'car'});
+addPair('tug_uniform','rovno','Vozík ťahaný rovnomerne','floor','Dvaja ľudia ťahajú vozík a ten sa pohybuje doprava konštantnou rýchlosťou.','Vozík sa pohybuje doprava konštantnou rýchlosťou. Trenie zanedbaj a uvažuj len ťahy ľudí.','Obaja kráčajú spolu s vozíkom.',50,0,0,2.5,0,[g(),n(),F('lh',55,'L'),F('rh',55,'R'),bogus()],[g(),n(),F('lh',55,'L'),F('rh',55,'R'),bogus()],{subject:'tug',context:'tug'});
+addPair('elevator_uniform','rovno','Výťah rovnomerne nahor','lift','Výťah sa pohybuje nahor konštantnou rýchlosťou.','Výťah sa pohybuje nahor konštantnou rýchlosťou.','Lano je napnuté.',600,0,5,0,2.5,[g(),F('rope',100,'U'),bogus('U')],[g(),F('rope',100,'U'),bogus('U')],{subject:'elevator'});
+addPair('boat_uniform','rovno','Loď rovnomerne dopredu','water','Loď sa pohybuje po pokojnej hladine konštantnou rýchlosťou doprava.','Loď sa pohybuje po hladine konštantnou rýchlosťou. Hnacia sila a odpor vody sa vyrovnajú.','Pokojná hladina.',500,0,0,2.2,0,[g(),F('bu',100,'U'),F('tr',24,'R'),F('w',24,'L')],[g(),F('bu',100,'U'),F('tr',24,'R'),F('w',24,'L')],{subject:'boat'});
+addPair('space_uniform','rovno','Teleso vo vesmíre','space','Teleso sa vo vesmíre pohybuje doprava konštantnou rýchlosťou.','Astronaut postrčil teleso a to sa ďalej pohybuje konštantnou rýchlosťou. Zanedbaj všetky odpory aj gravitáciu okolia.','Astronaut sa telesa už nedotýka.',2,0,0,3,0,[F('p',50,'R',false),F('g',100,'D',false),bogus()],[F('p',50,'R',false),F('g',100,'D',false),bogus()],{subject:'crate',context:'spacePush'});
+addPair('parachute_uniform','rovno','Parašutista ustáleným pádom','air','Parašutista klesá stálou rýchlosťou s otvoreným padákom.','Parašutista klesá stálou rýchlosťou s otvoreným padákom.','Pozoruj ho po dlhšom čase od otvorenia padáka.',85,0,23,0,-2.2,[g(),F('air',100,'U'),bogus('D')],[g(),F('air',100,'U'),bogus('D')],{subject:'parachute'});
+addPair('car_uniform2','rovno','Auto konštantnou rýchlosťou vľavo','road','Auto sa pohybuje doľava konštantnou rýchlosťou po rovnej ceste.','Auto ide doľava konštantnou rýchlosťou. Hnacia sila a odpor sa vyrovnávajú.','Rovná vozovka.',1050,0,0,-2.5,0,[g(),n(),F('tr',16,'L'),F('r',16,'R'),bogus('L')],[g(),n(),F('tr',16,'L'),F('r',16,'R'),bogus('L')],{subject:'car'});
+addPair('boat_uniform2','rovno','Loď proti slabému vetru','water','Loď sa pohybuje doprava konštantnou rýchlosťou aj napriek slabému vetru doľava.','Loď sa pohybuje konštantnou rýchlosťou doprava. Uvažuj odpor vody a vietor.','Vietor duje doľava.',500,0,0,2.0,0,[g(),F('bu',100,'U'),F('tr',30,'R'),F('w',18,'L'),F('wind',12,'L')],[g(),F('bu',100,'U'),F('tr',30,'R'),F('w',18,'L'),F('wind',12,'L')],{subject:'boat'});
+
+// ZRÝCHLENÝ POHYB
+addPair('crate_acc','zrych','Debna sa rozbieha','floor','Človek začne tlačiť debnu doprava a debna sa rozbieha.','Človek tlačí debnu doprava. Vieš, že sila tlačenia je väčšia než trenie.','Podlaha je drsná.',5,0,0,0,0,[g(),n(),F('p',45,'R'),F('f',15,'L'),bogus()],[g(),n(),F('p',45,'R'),F('f',15,'L'),bogus()],{subject:'crate',context:'pusher'});
+addPair('crate_acc2','zrych','Debna sa spomaľuje','floor','Debna sa šmýka doprava, ale spomaľuje.','Debna sa po počiatočnom postrčení šmýka doprava a trenie ju spomaľuje. Človek sa jej už nedotýka.','Drsná podlaha.',5,0,0,2.8,0,[g(),n(),F('f',18,'L'),F('p',35,'R',false),bogus()],[g(),n(),F('f',18,'L'),F('p',35,'R',false),bogus()],{subject:'crate'});
+addPair('car_acc','zrych','Auto zrýchľuje','road','Auto na vodorovnej ceste zvyšuje svoju rýchlosť doprava.','Auto sa rozbieha doprava. Vieš, že hnacia sila je väčšia než odpor.','Rovná cesta.',1000,0,0,1,0,[g(),n(),F('tr',45,'R'),F('r',10,'L'),bogus()],[g(),n(),F('tr',45,'R'),F('r',10,'L'),bogus()],{subject:'car'});
+addPair('car_brake','zrych','Auto brzdí','road','Auto ide doprava a spomaľuje.','Auto ide doprava a vodič začne brzdiť.','Vodorovná vozovka.',1100,0,0,3.5,0,[g(),n(),F('br',28,'L'),F('r',5,'L'),F('tr',30,'R',false),bogus()],[g(),n(),F('br',28,'L'),F('r',5,'L'),F('tr',30,'R',false),bogus()],{subject:'car'});
+addPair('tug_acc','zrych','Vozík sa rozbieha doprava','floor','Dvaja ľudia ťahajú vozík a ten sa rozbieha doprava.','Dvaja ľudia ťahajú vozík opačnými smermi. Pravý ťah je väčší než ľavý.','Trenie zanedbaj.',50,0,0,0,0,[g(),n(),F('lh',45,'L'),F('rh',65,'R'),bogus()],[g(),n(),F('lh',45,'L'),F('rh',65,'R'),bogus()],{subject:'tug',context:'tug'});
+addPair('tug_brake','zrych','Vozík spomaľuje','floor','Vozík sa pohybuje doprava, ale jeho rýchlosť klesá.','Vozík sa pohybuje doprava. Ľavý človek začne ťahať silnejšie než pravý.','Trenie zanedbaj.',50,0,0,2.4,0,[g(),n(),F('lh',70,'L'),F('rh',40,'R'),bogus()],[g(),n(),F('lh',70,'L'),F('rh',40,'R'),bogus()],{subject:'tug',context:'tug'});
+addPair('basket_arc','zrych','Hodená basketbalová lopta','air','Basketbalová lopta letí šikmo nahor a jej dráha sa zakrivuje.','Basketbalová lopta bola hodená šikmo nahor. Ruka sa jej už nedotýka a odpor vzduchu zanedbaj.','Pri ihrisku stojí hráč, ktorý loptu hodil.',0.6,0,5,6,5,[g(),thrown('R'),F('air',20,'L',false),bogus('RU')],[g(),thrown('R'),F('air',20,'L',false),bogus('RU')],{subject:'ball',context:'thrower'});
+addPair('cannon_arc','zrych','Vystrelená delová guľa','air','Delová guľa letí po zakrivenej dráhe šikmo nahor a doprava.','Delová guľa bola vystrelená z dela. Delo sa jej už nedotýka a odpor vzduchu zanedbaj.','Delo zostáva na zemi, guľa letí vo vzduchu.',5,0,5,7,5,[g(),thrown('R'),F('air',20,'L',false),bogus('RU')],[g(),thrown('R'),F('air',20,'L',false),bogus('RU')],{subject:'ball',context:'cannon'});
+addPair('ball_fall','zrych','Lopta klesá po výstrele nahor','air','Lopta už stúpanie ukončila a teraz klesá šikmo nadol.','Lopta bola hodená šikmo nahor a teraz už klesá. Ruka sa jej nedotýka. Odpor vzduchu zanedbaj.','Pozoruj neskoršiu časť letu.',0.5,0,8,5,-2,[g(),thrown('R'),F('air',15,'L',false),bogus('RD')],[g(),thrown('R'),F('air',15,'L',false),bogus('RD')],{subject:'ball',context:'thrower'});
+addPair('elevator_slow','zrych','Výťah stúpa a spomaľuje','lift','Výťah stále stúpa, ale jeho rýchlosť smerom nahor klesá.','Výťah sa pohybuje nahor, no spomaľuje.','Napnuté lano.',600,0,5,0,3,[g(),F('rope',75,'U'),bogus('U')],[g(),F('rope',75,'U'),bogus('U')],{subject:'elevator'});
+addPair('elevator_downslow','zrych','Výťah klesá a spomaľuje','lift','Výťah klesá, ale jeho klesanie sa spomaľuje.','Výťah sa pohybuje nadol, no jeho rýchlosť sa zmenšuje.','Napnuté lano.',600,0,5,0,-3,[g(),F('rope',130,'U'),bogus('D')],[g(),F('rope',130,'U'),bogus('D')],{subject:'elevator'});
+addPair('parachute_open','zrych','Otvorenie padáka','air','Parašutista klesá a po otvorení padáka sa jeho klesanie spomaľuje.','Parašutista práve otvoril padák. V tomto okamihu je odpor vzduchu väčší než gravitácia.','Krátko po otvorení padáka.',85,0,23,0,-7,[g(),F('air',160,'U'),bogus('D')],[g(),F('air',160,'U'),bogus('D')],{subject:'parachute'});
+addPair('rocket_up','zrych','Raketa po štarte','air','Raketa stúpa čoraz rýchlejšie.','Raketa letí nahor so zapnutým motorom. Zanedbaj odpor vzduchu.','Krátko po štarte.',1000,0,3,0,1,[g(),F('th',160,'U'),F('air',20,'D',false),bogus('U')],[g(),F('th',160,'U'),F('air',20,'D',false),bogus('U')],{subject:'rocket'});
+addPair('boat_acc','zrych','Loď sa rozbieha','water','Motorový čln sa rozbieha doprava po pokojnej hladine.','Čln sa rozbieha doprava. Hnacia sila je väčšia než odpor vody.','Pokojná hladina.',300,0,0,0.8,0,[g(),F('bu',100,'U'),F('tr',35,'R'),F('w',10,'L')],[g(),F('bu',100,'U'),F('tr',35,'R'),F('w',10,'L')],{subject:'boat'});
+addPair('boat_slow','zrych','Loď bez motora spomaľuje','water','Loď sa pohybuje doprava, ale spomaľuje.','Motor člna je vypnutý a čln sa ešte chvíľu pohybuje doprava. Odpor vody ho spomaľuje.','Pokojná hladina.',300,0,0,2.8,0,[g(),F('bu',100,'U'),F('w',18,'L'),F('tr',18,'R',false)],[g(),F('bu',100,'U'),F('w',18,'L'),F('tr',18,'R',false)],{subject:'boat'});
+addPair('space_acc','zrych','Teleso vo vesmíre sa zrýchľuje','space','Teleso vo vesmíre zrýchľuje doprava.','Na teleso vo vesmíre začne pôsobiť konštantná sila smerom doprava. Zanedbaj odpory aj gravitáciu okolia.','Voľný let vo vesmíre.',2,0,0,0,0,[F('p',100,'R'),F('g',100,'D',false),bogus()],[F('p',100,'R'),F('g',100,'D',false),bogus()],{subject:'crate',context:'spacePush'});
+addPair('space_slow','zrych','Teleso vo vesmíre brzdí motorom','space','Teleso sa vo vesmíre pohybuje doprava, ale zapne motor opačným smerom a spomaľuje.','Teleso letí doprava, no krátko zapne motor doľava, takže spomaľuje.','Zanedbaj všetky vonkajšie odpory.',2,0,0,3.2,0,[F('th',55,'L'),F('g',100,'D',false),bogus('R')],[F('th',55,'L'),F('g',100,'D',false),bogus('R')],{subject:'crate',context:'spacePush'});
+S('lab_acc','zrych','Voľný pokus F = m·a','space','Na teleso začne pôsobiť konštantná vodorovná sila. Preskúmaj, ako sa pri rovnakom F mení zrýchlenie pri rôznej hmotnosti.','Bez trenia a bez gravitácie okolia.',2,0,0,0,0,[F('p',100,'R'),F('lh',100,'L',false),F('g',100,'D',false),bogus()],{subject:'crate',context:'spacePush',task:'infer'});
+const $=id=>document.getElementById(id);let current=scenarios[0],chosen={},time=0,playing=false,revealed=false,showRef=false,lastTimestamp=0,model=null,reference=null,ended=false,animId=0,elapsedSinceStep=0;
+let workflow='forces',observed=false,savedPrediction=[];
+const canvas=$('stage');
+const fmt=(v,n=1)=>v.toLocaleString('sk-SK',{minimumFractionDigits:n,maximumFractionDigits:n});
+function forceMathHTML(id){
+ const sub=forceSubscripts[id]||'x';
+ const sigma='';
+ return `<span class="vector-expression" aria-label="vektor F s indexom ${sub}"><span class="vector-base" aria-hidden="true">F</span><sub aria-hidden="true">${sub}</sub></span>`;
+}
+function hasForceDecision(){return studentForces().length>0 || $('noForce').checked;}
+function markedPrediction(){return [...$('predictions').querySelectorAll('input:checked')].map(e=>e.value);}
+function refreshWorkflow(){
+ const phases=['forces','predict','simulate','review'],step=phases.indexOf(workflow);
+ const layout=document.querySelector('.layout');
+ const aside=document.querySelector('aside[aria-label="Panel síl"]');
+ const backLabels=['','← Späť na sily','← Späť na predpoveď','← Späť na pokus'];
+ layout.classList.toggle('singleStep',workflow!=='forces');
+ aside.hidden=workflow!=='forces';
+ $('forcePanel').hidden=workflow!=='forces';
+ $('predictionPanel').hidden=workflow!=='predict';
+ $('verificationPanel').hidden=workflow!=='review';
+ $('teacherPanel').hidden=true;
+ $('backStep').hidden=step<=0;
+ $('backStep').textContent=backLabels[step]||'← Späť';
+ for(let i=0;i<4;i++){
+   const el=$('flow'+(i+1));el.classList.toggle('active',i===step);el.classList.toggle('done',i<step);
+   if(i===step)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');
+ }
+ const guide=[
+  'Krok 1/4: Prezri si 2D situáciu, vyber sily, nastav smery a veľkosti a potvrď ich.',
+  'Krok 2/4: Vyber, čo predpokladáš, že sa stane podľa tvojho modelu síl. Predpoveď musíš potvrdiť pred pokusom.',
+  'Krok 3/4: Tvoja predpoveď je uložená. Teraz spusti 2D animáciu a pozoruj pohyb. Až potom môžeš prejsť na overenie.',
+  'Krok 4/4: Teraz môžeš porovnať sily s fyzikálnym modelom a prípadne prehrať oba modely.'
+ ];
+ $('flowHint').textContent=guide[step];
+ for(const [id,index] of [['forcePanel',0],['predictionPanel',1],['simulationPanel',2],['verificationPanel',3]]){
+   const el=$(id);el.classList.toggle('isCurrent',step===index);el.classList.toggle('isLocked',step<index);
+ }
+ const forceEditable=workflow==='forces';
+ $('forces').querySelectorAll('input,select').forEach(el=>el.disabled=!forceEditable || (el.type==='range' && el.id.startsWith('mag') && chosen[current.fs[Number(el.id.slice(3))]?.id]?.on && current.fs[Number(el.id.slice(3))]?.id==='g'));
+ $('massSlider').disabled=!forceEditable;
+ $('noForce').disabled=!forceEditable || studentForces().length>0;
+ $('clear').disabled=!forceEditable;
+ $('confirmForces').disabled=!forceEditable || !hasForceDecision();
+ $('editForces').hidden=true;
+ $('forcesLock').textContent=forceEditable?(hasForceDecision()?'Keď si pripravený, potvrď model síl.':'Vyber aspoň jednu silu alebo vedome potvrď, že žiadna nepôsobí.'):'Sily sú potvrdené. Ak ich zmeníš, budeš musieť zopakovať ďalšie kroky.';
+ $('predictions').querySelectorAll('input').forEach(el=>el.disabled=workflow!=='predict');
+ $('confirmPrediction').disabled=workflow!=='predict'||markedPrediction().length===0;
+ $('editPrediction').hidden=true;
+ $('predictionLock').textContent=workflow==='forces'?'Zamknuté. Najprv potvrď sily v kroku 1.':workflow==='predict'?'Vyber aspoň jednu predpoveď a potvrď ju.':'Predpoveď je uložená.';
+ const motionAllowed=step>=2;
+ $('simulationPanel').classList.toggle('previewMode',workflow!=='simulate');
+ $('simControls').hidden=workflow!=='simulate';
+ $('simMeter').hidden=workflow!=='simulate';
+ $('play').disabled=!motionAllowed;
+ $('pause').disabled=!motionAllowed || !playing;
+ $('restart').disabled=!motionAllowed;
+ $('speed').disabled=!motionAllowed;
+ $('showArrows').disabled=!motionAllowed;
+ $('check').disabled=!(workflow==='review');
+ $('goVerification').disabled=!observed;
+ $('goVerification').hidden=workflow!=='simulate';
+ $('goVerification').textContent=observed?'Pokračovať na overenie →':'Najprv sleduj pokus';
+ $('compare').disabled=!(workflow==='review'&&revealed);
+ $('new').disabled=workflow!=='review';
+ $('scenePreviewNote').textContent=workflow==='review'?'Porovnanie oboch modelov môžeš spustiť v aktuálnom kroku Overenie.':workflow==='simulate'?'Teraz môžeš spustiť 2D pokus a sledovať dôsledky svojich síl.':'Toto je iba náhľad situácie. Ďalší krok sa zobrazí až po splnení aktuálneho.';
+ if(!motionAllowed){
+   $('netForce').textContent='Až po predpovedi';$('netForce').style.color='';$('acceleration').textContent='Až po predpovedi';
+ }
+}
+function resetWorkflow(){
+ workflow='forces';observed=false;savedPrediction=[];$('noForce').checked=false;
+ $('predictions').querySelectorAll('input').forEach(el=>el.checked=false);
+ refreshWorkflow();
+}
+function confirmForces(){
+ if(workflow!=='forces'||!hasForceDecision())return;
+ workflow='predict';observed=false;refreshWorkflow();
+ $('status').textContent='Sily sú potvrdené. Teraz musíš predpovedať pohyb; animáciu ešte nemožno spustiť.';
+ $('predictionPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function editForces(){
+ if(workflow==='forces')return;
+ pause();hideReveal();resetSim();resetWorkflow();
+ $('status').textContent='Meníš sily. Po úprave treba znova potvrdiť predpoveď a vykonať pokus.';
+ $('forcePanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function confirmPrediction(){
+ if(workflow!=='predict')return;
+ const values=markedPrediction();if(values.length===0)return;
+ savedPrediction=[...values];workflow='simulate';observed=false;resetSim();refreshWorkflow();
+ $('status').textContent='Predpoveď bola uložená. Spusti svoj model a pozoruj, čo sa stane.';
+ $('simulationPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function editPrediction(){
+ if(!['simulate','review'].includes(workflow))return;
+ pause();hideReveal();resetSim();workflow='predict';observed=false;savedPrediction=[];refreshWorkflow();
+ $('status').textContent='Predpoveď môžeš zmeniť, ale pred ďalším pokusom ju znovu potvrď.';
+ $('predictionPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function goBackStep(){
+ if(workflow==='forces')return;
+ pause();
+ if(workflow==='predict'){
+   // Keep selected forces while returning to their editor.
+   workflow='forces';
+   refreshWorkflow();
+   $('forcePanel').scrollIntoView({behavior:'smooth',block:'start'});
+   return;
+ }
+ if(workflow==='simulate'){
+   // Require a fresh confirmation before running another experiment.
+   hideReveal();resetSim();observed=false;workflow='predict';savedPrediction=[];
+   refreshWorkflow();
+   $('predictionPanel').scrollIntoView({behavior:'smooth',block:'start'});
+   return;
+ }
+ if(workflow==='review'){
+   // The experiment has been performed, so revisiting the results is allowed.
+   hideReveal();resetSim();workflow='simulate';
+   refreshWorkflow();
+   $('simulationPanel').scrollIntoView({behavior:'smooth',block:'start'});
+ }
+}
+function makeState(s){return {x:s.x,y:s.y,vx:s.vx,vy:s.vy,ax:0,ay:0,hit:false,broken:false,breakAt:null,bounce:false,bounceAt:null,ended:false,peak:false}}
+function catalogBuild(){const selected=$('situationSelect').value;const cat=$('category').value;const filtered=scenarios.filter(s=>cat==='all'||s.cat===cat);$('situationSelect').innerHTML=filtered.map(s=>`<option value="${s.id}">${s.title}</option>`).join('');if(filtered.some(s=>s.id===selected))$('situationSelect').value=selected;else $('situationSelect').value=filtered[0].id;}
+function resetSim(){playing=false;ended=false;cancelAnimationFrame(animId);time=0;model=makeState(current);reference=makeState(current);lastTimestamp=0;elapsedSinceStep=0;tracks.length=0;updateMetrics();draw();$('play').textContent='▶ Spustiť';$('sceneInfo').textContent='t = 0,00 s · model pripravený';}
+function hideReveal(){revealed=false;showRef=false;$('result').hidden=true;$('referenceLegend').hidden=true;$('compare').textContent='▶ Prehrať oba modely';}
+function setSituation(id){current=scenarios.find(s=>s.id===id)||scenarios[0];$('situationSelect').value=current.id;chosen={};current.fs.forEach(f=>chosen[f.id]={on:false,mag:f.id==='g'?f.mag:0,dir:f.dir});$('situationTitle').textContent=current.title;$('situationGoal').textContent=current.goal+' '+motionTaskText(current);$('initialState').textContent=`${current.story||''} • Hmotnosť: ${fmt(current.mass, current.mass<1?1:0)} kg. • Začiatočná rýchlosť: (${fmt(current.vx)}; ${fmt(current.vy)}) m/s.`;
+ $('counter').textContent=`${scenarios.indexOf(current)+1} / ${scenarios.length} situácií`; $('massExperiment').hidden=current.id!=='lab_acc'; if(current.id==='lab_acc'){$('massSlider').value='2';$('massOut').textContent='2 kg';}$('predictions').querySelectorAll('input').forEach(i=>i.checked=false);buildForces();hideReveal();workflow='forces';observed=false;savedPrediction=[];$('noForce').checked=false;resetSim();refreshWorkflow();$('status').textContent='Pozri si 2D situáciu. Všetky sily okrem gravitačnej začínajú na 0 % Fg, preto im musíš nastaviť veľkosť sám. Predpoveď je povinná pred animáciou.';}
+function buildForces(){const parent=$('forces');parent.innerHTML='';current.fs.forEach((f,i)=>{const ch=chosen[f.id];const el=document.createElement('div');el.className='force'+(ch.on?' active':'');const id='force'+i;const special=f.id==='g';el.innerHTML=`<div class="forcehead"><input type="checkbox" id="${id}" ${ch.on?'checked':''}><label for="${id}">${forceInfo[f.id]} ${forceMathHTML(f.id)}</label></div><div class="forceopts" ${ch.on?'':'hidden'}><label class="small" for="mag${i}">Veľkosť</label><output class="number" id="value${i}">${fmt(ch.mag,0)} % Fg · ${fmt(ch.mag*current.mass*G/100,1)} N</output><input class="full" type="range" id="mag${i}" min="0" max="200" step="5" value="${ch.mag}" ${special?'disabled':''} aria-label="Veľkosť: ${forceInfo[f.id]}"><label class="small" for="dir${i}">Smer</label><select id="dir${i}" aria-label="Smer: ${forceInfo[f.id]}">${Object.keys(dirs).map(k=>`<option value="${k}" ${ch.dir===k?'selected':''}>${dirLabel[k]}</option>`).join('')}</select></div>`;
+ parent.append(el);el.querySelector('input[type=checkbox]').addEventListener('change',e=>{ch.on=e.target.checked;if(ch.on)$('noForce').checked=false;buildForces();edited();});if(ch.on){el.querySelector('input[type=range]').addEventListener('input',e=>{ch.mag=+e.target.value;$('value'+i).textContent=`${fmt(ch.mag,0)} % Fg · ${fmt(ch.mag*current.mass*G/100,1)} N`;edited();});el.querySelector('select').addEventListener('change',e=>{ch.dir=e.target.value;edited();});}});if(workflow!=='forces')refreshWorkflow();}
+function edited(){hideReveal();resetSim();workflow='forces';observed=false;savedPrediction=[];$('predictions').querySelectorAll('input').forEach(e=>e.checked=false);refreshWorkflow();$('status').textContent='Model síl je upravený. Potvrď ho a potom urob predpoveď.';}
+function forceVector(forces,s,state){let fx=0,fy=0;const mass=s.id==='lab_acc'?Number($('massSlider').value):s.mass;for(const f of forces){const d=dirs[f.dir];const magnitude=f.mag/100*(f.id==='g'?mass:s.mass)*G;fx+=magnitude*d[0];fy+=magnitude*d[1];}return {fx,fy,ax:fx/mass,ay:fy/mass};}
+function studentForces(){return current.fs.filter(f=>chosen[f.id]?.on).map(f=>({id:f.id,mag:chosen[f.id].mag,dir:chosen[f.id].dir}));}
+function trueForces(){return current.fs.filter(f=>f.real).map(f=>({id:f.id,mag:f.mag,dir:f.dir}));}
+function support(s,fs,state,t){return fs.filter(f=>{if(f.id==='n'&&['table','floor','road','ice','snow'].includes(s.scene)){if(state.broken||state.y>0.14)return false;if(state.y<-.20)return false;}
+ if(f.id==='n'&&s.scene==='air')return true;return true;});}
+function effectiveState(fs,state,t){const sel=support(current,fs,state,t);return forceVector(sel,current,state);}
+function integrate(state,forceList,dt){if(state.ended)return;const s=current;const eff=effectiveState(forceList,state,time);state.ax=eff.ax;state.ay=eff.ay;
+ // For friction / drag, a preset opposing force cannot flip a resting object into reverse motion.
+ let ax=state.ax,ay=state.ay;const opposingX=forceList.filter(f=>['f','br','r','w'].includes(f.id));if(opposingX.length&&Math.abs(state.vx)<.06&&Math.sign(ax)!==Math.sign(s.vx)&&s.vx!==0){/* static threshold ignored in simplified model */}
+ const oldVx=state.vx;state.vx+=ax*dt;state.vy+=ay*dt;
+ const activeRes=forceList.filter(f=>['f','br','r','w'].includes(f.id));
+ const otherX=forceList.filter(f=>!['f','br','r','w'].includes(f.id)).reduce((sum,f)=>sum+(dirs[f.dir]?.[0]||0)*f.mag,0);
+ if(activeRes.length && Math.abs(otherX)<.01 && oldVx!==0 && oldVx*state.vx<=0){state.vx=0;state.ax=0;}
+ if(activeRes.length && Math.abs(otherX)<.01 && oldVx===0) {state.vx=0;state.ax=0;}
+ state.x+=state.vx*dt;state.y+=state.vy*dt;
+ const ground=['table','floor','road','ice','snow'].includes(s.scene);
+ if(ground){
+  if(state.y<-.03&&!state.broken){state.broken=true;state.breakAt=time;}
+  if(state.y>0.14&&!state.bounce){state.bounce=true;state.bounceAt=time;}
+ }
+ // Pod rozlomenou doskou je viditeľná podlaha: kniha na nej skončí, nie mimo plátna.
+ if(s.id==='book'&&state.broken&&state.y<=-1.42&&state.vy<0){state.y=-1.42;state.vy=0;state.ay=0;state.ended=true;state.hit=true;}
+ // V ilustrácii prepadnutej vozovky / mäkkého podkladu má vozidlo či debna zostať viditeľná.
+ if(['road','floor','ice'].includes(s.scene)&&state.broken&&state.y<=-1.0&&state.vy<0){state.y=-1.0;state.vy=0;state.ay=0;state.ended=true;state.hit=true;}
+ if(s.scene==='air'&&state.y<=0&&state.vy<0){state.y=0;state.ended=true;state.hit=true;}
+ if(s.scene==='water'&&state.y< -13)state.ended=true;
+ if(s.scene==='lift'&&Math.abs(state.y-s.y)>28)state.ended=true;
+ if(Math.abs(state.x)>400||Math.abs(state.y)>240)state.ended=true;
+ if(!Number.isFinite(state.x+state.y+state.vx+state.vy)){state.ended=true;}
+}
+function vectorsText(v){return `(${fmt(v.fx,1)} N; ${fmt(v.fy,1)} N)`;}
+function updateMetrics(){const forces=studentForces();const fv=effectiveState(forces,model,time);const hidden=['forces','predict'].includes(workflow);const collided=model?.ended&&model?.hit;
+ $('netForce').textContent=hidden?'Až po predpovedi':collided?'— náraz mimo modelu':vectorsText(fv);$('netForce').style.color=hidden?'':'#d62828';
+ $('acceleration').textContent=hidden?'Až po predpovedi':collided?'— náraz mimo modelu':`(${fmt(fv.ax,1)}; ${fmt(fv.ay,1)}) m/s²`;
+ $('velocity').textContent=`(${fmt(model.vx,1)}; ${fmt(model.vy,1)}) m/s`;$('time').textContent=fmt(time,2)+' s';}
+function stageStep(timestamp){if(!playing)return;const dt=lastTimestamp?Math.min((timestamp-lastTimestamp)/1000,.045):0;lastTimestamp=timestamp;const tStep=dt*Number($('speed').value);const steps=Math.max(1,Math.ceil(tStep/.012));for(let i=0;i<steps;i++){const h=tStep/steps;if(time>=8||model.ended&&(!showRef||reference.ended)){playing=false;break;}integrate(model,studentForces(),h);if(showRef)integrate(reference,trueForces(),h);time+=h;}if(time>0 && tracks.length<240)tracks.push(pointFor(model));if(!playing){refreshWorkflow();$('play').textContent='▶ Spustiť';$('status').textContent='Ukážka sa skončila. Môžeš ju spustiť znovu alebo zobraziť porovnanie.';}if(workflow==='simulate'&&!observed&&(time>=.75||model.ended)){observed=true;refreshWorkflow();}updateMetrics();$('sceneInfo').textContent=`t = ${fmt(time,2)} s${model.broken?(currentSubject()==='book'?' · stôl sa láme':current.scene==='road'?' · vozovka sa prepadá':' · povrch nevydržal'):model.hit?' · dopad':model.bounce&&currentSubject()==='book'?' · hypotetický odraz':''}`;draw();if(playing)animId=requestAnimationFrame(stageStep);refreshWorkflow();}
+function start(){if(!['simulate','review'].includes(workflow)||playing)return;if(time>=8||model.ended&&(!showRef||reference.ended))resetSim();playing=true;$('play').textContent='▶ Beží…';$('status').textContent='Pohyb sa počíta výlučne z vybraných síl. Pozoruj, čo sa stane s rýchlosťou.';lastTimestamp=0;animId=requestAnimationFrame(stageStep);refreshWorkflow();}
+function pause(){if(!playing)return;playing=false;cancelAnimationFrame(animId);$('play').textContent='▶ Pokračovať';$('status').textContent='Pauza. Môžeš pokračovať alebo začať pokus od začiatku.';refreshWorkflow();}
+function predictState(f,st){const e=forceVector(f,current,st);const v=Math.hypot(current.vx,current.vy),a=Math.hypot(e.ax,e.ay);const dot=current.vx*e.ax+current.vy*e.ay;const cross=Math.abs(current.vx*e.ay-current.vy*e.ax);const result=new Set();if(v<.03&&a<.04)result.add('stay');else if(a<.04)result.add('uniform');else if(v<.03){result.add('speedup');}else{if(dot>0.08)result.add('speedup');else if(dot<-.08)result.add('slowdown');if(cross>0.08)result.add('turn');}if(current.vy<-.05||(Math.abs(current.vy)<=.05&&e.ay<-.05))result.add('fall');return result;}
+function setEqual(a,b){return a.size===b.size&&[...a].every(x=>b.has(x));}
+function motionLabel(set){
+ const labels={stay:'zostáva v pokoji',uniform:'pohybuje sa rovnomerne',speedup:'zrýchľuje',slowdown:'spomaľuje',turn:'mení smer',fall:'padá alebo klesá'};
+ return [...set].map(x=>labels[x]||x).join(', ');
+}
+function compareForces(){
+ const mine=studentForces(),truth=trueForces();
+ const missing=[], extras=[], wrongDir=[];
+ for(const t of truth){
+   const s=mine.find(m=>m.id===t.id);
+   if(!s || s.mag<=0){missing.push(forceInfo[t.id]); continue;}
+   if(s.dir!==t.dir) wrongDir.push(`${forceInfo[t.id]} (${dirLabel[t.dir]})`);
+ }
+ for(const m of mine){
+   if(!truth.some(t=>t.id===m.id)) extras.push(forceInfo[m.id]);
+ }
+ const expectedMotion=predictState(truth,makeState(current));
+ const mineMotion=predictState(mine,makeState(current));
+ const structureOK=missing.length===0&&extras.length===0&&wrongDir.length===0;
+ const motionOK=setEqual(expectedMotion,mineMotion);
+ return {ok:structureOK&&motionOK,structureOK,motionOK,missing,extras,wrongDir,expectedMotion,mineMotion};
+}
+function check(){
+ if(workflow!=='review'||!observed)return;
+ pause();revealed=true;
+ const evaluation=compareForces();
+ const predicted=new Set(savedPrediction);
+ const expectedOwn=predictState(studentForces(),model);
+ const pOK=predicted.size>0&&setEqual(predicted,expectedOwn);
+ const right=trueForces(),wrong=studentForces();
+ const list=right.map(f=>`${forceInfo[f.id]}: ${fmt(f.mag,0)} % Fg, ${dirLabel[f.dir]}`).join('<br>');
+ const actual=effectiveState(right,makeState(current),0);
+ const student=effectiveState(wrong,makeState(current),0);
+ const out=$('result');
+ out.className='result'+(evaluation.ok?'':' bad');
+ out.hidden=false;
+ out.innerHTML=`<h3>${evaluation.ok?'✓ Model zodpovedá zadaniu':'Model ešte úplne nezodpovedá zadaniu'}</h3>
+ <p><strong>Hodnotenie:</strong> Posudzuje sa hlavne to, či zvolené sily vedú k správnemu typu pohybu. Presné číselné triafanie veľkostí síl sa nevyžaduje.</p>
+ <p><strong>Typ pohybu podľa zadania:</strong> ${motionLabel(evaluation.expectedMotion)||'—'}.<br><strong>Typ pohybu podľa tvojho modelu:</strong> ${motionLabel(evaluation.mineMotion)||'—'}.</p>
+ ${evaluation.missing.length?`<p>Chýbajú podstatné sily: ${evaluation.missing.join(', ')}.</p>`:''}
+ ${evaluation.wrongDir.length?`<p>Tieto sily majú nesprávny smer: ${evaluation.wrongDir.join(', ')}.</p>`:''}
+ ${evaluation.extras.length?`<p>V modeli sú navyše sily, ktoré do tejto situácie nepatria: ${evaluation.extras.join(', ')}.</p>`:''}
+ <p><strong>Predpoveď vlastného modelu:</strong> ${predicted.size===0?'Nevyplnená':pOK?'zodpovedá zostaveným silám':'nezodpovedá celkom tvojim silám'}.</p>
+ <p><strong>Jedna možná správna skladba síl:</strong><br>${list||'Na teleso nepôsobí v rámci modelu žiadna nenulová sila.'}</p>
+ <p><strong>Jedna možná výslednica:</strong> ${vectorsText(actual)}; <strong>zrýchlenie:</strong> (${fmt(actual.ax)}; ${fmt(actual.ay)}) m/s².</p>
+ <p><strong>Fyzikálne vysvetlenie:</strong> ${explain(current)}</p>
+ <p class="small">Tvoj model na začiatku: Σ<span class="vector-expression"><span class="vector-base">F</span></span> = ${vectorsText(student)}. Presné percentá jednotlivých síl sa tu berú len ako jeden z možných spôsobov, ako dosiahnuť správny typ pohybu.</p>`;
+ $('status').textContent=evaluation.ok?'Tvoj model vedie k správnemu typu pohybu. Môžeš porovnať obe animácie.':'Pozri si vysvetlenie a porovnaj modely. Ak opravíš sily, musíš zopakovať aj predpoveď.';
+ refreshWorkflow();
+}
+function explain(s){if(['ballup','ballarc','ballapex','ballright'].includes(s.id))return 'Sila ruky pôsobila iba počas dotyku. Po vypustení zostáva počiatočná rýchlosť, nie sila hodu. Pri zanedbanom odpore vzduchu pôsobí iba gravitácia. Vo vrchole šikmého hodu je vy = 0, ale vx zostáva nenulové.';
+ if(['book','laptop'].includes(s.id))return 'Knihu na neporušenom stole drží reakcia podložky. Ak jej v hypotetickom modeli priradíme príliš malú hodnotu, stôl musí povoliť: doska sa prelomí a kniha prepadne až na podlahu. Príliš veľká oporná sila by vyžadovala aktívnu deformáciu či pružný odraz; bežný nehybný stôl sám od seba knihu nevystrelí. Animácia zlomu je ilustračná, pevnosť dreva nepočítame.';
+ if(s.scene==='lift')return 'Rovnomerný pohyb aj pokoj znamenajú nulovú výslednicu. Pri zrýchľovaní nahor musí byť ťah lana väčší než gravitácia; pri spomaľovaní stúpania naopak menší.';
+ if(s.id==='skyopen'||s.id==='skyuniform')return 'Odpor vzduchu môže vyrovnať gravitačnú silu. Po otvorení padáka môže byť v danom okamihu väčší, takže zrýchlenie smeruje nahor, hoci parašutista ešte klesá. V realite sa odpor pri zmene rýchlosti mení.';
+ if(s.scene==='road')return 'Na auto pôsobí gravitačná a tlaková sila vozovky; vodorovné zrýchlenie určuje rozdiel hnacej/brzdnej sily vozovky a odporov. Motor je súčasť auta, preto jeho vnútorná sila sama osebe nie je vonkajšou silou auta.';
+ if(s.scene==='water')return 'Zvislé zrýchlenie určuje rozdiel gravitačnej a vztlakovej sily. Pri pokojnom plávaní sa rovnajú; pri ponáraní môže byť výslednica nadol.';
+ if(s.id==='lab')return 'Pri nezmenenej vodorovnej sile sa pri zväčšení hmotnosti zrýchlenie zmenšuje podľa a = F/m. Experiment používa jednu referenčnú veľkosť sily 20 N, hmotnosť meníš samostatne.';
+ if(s.id==='space')return 'Po skončení postrčenia už sila ruky nepôsobí. Bez výslednej sily teleso pokračuje v rovnomernom priamočiarom pohybe.';
+ if(s.id==='rocketcoast')return 'Raketa nepotrebuje ťah motora na pokračovanie letu nahor. Gravitačné zrýchlenie zmenšuje jej rýchlosť, až prestane stúpať.';
+ if(s.id==='rocket')return 'Raketa sa zrýchľuje nahor, keď je ťahová sila motora väčšia než gravitačná sila. Tu zanedbávame zmenu hmotnosti paliva a odpor.';
+ return 'Pohyb neurčuje sila „pohybu“, ale výslednica skutočných vonkajších síl. Ak sa výslednica rovná nule, rýchlosť sa nemení. Ak nie, zrýchlenie má smer výslednice.';}
+function compare(){if(workflow!=='review'||!revealed)return;$('simulationPanel').scrollIntoView({behavior:'smooth',block:'start'});showRef=true;$('referenceLegend').hidden=false;resetSim();showRef=true;$('referenceLegend').hidden=false;start();}
+// Prehľadné 2D scény. Každá kresba zodpovedá konkrétnemu zadaniu.
+const W=1000,H=460;
+const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+const ctx=canvas.getContext('2d');
+const tracks=[];
+function line2(x1,y1,x2,y2,color='#2b435d',width=3,dash=[]){ctx.save();ctx.beginPath();ctx.setLineDash(dash);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.stroke();ctx.restore()}
+function fillRect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
+function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function ellipse(x,y,rx,ry,color){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=color;ctx.fill()}
+function poly(pts,color){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);pts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));ctx.closePath();ctx.fillStyle=color;ctx.fill()}
+function txt(text,x,y,size=18,color='#24425e',align='left',weight='600'){ctx.fillStyle=color;ctx.textAlign=align;ctx.font=`${weight} ${size}px system-ui`;ctx.fillText(text,x,y);ctx.textAlign='left';}
+function cloud(x,y){ellipse(x,y,52,15,'#ffffffd7');ellipse(x+25,y-9,32,20,'#ffffffd7');ellipse(x-25,y-7,32,17,'#ffffffd7')}
+function backdrop(){
+ let sc=current.scene;
+ const sky=ctx.createLinearGradient(0,0,0,H);
+ sky.addColorStop(0,sc==='space'?'#172842':'#cde7ff');sky.addColorStop(1,sc==='space'?'#2e4661':'#eff8ff');fillRect(0,0,W,H,sky);
+ if(sc==='space'){
+  for(let i=0;i<70;i++)ellipse((i*223+67)%1000,(i*79+21)%440,1+(i%3)*.5,1+(i%3)*.5,'#ffffffb5');
+  txt('VÁKUUM · idealizovaný model',968,35,14,'#f4faff','right');
+  return;
+ }
+ cloud(145,87);cloud(490,59);cloud(855,103);
+ const hillY=sc==='air'?425:sc==='water'?304:sc==='road'?381:sc==='ice'?378:sc==='table'?338:382;
+ if(sc!=='lift'){
+  poly([[0,hillY],[0,hillY-50],[150,hillY-91],[280,hillY-54],[450,hillY-105],[630,hillY-60],[810,hillY-93],[1000,hillY-56],[1000,hillY]],'#b8ddc0');
+  poly([[0,hillY],[0,hillY-12],[205,hillY-29],[410,hillY-9],[680,hillY-42],[1000,hillY-18],[1000,hillY]],'#8fca9d');
+ }
+ if(sc==='table'){
+   // Umiestnenie a deformácia sú naviazané na model, nie na dekoratívnu čiaru.
+   drawDesk(model);
+ }else if(sc==='road'){
+   const g=ctx.createLinearGradient(0,381,0,460);g.addColorStop(0,'#7e8a94');g.addColorStop(1,'#465361');fillRect(0,381,W,79,g);
+   line2(0,381,W,381,'#d6e1e4',4);for(let x=0;x<1000;x+=125)rounded(x+16,426,67,7,2,'#f6f9fb');
+ }else if(sc==='ice'){
+   fillRect(0,380,W,80,'#bceaf5');line2(0,380,W,380,'#f8ffff',5);
+   for(let i=0;i<12;i++)line2(45+i*92,405,80+i*92,398,'#82cadd',1.5);
+ }else if(sc==='water'){
+   const water=ctx.createLinearGradient(0,299,0,460);water.addColorStop(0,'#66c0e0');water.addColorStop(1,'#2a7fa9');fillRect(0,300,W,160,water);
+   ctx.beginPath();ctx.moveTo(0,300);for(let x=0;x<=1000;x+=12)ctx.lineTo(x,299+3*Math.sin(x/30+time*2));ctx.strokeStyle='#e4fcff';ctx.lineWidth=4;ctx.stroke();
+   for(let i=0;i<10;i++)line2(50+i*100,350+(i%3)*24,84+i*100,350+(i%3)*24,'#ccf1f766',3);
+ }else if(sc==='lift'){
+   fillRect(0,0,W,H,'#dce7f1');fillRect(165,0,29,H,'#7e93a6');fillRect(806,0,29,H,'#7e93a6');
+   line2(500,0,500,H,'#8396a4',5);line2(194,422,806,422,'#8298aa',6);
+ }else if(sc==='air'){
+   fillRect(0,425,W,35,'#93c97c');line2(0,425,W,425,'#5eaa58',4);
+ }else{
+   fillRect(0,381,W,79,'#b7cb94');line2(0,381,W,381,'#7da06b',4);
+   if(currentContext()==='tug'){
+     // Pôdorysné značky sa pohybujú voči sledovacej kamere.
+     const offset=((model?.x-current.x)||0)*10;
+     for(let i=-2;i<13;i++){
+       const xx=i*115-(offset%115);
+       ellipse(xx+15,427,18,4,'#8cab6c88');
+       line2(xx+7,430,xx+25,430,'#69945877',2);
+     }
+   }
+ }
+}
+function deskBoard(x,y,w,h,shade='#a76d3d'){
+ const grad=ctx.createLinearGradient(x,y,x,y+h);grad.addColorStop(0,'#dba876');grad.addColorStop(.45,shade);grad.addColorStop(1,'#684128');
+ fillRect(x,y,w,h,grad);line2(x,y+2,x+w,y+2,'#f0c18b',2);
+ line2(x,y+h-1,x+w,y+h-1,'#604027',2);
+ for(let k=1;k<4;k++)line2(x+16,y+4+k*3,x+w-10,y+4+k*3,'#6f422125',1);
+}
+function deskShard(cx,cy,r,shade='#d8a36b'){
+ ctx.save();ctx.translate(cx,cy);ctx.rotate(r);poly([[-8,-4],[8,-3],[5,4],[-4,7]],shade);ctx.restore();
+}
+function drawDesk(state){
+ // Stôl stojí na dvoch nohách; pod stolom je vidieť podlahu a priestor na pád knihy.
+ fillRect(0,444,1000,16,'#a6bc93');line2(0,444,1000,444,'#77986e',3);
+ for(const lx of [196,790]){
+   rounded(lx,347,30,96,3,'#86512c');fillRect(lx+5,349,7,92,'#bc814b');
+   ellipse(lx+15,444,36,6,'#3b543623');
+ }
+ // Predný a zadný okraj dosky ostáva pri nehode upevnený na nohách.
+ deskBoard(120,337,285,17);deskBoard(595,337,285,17);
+ if(!state?.broken){
+   const flex=state?.bounce && state.bounceAt!=null?6*Math.exp(-(time-state.bounceAt)*4):0;
+   if(flex>0.3){
+     ctx.save();ctx.beginPath();ctx.moveTo(405,337);ctx.quadraticCurveTo(500,337-flex*2,595,337);ctx.lineTo(595,354);ctx.quadraticCurveTo(500,354-flex*1.8,405,354);ctx.closePath();ctx.fillStyle='#b9804b';ctx.fill();line2(405,337,500,337-flex,'#eac390',3);line2(500,337-flex,595,337,'#eac390',3);ctx.restore();
+   }else{deskBoard(405,337,190,17);}
+   return;
+ }
+ const age=Math.max(0,time-(state.breakAt??time));
+ const prog=clamp(age/.58,0,1);
+ const ease=1-Math.pow(1-prog,3);
+ const angle=1.35*ease;
+ // Dve časti dosky sa otáčajú okolo miesta, kde sa uchytili k zvyšku stola.
+ ctx.save();ctx.translate(405,337);ctx.rotate(angle);deskBoard(0,0,95,17);ctx.restore();
+ ctx.save();ctx.translate(595,337);ctx.rotate(-angle);deskBoard(-95,0,95,17);ctx.restore();
+ // Trhliny na miestach zlomu a padajúce drevené úlomky.
+ for(const hx of [405,595]){
+   line2(hx-7,333,hx+2,339,'#593722',2);line2(hx+2,339,hx-3,347,'#593722',2);
+ }
+ if(prog>.07){for(let i=0;i<9;i++){
+   const phase=i*1.57,dist=15+i*13+prog*38;
+   const xx=500+Math.cos(phase)*dist*.7;
+   const yy=346+prog*(28+(i%4)*13)+Math.sin(phase)*4;
+   deskShard(xx,yy,(i%2?1:-1)*prog*.9,(i%2?'#bd844d':'#d6a36f'));
+ }}
+}
+function wheel(x,y,r,phase=0){ellipse(x,y,r+2,r+2,'#26374a');ellipse(x,y,r*.5,r*.5,'#c8dae6');for(let k=0;k<4;k++){const a=phase+k*Math.PI/2;line2(x,y,x+r*.8*Math.cos(a),y+r*.8*Math.sin(a),'#839cad',2)}}
+function human(x,baseline,shirt='#3077ab',facing=1,action=false,walkPhase=0){
+ // Postava stojí na zemi. Podporuje názornosť, nie anatomický model.
+ const leg=baseline-48,body=baseline-110,head=baseline-144;
+ ellipse(x,baseline-1,31,6,'#49617827');
+ const stride=walkPhase===0?0:14*Math.sin(walkPhase);
+ // Nohy kráčajú pri pohybe sústavy. Pri stojacom vozíku ostávajú nehybné.
+ line2(x-12,leg,x-17+stride,baseline-5,'#344a67',10);line2(x+12,leg,x+19-stride,baseline-5,'#344a67',10);
+ line2(x-17+stride,baseline-5,x-34+stride,baseline-5,'#24364b',8);
+ line2(x+19-stride,baseline-5,x+36-stride,baseline-5,'#24364b',8);
+ rounded(x-21,body,42,69,11,shirt);ellipse(x,head,20,22,'#e9b995');
+ ctx.beginPath();ctx.arc(x,head-5,19,Math.PI*1.05,Math.PI*1.95);ctx.strokeStyle='#4c3e37';ctx.lineWidth=6;ctx.stroke();
+ const dir=facing;
+ line2(x+dir*14,body+20,x+dir*33,body+38,'#e8b18f',8);
+ line2(x+dir*33,body+38,x+dir*(action?60:40),body+36,'#e8b18f',8);
+ line2(x-dir*16,body+25,x-dir*30,body+53,'#e8b18f',7);
+ return {handX:x+dir*(action?60:40),handY:body+36};
+}
+function cart(x,y,ghost=false,state=model){
+ ellipse(x,y+34,97,10,'#374a5420');
+ rounded(x-81,y-18,162,48,8,ghost?'#46bdad':'#d59950');
+ fillRect(x-73,y-11,145,7,ghost?'#77d4c7':'#f1c88c');
+ line2(x-81,y+23,x+81,y+23,ghost?'#147f71':'#975f2e',4);
+ const roll=(state.x-current.x)*5;wheel(x-49,y+29,19,roll);wheel(x+49,y+29,19,roll);
+ rounded(x-84,y-31,168,11,4,ghost?'#288b80':'#aa6736');
+}
+function crate(x,y,ghost=false){
+ ellipse(x,y+43,76,10,'#334f5b28');
+ rounded(x-57,y-43,114,87,6,ghost?'#47bda9':'#c99250');
+ ctx.strokeStyle=ghost?'#147a70':'#94602e';ctx.lineWidth=7;ctx.strokeRect(x-55,y-42,110,84);
+ line2(x-51,y-36,x+49,y+36,ghost?'#147a70':'#956332',5);
+ line2(x+50,y-36,x-50,y+36,ghost?'#147a70':'#956332',5);
+}
+function car(x,y,ghost=false,state=model){
+ const c=ghost?'#43b9a8':'#db9237', darker=ghost?'#218a7e':'#b86929';
+ ellipse(x,y+48,113,11,'#26394c22');
+ rounded(x-108,y-19,217,61,17,c);
+ poly([[x-70,y-17],[x-40,y-52],[x+49,y-52],[x+84,y-17]],c);
+ poly([[x-30,y-46],[x+13,y-46],[x+13,y-21],[x-52,y-21]],'#c7eafa');
+ poly([[x+22,y-46],[x+44,y-46],[x+69,y-21],[x+22,y-21]],'#b9e0f3');
+ line2(x-4,y-18,x-4,y+31,darker,2);rounded(x+27,y-12,16,5,2,'#f8d4a1');
+ const rotation=((state?.x??current.x)-current.x)*30/24;
+ wheel(x-65,y+40,24,rotation);wheel(x+72,y+40,24,rotation);
+ if(!ghost&&time>0&&studentForces().some(f=>f.id==='br'&&f.mag>0)){
+    ellipse(x-110,y+7,11,10,'#ff3c38aa');ellipse(x-110,y+7,5,5,'#ffe4bb');
+ }
+ ellipse(x+103,y+10,7,6,'#fff4b0');ellipse(x-108,y+7,5,8,'#ed6460');
+}
+function book(x,y,ghost=false){
+ rounded(x-66,y-16,132,37,5,ghost?'#34a996':'#28699f');
+ rounded(x-61,y-20,125,29,3,'#fff3d3');
+ line2(x-56,y-17,x+59,y-17,'#d4b888',3);
+ rounded(x-68,y-30,136,16,4,ghost?'#267f75':'#346f9d');
+ txt('FYZIKA',x,y-17,13,'#f7fafc','center','700');
+}
+function puck(x,y,ghost=false){
+ ellipse(x,y+6,54,16,ghost?'#248e7f':'#24364b');
+ rounded(x-54,y-12,108,18,5,ghost?'#4ab2a4':'#263d56');
+ ellipse(x,y-12,54,13,ghost?'#8cddd1':'#4c687f');
+ ellipse(x-20,y-15,9,3,'#ffffff45');
+}
+function ball(x,y,ghost=false){
+ const grd=ctx.createRadialGradient(x-10,y-12,2,x,y,27);
+ grd.addColorStop(0,ghost?'#ccfff5':'#ffe6aa');grd.addColorStop(1,ghost?'#1c9b8c':'#c47120');ellipse(x,y,26,26,grd);
+ ctx.beginPath();ctx.arc(x,y,18,-.6,1.3);ctx.strokeStyle=ghost?'#197b71':'#a15619';ctx.lineWidth=2.5;ctx.stroke();
+}
+function parachutist(x,y,ghost=false){
+ // Vrchlík a dve úchopové šnúry musia byť skutočne viditeľné.
+ const top=y-115;
+ ctx.beginPath();ctx.moveTo(x-102,top+24);ctx.bezierCurveTo(x-98,top-55,x+98,top-55,x+102,top+24);
+ ctx.quadraticCurveTo(x,top+51,x-102,top+24);ctx.closePath();ctx.fillStyle=ghost?'#35a99b':'#eeaa43';ctx.fill();
+ for(let i=-2;i<=2;i++)line2(x+i*38,top+20,x+i*5,y-23,'#9d8e76',2.5);
+ ellipse(x,y-16,12,13,'#e1b192');rounded(x-17,y-2,34,36,7,ghost?'#4db4aa':'#35577f');
+ line2(x-13,y+27,x-19,y+51,'#324563',7);line2(x+14,y+27,x+19,y+51,'#324563',7);
+}
+function rocket(x,y,ghost=false){
+ if(!ghost && time>0 && studentForces().some(f=>f.id==='th'&&f.mag>0)){
+  poly([[x-22,y+73],[x,y+135+10*Math.sin(time*18)],[x+22,y+73]],'#f3983e');
+  poly([[x-10,y+76],[x,y+112+6*Math.sin(time*14)],[x+10,y+76]],'#ffdc84');
+ }
+ poly([[x,y-88],[x+29,y-34],[x+29,y+66],[x-29,y+66],[x-29,y-34]],ghost?'#76cfc3':'#e6f2fa');
+ poly([[x-29,y-30],[x,y-88],[x+29,y-30]],ghost?'#359e94':'#c94c45');
+ poly([[x-28,y+34],[x-51,y+83],[x-23,y+67]],'#c85d4a');
+ poly([[x+28,y+34],[x+51,y+83],[x+23,y+67]],'#c85d4a');
+ ellipse(x,y-9,15,15,'#68b7d8');ellipse(x-4,y-13,5,5,'#d8faff');
+}
+function elevator(x,y,ghost=false){
+ rounded(x-91,y-94,182,192,5,ghost?'#67c9bb':'#9eafbf');
+ rounded(x-72,y-78,144,158,2,'#dbe7f1');
+ fillRect(x-2,y-78,5,159,'#8095a8');
+ fillRect(x-91,y+87,182,12,'#70889d');
+ txt('VÝŤAH',x,y-108,16,'#526c82','center');
+}
+function boat(x,y,ghost=false){
+ const c=ghost?'#2aa999':'#d38b42';
+ // hladina vody pretína trup, čo ukazuje plávanie
+ poly([[x-109,y-8],[x+110,y-8],[x+77,y+42],[x-80,y+42]],c);
+ rounded(x-47,y-39,98,30,6,'#fff0d1');
+ line2(x,y-91,x,y-8,'#805b3a',5);
+ poly([[x+5,y-89],[x+76,y-12],[x+5,y-12]],'#fcf7e6');
+ line2(x-92,y+8,x+88,y+8,'#fff4d6aa',2);
+}
+function shadow(x,y,w=76){ellipse(x,y,w,8,'#17364a26')}
+function pointFor(s){
+ const sc=current.scene;
+ const px=s.x-current.x,py=s.y-current.y;
+ const x=500+clamp(px*10,sc==='floor'&&currentContext()==='tug'?-90:-395,sc==='floor'&&currentContext()==='tug'?90:395);
+ let y;
+ if(sc==='table')y=316-py*75;
+ else if(sc==='road')y=317-py*42;
+ else if(sc==='ice')y=358-py*22;
+ else if(sc==='floor')y=333-py*24;
+ else if(sc==='lift')y=235-py*13;
+ else if(sc==='water')y=298-py*15;
+ else if(sc==='air'&&currentSubject()==='parachute')y=390-s.y*8;
+ else if(sc==='air'&&currentSubject()==='ball')y=399-s.y*29;
+ else if(sc==='air')y=337-clamp(py*7,-180,150);
+ else y=245-py*16;
+ return {x,y};
+}
+function drawSubject(s,ghost=false){
+ let p=pointFor(s),sub=currentSubject();
+ ctx.save();ctx.globalAlpha=ghost?.55:1;
+ if(sub==='tug') cart(p.x,p.y,ghost,s);
+ else if(sub==='book') book(p.x,p.y,ghost);
+ else if(sub==='crate') crate(p.x,p.y,ghost);
+ else if(sub==='puck') puck(p.x,p.y,ghost);
+ else if(sub==='car') car(p.x,p.y,ghost,s);
+ else if(sub==='ball') ball(p.x,p.y,ghost);
+ else if(sub==='parachute') parachutist(p.x,p.y,ghost);
+ else if(sub==='rocket') rocket(p.x,p.y,ghost);
+ else if(sub==='elevator') elevator(p.x,p.y,ghost);
+ else if(sub==='boat') boat(p.x,p.y,ghost);
+ else crate(p.x,p.y,ghost);
+ ctx.restore();
+ return p;
+}
+function drawPeopleWithCart(state,ghost=false){
+ const p=pointFor(state);
+ const walk=Math.abs(state.vx)>0.06 && time>0 ? time*Math.min(11,Math.max(2,Math.abs(state.vx)*2.6)) : 0;
+ ctx.save();ctx.globalAlpha=ghost?.4:1;
+ // Obaja ľudia, vozík aj konce lán používajú rovnakú polohu toho istého modelu.
+ const lx=p.x-312,rx=p.x+315;
+ const left=human(lx,382,'#3871ad',1,true,walk);
+ const right=human(rx,382,'#bc6542',-1,true,walk+Math.PI);
+ line2(left.handX,left.handY,p.x-84,p.y-10,ghost?'#88c8bb':'#c5a774',4);
+ line2(p.x+84,p.y-10,right.handX,right.handY,ghost?'#88c8bb':'#c5a774',4);
+ if(!ghost){txt('ČLOVEK A',lx,190,15,'#24415e','center');txt('ČLOVEK B',rx,190,15,'#24415e','center');}
+ ctx.restore();
+}
+function cannon(x,y){
+ rounded(x-58,y-18,84,26,8,'#5e6e7b');
+ wheel(x-32,y+18,14,0);wheel(x+12,y+18,12,0);
+ line2(x-8,y-6,x+58,y-38,'#4f5f6b',12);line2(x+50,y-42,x+68,y-50,'#8599a8',5);
+}
+function sceneContext(){
+ const ctxType=currentContext();
+ if(ctxType==='tug'){
+   if(showRef)drawPeopleWithCart(reference,true);
+   drawPeopleWithCart(model,false);
+ }else if(ctxType==='pusher'){
+   const p=pointFor(model),hand=human(p.x-128,381,'#426fb0',1,true);
+   line2(hand.handX,hand.handY,p.x-56,p.y-12,'#d6ae8b',8);
+ }else if(ctxType==='thrower'){
+   const p=pointFor(model);human(135,381,'#c06a47',1,true,0);ctx.font='600 15px system-ui';txt('Hráč už loptu pustil',180,110,15,'#244c6a','left');
+   line2(820,210,860,210,'#dd6b20',5);line2(860,210,860,260,'#dd6b20',5);line2(817,210,840,230,'#f2f2f2',2);line2(817,230,840,210,'#f2f2f2',2);
+ }else if(ctxType==='cannon'){
+   cannon(145,390);txt('Delo už na guľu nepôsobí',170,95,15,'#244c6a','left');
+ }else if(ctxType==='spacePush'){
+   human(115,381,'#8796aa',1,false);txt('Teleso je už bez kontaktu',200,90,15,'#e5f5ff','left');
+ }else if(currentSubject()==='puck'){
+   txt('Hokejka sa puku už nedotýka',500,46,16,'#254d70','center');
+ }else if(currentSubject()==='ball'){
+   txt('Teleso je už vo voľnom lete',500,45,16,'#244c6a','center');
+ }else if(current.id==='lab_acc'){
+   txt('Voľný experiment: nastav vonkajšie sily',500,45,16,'#e5f5ff','center');
+ }else if(currentSubject()==='parachute'){
+   txt('Padák je otvorený',500,40,16,'#254d70','center');
+ }
+}
+
+// Typografia vektorov je kreslená geometricky – žiadne kombinované Unicode znaky,
+// ktoré sa v niektorých prehliadačoch zobrazujú ako prázdny štvorček.
+function mathForceWidth(sub,resultant=false){
+ ctx.save();
+ ctx.font='italic 22px Georgia, "Times New Roman", serif';
+ const mainW=ctx.measureText('F').width;
+ ctx.font='14px Georgia, "Times New Roman", serif';
+ const subW=ctx.measureText(sub).width;
+ let sigmaW=0;
+ if(resultant){ctx.font='21px Georgia, "Times New Roman", serif';sigmaW=ctx.measureText('Σ').width+5;}
+ ctx.restore();
+ return {width:sigmaW+mainW+subW+4,sigmaW,mainW,subW};
+}
+function paintVectorForce(x,top,sub,color,resultant=false){
+ const m=mathForceWidth(sub,resultant),fX=x+m.sigmaW;
+ ctx.save();
+ ctx.fillStyle=color;
+ ctx.textAlign='left';
+ if(resultant){ctx.font='21px Georgia, "Times New Roman", serif';ctx.fillText('Σ',x,top+28);}
+ ctx.font='italic 22px Georgia, "Times New Roman", serif';
+ ctx.fillText('F',fX,top+28);
+ // Samostatná šípka nad F (graficky, nezávisle od podpory fontu).
+ const x1=fX+1,x2=fX+Math.max(11,m.mainW-1),y=top+7;
+ ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.lineCap='round';
+ ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(x2-5,y-3.4);ctx.lineTo(x2,y);ctx.lineTo(x2-5,y+3.4);ctx.stroke();
+ // Skutočný dolný index, nie podčiarkovník z neplatného LaTeX zápisu.
+ ctx.font='14px Georgia, "Times New Roman", serif';
+ ctx.fillText(sub,fX+m.mainW+1,top+32);
+ ctx.restore();
+ return m.width;
+}
+// Najprv sa nakreslia všetky vektory, až potom sa popisy umiestnia do voľných miest.
+// Tak popis jednej sily nemôže prekryť šípku inej sily ani svoju vlastnú.
+function labelDimensions(sub,percent,resultant=false,zero=false){
+ const m=mathForceWidth(sub,resultant);
+ ctx.save();ctx.font='700 16px system-ui';
+ const suffix=zero?' = 0 N':percent===null?'':`  ${fmt(percent,0)} %`;
+ const width=m.width+ctx.measureText(suffix).width+22;
+ ctx.restore();return {width,height:40,suffix,mathWidth:m.width};
+}
+function segmentHitsRect(a,rect,pad=6){
+ // Liang–Barsky: priesečník úsečky a obdĺžnika rozšíreného o okraj.
+ const x0=a.x1,y0=a.y1,dx=a.x2-x0,dy=a.y2-y0;
+ const xmin=rect.x-pad,xmax=rect.x+rect.w+pad,ymin=rect.y-pad,ymax=rect.y+rect.h+pad;
+ const p=[-dx,dx,-dy,dy],q=[x0-xmin,xmax-x0,y0-ymin,ymax-y0];
+ let t0=0,t1=1;
+ for(let i=0;i<4;i++){
+   if(Math.abs(p[i])<1e-8){if(q[i]<0)return false;continue;}
+   const r=q[i]/p[i];if(p[i]<0)t0=Math.max(t0,r);else t1=Math.min(t1,r);
+   if(t0>t1)return false;
+ }
+ return true;
+}
+function overlapArea(a,b,pad=5){
+ const x=Math.max(0,Math.min(a.x+a.w+pad,b.x+b.w+pad)-Math.max(a.x-pad,b.x-pad));
+ const y=Math.max(0,Math.min(a.y+a.h+pad,b.y+b.h+pad)-Math.max(a.y-pad,b.y-pad));
+ return x*y;
+}
+function positionArrowLabel(obj,allArrows,occupied){
+ const box=labelDimensions(obj.sub,obj.percent,obj.resultant,obj.zero),w=box.width,h=box.height;
+ const vx=obj.dx||.7,vy=obj.dy||-.7,len=Math.hypot(vx,vy);
+ const ux=vx/len,uy=vy/len;
+ const normals=[{x:ux,y:uy},{x:-uy,y:ux},{x:uy,y:-ux},{x:-ux,y:-uy},
+   {x:1,y:0},{x:-1,y:0},{x:0,y:-1},{x:0,y:1},
+   {x:Math.SQRT1_2,y:-Math.SQRT1_2},{x:-Math.SQRT1_2,y:-Math.SQRT1_2},
+   {x:Math.SQRT1_2,y:Math.SQRT1_2},{x:-Math.SQRT1_2,y:Math.SQRT1_2}];
+ let best=null;
+ for(let ci=0;ci<normals.length;ci++)for(const gap of [12,24,43,67,95,135]){
+   const d=normals[ci];
+   // Veď celý obdĺžnik až ZA hrot, nie ponad driek vektora.
+   const distance=Math.min((w/2+gap)/Math.max(Math.abs(d.x),1e-6),(h/2+gap)/Math.max(Math.abs(d.y),1e-6));
+   const px=obj.tipX+d.x*distance,py=obj.tipY+d.y*distance;
+   const rect={x:px-w/2,y:py-h/2,w,h};
+   let penalty=0;
+   const out=Math.max(0,6-rect.x)+Math.max(0,rect.x+w-(W-6))+
+      Math.max(0,6-rect.y)+Math.max(0,rect.y+h-(H-6));
+   penalty+=out*11000;
+   for(const old of occupied)penalty+=overlapArea(rect,old,7)*230;
+   for(const a of allArrows){if(segmentHitsRect(a,rect,8))penalty+=140000;}
+   const subject={x:obj.originX-75,y:obj.originY-57,w:150,h:114};
+   penalty+=overlapArea(rect,subject,1)*2;
+   // V ľavom hornom rohu je čas prehrávania; inde môžu byť titulkové bannery.
+   if(rect.x<180&&rect.y<52)penalty+=overlapArea(rect,{x:0,y:0,w:185,h:54},3)*30;
+   penalty+=gap*12+ci*15; // uprednostni blízky popis, ideálne za hrotom
+   if(!best||penalty<best.score)best={...rect,score:penalty};
+ }
+ // Pri veľmi hustom súbore síl preskúmaj aj ďalšie bezpečné voľné miesta.
+ // Je to výnimočný záložný režim – napríklad ak žiak zapne všetky sily naraz.
+ if(best.score>90000){
+   for(let gy=64;gy<=H-h-6;gy+=22)for(let gx=6;gx<=W-w-6;gx+=25){
+     const rect={x:gx,y:gy,w,h};let penalty=0;
+     for(const old of occupied)penalty+=overlapArea(rect,old,7)*230;
+     for(const a of allArrows)if(segmentHitsRect(a,rect,8))penalty+=140000;
+     penalty+=overlapArea(rect,{x:obj.originX-75,y:obj.originY-57,w:150,h:114},1)*2;
+     penalty+=Math.hypot(gx+w/2-obj.tipX,gy+h/2-obj.tipY)*3;
+     if(!best||penalty<best.score)best={...rect,score:penalty};
+   }
+ }
+ // Záložná pozícia je vždy vnútri obrazovky.
+ best.x=clamp(best.x,6,Math.max(6,W-w-6));
+ best.y=clamp(best.y,6,Math.max(6,H-h-6));
+ return best;
+}
+function paintForceCard(obj,rect){
+ const dim=labelDimensions(obj.sub,obj.percent,obj.resultant,obj.zero);
+ ctx.save();
+ // Nenápadná spojovacia čiara len keď štítok nie je tesne pri hrote šípky.
+ const tipx=obj.tipX,tipy=obj.tipY;
+ const endx=clamp(tipx,rect.x+4,rect.x+rect.w-4),endy=clamp(tipy,rect.y+4,rect.y+rect.h-4);
+ if(Math.hypot(endx-tipx,endy-tipy)>19){
+    ctx.setLineDash([3,4]);line2(tipx,tipy,endx,endy,obj.color+'aa',1.4);ctx.setLineDash([]);
+ }
+ rounded(rect.x,rect.y,rect.w,rect.h,7,'#fffefaed');
+ ctx.strokeStyle=obj.color;ctx.lineWidth=obj.resultant?2.4:1.5;
+ ctx.strokeRect(rect.x+.5,rect.y+.5,rect.w-1,rect.h-1);
+ paintVectorForce(rect.x+10,rect.y+2,obj.sub,obj.color,obj.resultant);
+ ctx.font='700 16px system-ui';ctx.fillStyle=obj.color;ctx.textAlign='left';
+ ctx.fillText(dim.suffix,rect.x+10+dim.mathWidth,rect.y+26);
+ ctx.restore();
+}
+function arrowsAt(p){
+ if(!$('showArrows').checked)return;
+ const fs=support(current,studentForces(),model,time),num={},vectors=[];
+ const oy=currentContext()==='tug'?p.y-17:currentSubject()==='book'?p.y-10:currentSubject()==='rocket'?p.y-4:p.y;
+ const addVector=(dx,dy,sub,color,offsetIndex,percent,resultant=false)=>{
+   const mag=Math.hypot(dx,dy);if(mag<=.001)return;
+   const ux=dx/mag,uy=dy/mag,nx=-uy,ny=ux;
+   const length=clamp(mag*.6+(resultant?40:30),resultant?46:36,resultant?150:130);
+   const spread=resultant?0:offsetIndex*24;
+   const ox=p.x+nx*spread,baseY=oy+ny*spread;
+   const xx=ox+ux*length,yy=baseY-uy*length;
+   vectors.push({x1:ox,y1:baseY,x2:xx,y2:yy,sub,color,percent,resultant,
+     tipX:xx,tipY:yy,originX:ox,originY:baseY,dx:ux,dy:-uy});
+ };
+ for(const f of fs){if(f.mag<=0)continue;
+   const d=dirs[f.dir];num[f.dir]=(num[f.dir]||0)+1;
+   addVector(d[0]*f.mag,d[1]*f.mag,forceSubscripts[f.id]||'x',forceColors[f.id]||'#245dc0',num[f.dir]-1,f.mag);
+ }
+ const fv=effectiveState(studentForces(),model,time),scale=current.mass*G/100;
+ if(Number.isFinite(fv.fx)&&Number.isFinite(fv.fy)&&scale>0){
+   const rx=fv.fx/scale,ry=fv.fy/scale;
+   if(Math.hypot(rx,ry)>.001)addVector(rx,ry,'',forceColors.result,0,null,true);
+   else vectors.push({zero:true,sub:'',color:forceColors.result,resultant:true,percent:null,
+      tipX:p.x+125,tipY:oy-100,originX:p.x,originY:oy,dx:.7,dy:-.7});
+ }
+ // Šípky musia zostať vždy celé viditeľné: najprv vektory, potom samostatná vrstva štítkov.
+ for(const v of vectors){
+   if(v.zero)continue;
+   line2(v.x1,v.y1,v.x2,v.y2,v.color,v.resultant?7:5);
+   const a=Math.atan2(v.y2-v.y1,v.x2-v.x1),head=v.resultant?18:15;
+   poly([[v.x2,v.y2],[v.x2-head*Math.cos(a-.4),v.y2-head*Math.sin(a-.4)],
+      [v.x2-head*Math.cos(a+.4),v.y2-head*Math.sin(a+.4)]],v.color);
+ }
+ const lines=vectors.filter(v=>!v.zero).map(v=>({x1:v.x1,y1:v.y1,x2:v.x2,y2:v.y2}));
+ const tryArrangement=(order)=>{
+   const placed=[],occupied=[];
+   for(const v of order){const rect=positionArrowLabel(v,lines,occupied);occupied.push(rect);placed.push({v,rect});}
+   const hits=placed.reduce((sum,{rect})=>sum+lines.filter(a=>segmentHitsRect(a,rect,8)).length,0);
+   const overlaps=placed.reduce((sum,{rect},i)=>sum+placed.slice(i+1).filter(q=>overlapArea(rect,q.rect,1)>0).length,0);
+   return {placed,hits,overlaps};
+ };
+ // Najprv uprednostni červenú výslednicu. Pri obzvlášť hustom diagrame
+ // skúšaj ďalšie poradia, aby skoršie štítky nezobrali všetko voľné miesto.
+ const base=[...vectors].sort((a,b)=>Number(b.resultant)-Number(a.resultant));
+ let layout=tryArrangement(base);
+ if(layout.hits||layout.overlaps){
+   const variants=[
+     [...base].reverse(),
+     [...base].sort((a,b)=>a.tipY-b.tipY),
+     [...base].sort((a,b)=>b.tipY-a.tipY),
+     [...base].sort((a,b)=>a.tipX-b.tipX),
+     [...base].sort((a,b)=>b.tipX-a.tipX),
+     [...base].sort((a,b)=>Math.hypot(b.x2-b.x1||0,b.y2-b.y1||0)-Math.hypot(a.x2-a.x1||0,a.y2-a.y1||0)),
+     [...base].sort((a,b)=>a.sub.localeCompare(b.sub))
+   ];
+   for(const order of variants){
+     const candidate=tryArrangement(order);
+     if(candidate.hits*100+candidate.overlaps*100<layout.hits*100+layout.overlaps*100)layout=candidate;
+     if(!layout.hits&&!layout.overlaps)break;
+   }
+ }
+ const results=layout.placed;
+ for(const {v,rect} of results)paintForceCard(v,rect);
+ window.__forceLabelQA={boxes:results.map(({v,rect})=>({sub:v.sub,resultant:v.resultant,x:rect.x,y:rect.y,w:rect.w,h:rect.h})),
+   lines,overlaps:results.flatMap(({rect},i)=>results.slice(i+1).filter(q=>overlapArea(rect,q.rect,1)>0).map(q=>[i,q.v.sub]))};
+}
+function groundForeground(){
+ if(!model.broken||current.scene!=='road')return;
+ const p=pointFor(model);const sy=381;
+ const age=Math.max(0,time-(model.breakAt??time));const t=clamp(age/.55,0,1);
+ const half=120*t+55;
+ // Predný okraj otvoru prekryje časť kolies, ktoré sa už nachádzajú pod povrchom.
+ poly([[p.x-half,405],[p.x-half*.65,407+9*t],[p.x+half*.65,408+11*t],[p.x+half,405],[p.x+half,460],[p.x-half,460]],'#52616b');
+ line2(p.x-half,405,p.x-half*.65,407+9*t,'#9aa6ae',3);
+ line2(p.x+half*.65,408+11*t,p.x+half,405,'#9aa6ae',3);
+}
+function groundFailure(){
+ // Pri chybných silách nie je zobrazený iba vertikálny posun: povrch sa viditeľne prepadá.
+ if(!model.broken||!['road','floor','ice'].includes(current.scene))return;
+ const p=pointFor(model),road=current.scene==='road';
+ const sy=road?381:current.scene==='ice'?380:381;
+ const age=Math.max(0,time-(model.breakAt??time));const prog=clamp(age/.55,0,1);
+ const rx=(road?145:120)*(0.35+0.65*prog);
+ ellipse(p.x,sy+8,rx,14+24*prog,road?'#27333e':'#5f513f');
+ ctx.save();ctx.beginPath();ctx.ellipse(p.x,sy+12,rx*.85,8+23*prog,0,0,2*Math.PI);ctx.clip();
+ const hole=ctx.createLinearGradient(0,sy,0,sy+70);hole.addColorStop(0,'#263039');hole.addColorStop(1,'#0b1726');fillRect(p.x-rx,sy-10,rx*2,110,hole);ctx.restore();
+ line2(p.x-rx-48,sy,p.x-rx-12,sy+5,'#4d5862',3);
+ line2(p.x+rx+12,sy+6,p.x+rx+48,sy,'#4d5862',3);
+ for(let i=0;i<5;i++){
+   const xx=p.x+(i-2)*rx*.5;
+   line2(xx,sy-3,xx+(i%2?18:-18),sy-12-(i%2)*8,road?'#424a51':'#79785d',2);
+ }
+}
+function waterInFront(){
+ if(current.scene!=='water')return;
+ const overlay=ctx.createLinearGradient(0,299,0,H);overlay.addColorStop(0,'#62c6e44d');overlay.addColorStop(1,'#287aa066');fillRect(0,300,W,H-300,overlay);
+ ctx.beginPath();ctx.moveTo(0,300);for(let x=0;x<=W;x+=12)ctx.lineTo(x,299+3*Math.sin(x/30+time*2));ctx.strokeStyle='#e5faffc7';ctx.lineWidth=3;ctx.stroke();
+}
+function draw(){
+ ctx.clearRect(0,0,W,H);backdrop();
+ groundFailure();
+ sceneContext();
+ if(time>0 && (current.scene==='air'||currentSubject()==='puck'||currentSubject()==='car'||current.id==='tug')){
+  ctx.save();ctx.setLineDash([6,7]);ctx.strokeStyle='#dd8f36aa';ctx.lineWidth=3;
+  if(tracks.length>1){ctx.beginPath();tracks.forEach((v,i)=>{if(i===0)ctx.moveTo(v.x,v.y);else ctx.lineTo(v.x,v.y)});ctx.stroke();}
+  ctx.restore();
+ }
+ if(currentSubject()==='book'){
+   const bp=pointFor(model);
+   const groundY=model.broken?443:337;
+   ellipse(bp.x,groundY,model.broken?Math.max(26,69-Math.abs(groundY-bp.y)*.25):61,model.broken?7:5,'#172b3833');
+ }
+ if(showRef)drawSubject(reference,true);
+ const p=drawSubject(model,false);
+ waterInFront();
+ groundForeground();
+ if(!model.hit)arrowsAt(p);
+ if(currentSubject()==='rocket'&&time>0){rounded(752,23,234,34,8,'#fffef0e8');txt(`Výška: ${fmt(model.y,1)} m`,870,47,16,'#37536d','center');}
+ if(currentSubject()==='book'&&model.broken){
+  rounded(250,24,500,37,8,'#fff0daec');txt(model.hit?'Doska sa prelomila – kniha dopadla na podlahu':'Doska sa prelamuje – kniha prepadáva',500,49,16,'#7a4c26','center');
+ }
+ if(currentSubject()==='book'&&model.bounce&&!model.broken){
+  rounded(250,24,500,37,8,'#fff1d9ec');txt('Hypotetický pružný odraz – nie bežná reakcia stola',500,49,16,'#784b29','center');
+ }
+ if(model.broken&&current.scene==='road'){
+  rounded(335,23,330,34,8,'#fff0daed');txt('Vozovka sa prepadáva – opora nestačí',500,46,16,'#754a24','center');
+ }
+ if(model.hit&&!model.broken){rounded(347,31,306,35,8,'#fff4db');txt('Dopad – koniec pokusu',500,55,17,'#845522','center')}
+}
+$('confirmForces').addEventListener('click',confirmForces);
+$('editForces').addEventListener('click',editForces);
+$('goVerification').addEventListener('click',()=>{if(!observed)return;pause();workflow='review';refreshWorkflow();$('status').textContent='Teraz môžeš overiť výsledok a porovnať ho s fyzikou.';$('verificationPanel').scrollIntoView({behavior:'smooth',block:'start'});});
+$('confirmPrediction').addEventListener('click',confirmPrediction);
+$('backStep').addEventListener('click',goBackStep);
+$('editPrediction').addEventListener('click',editPrediction);
+$('noForce').addEventListener('change',refreshWorkflow);
+$('predictions').addEventListener('change',refreshWorkflow);
+$('category').addEventListener('change',()=>{catalogBuild();setSituation($('situationSelect').value)});$('situationSelect').addEventListener('change',e=>setSituation(e.target.value));$('random').addEventListener('click',()=>{const list=scenarios.filter(s=>$('category').value==='all'||s.cat===$('category').value);const next=list[Math.floor(Math.random()*list.length)];setSituation(next.id)});$('play').addEventListener('click',start);$('pause').addEventListener('click',pause);$('restart').addEventListener('click',()=>{resetSim();$('status').textContent='Model je v čase 0. Môžeš ho znova spustiť.'});$('clear').addEventListener('click',()=>{Object.entries(chosen).forEach(([id,f])=>{f.on=false;f.mag=id==='g'?100:0;});buildForces();edited()});$('reset').addEventListener('click',()=>setSituation(current.id));$('new').addEventListener('click',()=>{const list=scenarios.filter(s=>$('category').value==='all'||s.cat===$('category').value);let idx=list.findIndex(s=>s.id===current.id);setSituation(list[(idx+1)%list.length].id)});$('check').addEventListener('click',check);$('compare').addEventListener('click',compare);$('showArrows').addEventListener('change',draw);$('massSlider').addEventListener('input',e=>{$('massOut').textContent=e.target.value+' kg';edited();});window.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='BUTTON'&&e.target.tagName!=='INPUT'&&e.target.tagName!=='SELECT'){e.preventDefault();if(['simulate','review'].includes(workflow))playing?pause():start()}});
+const mobileLayout=window.matchMedia('(max-width:980px)');
+const forcePanel=$('forces').closest('.panel');
+const exercisePanel=document.querySelector('section[aria-label="Situácia a simulácia"] > .panel');
+function placeForces(){if(mobileLayout.matches)$('simulationPanel').insertAdjacentElement('afterend',forcePanel);else document.querySelector('aside[aria-label="Panel síl"]').insertBefore(forcePanel,document.querySelector('aside[aria-label="Panel síl"]').firstChild);}
+mobileLayout.addEventListener('change',placeForces);placeForces();
+window.__NewtonTest={scenarios,forceVector,predictState,studentForces,trueForces,getCurrent:()=>current,getModel:()=>model,getTime:()=>time,setSituation};catalogBuild();setSituation(scenarios[0].id);
+</script></body></html>
