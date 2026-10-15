@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#12283d">
+<title>Najrýchlejšia cesta – plavčík a lom svetla</title>
+<style>
+:root{font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color:#17344a;background:#f3f7f9;--navy:#142b40;--purple:#6452c6;--orange:#d75f2f;--teal:#077a75;--line:#dce5eb}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #e6ab31;outline-offset:3px}
+header{background:linear-gradient(115deg,#152e46,#204d60);color:white;padding:27px max(23px,calc((100vw - 1230px)/2));}
+header .eyebrow{font-size:.75rem;letter-spacing:.11em;font-weight:800;color:#a7dfd5;text-transform:uppercase;margin:0 0 8px}
+h1{font-size:clamp(1.5rem,3vw,2.22rem);line-height:1.15;margin:0 0 10px;font-weight:820;letter-spacing:-.03em}header p{margin:0;max-width:920px;line-height:1.55;color:#e2f2f5;font-size:1.02rem}
+main{width:min(1220px,calc(100% - 32px));margin:22px auto 50px}.panel{background:#fff;border:1px solid var(--line);border-radius:17px;box-shadow:0 5px 25px #18364a09}h2,h3{line-height:1.28}h2{font-size:1.1rem;margin:0 0 14px}h3{font-size:1rem;margin:0 0 8px}
+.scenarios{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.scenario{background:white;border:2px solid #dfebef;border-radius:14px;text-align:left;padding:15px 18px;display:flex;gap:13px;align-items:center;min-height:86px;color:var(--navy);transition:background .15s,border-color .15s}.scenario .emoji{font-size:1.8rem}.scenario strong{font-size:1rem;display:block}.scenario small{display:block;color:#537083;font-size:.82rem;margin-top:3px;line-height:1.25}.scenario.active{border-color:#078a8b;background:#e8f6f4;box-shadow:0 0 0 1px #078a8b inset}
+.control-panel{display:grid;grid-template-columns:1fr 1fr 1.08fr;gap:15px;padding:18px;margin-bottom:16px;align-items:stretch}.speedbox{background:#f7fafb;border:1px solid #e3ecf0;border-radius:12px;padding:13px 15px}.speedbox label{display:flex;gap:12px;justify-content:space-between;align-items:baseline;font-weight:760;color:#273e4f}.speedbox output{font-variant-numeric:tabular-nums;font-weight:900;color:#157470;white-space:nowrap}.speedbox input{width:100%;accent-color:#078a8b;margin:17px 0 6px;min-height:20px}.speedbox .ends{display:flex;justify-content:space-between;color:#64808f;font-size:.77rem}.helpbox{padding:12px 15px;border-radius:12px;background:#f0f3fc;color:#334866;border:1px solid #e2e7f5;line-height:1.43;font-size:.91rem}.helpbox b{color:#374b8a}.helpbox span{display:block;margin:3px 0}
+.stage-panel{padding:14px}.stage-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:1px 3px 12px;flex-wrap:wrap}.stage-heading h2{margin:0}.stage-heading .step{font-size:.86rem;color:#506d7c}.stage-wrapper{position:relative;overflow:hidden;border-radius:12px;border:1px solid #d7e5e9;background:#efe0b7}.stage{width:100%;height:auto;display:block;user-select:none;-webkit-user-select:none;touch-action:pan-y}.stage.selecting{cursor:crosshair;touch-action:none}.stage text{font-family:system-ui,-apple-system,'Segoe UI',Arial,sans-serif}.stage .shoreHit{cursor:crosshair}.stage .label{font-weight:800;paint-order:stroke;stroke-width:4px;stroke-linejoin:round}
+.scene-hint{position:absolute;left:50%;top:51%;transform:translate(-50%,-50%);border:1px solid #e9d5a7;background:#fffdf3e8;padding:9px 15px;border-radius:100px;font-size:.83rem;font-weight:780;pointer-events:none;text-align:center;max-width:calc(100% - 24px);box-shadow:0 3px 12px #2345}.scene-hint[hidden]{display:none}
+.legend{display:flex;flex-wrap:wrap;gap:10px 20px;padding:12px 5px 2px;color:#4c6576;font-size:.85rem}.legend .sample{display:inline-block;width:26px;height:0;border-top:4px solid var(--purple);vertical-align:middle;margin-right:6px;border-radius:2px}.legend .orange{border-color:var(--orange)}.legend .dashed{border-top-style:dashed;border-color:#8195a4}.legend .optimal{border-color:#159063}
+.interactions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:16px}.choices,.results{padding:19px}.choices p{margin:0 0 14px;color:#526b7e;font-size:.92rem;line-height:1.48}.point-label{display:flex;justify-content:space-between;gap:10px;font-weight:750}.point-label output{color:#0c7771;font-variant-numeric:tabular-nums;font-weight:900;white-space:nowrap}.point-slider{width:100%;accent-color:#157f83;margin:20px 0 7px;min-height:20px}.range-end{display:flex;justify-content:space-between;color:#6d8491;font-size:.78rem}.buttons{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.btn{border:1px solid transparent;border-radius:11px;padding:11px 15px;font-weight:780;min-height:46px;display:inline-flex;align-items:center;justify-content:center;gap:7px}.primary{background:#087c79;color:white}.primary:hover:not(:disabled){background:#066865}.secondary{background:#edf3f7;border-color:#dce6ec;color:#27465c}.secondary:hover:not(:disabled){background:#e1ecf1}.outline{background:white;color:#0d7774;border-color:#0d8985}.outline:hover:not(:disabled){background:#eff8f7}.clockbox{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:13px;background:#f4f9fb;border:1px solid #deebef;padding:12px 15px;border-radius:12px;margin-top:17px}.clock{font-size:clamp(1.45rem,3vw,2rem);font-weight:880;font-variant-numeric:tabular-nums;color:#164962;white-space:nowrap}.clock small{font-size:.83rem}.phase{color:#536f7c;font-size:.84rem;line-height:1.4}.small-control{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:.87rem;color:#536b7a}.small-control select{border:1px solid #cadce5;border-radius:8px;padding:6px 8px;background:white;color:var(--navy);min-height:38px}
+.results-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.results-head small{color:#5f7b86}.tablewrap{overflow-x:auto;border:1px solid #e5edf1;border-radius:11px;max-height:270px;overflow-y:auto}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:right;padding:11px 12px;border-bottom:1px solid #e9f0f3;font-size:.89rem;white-space:nowrap}th:first-child,td:first-child{text-align:left}th{background:#f5f8fa;font-size:.8rem;color:#5b7380;position:sticky;top:0}tr:last-child td{border-bottom:0}tr.best td{background:#e9f8f1;color:#176449;font-weight:770}.empty{padding:24px 12px;text-align:center;color:#66808b;font-size:.9rem}.summaryline{display:flex;justify-content:space-between;gap:10px;border-top:1px dashed #d7e4e9;padding-top:13px;margin-top:13px;color:#526d7d;font-size:.92rem}.summaryline b{color:#163d50}.note{font-size:.8rem;color:#718793;margin-top:13px!important}
+.solution{margin-top:16px;padding:18px 20px}.solution-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:15px}.solution-head h2{margin:0 0 5px}.solution-head p{margin:0;color:#58717f;font-size:.91rem}.solution-body{margin-top:18px;border-top:1px solid #e3ecef;padding-top:17px}.solution-body[hidden]{display:none}.solution-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{border:1px solid #dce8ec;background:#f8fbfa;border-radius:12px;padding:14px 12px}.metric span{display:block;color:#586e7b;font-size:.77rem;margin-bottom:7px}.metric strong{display:block;color:#144b56;font-size:clamp(1.16rem,2.1vw,1.45rem);white-space:nowrap;font-variant-numeric:tabular-nums}.equation{margin:16px 0 12px;text-align:center;border:1px solid #bee2db;background:#edfaf6;padding:17px 10px;border-radius:12px;color:#184e48}.equation .formula{font-size:clamp(1.15rem,2.7vw,1.62rem);font-weight:760;letter-spacing:.01em}.equation .numbers{font-size:.97rem;margin-top:9px}.fraction{display:inline-flex;vertical-align:middle;align-items:center;flex-direction:column;line-height:1.15;padding:0 4px}.fraction>span:first-child{border-bottom:1.8px solid currentColor;padding:0 4px 4px}.fraction>span:last-child{padding:4px 4px 0}.conclusion{color:#305568;line-height:1.55;font-size:.94rem;margin:12px 0}.theory{background:#f7f9fc;border:1px solid #e3eaf2;border-radius:10px;padding:11px 15px;margin-top:13px}.theory summary{cursor:pointer;font-weight:770;color:#334c71}.theory p{line-height:1.55;margin:9px 0 0;font-size:.92rem;color:#456174}.mathsmall{font-family:Georgia,serif;font-style:italic}.footer-note{color:#667e89;font-size:.81rem;line-height:1.5;margin:19px 4px 0}
+[hidden]{display:none!important}
+@media(max-width:900px){.control-panel{grid-template-columns:1fr 1fr}.helpbox{grid-column:1/-1}.solution-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){main{width:min(100% - 20px,580px);margin-top:13px}.scenarios{gap:8px}.scenario{padding:11px 10px;gap:9px;min-height:103px}.scenario .emoji{font-size:1.33rem}.scenario strong{font-size:.89rem}.scenario small{font-size:.75rem}.control-panel,.interactions{grid-template-columns:1fr}.helpbox{grid-column:auto}.control-panel{padding:12px;gap:9px}.stage-panel{padding:7px}.stage-heading{padding:8px}.stage-heading .step{font-size:.76rem}.scene-hint{font-size:.7rem;padding:6px 8px}.stage-wrapper{border-radius:8px}.choices,.results,.solution{padding:15px}.legend{font-size:.77rem;gap:6px 12px}.btn{padding:11px 12px;font-size:.89rem}.solution-grid{gap:7px}.metric{padding:12px 8px}.metric strong{font-size:1.12rem}}
+@media(max-width:370px){.scenarios{grid-template-columns:1fr}.scenario{min-height:61px}.scenario small{font-size:.77rem}.buttons .btn{flex:1}.stage-heading{display:block}.solution-grid{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.scenario{transition:none}}
+
+/* 3 obrazovky a navigácia pripomínajúca PhET */
+body{padding-bottom:98px}.page-screen[hidden]{display:none!important}.page-intro{padding:4px 5px 18px}.page-kicker{font-size:.73rem;letter-spacing:.12em;color:#087a76;font-weight:860;margin:1px 0 8px}.page-intro h2{font-size:clamp(1.42rem,2.6vw,1.95rem);letter-spacing:-.025em;margin:0 0 9px;color:#16374b}.page-intro p{margin:0;line-height:1.5;color:#496879;max-width:850px}.context-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.context-chips span{font-size:.84rem;background:#ecf7f5;border:1px solid #cfe9e4;border-radius:100px;padding:7px 12px;color:#175e5b;font-weight:650}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:#f9fcfdf5;backdrop-filter:blur(12px);border-top:1px solid #cfdee3;box-shadow:0 -6px 24px #0b324218;padding:9px 12px max(9px,env(safe-area-inset-bottom))}.tab-strip{display:grid;grid-template-columns:repeat(3,1fr);max-width:750px;margin:auto;gap:8px}.nav-tab{border:2px solid transparent;background:transparent;color:#49697a;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:10px;min-height:57px;padding:5px 12px;text-align:left}.nav-tab .tab-icon{font-size:1.35rem;font-weight:850;width:26px;text-align:center}.nav-tab b{display:block;font-size:.93rem}.nav-tab small{display:block;font-size:.73rem;opacity:.78;margin-top:2px}.nav-tab.active{color:#096c68;background:#e6f5f2;border-color:#119186}.nav-tab:hover:not(.active){background:#eef3f7}.nav-tab:focus-visible{outline:3px solid #efa62d;outline-offset:1px}
+.diagram-panel{padding:13px;margin-bottom:16px}.diagram-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:5px 7px 13px;flex-wrap:wrap}.diagram-head h3{margin:0;font-size:1.02rem}.diagram-head span{font-size:.83rem;color:#627b8b}#solutionDiagram{width:100%;display:block;height:auto;background:#edf8f7;border-radius:12px;border:1px solid #d3e8e7}.diagram-panel .legend{padding:12px 8px 3px}.solution{margin-top:0}.solution-body{border-top:0;padding-top:0}.solution .equation{margin-top:18px}
+.light-controls{padding:18px;margin-bottom:15px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px}.light-controls label{font-weight:730;color:#304f62}.light-controls select{min-height:44px;max-width:100%;background:white;padding:8px 10px;border:1px solid #bbd6dd;border-radius:9px;color:#284758}.material-controls{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.material-controls>div{display:flex;flex-direction:column;gap:5px}.material-controls label{font-size:.86rem}.light-mode-hint{width:100%;font-size:.87rem;color:#547084;line-height:1.5;margin:0}.comparison-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-bottom:15px}.compare-card{padding:13px;min-width:0}.compare-title{display:flex;gap:11px;align-items:center;padding:2px 5px 12px}.compare-title h3{margin:0 0 3px;font-size:1rem}.compare-title p{margin:0;font-size:.79rem;color:#62808c}.number-pill{border-radius:100%;background:#e5f5f1;color:#0d7772;display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;font-weight:900}.number-pill.yellow{background:#fff0c9;color:#956312}.compare-svg{background:#f4f8fa;border:1px solid #e1e9ec;border-radius:10px;width:100%;height:auto;display:block}.compare-facts{padding:13px 8px 5px;color:#415f70;font-size:.84rem;line-height:1.48}.compare-facts b{color:#145665}.bridge-card{padding:19px 22px}.bridge-card h3{font-size:1.07rem;margin:0 0 12px}.bridge-formula{font-size:clamp(1.1rem,2vw,1.48rem);text-align:center;font-weight:750;background:#edf9f7;border:1px solid #cbe5e1;border-radius:12px;padding:19px 8px;color:#155854;line-height:1.35}.bridge-separator{margin:0 12px;color:#778d97}.bridge-card p{color:#355a6d;line-height:1.57}.bridge-card .bridge-note{font-size:.83rem;background:#f4f7fb;border-left:4px solid #8b9aac;padding:12px 14px;border-radius:5px;color:#587280;margin-bottom:0}
+@media(max-width:900px){.comparison-grid{grid-template-columns:1fr}.compare-svg{max-width:650px;margin:auto}}@media(max-width:680px){body{padding-bottom:86px}.bottom-nav{padding:5px 4px max(5px,env(safe-area-inset-bottom))}.tab-strip{gap:1px}.nav-tab{padding:5px 2px;min-height:60px;gap:3px;flex-direction:column;text-align:center}.nav-tab .tab-icon{font-size:1.22rem;line-height:1.1}.nav-tab b{font-size:.79rem}.nav-tab small{font-size:.64rem;margin-top:0}.diagram-panel{padding:7px}.material-controls{grid-template-columns:1fr}.bridge-card{padding:14px}.bridge-formula{font-size:1rem}.bridge-separator{margin:0 3px}.context-chips{gap:6px}.context-chips span{font-size:.76rem;padding:5px 8px}}
+@media print{.bottom-nav{display:none}body{padding-bottom:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Fyzika • optika • Fermatov princíp</div>
+  <h1>Najrýchlejšia cesta plavčíka</h1>
+  <p>Najkratšia cesta nie je vždy najrýchlejšia. Kde má plavčík prekročiť hranicu vody a súše? Najprv experimentuj, potom objav zákon lomu svetla.</p>
+</header>
+<main>
+<section id="pageExperiment" class="page-screen" role="tabpanel" aria-labelledby="tabExperiment">
+<section class="scenarios" aria-label="Vyber situáciu">
+  <button class="scenario active" id="scenarioRescue" aria-pressed="true"><span class="emoji" aria-hidden="true">🛟</span><span><strong>1. Záchrana vo vode</strong><small>Plavčík beží po pláži za topiacim sa človekom.</small></span></button>
+  <button class="scenario" id="scenarioDog" aria-pressed="false"><span class="emoji" aria-hidden="true">🐕</span><span><strong>2. Pes na pláži</strong><small>Plavčík pláva z vody odohnať psa, ktorý leží na lehátku.</small></span></button>
+</section>
+<section class="panel control-panel" aria-label="Nastavenie rýchlostí">
+  <div class="speedbox"><label for="landSpeed">Rýchlosť na súši <output id="landOutput">5,0 m/s</output></label><input id="landSpeed" type="range" min="1" max="8" step="0.1" value="5"><div class="ends"><span>1,0 m/s</span><span>8,0 m/s</span></div></div>
+  <div class="speedbox"><label for="waterSpeed">Rýchlosť vo vode <output id="waterOutput">1,5 m/s</output></label><input id="waterSpeed" type="range" min="0.5" max="4" step="0.1" value="1.5"><div class="ends"><span>0,5 m/s</span><span>4,0 m/s</span></div></div>
+  <div class="helpbox"><b>Postup pri pokuse</b><span>① Vyber bod na hranici vody a pláže.</span><span>② Spusti pohyb a odmeraj čas.</span><span>③ Porovnaj pokusy a klikni dole na Riešenie.</span></div>
+</section>
+<section class="panel stage-panel" aria-label="Interaktívny model pláže">
+  <div class="stage-heading"><h2 id="sceneTitle">Plavčík zachraňuje človeka</h2><span class="step">Na výber bodu použi pobrežie alebo posuvník.</span></div>
+  <div class="stage-wrapper">
+    <svg id="stage" class="stage" viewBox="0 0 1000 540" role="img" aria-label="Pohľad zhora na pláž a vodu. Vyber miesto prekročenia pobrežia." xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots" width="46" height="42" patternUnits="userSpaceOnUse"><circle cx="7" cy="9" r="1.9" fill="#d7b47b" opacity=".42"/><circle cx="28" cy="32" r="1.6" fill="#c89b5a" opacity=".45"/></pattern>
+        <pattern id="waves" width="154" height="70" patternUnits="userSpaceOnUse"><path d="M 0 28 Q 18 18 38 28 T 76 28 T 114 28 T 154 28" fill="none" stroke="#d5f5ef" stroke-width="2.8" opacity=".46"/></pattern>
+        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#163948" flood-opacity=".2"/></filter>
+      </defs>
+      <rect x="0" y="0" width="1000" height="268" fill="#f7e5bc"/><rect x="0" y="0" width="1000" height="268" fill="url(#dots)"/>
+      <rect x="0" y="268" width="1000" height="272" fill="#9bdedc"/><rect x="0" y="268" width="1000" height="272" fill="url(#waves)"/>
+      <rect x="0" y="262" width="1000" height="13" fill="#fdf5d8" opacity=".8"/>
+      <path d="M0 268 Q45 257 90 268 T180 268 T270 268 T360 268 T450 268 T540 268 T630 268 T720 268 T810 268 T900 268 T990 268" stroke="#6faaa0" stroke-width="3" fill="none" opacity=".75"/>
+      <text x="500" y="44" text-anchor="middle" fill="#7b5b30" font-size="19" font-weight="800" letter-spacing="2">PLÁŽ · SÚŠ</text>
+      <text x="500" y="505" text-anchor="middle" fill="#156e79" font-size="19" font-weight="800" letter-spacing="2">VODA</text>
+      <g aria-hidden="true" font-size="13" fill="#51747a" font-weight="650"><text x="79" y="292" text-anchor="middle">0</text><text x="247" y="292" text-anchor="middle">20</text><text x="415" y="292" text-anchor="middle">40</text><text x="583" y="292" text-anchor="middle">60</text><text x="751" y="292" text-anchor="middle">80</text><text x="920" y="292" text-anchor="middle">100 m</text></g>
+      <g aria-hidden="true" stroke="#528b8c" stroke-opacity=".4" stroke-width="1.5"><path d="M80 272v8 M248 272v8 M416 272v8 M584 272v8 M752 272v8 M920 272v8"/></g>
+      <g id="dogProps" pointer-events="none" visibility="hidden" aria-hidden="true">
+        <g transform="translate(794 50) rotate(90)">
+          <rect x="-26" y="-53" width="53" height="100" rx="8" fill="#f8f9ed" stroke="#4c8187" stroke-width="4"/>
+          <path d="M-19-39H20 M-19-22H20 M-19-5H20 M-19 12H20 M-19 29H20" stroke="#e3996b" stroke-width="9"/>
+          <path d="M-24-12H25" stroke="#4c8187" stroke-width="3"/>
+          <path d="M-24 38l-12 10 M24 38l12 10" stroke="#4c8187" stroke-width="4" stroke-linecap="round"/>
+        </g>
+      </g>
+      <g id="trialPaths" pointer-events="none"></g>
+      <g id="optimalPaths" pointer-events="none"></g>
+      <g id="angleGraphics" pointer-events="none"></g>
+      <g id="startGroup" filter="url(#shadow)" pointer-events="none"><circle r="26" fill="white" stroke="#2f8391" stroke-width="3.2"/><text class="iconText" y="10" text-anchor="middle" font-size="29">🛟</text></g>
+      <g id="goalGroup" filter="url(#shadow)" pointer-events="none"><circle r="26" fill="white" stroke="#d56a34" stroke-width="3.2"/><text class="iconText" y="10" text-anchor="middle" font-size="29">🙋</text></g>
+      <text id="startName" class="label" fill="#1a5362" stroke="#fff" font-size="17" text-anchor="middle">Plavčík</text>
+      <text id="goalName" class="label" fill="#923e1e" stroke="#fff" font-size="17" text-anchor="middle">Topiaci sa človek</text>
+      <g id="runner" visibility="hidden" pointer-events="none" filter="url(#shadow)"><circle r="22" fill="#fff" stroke="#1d7586" stroke-width="3"/><text id="runnerEmoji" y="8" text-anchor="middle" font-size="25">🏃</text></g>
+      <rect class="shoreHit" x="0" y="225" width="1000" height="90" fill="transparent" aria-hidden="true"/>
+    </svg>
+    <div class="scene-hint" id="sceneHint">Klikni na pobrežie a vyber bod prechodu</div>
+  </div>
+  <div class="legend" aria-label="Legenda"><span><i class="sample"></i>Prvé prostredie</span><span><i class="sample orange"></i>Druhé prostredie</span><span id="legendTrial" hidden><i class="sample dashed"></i>Tvoj pokus</span><span id="legendSolution" hidden><i class="sample optimal"></i>Optimálny bod</span></div>
+</section>
+<div class="interactions">
+  <section class="panel choices" aria-label="Experimentovanie s trasou">
+    <h2>1 · Vyskúšaj svoju trasu</h2><p>Bod môžeš ťahať po pobreží. Plavčík sa v každom prostredí pohybuje po priamej úsečke.</p>
+    <label for="crossSlider" class="point-label"><span>Bod prechodu cez pobrežie</span><output id="crossOutput">Nevybraný</output></label>
+    <input type="range" id="crossSlider" class="point-slider" min="0" max="100" step="0.5" value="50" aria-label="Poloha bodu prechodu v metroch pozdĺž pobrežia"/>
+    <div class="range-end"><span>0 m</span><span>100 m</span></div>
+    <div class="buttons"><button class="btn primary" id="runBtn" disabled>▶ Spustiť pokus</button><button class="btn secondary" id="pauseBtn" disabled>⏸ Pozastaviť</button><button class="btn secondary" id="stopBtn" disabled>↺ Zastaviť</button></div>
+    <div class="clockbox"><div class="clock" id="clock">— <small>s</small></div><div class="phase" id="phase" role="status" aria-live="polite">Vyber bod na pobreží a spusti prvý pokus.</div></div>
+    <div class="small-control"><label for="animSpeed">Rýchlosť prehrávania</label><select id="animSpeed"><option value="4">4×</option><option value="8" selected>8×</option><option value="16">16×</option><option value="32">32×</option></select></div>
+  </section>
+  <section class="panel results" aria-label="Výsledky meraní">
+    <div class="results-head"><h2>2 · Porovnaj namerané časy</h2><small id="attemptCount">0 pokusov</small></div>
+    <div class="tablewrap"><table id="attemptTable" hidden><thead><tr><th>Pokus</th><th>Bod na brehu</th><th>Čas</th></tr></thead><tbody id="attemptsBody"></tbody></table><div class="empty" id="emptyTrials">Zatiaľ nemáš žiadne meranie. Skús rôzne body a hľadaj čo najnižší čas.</div></div>
+    <div class="summaryline"><span>Najrýchlejší z tvojich pokusov</span><b id="bestTrial">—</b></div>
+    <div class="buttons"><button class="btn secondary" id="clearBtn">Vymazať merania</button></div>
+    <p class="note">Pri zmene rýchlostí alebo situácie sa séria meraní vymaže, aby sa porovnávali iba pokusy za rovnakých podmienok.</p>
+  </section>
+</div>
+</section>
+
+<section id="pageSolution" class="page-screen" role="tabpanel" aria-labelledby="tabSolution" hidden>
+  <div class="page-intro">
+    <div class="page-kicker">KROK 2 · VYSVETLENIE</div>
+    <h2>Prečo je práve táto cesta najrýchlejšia?</h2>
+    <p>Tu sa odhalí optimálna trasa pre situáciu a rýchlosti nastavené v experimente. Porovnaj ju s vlastnými pokusmi.</p>
+    <div class="context-chips" id="solutionContext"></div>
+  </div>
+  <section class="panel diagram-panel" aria-label="Optimálna trasa a uhly">
+    <div class="diagram-head"><h3>Optimálny bod prechodu a uhly k kolmici</h3><span>Výsledok pre tvoje aktuálne nastavenia</span></div>
+    <svg id="solutionDiagram" viewBox="0 0 1000 540" role="img" aria-label="Optimálna dráha plavčíka cez breh s uhlami meranými od kolmice"></svg>
+    <div class="legend"><span><i class="sample optimal"></i>Optimálna trasa</span><span><i class="sample dashed"></i>Posledný vybraný bod (ak je odlišný)</span><span>⋮ Kolmica na pobrežie</span></div>
+  </section>
+  <section class="panel solution" aria-label="Matematické riešenie">
+    <div class="solution-head"><div><h2>Výsledky výpočtu</h2><p>Čas je súčet času na súši a času vo vode.</p></div></div>
+    <div class="solution-body">
+      <div class="solution-grid"><div class="metric"><span>Optimálny bod na brehu</span><strong id="optX">—</strong></div><div class="metric"><span>Najkratší možný čas</span><strong id="optT">—</strong></div><div class="metric"><span>Uhol α₁ k kolmici</span><strong id="optA1">—</strong></div><div class="metric"><span>Uhol α₂ k kolmici</span><strong id="optA2">—</strong></div></div>
+      <div class="equation"><div class="formula"><span class="fraction"><span>v₁</span><span>v₂</span></span> = <span class="fraction"><span>sin(α₁)</span><span>sin(α₂)</span></span></div><div class="numbers" id="ratioLine">—</div></div>
+      <p class="conclusion" id="solutionDescription"></p>
+      <details class="theory"><summary>Prečo práve tento bod? (matematické vysvetlenie)</summary><p>Celkový čas je <b>T(x) = d₁(x) / v₁ + d₂(x) / v₂</b>, kde d₁ a d₂ sú dĺžky priamych úsekov. Derivovaním podľa bodu prechodu x a položením derivácie na nulu získame <b>sin(α₁)/v₁ = sin(α₂)/v₂</b>. Preto <b>v₁/v₂ = sin(α₁)/sin(α₂)</b>. Oba uhly meriame od kolmice, nie od hranice prostredí.</p></details>
+    </div>
+  </section>
+</section>
+<section id="pageLight" class="page-screen" role="tabpanel" aria-labelledby="tabLight" hidden>
+  <div class="page-intro">
+    <div class="page-kicker">KROK 3 · SVETLO A FERMATOV PRINCÍP</div>
+    <h2>Plavčík a svetelný lúč riešia rovnaký problém</h2>
+    <p>Rýchlosť sa na hranici dvoch prostredí zmení. Najrýchlejšia cesta sa preto môže <b>zlomiť</b>. Pozri sa, ako sa to prejavuje pri svetle.</p>
+    <div class="context-chips" id="lightContext"></div>
+  </div>
+  <section class="panel light-controls">
+    <label for="lightMode"><b>Čo chceš porovnať?</b></label>
+    <select id="lightMode"><option value="analogy">Rovnaký pomer rýchlostí ako plavčík</option><option value="materials">Skutočné optické prostredia</option></select>
+    <div id="materialControls" class="material-controls" hidden>
+      <div><label for="medium1">1. prostredie, odkiaľ lúč prichádza</label><select id="medium1"><option value="air">Vzduch (n ≈ 1,00)</option><option value="water">Voda (n ≈ 1,33)</option><option value="glass">Sklo (n ≈ 1,50)</option><option value="diamond">Diamant (n ≈ 2,42)</option></select></div>
+      <div><label for="medium2">2. prostredie, kam lúč prechádza</label><select id="medium2"><option value="air">Vzduch (n ≈ 1,00)</option><option value="water">Voda (n ≈ 1,33)</option><option value="glass">Sklo (n ≈ 1,50)</option><option value="diamond">Diamant (n ≈ 2,42)</option></select></div>
+    </div>
+    <p id="lightModeHint" class="light-mode-hint"></p>
+  </section>
+  <div class="comparison-grid">
+    <section class="panel compare-card"><div class="compare-title"><span class="number-pill">A</span><div><h3>Plavčík – najrýchlejšia trasa</h3><p id="lifeguardSub">—</p></div></div><svg id="lifeguardMini" class="compare-svg" viewBox="0 0 540 350" role="img" aria-label="Zjednodušený diagram optimálnej trasy plavčíka"></svg><div class="compare-facts" id="lifeguardFacts"></div></section>
+    <section class="panel compare-card"><div class="compare-title"><span class="number-pill yellow">B</span><div><h3>Svetlo – lom svetelného lúča</h3><p id="lightSub">—</p></div></div><svg id="lightMini" class="compare-svg" viewBox="0 0 540 350" role="img" aria-label="Svetelný lúč prechádzajúci cez dve optické prostredia"></svg><div class="compare-facts" id="lightFacts"></div></section>
+  </div>
+  <section class="panel bridge-card">
+    <h3>Ten istý princíp, dva rôzne príklady</h3>
+    <div class="bridge-formula"> <span class="fraction"><span>v₁</span><span>v₂</span></span> = <span class="fraction"><span>sin α₁</span><span>sin α₂</span></span> = <span class="fraction"><span>n₂</span><span>n₁</span></span> <span class="bridge-separator">⇔</span> n₁ · sin α₁ = n₂ · sin α₂ </div>
+    <p id="lightExplanation"></p>
+    <p class="bridge-note"><b>Pozor:</b> Rýchlosti plavčíka v m/s nie sú rýchlosťami svetla. V režime „Rovnaký pomer“ porovnávame iba pomery rýchlostí. Pri skutočných materiáloch platí približne v = c/n a uvedené indexy lomu závisia aj od vlnovej dĺžky svetla.</p>
+  </section>
+</section>
+<p class="footer-note"><b>Zjednodušenia modelu:</b> Pohľad zhora; rovný breh; rýchlosti v oboch prostrediach sú konštantné; zmena rýchlosti pri prechode pobrežím je okamžitá; nezaoberáme sa prúdmi vody ani reakčným časom. Rozmery sú v metroch, časy v sekundách. Animácia je zrýchlená, no vypočítané časy plavčíka zostávajú fyzikálne. Svetelná analógia používa pomery rýchlostí, nie rýchlosti plavčíka ako skutočné rýchlosti svetla.</p>
+</main>
+
+<nav class="bottom-nav" aria-label="Obrazovky appletu"><div class="tab-strip" role="tablist" aria-label="Výučbové obrazovky">
+  <button id="tabExperiment" type="button" role="tab" aria-selected="true" aria-controls="pageExperiment" class="nav-tab active" data-page="experiment"><span class="tab-icon" aria-hidden="true">⚙</span><span><b>Experiment</b><small>Skúšanie trás</small></span></button>
+  <button id="tabSolution" type="button" role="tab" aria-selected="false" aria-controls="pageSolution" class="nav-tab" data-page="solution" tabindex="-1"><span class="tab-icon" aria-hidden="true">∠</span><span><b>Riešenie</b><small>Optimálna dráha</small></span></button>
+  <button id="tabLight" type="button" role="tab" aria-selected="false" aria-controls="pageLight" class="nav-tab" data-page="light" tabindex="-1"><span class="tab-icon" aria-hidden="true">↗</span><span><b>Lom svetla</b><small>Prepojenie analógie</small></span></button>
+</div></nav>
+
+<script>
+'use strict';
+(() => {
+  const $ = id => document.getElementById(id);
+  const shoreY=268, pxPerM=8.4, xpx=x=>80+pxPerM*x, ypx=y=>shoreY+pxPerM*y;
+  const cases={
+    rescue:{title:'Plavčík zachraňuje človeka',start:{x:15,y:-26},goal:{x:85,y:26},first:'súš',second:'voda',goalEmoji:'🙋',goalLabel:'Topiaci sa človek'},
+    dog:{title:'Plavčík odháňa psa ležiaceho na lehátku',start:{x:15,y:26},goal:{x:85,y:-26},first:'voda',second:'súš',goalEmoji:'🐶',goalLabel:'Pes na lehátku'}
+  };
+  const state={scene:'rescue',land:5,water:1.5,point:null,experiments:[],tab:'experiment',lightMode:'analogy',medium1:'air',medium2:'water',play:null,animRate:8,lastFinish:null};
+  let raf=0,serial=0,dragging=false;
+  const fmt=(x,n=1)=>Number(x).toFixed(n).replace('.',','), rad=x=>x*180/Math.PI;
+  const curr=()=>cases[state.scene];
+  function segmentModel(x){
+    const c=curr(),v1=c.first==='súš'?state.land:state.water,v2=c.second==='súš'?state.land:state.water;
+    const d1=Math.hypot(x-c.start.x,c.start.y), d2=Math.hypot(c.goal.x-x,c.goal.y);
+    const t1=d1/v1,t2=d2/v2;
+    return {x,d1,d2,t1,t2,total:t1+t2,v1,v2};
+  }
+  function solve(){
+    const c=curr(),lo=c.start.x,hi=c.goal.x;
+    let a=lo,b=hi;
+    const deriv=x=>{
+      const m=segmentModel(x);
+      return (x-c.start.x)/(m.d1*m.v1)+(x-c.goal.x)/(m.d2*m.v2);
+    };
+    for(let i=0;i<70;i++){let middle=(a+b)/2;if(deriv(middle)>0)b=middle;else a=middle;}
+    const x=(a+b)/2,m=segmentModel(x);
+    m.a1=Math.atan2(Math.abs(x-c.start.x),Math.abs(c.start.y));
+    m.a2=Math.atan2(Math.abs(c.goal.x-x),Math.abs(c.goal.y));
+    return m;
+  }
+  function path(x){let c=curr();return `M ${xpx(c.start.x)} ${ypx(c.start.y)} L ${xpx(x)} ${shoreY} L ${xpx(c.goal.x)} ${ypx(c.goal.y)}`}
+  function strokes(x,kind){
+    const c=curr(),p={x:xpx(x),y:shoreY},q={x:xpx(c.start.x),y:ypx(c.start.y)},r={x:xpx(c.goal.x),y:ypx(c.goal.y)};
+    const dash='',w=5.2,col1='#6452c6',col2='#d75f2f',opacity=1;
+    const line=(a,b,color)=>`<path d="M${a.x.toFixed(1)} ${a.y.toFixed(1)} L${b.x.toFixed(1)} ${b.y.toFixed(1)}" stroke="${color}" stroke-width="${w}" stroke-linecap="round" fill="none" ${dash} opacity="${opacity}"/>`;
+    const bead=kind==='opt'?`<circle cx="${p.x}" cy="${p.y}" r="12" fill="#fff" stroke="#0b9669" stroke-width="5"/><circle cx="${p.x}" cy="${p.y}" r="4" fill="#0b9669"/>`:`<circle cx="${p.x}" cy="${p.y}" r="12" fill="white" stroke="#2a5474" stroke-width="4"/><circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#2a5474"/>`;
+    return `<g>${line(q,p,col1)}${line(p,r,col2)}${bead}</g>`;
+  }
+  function arc(x,radius,theta,sign,side){
+    if(theta<.008)return '';
+    const center=xpx(x),parts=[];
+    for(let i=0;i<=24;i++){let a=theta*i/24,px=center+side*radius*Math.sin(a),py=shoreY+sign*radius*Math.cos(a);parts.push(`${i?'L':'M'}${px.toFixed(2)} ${py.toFixed(2)}`)}
+    return `<path d="${parts.join(' ')}" fill="none" stroke="#115e62" stroke-width="2.8"/>`;
+  }
+  function angleMarkup(m){
+    const c=curr(),x=m.x,xx=xpx(x),sign1=Math.sign(c.start.y),sign2=Math.sign(c.goal.y);
+    let txt=(a,r,side,sign,label)=>{
+      const beta=a/2, xt=xx+side*(r+23)*Math.sin(beta),yt=shoreY+sign*(r+24)*Math.cos(beta);
+      return `<text x="${xt.toFixed(1)}" y="${(yt+5).toFixed(1)}" font-size="16" fill="#064e51" font-weight="800" text-anchor="middle" stroke="#ffffff" stroke-width="4" paint-order="stroke">${label}</text>`;
+    };
+    return `<path d="M${xx} ${shoreY-100}v200" stroke="#2b7c7a" stroke-width="2" stroke-dasharray="6 6" opacity=".8"/>${arc(x,43,m.a1,sign1,-1)}${arc(x,43,m.a2,sign2,1)}${txt(m.a1,46,-1,sign1,'α₁')}${txt(m.a2,46,1,sign2,'α₂')}`;
+  }
+  function updateScene(){
+    const c=curr();$('sceneTitle').textContent=c.title;$('dogProps').setAttribute('visibility',state.scene==='dog'?'visible':'hidden');
+    $('startGroup').setAttribute('transform',`translate(${xpx(c.start.x)} ${ypx(c.start.y)})`);
+    $('goalGroup').setAttribute('transform',`translate(${xpx(c.goal.x)} ${ypx(c.goal.y)})`);
+    $('goalGroup').querySelector('.iconText').textContent=c.goalEmoji;
+    const placeLabel=(id,pt,name)=>{const node=$(id),y=ypx(pt.y)+(pt.y<0?64:-58);node.setAttribute('x',xpx(pt.x));node.setAttribute('y',y);node.textContent=name};
+    placeLabel('startName',c.start,'Plavčík');placeLabel('goalName',c.goal,c.goalLabel);
+    $('trialPaths').innerHTML=state.point===null?'':strokes(state.point,'trial');
+    $('optimalPaths').innerHTML='';
+    $('angleGraphics').innerHTML='';
+    $('sceneHint').hidden=state.point!==null;
+    $('legendTrial').hidden=true;
+    $('legendSolution').hidden=true;
+    $('crossOutput').textContent=state.point===null?'Nevybraný':`${fmt(state.point)} m`;
+    if(state.point!==null)$('crossSlider').value=state.point;
+    $('crossSlider').setAttribute('aria-valuetext',state.point===null?'Bod zatiaľ nevybraný':`${fmt(state.point)} metra`);
+    $('runBtn').disabled=state.point===null||!!state.play;
+    $('pauseBtn').disabled=!state.play;$('stopBtn').disabled=!state.play;
+    $('landSpeed').disabled=!!state.play;$('waterSpeed').disabled=!!state.play;
+    $('scenarioRescue').disabled=!!state.play;$('scenarioDog').disabled=!!state.play;
+    $('crossSlider').disabled=!!state.play;
+  }
+  function renderTrials(){
+    const list=state.experiments,best=list.reduce((acc,m)=>!acc||m.total<acc.total?m:acc,null);
+    $('attemptCount').textContent=list.length===1?'1 pokus':`${list.length} pokusov`;
+    $('attemptTable').hidden=!list.length;$('emptyTrials').hidden=!!list.length;
+    $('attemptsBody').innerHTML=list.map((m,i)=>`<tr class="${best&&m.id===best.id?'best':''}"><td>${i+1}${best&&m.id===best.id?' ★':''}</td><td>${fmt(m.x)} m</td><td>${fmt(m.total,2)} s</td></tr>`).join('');
+    $('bestTrial').textContent=best?`${fmt(best.total,2)} s (bod ${fmt(best.x)} m)`:'—';
+  }
+  function updateSolution(){
+    
+    const m=solve(),c=curr();
+    $('optX').textContent=`${fmt(m.x,2)} m`;$('optT').textContent=`${fmt(m.total,2)} s`;
+    $('optA1').textContent=`${fmt(rad(m.a1),2)}°`;$('optA2').textContent=`${fmt(rad(m.a2),2)}°`;
+    $('ratioLine').textContent=`${fmt(m.v1,1)} / ${fmt(m.v2,1)} = ${fmt(m.v1/m.v2,3)}   a   sin(${fmt(rad(m.a1),2)}°) / sin(${fmt(rad(m.a2),2)}°) = ${fmt(Math.sin(m.a1)/Math.sin(m.a2),3)}`;
+    const last=state.experiments.length?state.experiments.reduce((best,t)=>t.total<best.total?t:best):null;
+    const delta=last?` Tvoj najlepší pokus trval ${fmt(last.total,2)} s, teda o ${fmt(Math.max(0,last.total-m.total),2)} s viac ako optimum.`:'';
+    $('solutionDescription').textContent=`Prvé prostredie je ${c.first} (v₁ = ${fmt(m.v1)} m/s), druhé je ${c.second} (v₂ = ${fmt(m.v2)} m/s). Uhly α₁ a α₂ sa vždy merajú od kolmice na pobrežie, nie od pobrežia. Rýchlejšie prostredie zodpovedá väčšiemu uhlu ku kolmici.${delta}`;
+  }
+
+  // Všetky tri obrazovky používajú rovnaký geometrický model a spoločný stav.
+  const materials={air:{n:1.0003,label:'vzduch'},water:{n:1.333,label:'voda'},glass:{n:1.50,label:'sklo'},diamond:{n:2.42,label:'diamant'}};
+  function solveWithSpeeds(v1,v2){
+    const c=curr();let lo=c.start.x,hi=c.goal.x;
+    const deriv=x=>{
+      const d1=Math.hypot(x-c.start.x,c.start.y),d2=Math.hypot(x-c.goal.x,c.goal.y);
+      return (x-c.start.x)/(d1*v1)+(x-c.goal.x)/(d2*v2);
+    };
+    for(let i=0;i<70;i++){const x=(lo+hi)/2;if(deriv(x)>0)hi=x;else lo=x;}
+    const x=(lo+hi)/2,d1=Math.hypot(x-c.start.x,c.start.y),d2=Math.hypot(c.goal.x-x,c.goal.y);
+    return {x,d1,d2,total:d1/v1+d2/v2,v1,v2,a1:Math.atan2(x-c.start.x,Math.abs(c.start.y)),a2:Math.atan2(c.goal.x-x,Math.abs(c.goal.y))};
+  }
+  function updatePageContexts(){
+    const c=curr(),m=solve();
+    const parts=[c.title,`Súš: ${fmt(state.land)} m/s`,`Voda: ${fmt(state.water)} m/s`];
+    for(const name of ['solutionContext','lightContext'])$(name).innerHTML=parts.map(x=>`<span>${x}</span>`).join('');
+  }
+  function makeAngles(m,trans,scale){
+    const c=curr(),x=trans.x(m.x),y=trans.y(0),sign1=Math.sign(c.start.y),sign2=Math.sign(c.goal.y);
+    const arc=(theta,sign,side,r)=>{
+      const pts=[];for(let i=0;i<=24;i++){const a=theta*i/24;pts.push(`${i?'L':'M'}${(x+side*r*Math.sin(a)).toFixed(2)} ${(y+sign*r*Math.cos(a)).toFixed(2)}`)}
+      return `<path d="${pts.join(' ')}" fill="none" stroke="#087b7a" stroke-width="${scale>6?3:2.4}"/>`;
+    };
+    const label=(theta,sign,side,r,t)=>`<text x="${(x+side*r*Math.sin(theta/2)).toFixed(1)}" y="${(y+sign*r*Math.cos(theta/2)+5).toFixed(1)}" text-anchor="middle" font-size="${scale>6?19:16}" font-weight="850" fill="#06625f" paint-order="stroke" stroke="white" stroke-width="4">${t}</text>`;
+    const r=scale>6?46:29;
+    return `<line x1="${x}" y1="${y-90*scale/8.4}" x2="${x}" y2="${y+90*scale/8.4}" stroke="#185d6b" stroke-width="2" stroke-dasharray="5 5" opacity=".85"/>`+arc(m.a1,sign1,-1,r)+arc(m.a2,sign2,1,r)+label(m.a1,sign1,-1,r+26,'α₁')+label(m.a2,sign2,1,r+26,'α₂');
+  }
+  function renderSolutionDiagram(){
+    const c=curr(),m=solve(),P={x:xpx,y:ypx};
+    const line=(x,color,w,dash='')=>`<path d="M ${xpx(c.start.x)} ${ypx(c.start.y)} L ${xpx(x)} ${shoreY} L ${xpx(c.goal.x)} ${ypx(c.goal.y)}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round" ${dash}/>`;
+    const trial=state.point!==null&&Math.abs(m.x-state.point)>.2?line(state.point,'#8a9eac',4,'stroke-dasharray="11 9"'):'';
+    const dots=[{p:c.start,label:'ZAČIATOK',emoji:'🛟',color:'#126c8b'},{p:c.goal,label:'CIEĽ',emoji:c.goalEmoji,color:'#c56532'}].map(({p,label,emoji,color})=>`<circle cx="${xpx(p.x)}" cy="${ypx(p.y)}" r="25" fill="#fff" stroke="${color}" stroke-width="3"/><text x="${xpx(p.x)}" y="${ypx(p.y)+9}" text-anchor="middle" font-size="29">${emoji}</text><text x="${xpx(p.x)}" y="${ypx(p.y)+(p.y<0?57:-41)}" text-anchor="middle" font-size="19" font-weight="800" stroke="#fff" stroke-width="4" paint-order="stroke" fill="#20495f">${label}</text>`).join('');
+    $('solutionDiagram').innerHTML=`<rect width="1000" height="268" fill="#f9e9c8"/><rect y="268" width="1000" height="272" fill="#a8e3e0"/><path d="M0 268H1000" stroke="#71aaa0" stroke-width="5"/><text x="500" y="37" text-anchor="middle" font-size="21" fill="#947043" font-weight="850">PLÁŽ · SÚŠ</text><text x="500" y="508" text-anchor="middle" font-size="21" fill="#156f7b" font-weight="850">VODA</text>${trial}${line(m.x,'#078a64',6)}${makeAngles(m,P,pxPerM)}<circle cx="${xpx(m.x)}" cy="${shoreY}" r="13" fill="white" stroke="#078a64" stroke-width="5"/><circle cx="${xpx(m.x)}" cy="${shoreY}" r="4" fill="#078a64"/>${dots}<text x="${xpx(m.x)+18}" y="${shoreY-18}" font-size="16" font-weight="850" fill="#05704e" stroke="white" stroke-width="4" paint-order="stroke">OPTIMUM</text>`;
+  }
+  function miniDiagram(id,m,kind){
+    const c=curr(),trans={x:x=>54+4.32*x,y:y=>175+4.32*y},xx=trans.x(m.x),yy=trans.y(0);
+    const src={x:trans.x(c.start.x),y:trans.y(c.start.y)},dst={x:trans.x(c.goal.x),y:trans.y(c.goal.y)};
+    const line=(x1,y1,x2,y2,col)=>`<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${col}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+    const rayColor=kind==='light'?'#f3b326':'#078e82';
+    const topLabel=c.first==='súš'?'1. SÚŠ':'2. SÚŠ';
+    const bottomLabel=c.first==='voda'?'1. VODA':'2. VODA';
+    const p1=kind==='light'?`<text x="508" y="28" text-anchor="end" font-size="15" font-weight="800" fill="#38678d">${c.start.y<0?'1. PROSTREDIE':'2. PROSTREDIE'}</text>`:`<text x="508" y="28" text-anchor="end" font-size="15" font-weight="800" fill="#8a6537">${topLabel}</text>`;
+    const p2=kind==='light'?`<text x="508" y="337" text-anchor="end" font-size="15" font-weight="800" fill="#38678d">${c.start.y>0?'1. PROSTREDIE':'2. PROSTREDIE'}</text>`:`<text x="508" y="337" text-anchor="end" font-size="15" font-weight="800" fill="#286f7d">${bottomLabel}</text>`;
+    const shade1=kind==='light'?'#e3efff':'#faeccb';const shade2=kind==='light'?'#a6c8f5':'#a6e1df';
+    const animDots=kind==='light'?`<circle cx="${(src.x+xx)/2}" cy="${(src.y+yy)/2}" r="4" fill="#fff" stroke="#e59c00" stroke-width="2"/><circle cx="${(dst.x+xx)/2}" cy="${(dst.y+yy)/2}" r="4" fill="#fff" stroke="#e59c00" stroke-width="2"/>`:'';
+    $(id).innerHTML=`<rect width="540" height="175" fill="${shade1}"/><rect y="175" width="540" height="175" fill="${shade2}"/><path d="M0 175H540" stroke="#709fbc" stroke-width="3"/>${p1}${p2}`+
+      line(src.x,src.y,xx,yy,rayColor)+line(xx,yy,dst.x,dst.y,rayColor)+makeAngles(m,trans,4.32)+
+      `<circle cx="${xx}" cy="${yy}" r="7" fill="white" stroke="${rayColor}" stroke-width="4"/>`+
+      `<circle cx="${src.x}" cy="${src.y}" r="11" fill="white" stroke="${rayColor}" stroke-width="3"/><circle cx="${dst.x}" cy="${dst.y}" r="11" fill="white" stroke="${rayColor}" stroke-width="3"/>`+
+      `<text x="${src.x+14}" y="${src.y-12}" font-size="14" font-weight="800" fill="#225366" stroke="white" stroke-width="3" paint-order="stroke">ZDROJ</text><text x="${dst.x-14}" y="${dst.y+(c.goal.y>0?-16:30)}" text-anchor="end" font-size="14" font-weight="800" fill="#225366" stroke="white" stroke-width="3" paint-order="stroke">CIEĽ</text>`+animDots;
+  }
+  function renderLightComparison(){
+    const human=solve(),c=curr(),actual=state.lightMode==='materials';
+    const n1=materials[state.medium1].n,n2=materials[state.medium2].n;
+    // V svetle záleží na pomere rýchlostí. Modelová relatívna rýchlosť je 1/n.
+    const light=actual?solveWithSpeeds(1/n1,1/n2):solveWithSpeeds(human.v1,human.v2);
+    $('materialControls').hidden=!actual;$('lightMode').value=state.lightMode;
+    $('medium1').value=state.medium1;$('medium2').value=state.medium2;
+    miniDiagram('lifeguardMini',human,'human');miniDiagram('lightMini',light,'light');
+    $('lifeguardSub').textContent=`${c.first} → ${c.second}`;
+    $('lightSub').textContent=actual?`${materials[state.medium1].label} → ${materials[state.medium2].label}`:'Rovnaký pomer rýchlostí';
+    $('lifeguardFacts').innerHTML=`<b>v₁ / v₂ = ${fmt(human.v1/human.v2,3)}</b><br>α₁ = ${fmt(rad(human.a1),2)}° · α₂ = ${fmt(rad(human.a2),2)}°`;
+    if(actual){
+      const left=Math.sin(light.a1)*n1,right=Math.sin(light.a2)*n2;
+      $('lightFacts').innerHTML=`<b>n₁ = ${fmt(n1,3)} · n₂ = ${fmt(n2,3)}</b><br>α₁ = ${fmt(rad(light.a1),2)}° · α₂ = ${fmt(rad(light.a2),2)}°<br>n₁ sin α₁ ≈ ${fmt(left,3)}; n₂ sin α₂ ≈ ${fmt(right,3)}`;
+      const bend=n2>n1?'ku kolmici':n2<n1?'od kolmice':'bez zmeny smeru';
+      $('lightModeHint').textContent='Pri výbere materiálov sa uplatnia približné indexy lomu viditeľného svetla. Svetelná dráha sa prepočíta nezávisle od rýchlostí plavčíka.';
+      $('lightExplanation').textContent=`Pri prechode z prostredia „${materials[state.medium1].label}“ do prostredia „${materials[state.medium2].label}“ sa lúč láme ${bend}. Zvolený pomer rýchlostí svetla je v₁/v₂ = n₂/n₁ = ${fmt(n2/n1,3)}, zatiaľ čo plavčík má pomer ${fmt(human.v1/human.v2,3)}. Preto sa dráhy nemusia zhodovať. V oboch obrázkoch však platí ten istý zákon lomu.`;
+    }else{
+      $('lightFacts').innerHTML=`<b>v₁ / v₂ = ${fmt(human.v1/human.v2,3)}</b><br>α₁ = ${fmt(rad(light.a1),2)}° · α₂ = ${fmt(rad(light.a2),2)}°`;
+      $('lightModeHint').textContent='Rýchlosti v oboch obrázkoch nie sú číselne rovnaké; rovnaký je iba ich pomer, preto sú aj uhly rovnaké.';
+      $('lightExplanation').textContent=`Na prvom obrázku plavčík a na druhom lúč prechádzajú medzi dvoma oblasťami s rovnakým pomerom rýchlostí. Preto pri rovnakých východiskovom a cieľovom bode získame ten istý bod prechodu a tie isté uhly. Rýchlejšie prostredie znamená väčší uhol k kolmici; pomalšie prostredie menší. Toto je Fermatov princíp najmenšieho času a Snellov zákon lomu.`;
+    }
+  }
+  function switchTab(name){
+    if(state.play){clearPlayback();$('phase').textContent='Pokus bol prerušený pri prepnutí obrazovky.';}
+    state.tab=name;
+    const screens={experiment:'Experiment',solution:'Solution',light:'Light'};
+    for(const [key,suffix] of Object.entries(screens)){
+      const active=key===name;
+      $('page'+suffix).hidden=!active;
+      const tab=$('tab'+suffix);tab.classList.toggle('active',active);tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;
+    }
+    updateAll();window.scrollTo({top:0,behavior:'instant'});
+  }
+  document.querySelectorAll('[data-page]').forEach(tab=>{
+    tab.addEventListener('click',()=>switchTab(tab.dataset.page));
+    tab.addEventListener('keydown',e=>{
+      if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+      const pages=['experiment','solution','light'];let i=pages.indexOf(state.tab);
+      if(e.key==='ArrowLeft')i=(i+2)%3;else if(e.key==='ArrowRight')i=(i+1)%3;else if(e.key==='Home')i=0;else i=2;
+      e.preventDefault();switchTab(pages[i]);$('tab'+Object.values({experiment:'Experiment',solution:'Solution',light:'Light'})[i]).focus();
+    });
+  });
+  $('lightMode').addEventListener('change',e=>{state.lightMode=e.target.value;renderLightComparison()});
+  $('medium1').addEventListener('change',e=>{state.medium1=e.target.value;renderLightComparison()});
+  $('medium2').addEventListener('change',e=>{state.medium2=e.target.value;renderLightComparison()});
+
+  function updateAll(){updateScene();renderTrials();updateSolution();renderSolutionDiagram();renderLightComparison();updatePageContexts()}
+  function clearPlayback(){if(raf)cancelAnimationFrame(raf);raf=0;state.play=null;$('runner').setAttribute('visibility','hidden');$('pauseBtn').textContent='⏸ Pozastaviť'}
+  function selectPoint(x){if(state.play)return;state.point=Math.min(100,Math.max(0,Math.round(x*2)/2));$('phase').textContent=`Vybraný bod ${fmt(state.point)} m. Spusti pokus a zisti čas.`;if(!state.experiments.length)$('clock').innerHTML='— <small>s</small>';updateScene()}
+  function resetMeasurements(){clearPlayback();state.experiments=[];state.lastFinish=null;$('clock').innerHTML='— <small>s</small>';$('phase').textContent=state.point===null?'Vyber bod na pobreží a spusti prvý pokus.':'Merania boli vymazané. Môžeš spustiť nový pokus.';updateAll()}
+  function setCase(k){if(state.scene===k)return;clearPlayback();state.scene=k;state.point=null;state.experiments=[];state.lastFinish=null;state.medium1=k==='rescue'?'air':'water';state.medium2=k==='rescue'?'water':'air';$('clock').innerHTML='— <small>s</small>';$('phase').textContent='Vyber bod na pobreží a spusti prvý pokus.';for(let id of ['rescue','dog']){const active=id===k;$(`scenario${id==='rescue'?'Rescue':'Dog'}`).classList.toggle('active',active);$(`scenario${id==='rescue'?'Rescue':'Dog'}`).setAttribute('aria-pressed',String(active))}updateAll()}
+  function updateParams(){state.land=Number($('landSpeed').value);state.water=Number($('waterSpeed').value);$('landOutput').textContent=`${fmt(state.land)} m/s`;$('waterOutput').textContent=`${fmt(state.water)} m/s`;resetMeasurements()}
+  function moveRunner(){
+    const play=state.play;if(!play)return;
+    const {model:m,elapsed:t}=play,c=curr();let pos,icon,phase;
+    if(t<=m.t1){const u=Math.min(1,t/m.t1);pos={x:c.start.x+(m.x-c.start.x)*u,y:c.start.y*(1-u)};icon=c.first==='súš'?'🏃':'🏊';phase=`1. úsek: ${c.first} · ${fmt(Math.min(t,m.t1),1)} s`}
+    else{const u=Math.min(1,(t-m.t1)/m.t2);pos={x:m.x+(c.goal.x-m.x)*u,y:c.goal.y*u};icon=c.second==='súš'?'🏃':'🏊';phase=`2. úsek: ${c.second} · ${fmt(Math.min(t-m.t1,m.t2),1)} s`}
+    $('runner').setAttribute('transform',`translate(${xpx(pos.x).toFixed(1)} ${ypx(pos.y).toFixed(1)})`);$('runner').setAttribute('visibility','visible');$('runnerEmoji').textContent=icon;
+    $('clock').innerHTML=`${fmt(Math.min(t,m.total),2)} <small>s</small>`;$('phase').textContent=phase;
+  }
+  function animationFrame(timestamp){
+    raf=0;const play=state.play;if(!play||play.paused)return;
+    if(play.lastStamp===null)play.lastStamp=timestamp;
+    const dt=Math.min(.13,Math.max(0,(timestamp-play.lastStamp)/1000));play.lastStamp=timestamp;
+    play.elapsed=Math.min(play.model.total,play.elapsed+dt*state.animRate);moveRunner();
+    if(play.elapsed>=play.model.total-1e-9){
+      const m=play.model;state.experiments.push({...m,id:++serial});state.lastFinish=m;clearPlayback();
+      $('clock').innerHTML=`${fmt(m.total,2)} <small>s</small>`;
+      $('phase').textContent=`Hotovo. Súš: ${fmt(curr().first==='súš'?m.t1:m.t2,2)} s, voda: ${fmt(curr().first==='voda'?m.t1:m.t2,2)} s.`;
+      updateAll();return;
+    }
+    raf=requestAnimationFrame(animationFrame);
+  }
+  function begin(){if(state.point===null||state.play)return;state.play={model:segmentModel(state.point),elapsed:0,lastStamp:null,paused:false};moveRunner();updateScene();raf=requestAnimationFrame(animationFrame)}
+  function togglePause(){const p=state.play;if(!p)return;if(!p.paused){p.paused=true;if(raf)cancelAnimationFrame(raf);raf=0;$('pauseBtn').textContent='▶ Pokračovať';$('phase').textContent='Animácia pozastavená.'}else{p.paused=false;p.lastStamp=null;$('pauseBtn').textContent='⏸ Pozastaviť';raf=requestAnimationFrame(animationFrame)}}
+  function stop(){if(!state.play)return;clearPlayback();$('clock').innerHTML='— <small>s</small>';$('phase').textContent='Pokus bol zastavený bez zápisu času.';updateScene()}
+  $('scenarioRescue').addEventListener('click',()=>setCase('rescue'));
+  $('scenarioDog').addEventListener('click',()=>setCase('dog'));
+  $('landSpeed').addEventListener('input',updateParams);$('waterSpeed').addEventListener('input',updateParams);
+  $('crossSlider').addEventListener('input',e=>selectPoint(Number(e.target.value)));
+  $('runBtn').addEventListener('click',begin);$('pauseBtn').addEventListener('click',togglePause);$('stopBtn').addEventListener('click',stop);
+  $('clearBtn').addEventListener('click',resetMeasurements);
+  $('animSpeed').addEventListener('change',e=>{state.animRate=Number(e.target.value)});
+
+  const stage=$('stage');
+  function eventToScene(e){const rect=stage.getBoundingClientRect();const scaleX=1000/rect.width,scaleY=540/rect.height;return {x:(e.clientX-rect.left)*scaleX,y:(e.clientY-rect.top)*scaleY}}
+  stage.addEventListener('pointerdown',e=>{if(state.play)return;const p=eventToScene(e);if(p.y<218||p.y>319)return;dragging=true;stage.classList.add('selecting');try{stage.setPointerCapture(e.pointerId)}catch{}selectPoint((p.x-80)/pxPerM);e.preventDefault()});
+  stage.addEventListener('pointermove',e=>{if(!dragging||state.play)return;const p=eventToScene(e);selectPoint((p.x-80)/pxPerM)});
+  const endDrag=()=>{dragging=false;stage.classList.remove('selecting')};stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);stage.addEventListener('lostpointercapture',endDrag);
+  // Public, read-only numerical hooks used for educational-model verification.
+  window.appletPhysics={getState:()=>({scene:state.scene,land:state.land,water:state.water,point:state.point,attempts:state.experiments.length,solutionRevealed:state.tab==='solution',tab:state.tab,lightMode:state.lightMode}),timeAt:x=>segmentModel(x).total,optimum:()=>({...solve()})};
+  updateAll();
+})();
+</script>
+</body>
+</html>
