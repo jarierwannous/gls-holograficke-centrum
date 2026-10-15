@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7fb">
+<title>Rutherfordov experiment — interaktívny applet</title>
+<style>
+:root{--ink:#17243b;--muted:#51627e;--line:#d9e2ef;--bg:#f3f6fb;--surface:#fff;--navy:#101c34;--cyan:#47e2db;--gold:#ffca70;--coral:#ff807f;--blue:#3263cc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);line-height:1.45}
+button,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.42}
+button:focus-visible,select:focus-visible,input:focus-visible+span{outline:3px solid #2786f5;outline-offset:3px}
+.shell{width:min(1140px,calc(100% - 32px));margin:0 auto;padding:26px 0 40px}
+.eyebrow{font-size:.76rem;font-weight:800;letter-spacing:.14em;color:#4772ba;text-transform:uppercase}
+h1{font-size:clamp(1.6rem,3.4vw,2.45rem);letter-spacing:-.045em;line-height:1.14;margin:.4rem 0 .45rem}
+.lede{font-size:clamp(.96rem,1.35vw,1.08rem);color:var(--muted);margin:0 0 23px;max-width:800px}
+.stepbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:15px}
+.step{border:1.5px solid var(--line);background:var(--surface);text-align:left;padding:14px 15px;border-radius:14px;display:flex;align-items:center;gap:13px;color:var(--muted);min-height:70px;transition:.15s}
+.step:hover{border-color:#a6b9d7}.step.active{border:2px solid #3768d9;color:#16409b;background:#edf4ff;padding:13.5px 14.5px;box-shadow:0 3px 16px #426aca14}
+.stepno{font-size:1.03rem;background:#e9eef8;color:#456184;border-radius:11px;width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;font-weight:800}
+.step.active .stepno{color:#fff;background:#3768d9}
+.step strong{display:block;font-size:1rem;color:var(--ink);line-height:1.3}.step small{display:block;font-size:.8rem;margin-top:2px}
+.experiment{background:white;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 12px 42px #23395b0c}
+.canvas-head{background:#192744;color:#e7f0ff;padding:12px 21px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.canvas-title{font-size:1.02rem;font-weight:750}.scale{font-size:.78rem;color:#bbcee9}
+.viewport{background:var(--navy);position:relative;overflow:hidden}
+canvas{display:block;width:100%;height:450px;touch-action:pan-y}canvas.interactive{touch-action:none;cursor:crosshair}
+.legend{display:flex;gap:19px;align-items:center;flex-wrap:wrap;padding:12px 22px;background:#192744;color:#edf4ff;font-size:.91rem}
+.legend .mark{width:12px;height:12px;border-radius:50%;display:inline-block;vertical-align:middle;margin-right:7px}
+.legend .wire{width:22px;height:4px;border-radius:3px;display:inline-block;vertical-align:middle;margin-right:7px}
+.controller{padding:19px 22px 21px;display:flex;gap:15px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.control-left,.control-right,.presets{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.view-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.view-controls .selectlabel{margin-right:2px}
+button.view-btn{border:1px solid #cbd8eb;background:white;color:#334d75;padding:9px 13px;min-height:44px;border-radius:10px;font-weight:700}
+button.view-btn.active{background:#eaf1ff;color:#174bad;border-color:#3768d9}
+.aim-controls{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:0 22px 18px}
+.aim-controls input{flex:1 1 170px;accent-color:#3768d9;min-height:26px}
+.aim-controls output{font-variant-numeric:tabular-nums;min-width:115px;font-weight:700;color:#2452a5}
+.aim-controls .helper{color:#5d708e;font-size:.81rem;flex-basis:100%}
+.stream-controls{padding:0 22px 16px;display:flex;align-items:center;gap:15px;flex-wrap:wrap;font-size:.94rem}
+.stream-controls label{display:inline-flex;gap:9px;align-items:center;font-weight:700;cursor:pointer}
+.stream-controls input{width:21px;height:21px;accent-color:#3263cc}
+.stream-controls small{color:#586c88}
+.stream-controls output{margin-left:auto;font-variant-numeric:tabular-nums;color:#27519a;font-weight:650}
+
+button.preset,button.secondary{border:1px solid #cad7e9;background:white;color:#243b60;border-radius:10px;padding:10px 14px;font-weight:650;min-height:44px}
+button.preset.active{border-color:#3768d9;background:#eaf1ff;color:#174bad;box-shadow:inset 0 0 0 .5px #3768d9}
+button.preset:hover,button.secondary:hover{background:#eaf1ff}
+button.primary{background:#3366d8;color:white;border:0;font-weight:740;border-radius:11px;padding:11px 18px;min-height:45px;box-shadow:0 3px 7px #335fb735}
+button.primary:hover{background:#2455c4}
+.selectlabel{font-weight:650;font-size:.91rem;color:var(--muted)}
+select{background:white;border:1px solid #cad7e9;border-radius:9px;padding:9px 10px;color:var(--ink);min-height:43px}
+.explain{display:grid;grid-template-columns:1.45fr 1fr;gap:17px;margin-top:17px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:19px 21px}
+.panel h2{font-size:1.16rem;letter-spacing:-.02em;margin:0 0 9px}.panel p{font-size:1rem;margin:0 0 12px;color:#354863}
+.panel p:last-child{margin-bottom:0}
+.callout{font-size:1.015rem!important;font-weight:720;color:#173a7c!important}
+.question{margin:12px 0!important;font-size:.95rem!important}
+.answers{display:flex;flex-wrap:wrap;gap:8px}.answer{display:block;position:relative}.answer input{position:absolute;opacity:0;inset:0}
+.answer span{display:block;border:1px solid #c6d4e8;padding:9px 14px;border-radius:10px;cursor:pointer;min-height:43px;background:white;font-weight:650}
+.answer input:checked+span{background:#eaf1ff;color:#164cad;border-color:#3768d9}
+.answer input:focus-visible+span{outline:3px solid #2786f5;outline-offset:2px}
+.smallnote{font-size:.84rem!important;color:#64718a!important}
+.next{margin-top:12px}
+.statlist{display:grid;gap:12px}.stat{display:flex;gap:10px;align-items:flex-start}
+.stat .dot{flex:0 0 13px;height:13px;margin-top:5px;border-radius:100%}
+.stat strong{display:block;line-height:1.22;font-size:.94rem}.stat small{display:block;color:#667894;font-size:.84rem;margin-top:2px}
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.result{background:#f0f5fd;border-radius:11px;padding:10px 12px;line-height:1.2}
+.result strong{display:block;font-size:.88rem}.result small{color:#52698a;font-size:.81rem;display:block;margin-top:5px}
+.compare{margin-top:10px;display:flex;align-items:center;gap:10px}
+.compare input{width:19px;height:19px;accent-color:#3672d7}.compare label{font-weight:650;font-size:.9rem}
+.foot{margin-top:19px;color:#556781;font-size:.86rem;line-height:1.55}
+.foot details{padding:10px 14px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.foot summary{cursor:pointer;font-weight:690;color:#334d73}.foot p{margin:9px 0 3px}
+.hidden{display:none!important}
+@media(max-width:850px){.step{padding:10px;gap:8px;min-height:62px}.step.active{padding:9.5px}.stepno{width:33px;height:33px;flex-basis:33px}.step small{font-size:.74rem}.explain{grid-template-columns:1fr}}
+@media(max-width:620px){.shell{width:min(100% - 20px,1140px);padding-top:16px}.lede{margin-bottom:16px}.stepbar{gap:5px}.step{flex-direction:column;align-items:flex-start;padding:9px;gap:6px}.step.active{padding:8.5px}.stepno{width:28px;height:28px;flex-basis:28px;font-size:.81rem}.step strong{font-size:.79rem}.step small{font-size:.69rem}.canvas-head{padding:10px 12px;align-items:flex-start}.canvas-title{font-size:.91rem}.scale{font-size:.69rem;text-align:right;max-width:120px}canvas{height:360px}.legend{gap:11px;font-size:.79rem;padding:11px 12px}.controller{padding:13px;align-items:stretch}.control-left,.control-right{width:100%}.control-right{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:center}.control-right .primary,.control-right .secondary{width:100%}.control-right .selectlabel{text-align:right}.view-controls{width:100%;justify-content:flex-start}.view-controls .selectlabel{flex-basis:100%}.aim-controls{padding:0 13px 15px}.stream-controls{padding:0 13px 15px;gap:8px}.stream-controls output{margin-left:0}.presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:5px}button.preset{font-size:.77rem;padding:8px 6px;line-height:1.25;min-height:48px}.panel{padding:17px}.results{grid-template-columns:1fr}.result{display:flex;gap:8px;align-items:baseline}.result small{margin-top:0}}
+@media(prefers-reduced-motion:reduce){button,.step{transition:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+<div class="eyebrow">Fyzika · Stavba atómu</div>
+<h1>Čo prezradili alfa častice o atóme?</h1>
+<p class="lede">Preskúmaj Rutherfordov experiment so zlatou fóliou: najprv očakávanie podľa Thomsonovho modelu, potom pozorovanie a napokon vysvetlenie.</p>
+<nav class="stepbar" aria-label="Kroky experimentu">
+ <button class="step active" data-stage="thomson" aria-current="step"><span class="stepno">1</span><span><strong>Očakávanie</strong><small>Thomsonov model</small></span></button>
+ <button class="step" data-stage="observation"><span class="stepno">2</span><span><strong>Pozorovanie</strong><small>Čo ukázala fólia?</small></span></button>
+ <button class="step" data-stage="rutherford"><span class="stepno">3</span><span><strong>Vysvetlenie</strong><small>Rutherfordov model</small></span></button>
+</nav>
+<section class="experiment" aria-label="Interaktívna animácia">
+ <div class="canvas-head"><span class="canvas-title" id="sceneTitle">Atóm podľa Thomsona</span><span class="scale" id="scaleText">Schéma · nie je v mierke</span></div>
+ <div class="viewport"><canvas id="scene" role="img" aria-label="Animácia preletu alfa častice cez model atómu. Výsledok je opísaný aj v texte pod animáciou."></canvas></div>
+ <div class="legend" id="legend"></div>
+ <div class="controller">
+  <div class="view-controls" id="viewControls" role="group" aria-label="Mierka pohľadu v Thomsonovom modeli">
+   <span class="selectlabel">Pohľad:</span>
+   <button class="view-btn active" data-view="macro" aria-pressed="true">Celá fólia</button>
+   <button class="view-btn" data-view="micro" aria-pressed="false">Jeden atóm</button>
+  </div>
+  <div class="control-left hidden" id="impactControls">
+   <span class="selectlabel">Kam mieri α?</span>
+   <div class="presets" role="group" aria-label="Mierenie alfa častice">
+    <button class="preset active" data-impact="far" aria-pressed="true">Ďaleko od stredu</button>
+    <button class="preset" data-impact="near" aria-pressed="false">Blízko stredu</button>
+    <button class="preset" data-impact="head" aria-pressed="false">Takmer priamo</button>
+   </div>
+  </div>
+  <div class="control-right">
+   <button class="primary" id="play">▶ Spustiť</button>
+   <button class="secondary" id="restart" aria-label="Spustiť pokus od začiatku">↻ Znova</button>
+   <label class="selectlabel" for="speed">Rýchlosť</label>
+   <select id="speed"><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="2">2×</option></select>
+  </div>
+ </div>
+ <div class="aim-controls hidden" id="aimControls">
+  <label class="selectlabel" for="aim">Miesto vstupu α častice:</label>
+  <input type="range" id="aim" min="-95" max="95" step="1" value="66" aria-label="Výška príchodu alfa častice voči stredu atómu">
+  <output id="aimValue" for="aim">+66 % polomeru</output>
+  <span class="helper">Alebo prstom / myšou potiahni modrý zdroj α naľavo od atómu nahor či nadol.</span>
+ </div>
+ <div class="stream-controls hidden" id="streamControls">
+  <label for="stream"><input type="checkbox" id="stream">Opakované vystreľovanie α</label>
+  <small>Nová častica každých 1,2 s (pri rýchlosti 1×). Zostáva viditeľných posledných 10 trajektórií.</small>
+  <output id="shotCount" aria-live="off">Vystrelené: 0</output>
+ </div>
+</section>
+<div class="explain">
+ <article class="panel" id="mainPanel" aria-live="polite"></article>
+ <aside class="panel" id="sidePanel" aria-live="polite"></aside>
+</div>
+<div class="foot">
+ <details><summary>O modeli a mierke</summary><p>Ide o didaktickú vizualizáciu, nie o presnú rekonštrukciu merania. Polomery elektrónového obalu a jadra ani vzájomné vzdialenosti na plátne nie sú v mierke. V mikropohľade Thomsonovho modelu je vychýlenie vypočítané numericky z elektrostatickej sily rovnomerne rozloženého kladného náboja +79e pri polomere 0,14 nm a energii α častice 5 MeV. Vplyv ľahkých elektrónov a detailné tienenie zanedbávame; mimo atómu je pole z dôvodu neutrality zjednodušene nulové. Skutočné uhly sú rádovo stotiny stupňa, ich grafické odchýlenie je zväčšené 240×; uvedená hodnota uhla je nezväčšená. Makroskopické pohľady sú schematické, nie kvantitatívny rozptylový experiment. Makroskopický obrázok zobrazuje úzky kolimovaný zväzok, nie presne nameraný rozptylový diagram. Častice sa v makropohľade pohybujú po dráhach približne rovnakou vykresľovanou rýchlosťou. Neriešime ich skutočnú stratu energie pri prechode fóliou; dramatické spomalenie pri fólii by bolo klamlivé. Dráhy v atómovom pohľade sú kvalitatívne; pri Rutherfordovom modeli sa ich zakrivenie vytvára numerickým modelom odpudzovania so silou nepriamo úmernou druhej mocnine vzdialenosti. Skutočné jadro je približne desaťtisícekrát menšie než atóm. Skutočné alfa častice prechádzajú fóliou s mnohými atómami, nie jedným izolovaným atómom. Náčrt viacerých častíc úmyselne obsahuje jeden veľmi vzácny prípad — nepoužívaj počet zobrazených čiar na odhad pravdepodobností.</p></details>
+</div>
+</main>
+<script>
+(()=>{'use strict';
+const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d');
+const stages={thomson:'thomson',observation:'observation',rutherford:'rutherford'};
+const s={stream:false,streamTime:0,shots:[],shotTotal:0,foilSeed:1,foilCache:{},foilRun:0,pathAngles:{},stage:'thomson',view:'macro',impact:'far',aim:.66,dragging:false,playing:false,progress:0,last:0,speed:1,compare:false,prediction:null,W:900,H:450,paths:{},elapsed:0,token:0};
+const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
+const CYAN='#49e4db',GOLD='#ffcc71',CORAL='#ff8085',LINE='#8fa6d2';
+function configureCanvas(){const w=canvas.clientWidth,h=canvas.clientHeight;const dpr=Math.min(window.devicePixelRatio||1,2.5);s.W=Math.max(200,w);s.H=Math.max(200,h);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);s.paths={};s.pathAngles={};s.foilCache={};draw();}
+function microView(){return s.stage==='rutherford'||(s.stage==='thomson'&&s.view==='micro');}
+function impactClass(){const a=Math.abs(s.aim);return a>.55?'far':a>.075?'near':'head';}
+function syncControls(){
+ const micro=microView();
+ $('#viewControls').classList.toggle('hidden',s.stage!=='thomson');
+ $$('.view-btn').forEach(b=>{const active=b.dataset.view===s.view;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+ $('#impactControls').classList.toggle('hidden',!micro);
+ $('#aimControls').classList.toggle('hidden',!micro);
+ $('#streamControls').classList.toggle('hidden',!micro);
+ $('#stream').checked=s.stream;
+ $('#shotCount').textContent=`Vystrelené: ${s.shotTotal} · stopy: ${s.shots.length}/10`;
+ canvas.classList.toggle('interactive',micro);
+ $('#aim').value=Math.round(s.aim*100);
+ $('#aimValue').textContent=`${s.aim>=0?'+':''}${Math.round(s.aim*100)} % polomeru`;
+ $$('.preset').forEach(b=>{const active=b.dataset.impact===s.impact;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+ $('#sceneTitle').textContent=s.stage==='thomson'?(micro?'Thomsonov model · jeden atóm':'Thomsonov model · očakávaný výsledok'):s.stage==='observation'?'Skutočný rozptyl na zlatej fólii':'Rutherfordov model · jeden atóm';
+ $('#scaleText').textContent=micro?'Zväčšená schéma · nie je v mierke':s.stage==='thomson'?'Očakávanie · malé odchýlky':'Vybrané dráhy · nie štatistika';
+ canvas.setAttribute('aria-label',micro?'Mikroskopická animácia alfa častice. Zdroj naľavo sa dá zvisle presúvať ťahaním alebo posuvníkom.':'Animácia úzkeho zväzku alfa častíc dopadajúceho na zlatú fóliu a rozptylu na detekčnom tienidle.');
+}
+function resetMotion(){s.progress=0;s.streamTime=0;s.shots=[];s.shotTotal=0;s.playing=false;s.last=0;s.token++;s.paths={};s.pathAngles={};updatePlay();}
+function newFoilRun(){s.foilSeed=Math.floor(Math.random()*4294967296)>>>0;s.foilRun++;s.foilCache={};}
+function setStage(stage){s.stage=stage;s.view=stage==='thomson'?'macro':'micro';s.dragging=false;resetMotion();if(stage==='observation')newFoilRun();$$('.step').forEach(b=>{const active=b.dataset.stage===stage;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current')});syncControls();updateText();draw();}
+function setView(view){if(s.stage!=='thomson')return;s.view=view;resetMotion();syncControls();updateText();draw();}
+function setImpact(impact){const streaming=s.stream&&microView();s.impact=impact;s.aim=impact==='far'?.66:impact==='near'?.18:0;if(streaming){syncControls();updateText();draw();return;}resetMotion();syncControls();updateText();draw();}
+function setAim(value){const streaming=s.stream&&microView();s.aim=Math.max(-.95,Math.min(.95,Number(value)));s.impact='custom';if(streaming){syncControls();updateText();draw();return;}resetMotion();syncControls();updateText();draw();}
+function updatePlay(){$('#play').textContent=s.playing?'Ⅱ Pauza':(s.progress>=1?'▶ Nový pokus':s.stream&&microView()?'▶ Spustiť prúd':'▶ Spustiť');}
+function start(){if(s.progress>=1){s.progress=0;if(s.stage==='observation')newFoilRun();}s.playing=true;s.last=0;const token=++s.token;updatePlay();requestAnimationFrame(ts=>frame(ts,token));}
+function pause(){s.playing=false;s.last=0;s.token++;updatePlay();}
+function frame(ts,token){if(!s.playing||token!==s.token)return;if(!s.last)s.last=ts;const dt=Math.min((ts-s.last)/1000,.06);s.last=ts;const step=dt*s.speed;
+ if(s.stream&&microView()){s.streamTime+=step;while(s.streamTime>=s.shotTotal*1.2){s.shots.push({launch:s.shotTotal*1.2,aim:s.aim,impact:s.impact,kind:s.stage});s.shotTotal++;if(s.shots.length>10)s.shots.shift();}$('#shotCount').textContent=`Vystrelené: ${s.shotTotal} · stopy: ${s.shots.length}/10`;}
+ else s.progress=Math.min(1,s.progress+step/(s.stage==='observation'?5.6:3.35));
+ s.elapsed+=dt;draw();if(!(s.stream&&microView())&&s.progress>=1){pause();return;}requestAnimationFrame(t=>frame(t,token));}
+function updateText(){
+ const isT=s.stage==='thomson',isO=s.stage==='observation';
+ const m=$('#mainPanel'),side=$('#sidePanel'),lg=$('#legend');
+ if(isT){
+  const micro=microView();
+  m.innerHTML=`<h2>1. Čo by sme očakávali?</h2><p>Podľa <strong>Thomsonovho modelu</strong> je kladný náboj rozložený v celom atóme a elektróny sa nachádzajú vnútri tohto kladného náboja.</p><p class="callout">Alfa častice by mali väčšinou prejsť cez tenkú fóliu; očakávali by sme len malé odchýlky, nie spätné odrazy.</p><p class="question"><strong>Predpoveď:</strong> Dokáže takto rozložený kladný náboj obrátiť rýchlu alfa časticu späť?</p><div class="answers"><label class="answer"><input type="radio" name="prediction" value="yes" ${s.prediction==='yes'?'checked':''}><span>Áno, dokáže</span></label><label class="answer"><input type="radio" name="prediction" value="no" ${s.prediction==='no'?'checked':''}><span>Nie, nedokáže</span></label></div><button class="primary next" id="nextStep">Pozrieť skutočný experiment →</button>`;
+  side.innerHTML=micro?`<h2>Presúvaj zdroj α</h2><p>Potiahni modrý zdroj na ľavej strane nahor alebo nadol, prípadne použi posuvník. Vyberáš, v akej vzdialenosti od stredu častica vstúpi do atómu.</p><p><strong>Prerušovaná čiara</strong> ukazuje pôvodný smer bez vychýlenia. Sleduj rozdiel medzi ňou a skutočnou dráhou.</p><p class="smallnote">Pri ideálne symetrickom rozložení kladného náboja má častica letiaca stredom nulové bočné vychýlenie. Výpočet využíva kladný náboj +79e rovnomerne rozložený v guli s polomerom 0,14 nm a α časticu s energiou 5 MeV. Odchýlka na obrázku je 240× vizuálne zväčšená.</p>`:`<h2>Predpoveď pre celú fóliu</h2><p>Úzky zväzok alfa častíc naráža na zlatú fóliu. Častice by dopadali <strong>blízko pôvodného smeru</strong> — nie úplne do jedného bodu, ale s malým rozptylom.</p><p>Prepni na <strong>Jeden atóm</strong> a skús odhaliť príčinu malých odchýlok na mikroskopickej úrovni.</p><p class="smallnote">Jemné vychýlenia sú na schéme zvýraznené, aby ich bolo vidieť.</p>`;
+ }else if(isO){
+  const prediction=s.prediction===null?'':`<p class="smallnote">Tvoja predpoveď: <strong>${s.prediction==='yes'?'Spätný odraz je možný.':'Spätný odraz nie je možný.'}</strong> Teraz porovnaj s pozorovaním.</p>`;
+  m.innerHTML=`<h2>2. Čo sa skutočne stalo?</h2><p>Rutherfordovi spolupracovníci ostreľovali tenkú zlatú fóliu alfa časticami a sledovali, kam dopadnú.</p><div class="results"><div class="result"><strong>Väčšina</strong><small>prešla takmer priamo</small></div><div class="result"><strong>Niektoré</strong><small>sa citeľne odchýlili</small></div><div class="result"><strong>Veľmi zriedka</strong><small>sa častica vrátila späť</small></div></div>${prediction}<button class="primary next" id="nextStep">Ako to Rutherford vysvetlil? →</button>`;
+  side.innerHTML=`<h2>Najväčšie prekvapenie</h2><p class="callout">Niekoľko alfa častíc sa odklonilo pod veľmi veľkým uhlom — dokonca späť k zdroju.</p><p>To sa nedalo uspokojivo vysvetliť Thomsonovým modelom rozptýleného kladného náboja.</p><p class="smallnote">Každé nové spustenie vytvorí iné náhodné smery rozptylu. Na vysvetlenie je navyše zámerne vložený jeden veľmi vzácny spätný odraz; počty nakreslených dráh preto nevyjadrujú skutočné pravdepodobnosti.</p>`;
+ }else{
+  const k=impactClass(); const txt=k==='far'?'Ďaleko od jadra je odpudzovanie slabé a dráha sa mení iba málo.':k==='near'?'Pri tesnom prelete okolo jadra môže kladná alfa častica prudko zmeniť smer.':'Takmer čelné priblíženie ku kladnému jadru môže alfa časticu obrátiť späť.';
+  m.innerHTML=`<h2>3. Rutherfordov záver</h2><p>Atóm tvorí <strong>prevažne prázdny priestor</strong>. Takmer celý jeho kladný náboj a väčšina hmotnosti sú sústredené v <strong>malom, hustom, kladne nabitom jadre</strong>.</p><p class="callout">${txt}</p><p class="smallnote">Elektróny sa nachádzajú v priestore mimo jadra. Nákres neurčuje ich presné dráhy.</p>`;
+  side.innerHTML=`<h2>Prečo to funguje?</h2><div class="statlist"><div class="stat"><span class="dot" style="background:${CYAN}"></span><div><strong>Väčšina častíc preletí</strong><small>Jadro je vzhľadom na veľkosť atómu nepatrné.</small></div></div><div class="stat"><span class="dot" style="background:${GOLD}"></span><div><strong>Častica pri jadre odbočí</strong><small>Kladný náboj jadra odpudzuje kladne nabitú α časticu.</small></div></div><div class="stat"><span class="dot" style="background:${CORAL}"></span><div><strong>Takmer čelná zrážka</strong><small>Výrazná zmena smeru až návrat späť.</small></div></div></div><div class="compare"><input type="checkbox" id="compare" ${s.compare?'checked':''}><label for="compare">Ukázať aj dráhu podľa Thomsona</label></div>`;
+ }
+ lg.innerHTML=isT&&!microView()?`<span><i class="wire" style="background:${CYAN}"></i>prelet takmer priamo</span><span><i class="wire" style="background:${GOLD}"></i>malá odchýlka</span>`:isO?`<span><i class="wire" style="background:${CYAN}"></i>takmer priamo</span><span><i class="wire" style="background:${GOLD}"></i>odklon</span><span><i class="wire" style="background:${CORAL}"></i>veľký odklon / späť</span>`:`<span><i class="mark" style="background:${CYAN}"></i>alfa častica α (+2e)</span><span><i class="mark" style="background:${GOLD}"></i>kladný náboj</span>${!isT?`<span><i class="mark" style="background:#69a7ff"></i>elektróny</span>`:`<span><i class="mark" style="background:#69a7ff"></i>elektróny (−)</span>`}`;
+ const next=$('#nextStep');if(next)next.addEventListener('click',()=>setStage(isT?'observation':'rutherford'));
+ $$('input[name="prediction"]').forEach(el=>el.addEventListener('change',e=>{s.prediction=e.target.value;}));
+ const comp=$('#compare');if(comp)comp.addEventListener('change',e=>{s.compare=e.target.checked;draw();});
+}
+function circle(x,y,r,fill){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();}
+function strokeCircle(x,y,r,stroke,width=1){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke();}
+function text(x,y,str,size,color,align='left',weight='600'){ctx.font=`${weight} ${size}px system-ui, sans-serif`;ctx.textAlign=align;ctx.textBaseline='middle';ctx.fillStyle=color;ctx.fillText(str,x,y);}
+function line(x1,y1,x2,y2,color,width=1.5,dash=[]){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([]);}
+function polygon(points,color){ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fillStyle=color;ctx.fill();}
+function arrow(x,y,angle,col,scale=1){ctx.save();ctx.translate(x,y);ctx.rotate(angle);polygon([[10*scale,0],[-5*scale,-5*scale],[-5*scale,5*scale]],col);ctx.restore();}
+function background(){const W=s.W,H=s.H;const grad=ctx.createLinearGradient(0,0,W,H);grad.addColorStop(0,'#142441');grad.addColorStop(1,'#0c172b');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);ctx.strokeStyle='rgba(120,157,215,.058)';ctx.lineWidth=1;for(let x=15;x<W;x+=36){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=12;y<H;y+=36){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}}
+function atomGeometry(){const W=s.W,H=s.H;return {cx:W*(W<600?.55:.54),cy:H*.50,r:Math.min(H*.36,W*.25,150),alpha:W<600?11.5:15.5};}
+function drawAtom(){const {cx,cy,r}=atomGeometry();const T=s.stage==='thomson';
+ const haze=ctx.createRadialGradient(cx,cy,0,cx,cy,r*1.14);haze.addColorStop(0,T?'rgba(255,188,100,.21)':'rgba(89,142,247,.05)');haze.addColorStop(.66,T?'rgba(255,201,112,.15)':'rgba(100,154,255,.09)');haze.addColorStop(1,'rgba(255,200,120,0)');circle(cx,cy,r*1.2,haze);strokeCircle(cx,cy,r,T?'rgba(255,200,115,.6)':'rgba(110,159,245,.3)',1.5);
+ if(T){
+  for(let j=0;j<24;j++){const a=2.39996*j,rr=r*.85*Math.sqrt((j+.5)/25);const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;text(x,y,'+',15,'rgba(255,214,142,.70)','center','750')}
+  const pos=[[-.61,-.32],[.47,-.54],[.62,.39],[-.44,.57],[.04,-.72],[.06,.23],[-.78,.08],[.31,.72]];
+  pos.forEach(([x,y],i)=>{circle(cx+x*r,cy+y*r,5,'#6aa9fa');text(cx+x*r,cy+y*r-.4,'−',10,'#152441','center','850')});
+ }else{
+  const pos=[[-.72,-.42],[.51,-.65],[.78,.30],[-.54,.66],[.06,-.85],[.28,.73],[-.74,.10],[.35,.03]];
+  pos.forEach(([x,y],i)=>{const f=Math.sin(s.elapsed*1.6+i*1.7)*2.3;circle(cx+x*r+f,cy+y*r+Math.cos(i+s.elapsed)*2,3.5,'rgba(108,165,253,.85)')});
+  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,24);glow.addColorStop(0,'rgba(255,191,87,.6)');glow.addColorStop(1,'rgba(255,191,87,0)');circle(cx,cy,24,glow);circle(cx,cy,12.5,'#ffd082');strokeCircle(cx,cy,12.5,'#fff2ba',1.7);text(cx,cy,'+',17,'#744317','center','850');
+ }
+ if(s.W>580){const shift=s.W>850?0:-20; if(T){text(cx,cy+r+27,'Kladný náboj v celom objeme',13,'#ffd394','center','650')}else{text(cx+35,cy-31,'jadro (+)',15,'#ffd38c');line(cx+25,cy-25,cx+9,cy-7,'#ffcc71',1.2);text(cx+r*.70,cy-r*.8,'elektrónový obal',13,'#a6c4fb','center','550')}
+  text(27,31,'Smer letu častice →',13,'#a1b9db','left','550')
+ }else{
+  if(!T){text(cx+24,cy-26,'jadro (+)',12,'#ffd28c');line(cx+16,cy-17,cx+6,cy-6,GOLD,1)}
+  text(12,18,'α →',12,'#a1b9db')
+ }
+}
+// Thomson: fyzikálny odhad malého vychýlenia α častice.
+// Rozložený kladný náboj je homogénna guľa (+79e) s R=0,14 nm.
+// K = (qα Ze²/4πε0)/(m v0² R) = (2·79·1,439964 MeV fm)/(2·5 MeV·140000 fm).
+// Uvažujeme 5 MeV α, elektróny majú v tomto zjednodušení zanedbateľný účinok na jej smer.
+// Pre neutrálne prostredie pokladáme efektívne pole mimo atómu za nulové (tienenie).
+// Kreslenú kolmú odchýlku VÝSLOVNE zväčšujeme, uhol v popise zostáva skutočný.
+const THOMSON_K=(2*79*1.439964)/(2*5*140000),THOMSON_VISUAL=240;
+function thomsonTrajectory(key,aimVal=s.aim){
+ const {cx,cy,r}=atomGeometry(),W=s.W,b=aimVal,h=.012;
+ let x=(43-cx)/r,y=b,vx=1,vy=0,pts=[];
+ function accel(ax,ay){return ax*ax+ay*ay<1?[THOMSON_K*ax,THOMSON_K*ay]:[0,0];}
+ for(let i=0;i<2000;i++){
+  if(i%2===0)pts.push([cx+x*r,cy+(b+(y-b)*THOMSON_VISUAL)*r]);
+  if(cx+x*r>W+45)break;
+  const a=accel(x,y);vx+=a[0]*h/2;vy+=a[1]*h/2;x+=vx*h;y+=vy*h;
+  const a2=accel(x,y);vx+=a2[0]*h/2;vy+=a2[1]*h/2;
+ }
+ s.pathAngles[key]=Math.atan2(vy,vx)*180/Math.PI;
+ return pts;
+}
+// Rutherford: zjednodušené Coulombovo odpudzovanie od bodového jadra;
+// vizuálna geometria jadra a priestorová škála nie sú v mierke.
+function atomPath(kind,aimVal=s.aim){const key=kind+'|'+aimVal.toFixed(3)+'|'+Math.round(s.W)+'|'+Math.round(s.H);if(s.paths[key])return s.paths[key];
+ if(kind==='thomson')return s.paths[key]=thomsonTrajectory(key,aimVal);
+ const {cx,cy,r,alpha}=atomGeometry(); const W=s.W,H=s.H;
+ const b=aimVal*r;
+ let x=-cx+43,y=b,vx=1,vy=0;
+ const dt=.38,points=[];const softness=1.2,strength=alpha;
+ function force(px,py){let r2=px*px+py*py+softness*softness,rr=Math.sqrt(r2);return [strength*px/(r2*rr),strength*py/(r2*rr)];}
+ for(let i=0;i<3900;i++){
+  const ax=force(x,y);vx+=.5*dt*ax[0];vy+=.5*dt*ax[1];x+=vx*dt;y+=vy*dt;const az=force(x,y);vx+=.5*dt*az[0];vy+=.5*dt*az[1];
+  if(i%2===0)points.push([cx+x,cy+y]);
+  if((x>W-cx+100&&vx>0)||(x<-cx-110&&vx<0)||(cy+y>H+180&&vy>0)||(cy+y<-180&&vy<0))break;
+ }
+ s.paths[key]=points;return points;
+}
+function interpolatePolyline(pts,t){if(pts.length<2)return; const f=Math.max(0,Math.min(1,t))*(pts.length-1),i=Math.min(pts.length-2,Math.floor(f)),q=f-i;return {x:pts[i][0]+q*(pts[i+1][0]-pts[i][0]),y:pts[i][1]+q*(pts[i+1][1]-pts[i][1]),i}}
+function trace(pts,t,color,width=3,dashed=false,opacity=1){if(!pts.length)return;const pos=interpolatePolyline(pts,t);ctx.save();ctx.globalAlpha=opacity;ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';if(dashed)ctx.setLineDash([7,7]);ctx.beginPath();ctx.moveTo(...pts[0]);for(let j=1;j<=pos.i;j++)ctx.lineTo(...pts[j]);ctx.lineTo(pos.x,pos.y);ctx.stroke();ctx.setLineDash([]);ctx.restore();return pos}
+function drawProjectile(x,y){const halo=ctx.createRadialGradient(x,y,0,x,y,16);halo.addColorStop(0,'rgba(78,234,221,.48)');halo.addColorStop(1,'rgba(78,234,221,0)');circle(x,y,16,halo);circle(x,y,7.1,'#5ff4e6');strokeCircle(x,y,7.1,'#e0fffc',1.2);text(x,y,'α',10,'#113340','center','900');}
+function atomicScene(){
+ drawAtom();const kind=s.stage,pts=atomPath(kind,s.aim),{cy,r}=atomGeometry(),y0=cy+s.aim*r;
+ // Pomocná referenčná priamka ukazuje smer bez interakcie; pri Thomsonovi zvýrazní malý odklon.
+ if(kind==='thomson'){
+  line(43,y0,s.W-17,y0,'rgba(228,238,255,.55)',1.35,[5,7]);
+  if(s.W>500)text(s.W-17,Math.max(16,Math.min(s.H-18,y0-13)),'bez odchýlky',12,'#b5c8e3','right','600');
+ }
+ // Držadlo zdroja zostáva viditeľné pri lete, aby sa dalo zmeniť miesto vstupu.
+ const sourceX=43;
+ circle(sourceX,y0,15,'rgba(50,126,186,.40)');strokeCircle(sourceX,y0,15,'#87ccff',1.5);
+ text(sourceX,y0,'↕',17,'#e0f4ff','center','700');
+ if(s.W>500)text(17,Math.max(16,Math.min(s.H-16,y0-27)),'Potiahni zdroj α',12,'#a8d3f0','left','550');
+ if(kind==='rutherford'&&s.compare){const ghost=atomPath('thomson',s.aim);trace(ghost,Math.max(s.progress,.04),'#ffcd74',2,true,.85)}
+ if(s.stream){
+  for(let i=0;i<s.shots.length;i++){
+   const shot=s.shots[i],life=(s.streamTime-shot.launch)/3.35;
+   if(life<0)continue;
+   const shotPts=atomPath(shot.kind,shot.aim);
+   // Dokončené stopy zostávajú zakreslené; odstráni ich až jedenásta nová stopa.
+   const complete=life>=1;
+   const opacity=complete?(.22+.27*(i+1)/s.shots.length):.65;
+   const pos=trace(shotPts,Math.min(1,life),CYAN,complete?2.15:2.8,false,opacity);
+   if(!complete&&pos)drawProjectile(pos.x,pos.y);
+  }
+ }else{const pos=trace(pts,s.progress,CYAN,3.5);if(pos)drawProjectile(pos.x,pos.y);}
+ if(kind==='thomson'&&(s.stream||s.progress>.08)){
+  const key='thomson|'+s.aim.toFixed(3)+'|'+Math.round(s.W)+'|'+Math.round(s.H);
+  const deg=Math.abs(s.pathAngles[key]||0);
+  text(17,s.H-22,`Skutočný výpočtový uhol ≈ ${deg.toFixed(3).replace('.',',')}° · obraz 240×`,s.W<500?10.5:13.5,'#ffce80','left','750');
+ }else if(!s.stream&&s.progress>.03&&s.progress<1){
+  const k=impactClass(),label=k==='head'?'Takmer čelný prelet':k==='near'?'Blízko stredu':'Ďaleko od stredu';text(17,s.H-22,label,s.W<500?12:14,'#cad9ef','left','600');
+ }
+ if(kind==='rutherford'&&impactClass()==='head'&&(s.stream||s.progress>.74)){const {cx,r}=atomGeometry();arrow(Math.max(42,cx-r*1.6),cy+13,Math.PI,CYAN,.85);text(16,s.H-22,'Odraz späť od kladného jadra',s.W<500?11.5:14,'#ffca83');}
+}
+function arcScreen(cx,cy,rad,start,end){ctx.beginPath();ctx.arc(cx,cy,rad,start,end);ctx.strokeStyle='rgba(137,160,193,.34)';ctx.lineWidth=13;ctx.stroke();ctx.strokeStyle='rgba(181,200,229,.4)';ctx.lineWidth=1.1;ctx.stroke();}
+function drawFoil(){let W=s.W,H=s.H;const fx=W*.48,y0=H*.17,y1=H*.85,cy=H*.51;
+ const g=ctx.createLinearGradient(fx-13,0,fx+13,0);g.addColorStop(0,'rgba(255,209,105,.04)');g.addColorStop(.5,'rgba(255,209,105,.27)');g.addColorStop(1,'rgba(255,209,105,.04)');ctx.fillStyle=g;ctx.fillRect(fx-13,y0,26,y1-y0);
+ for(let j=0;j<6;j++)for(let i=0;i<3;i++){let yy=y0+12+j*(y1-y0-22)/5,xx=fx-9+i*9;circle(xx,yy,2.9,'rgba(255,210,126,.60)')}
+ const R=Math.min(W*.42,H*.45);
+ arcScreen(fx,cy,R,-1.17,1.17);arcScreen(fx,cy,R,-2.72,-2.14);
+ const titleSize=Math.max(11,Math.min(14,W*.02));
+ text(fx,H*.095,'ZLATÁ FÓLIA',titleSize,'#f0c98c','center','750');
+ text(W*.79,H*.12,'TIENIDLO',titleSize,'#a8bddc','center','650');
+ const emitterX=W*.085,aperture=Math.max(5,Math.min(8,H*.015));
+ ctx.fillStyle='#345377';ctx.beginPath();ctx.roundRect(emitterX-24,cy-22,40,44,5);ctx.fill();
+ ctx.fillStyle='#10243a';ctx.fillRect(emitterX+12,cy-aperture,6,2*aperture);
+ ctx.strokeStyle='#87c8ea';ctx.lineWidth=1;ctx.strokeRect(emitterX+12,cy-aperture,6,2*aperture);
+ line(emitterX+18,cy,fx-18,cy,'rgba(84,225,218,.32)',1.2,[6,7]);
+ text(emitterX-18,cy-37,'ZDROJ α',Math.max(11,Math.min(14,W*.022)),'#b3c7e4','left','700');
+}
+function screenHit(x,y,slope){const W=s.W,H=s.H,fx=W*.48,cy=H*.51,R=Math.min(W*.42,H*.45);
+ const off=y-cy,A=1+slope*slope,B=2*off*slope,C=off*off-R*R;
+ const dx=(-B+Math.sqrt(Math.max(0,B*B-4*A*C)))/(2*A);
+ return [x+dx,y+slope*dx];
+}
+function mulberry32(seed){return function(){let t=seed+=0x6d2b79f5;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;}}
+function normalRand(rand){return (rand()+rand()+rand()+rand()+rand()+rand()-3)*1.4142135624;}
+function pathLength(pts){let len=0;for(let j=1;j<pts.length;j++)len+=Math.hypot(pts[j][0]-pts[j-1][0],pts[j][1]-pts[j-1][1]);return len;}
+function foilPaths(isThomson){
+ const key=`${isThomson?'t':'o'}|${s.foilSeed}|${Math.round(s.W)}|${Math.round(s.H)}`;
+ if(s.foilCache[key])return s.foilCache[key];
+ const W=s.W,H=s.H,fx=W*.48,sourceX=W*.085+18,cy=H*.51,paths=[];
+ const rand=mulberry32(isThomson?0x515AEE:s.foilSeed),n=isThomson?28:34;
+ for(let i=0;i<n;i++){
+  const fromY=cy+(rand()-.5)*5.0,atY=cy+(rand()-.5)*7.0;
+  const u=rand();let angle,group;
+  if(isThomson){angle=Math.max(-.065,Math.min(.065,normalRand(rand)*.026));group=Math.abs(angle)>.037?'minor':'straight';}
+  else if(u<.79){angle=normalRand(rand)*.029;group='straight';}
+  else if(u<.965){angle=(rand()<.5?-1:1)*(.11+rand()*.42);group='angle';}
+  else{angle=(rand()<.5?-1:1)*(.55+rand()*.4);group='angle';}
+  // Dopadový uhol náhodný, úzka šírka zväzku zostáva zachovaná.
+  const slope=Math.tan(angle),nearFoil=fx-18;
+  const pts=[[sourceX,fromY],[nearFoil,atY],[fx,atY],[fx+Math.min(13,W*.025),atY+slope*Math.min(13,W*.025)],screenHit(fx,atY,slope)];
+  paths.push({group,delay:.015+rand()*.34,points:pts,length:pathLength(pts)});
+ }
+ if(!isThomson){
+  // Jeden zámerne pridaný vzácny spätný rozptyl je DIDAKTICKÁ UKÁŽKA, nie frekvencia výskytu.
+  const R=Math.min(W*.42,H*.45),phi=-(2.20+rand()*.44),y=cy+(rand()-.5)*3;
+  const bx=fx+R*Math.cos(phi),by=cy+R*Math.sin(phi);
+  const pts=[[sourceX,cy+(rand()-.5)*4],[fx-33,y],[fx-12,y],[fx-3,y-2],[fx-5,y-9],[fx-13,y-23],[bx,by]];
+  paths.push({group:'back',delay:.06+rand()*.12,points:pts,length:pathLength(pts)});
+ }
+ s.foilCache[key]=paths;return paths;
+}
+// Dráha sa prehráva podľa DĹŽKY, nie podľa počtu uzlov.
+// Vďaka tomu krátke úseky v blízkosti fólie nespôsobujú umelé zastavovanie.
+function drawObservedPath(pts,travel,color,w){
+ const length=pathLength(pts);const total=Math.max(0,Math.min(length,travel));
+ if(total<=0)return;
+ ctx.save();ctx.lineJoin='round';ctx.lineCap='round';ctx.strokeStyle=color;ctx.lineWidth=w;
+ ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);let used=0,pos=pts[0];
+ for(let j=1;j<pts.length;j++){
+  const a=pts[j-1],b=pts[j],dist=Math.hypot(b[0]-a[0],b[1]-a[1]);
+  if(used+dist>=total){const t=dist? (total-used)/dist:1;pos=[a[0]+t*(b[0]-a[0]),a[1]+t*(b[1]-a[1])];ctx.lineTo(...pos);break;}
+  ctx.lineTo(...b);pos=b;used+=dist;
+ }
+ ctx.globalAlpha=total>=length?.58:.93;ctx.stroke();ctx.restore();
+ if(total>=length)circle(pos[0],pos[1],3.8,color);
+ else circle(pos[0],pos[1],3.5,color);
+}
+function foilScene(isThomson){drawFoil();const W=s.W,H=s.H,cy=H*.51,fx=W*.48;
+ if(isThomson){
+  line(fx+8,cy,fx+Math.min(W*.39,H*.39),cy,'rgba(241,245,252,.52)',1.1,[5,7]);
+  text(W<600?W*.055:W*.065,W<600?H*.935:H*.085,W<600?'LEN MALÉ ODCHÝLKY':'PREDPOVEĎ: LEN MALÉ ODCHÝLKY',Math.max(11,Math.min(15,W*.02)),GOLD,'left','750');
+ }else if(s.progress>.62){
+  text(W<600?W*.055:W*.065,W<600?H*.935:H*.075,'VZÁCNY SPÄTNÝ ROZPTYL',Math.max(11,Math.min(15,W*.02)),CORAL,'left','750');
+ }
+ for(const p of foilPaths(isThomson)){
+  const travel=Math.max(0,(s.progress-p.delay)*Math.max(520,s.W*1.25));
+  if(travel<=0)continue;
+  const color=p.group==='back'?CORAL:p.group==='angle'||p.group==='minor'?GOLD:CYAN;
+  drawObservedPath(p.points,travel,color,p.group==='back'?3.8:p.group==='minor'?2.1:1.85);
+ }
+}
+function draw(){const W=s.W,H=s.H;ctx.clearRect(0,0,W,H);background();if(!microView())foilScene(s.stage==='thomson');else atomicScene();}
+$$('.step').forEach(b=>b.addEventListener('click',()=>setStage(b.dataset.stage)));
+$$('.view-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+$('#aim').addEventListener('input',e=>setAim(Number(e.target.value)/100));
+$$('.preset').forEach(b=>b.addEventListener('click',()=>setImpact(b.dataset.impact)));
+$('#play').addEventListener('click',()=>s.playing?pause():start());
+$('#restart').addEventListener('click',()=>{resetMotion();if(s.stage==='observation')newFoilRun();draw();start();});
+$('#stream').addEventListener('change',e=>{const wasPlaying=s.playing;s.stream=e.target.checked;resetMotion();syncControls();draw();if(wasPlaying)start();});
+$('#speed').addEventListener('change',e=>{s.speed=Number(e.target.value)||1;});
+function yForPointer(e){const box=canvas.getBoundingClientRect(),{cy,r}=atomGeometry();return ((e.clientY-box.top)-cy)/r;}
+canvas.addEventListener('pointerdown',e=>{if(!microView()||e.button>0)return;s.dragging=true;canvas.setPointerCapture(e.pointerId);setAim(yForPointer(e));});
+canvas.addEventListener('pointermove',e=>{if(s.dragging&&microView())setAim(yForPointer(e));});
+function stopDragging(e){if(!s.dragging)return;s.dragging=false;if(canvas.hasPointerCapture(e.pointerId))canvas.releasePointerCapture(e.pointerId);}
+canvas.addEventListener('pointerup',stopDragging);canvas.addEventListener('pointercancel',stopDragging);
+
+window.addEventListener('resize',configureCanvas,{passive:true});
+// Ak nie je viditeľná karta, čas experimentu nepreskakuje.
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&s.playing)pause();});
+setStage('thomson');configureCanvas();
+})();
+</script>
+</body>
+</html>
