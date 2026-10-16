@@ -46,6 +46,16 @@
 #arLabelsToggle{min-height:36px;font-size:12px}
 .labelToggleRow{display:flex;justify-content:space-between;align-items:center;gap:9px}
 @media(max-width:610px){.boneLabel{font-size:11px;max-width:112px;padding:4px 5px}.labelLines line{stroke-width:1.2}#arLabelLayer .boneLabel{max-width:105px;font-size:10px}}
+
+/* Rovnaké sady popiskov a ovládanie stránkovania v 3D aj v AR */
+.labelPager{display:flex;align-items:center;gap:7px;justify-content:space-between;margin:10px 0;min-width:0}
+.labelPager button{font-size:12px;min-height:40px;padding:7px 9px;flex:0 0 auto}
+.labelPager button:disabled{opacity:.4;cursor:not-allowed}
+.labelPager .pageText{font-size:12px;color:#b7d8df;text-align:center;line-height:1.35;min-width:0}
+#arLabelPager{margin:4px 0 8px;gap:5px}
+#arLabelPager button{font-size:12px;min-height:38px;padding:6px 9px}
+#arLabelDensity{pointer-events:auto}
+#arLabelPager .pageText{color:#edffff}
 </style></head><body>
 <header class="brand"><div class="brandTitle"><div class="emblem" aria-hidden="true">♙</div><div><h1>Kostra človeka <span style="font-weight:400;color:#96b5c8">/ 3D + AR atlas</span></h1><p>Biológia · skutočná anatomická kostra v 3D aj v rozšírenej realite</p></div></div><div class="topright"><span class="tag">Gymnázium · anatómia</span><button class="ghost small" id="helpBtn" title="Ako ovládať model">? Návod</button></div></header>
 <main class="layout">
@@ -65,12 +75,13 @@
 <div class="stageTop"><div id="status" class="status" role="status" aria-live="polite"><strong>Načítava sa podrobná kostra…</strong>Žiadna geometrická náhrada sa nezobrazuje.</div><div class="viewBtns"><button id="launchAR" type="button" class="primary" aria-describedby="arExplanation">◈ Spustiť AR</button><button data-view="front" class="active">Spredu</button><button data-view="back">Zozadu</button><button data-view="side">Zboku</button><button data-view="reset">⟲</button></div></div><div class="stageBottom"><div class="hint">Potiahni = otáčaj · koliesko alebo dvojprstové gesto = priblíž · klikni = vyber kosť</div><div class="zoomBtns"><button id="plus" aria-label="Priblížiť">+</button><button id="minus" aria-label="Oddialiť">−</button></div></div></section>
 <aside class="side right">
 <div class="sectName" style="margin-top:0">Režim učenia</div><div class="modeRow"><button id="exploreBtn" class="active">Preskúmať</button><button id="quizBtn">Precvičiť</button></div>
-<div id="explorePanel"><div class="div"></div><div class="eyebrow" id="category">Anatomický atlas</div><h2 id="selectedName" class="infoName">Ľudská kostra</h2><div id="selectedEn" class="infoEn">Kostrová sústava</div><p id="selectedDesc" class="info">Kostra poskytuje oporu telu, chráni orgány a spolu so svalmi umožňuje pohyb. Dospelý človek má spravidla 206 kostí.</p><div id="selectedSide" class="partBadge">Vyber kostru alebo jej časť</div><div class="row" style="margin-top:14px"><button class="small" id="focusBtn">◎ Priblížiť výber</button><button class="small" id="isolateBtn">◉ Zobraziť iba výber</button></div></div>
+<div id="explorePanel"><div class="div"></div><div class="eyebrow" id="category">Anatomický atlas</div><h2 id="selectedName" class="infoName">Ľudská kostra</h2><div id="selectedEn" class="infoEn">Slovenské anatomické pomenovanie</div><p id="selectedDesc" class="info">Kostra poskytuje oporu telu, chráni orgány a spolu so svalmi umožňuje pohyb. Dospelý človek má spravidla 206 kostí.</p><div id="selectedSide" class="partBadge">Vyber kostru alebo jej časť</div><div class="row" style="margin-top:14px"><button class="small" id="focusBtn">◎ Priblížiť výber</button><button class="small" id="isolateBtn">◉ Zobraziť iba výber</button></div></div>
 <div id="quizPanel" class="hidden"><div class="div"></div><div class="eyebrow">Ukáž správnu kosť</div><div id="quizQuestion" class="quizQ">Klikni na požadovanú kosť v modeli.</div><p class="quizFeedback" id="quizFeedback">Vyber kosť kliknutím alebo v zozname.</p><div class="row"><button class="primary" id="nextQuestion">Ďalšia otázka →</button><span class="quizScore" id="quizScore">0 / 0</span></div><p class="notice">Po nesprávnej odpovedi môžeš skúsiť vybrať inú kosť. Správna odpoveď sa zobrazí až po kliknutí.</p></div>
 <div class="div"></div><div class="sectName">Vysvetlivky v modeli</div>
 <label class="toggle"><span>Zobrazovať názvy priamo pri kostiach</span><input id="showLabels" type="checkbox" checked></label>
 <label for="labelDensity" class="toggle"><span>Počet popiskov</span><select id="labelDensity" style="max-width:130px;background:#1b2f44;color:#efffff;border:1px solid #49647a;border-radius:8px;padding:7px"><option value="main">Hlavné kosti</option><option value="more">Podrobnejšie</option></select></label>
-<div class="labelNote" id="labelNote">Názvy ukazujú na konkrétne anatomické kosti. Kliknutím na popisok zobrazíš vysvetlenie. Pri precvičovaní sa popisky automaticky skryjú.</div>
+<div class="labelPager" aria-label="Ďalšie názvy kostí"><button id="labelsPrev" type="button" aria-label="Predchádzajúca sada popiskov">◀ Predošlé</button><span class="pageText" id="labelPageStatus" role="status" aria-live="polite">Po načítaní kostry sa zobrazia názvy.</span><button id="labelsNext" type="button" aria-label="Ďalšia sada popiskov">Ďalšie ▶</button></div>
+<div class="labelNote" id="labelNote">Názvy patria ku konkrétnym kostiam. Tlačidlami Predošlé / Ďalšie zobrazíš aj názvy, ktoré sa naraz nezmestia. Rovnaké sady sú aj v AR. V precvičovaní sa skryjú.</div>
 <div class="div"></div><div class="sectName">Zobrazenie</div><label class="toggle"><span>Zobraziť chrupavky</span><input id="cartilage" type="checkbox" checked></label><label class="toggle"><span>Automaticky otáčať</span><input id="autospin" type="checkbox"></label><label class="toggle"><span>Zvýrazniť vybranú oblasť</span><input id="dimOthers" type="checkbox"></label><button id="showAll" class="small" style="width:100%;margin-top:5px">Obnoviť všetky časti</button>
 <div class="div"></div><div class="sectName">Kostra v rozšírenej realite</div>
 <div id="arExplanation" class="notice">Na podporovanom Androide otvor túto stránku cez HTTPS (napríklad GitHub Pages) v prehliadači Chrome. Po načítaní kostry stlač <strong>Spustiť AR</strong>, namier kameru na stôl a ťuknutím kostru umiestni. V AR môžeš meniť mierku a natočenie. Ak AR nie je dostupné, 3D atlas funguje ďalej.</div>
@@ -90,6 +101,8 @@
     <div class="arHelp" id="arHelp">Pomaly pohybuj mobilom nad stolom. Po zobrazení zameriavacieho kruhu ťukni do obrazu.</div>
     <div class="arControls">
       <div class="labelToggleRow"><span style="font-size:13px;font-weight:700">Názvy kostí</span><button type="button" id="arLabelsToggle">Skryť popisky</button></div>
+      <div class="labelToggleRow"><label for="arLabelDensity" style="font-size:13px;font-weight:700">Podrobnosť názvov</label><select id="arLabelDensity" aria-label="Podrobnosť názvov kostí v AR" style="background:#143744;color:#efffff;border:1px solid #82d9d2;border-radius:8px;padding:7px;min-height:36px"><option value="main">Hlavné kosti</option><option value="more">Podrobnejšie</option></select></div>
+      <div class="labelPager" id="arLabelPager" aria-label="Ďalšie názvy kostí v AR"><button id="arLabelsPrev" type="button" aria-label="Predchádzajúca sada popiskov v AR">◀ Predošlé</button><span class="pageText" id="arLabelPageStatus" role="status" aria-live="polite">Sada 1</span><button id="arLabelsNext" type="button" aria-label="Ďalšia sada popiskov v AR">Ďalšie ▶</button></div>
       <label for="arSize">Veľkosť kostry <strong id="arSizeLabel">25 % · približne 44 cm</strong></label>
       <input id="arSize" type="range" min="0.15" max="1" step="0.05" value="0.25" aria-label="Mierka kostry v AR">
       <label for="arAngle">Natočenie <strong id="arAngleLabel">0°</strong></label>
@@ -109,7 +122,7 @@ const GLB_URLS=[
 ];
 let gl,prog,pickProg,fb=null,depthRb=null,colorTex=null,records=[],selected=null,region='all',mode='explore',isolate=false,auto=false,hideCartilage=false,dimOthers=false,usingDetailed=false,loading=true;
 let xrSession=null,xrRefSpace=null,xrHitSource=null,arHitPoint=null,arAnchorPoint=null,arPlaced=false,arScale=0.25,arAngle=0,arMarker=null,arStatusKey='',arBusy=false;
-let showLabels=true,labelDensity='main',lastArLabelsAt=0,last3DLabelsAt=0;
+let showLabels=true,labelDensity='main',labelPageIndex=0,lastArLabelsAt=0,last3DLabelsAt=0;
 let yaw=0,pitch=.055,dist=2.55,target=[0,.91,0],drag=null,pointers=new Map(),pinchLast=0,needsDraw=true,activeQuestion=null,quizCorrect=0,quizTotal=0,asked=[], lastTime=0;
 const REGION_NAMES={all:'Celá kostra',lebka:'Lebka',chrbtica:'Chrbtica',hrudnik:'Hrudník',horna:'Horná končatina',panva:'Panva',dolna:'Dolná končatina'};
 const SIDE_NAMES={left:'ľavá',right:'pravá',midline:'stredová'};
@@ -144,6 +157,17 @@ const INFORMATION=[
 [/hip bone|coxal|ilium|ischium|pubis|panvov/i,'Panvová kosť','Panvu tvoria dve panvové kosti spolu s krížovou kosťou. Každá panvová kosť vznikla zrastením bedrovej, sedacej a lonovej časti.'],
 [/calcaneus|pätov/i,'Pätová kosť','Najväčšia kosť priehlavku. Tvorí pätu a je miestom úponu Achillovej šľachy.'],
 [/talus|členkov/i,'Členková kosť','Prenáša zaťaženie z píšťaly do kostí nohy a je súčasťou členkového kĺbu.'],
+[/scaphoid/i,'Člnkovitá kosť zápästia','Kosť zápästia na palcovej strane; pomáha spájať predlaktie so zápästím.'],
+[/lunate/i,'Polmesiačikovitá kosť','Jedna z kostí proximálneho radu zápästia.'],
+[/triquetral|triquetrum/i,'Trojhranná kosť','Kosť zápästia na strane malíčka.'],
+[/pisiform/i,'Hráškovitá kosť','Drobná sezamská kosť na dlaňovej strane zápästia.'],
+[/hamate/i,'Hákovitá kosť','Kosť distálneho radu zápästia s hákovitým výbežkom.'],
+[/capitate/i,'Hlavičkatá kosť','Najväčšia kosť zápästia v jeho strednej časti.'],
+[/trapezoid/i,'Mnohouholníková kosť menšia','Kosť zápästia pri ukazováku.'],
+[/trapezium/i,'Mnohouholníková kosť väčšia','Kosť zápästia pri palci; umožňuje pohyblivosť palca.'],
+[/navicular/i,'Člnkovitá kosť nohy','Kosť priehlavku na vnútornej strane chodidla.'],
+[/cuboid/i,'Kockovitá kosť','Kosť priehlavku na vonkajšej strane chodidla.'],
+[/cuneiform/i,'Klinovitá kosť','Jedna z troch klinovitých kostí priehlavku.'],
 [/metatarsal|predpriehlav/i,'Predpriehlavková kosť','Jedna z piatich dlhých kostí medzi priehlavkom a článkami prstov nohy.'],
 [/metacarpal|záprst/i,'Záprstná kosť','Jedna z piatich kostí dlane, spájajúca zápästie s článkami prstov.'],
 [/carpal|zápäst/i,'Zápästná kosť','Jedna z ôsmich drobných kostí zápästia, ktoré umožňujú pružný pohyb ruky.'],
@@ -151,8 +175,126 @@ const INFORMATION=[
 [/phal(anx|anges)|článok|článk/i,'Článok prsta','Kosti prstov: palec ruky i nohy má dva články; ostatné prsty majú zvyčajne tri.'],
 [/skull|cranium|lebk/i,'Lebka','Chráni mozog a tvorí kostný základ tváre. Kosti lebky sú väčšinou spojené švami.']
 ];
-function parseName(s){let side='midline';let en=s||'Nepomenovaná kosť';if(/^Left\b/i.test(en)){side='left';en=en.replace(/^Left\s+/i,'')}else if(/^Right\b/i.test(en)){side='right';en=en.replace(/^Right\s+/i,'')};let match=INFORMATION.find(item=>item[0].test(en));let sk=match?match[1]:en.replace(/_/g,' ');return {side,sk: side==='midline'?sk:sk+' ('+(side==='left'?'ľavá':'pravá')+')',description:match?match[2]:'Súčasť kostry človeka. Skús si všimnúť jej polohu a spojenie s okolitými kosťami.'};}
-function classify(name,center){let s=(name||'').toLowerCase(), y=center?center[1]:1; if(/(skull|cranium|mandible|maxilla|frontal|parietal|temporal|occipital|nasal|zygomatic|lacrimal|sphenoid|ethmoid|vomer|palatine|hyoid|inferior nasal|tooth|teeth|incisor|molar|canine|ear ossicle|malleus|stapes|incus)/.test(s))return 'lebka';if(/(vertebra|atlas|axis|sacrum|coccyx|intervertebral|disc)/.test(s))return 'chrbtica';if(/(rib|sternum|costal cartilage)/.test(s))return 'hrudnik';if(/(pelvis|hip bone|os coxae|ili[ua]|ischium|pubis|pubic)/.test(s))return 'panva';if(/(clavicle|scapula|humerus|radius|ulna|carpal|metacarpal)/.test(s))return 'horna';if(/(femur|tibia|fibula|patella|tarsal|metatarsal|calcaneus|talus|navicular|cuboid|cuneiform)/.test(s))return 'dolna';if(/(phalan|phalanges)/.test(s))return y<.55?'dolna':'horna';return y>1.60?'lebka':y<.88?'dolna':y<1.14?'panva':'hrudnik'}
+// Slovenské názvy sa odvodzujú z úplných názvov anatomických štruktúr Écorché.
+// Originálne anglické názvy zostávajú iba interne na identifikáciu geometrie a pre vyhľadávanie.
+const ORDINAL_EN={first:1,second:2,third:3,fourth:4,fifth:5,sixth:6,seventh:7,eighth:8,ninth:9,tenth:10,eleventh:11,twelfth:12};
+const NUM_WORDS='first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth';
+const ANATOMICAL_SK={
+ 'atlas':'Nosič (C1)', 'axis':'Čapovec (C2)', 'frontal bone':'Čelová kosť',
+ 'ethmoid':'Čuchová kosť', 'sphenoid bone':'Klinová kosť', 'occipital bone':'Záhlavná kosť',
+ 'vomer':'Čerieslo', 'mandible':'Sánka', 'manubrium':'Rukoväť hrudnej kosti',
+ 'body of sternum':'Telo hrudnej kosti', 'xiphoid process':'Mečovitý výbežok hrudnej kosti',
+ 'sacrum':'Krížová kosť', 'coccyx':'Kostrč',
+ 'external ear':'Ušnica', 'septal nasal cartilage':'Chrupavka nosovej priehradky',
+ 'lateral nasal cartilage':'Bočná nosová chrupavka',
+ 'major alar cartilage':'Veľká krídlová chrupavka nosa',
+ 'maxilla':'Horná čeľusť','inferior nasal concha':'Dolná nosová mušľa',
+ 'lacrimal bone':'Slzná kosť','palatine bone':'Podnebná kosť',
+ 'nasal bone':'Nosová kosť','parietal bone':'Temenná kosť',
+ 'temporal bone':'Spánková kosť','zygomatic bone':'Jarmová kosť',
+ 'clavicle':'Kľúčna kosť','scapula':'Lopatka','humerus':'Ramenná kosť',
+ 'radius':'Vretenná kosť','ulna':'Lakťová kosť','sternum':'Hrudná kosť',
+ 'hip bone':'Panvová kosť','ilium':'Bedrová kosť','ischium':'Sedacia kosť',
+ 'pubis':'Lonová kosť','femur':'Stehenná kosť','tibia':'Píšťala',
+ 'fibula':'Ihlica','patella':'Jabĺčko','calcaneus':'Pätová kosť',
+ 'talus':'Členková kosť','navicular bone of foot':'Člnkovitá kosť nohy',
+ 'cuboid bone':'Kockovitá kosť','medial cuneiform bone':'Vnútorná klinovitá kosť',
+ 'intermediate cuneiform bone':'Prostredná klinovitá kosť',
+ 'lateral cuneiform bone':'Vonkajšia klinovitá kosť',
+ 'scaphoid':'Člnkovitá kosť zápästia','lunate':'Polmesiačikovitá kosť',
+ 'triquetral':'Trojhranná kosť','triquetrum':'Trojhranná kosť',
+ 'pisiform':'Hráškovitá kosť','trapezium':'Mnohouholníková kosť väčšia',
+ 'trapezoid':'Mnohouholníková kosť menšia','capitate':'Hlavičkatá kosť',
+ 'hamate':'Hákovitá kosť','hyoid bone':'Jazylka',
+ 'cornea':'Rohovka','sclera':'Bielko'
+};
+function skFingerPart(part){
+ const hand={'thumb':'palca ruky','index finger':'ukazováka','middle finger':'prostredníka','ring finger':'prstenníka','little finger':'malíčka'};
+ const foot={'big toe':'palca nohy','second toe':'2. prsta nohy','third toe':'3. prsta nohy','fourth toe':'4. prsta nohy','little toe':'5. prsta nohy'};
+ return hand[part]||foot[part]||null;
+}
+function translatedStructure(en,tissue){
+ const n=(en||'').replace(/_/g,' ').trim().toLowerCase();
+ const plain=n.replace(/\b(left|right)\b/g,' ').replace(/\s+/g,' ').trim();
+ let m;
+ // Individuálne zuby: zachovať hornú/dolnú čeľusť a druh zuba.
+ if(tissue==='tooth'||/\btooth\b/.test(plain)){
+  const jaw=/\blower\b/.test(plain)?'Dolný':'Horný';
+  const tooth=/\bincisor\b/.test(plain)?(/\bcentral\b/.test(plain)?'stredný rezák':'bočný rezák'):
+   /\bcanine\b/.test(plain)?'očný zub':/\bpremolar\b/.test(plain)?'črenový zub':
+   /\bmolar\b/.test(plain)?'stolička':'zub';
+  const num=(plain.match(/\b(first|second|third)\b/)||[])[1];
+  const spec=(/\bpremolar\b|\bmolar\b/.test(plain)&&num)?ORDINAL_EN[num]+'. ':'';
+  const st=(spec+tooth).replace(/^./,v=>v.toUpperCase());
+  const adj=tooth==='stolička'?(jaw==='Horný'?'Horná':'Dolná'):jaw;
+  return adj+' '+st.toLocaleLowerCase('sk')+' (trvalý zub)';
+ }
+ // Každý článok prsta ruky a nohy: konkrétny prst aj poloha článku.
+ if(m=plain.match(/^(distal|middle|proximal) phalanx of (.+)$/)){
+  const seg={distal:'Koncový',middle:'Stredný',proximal:'Základný'}[m[1]];
+  const digit=skFingerPart(m[2]);
+  if(digit)return seg+' článok '+digit;
+ }
+ // Medzistavcové platničky sa nesmú zameniť za stavce.
+ if(m=plain.match(/^intervertebral dis[ck] of (.+)$/)){
+  const attached=translatedStructure(m[1],'bone');
+  return 'Medzistavcová platnička ('+attached+')';
+ }
+ // Zachovať čísla C3–C7, Th1–Th12 a L1–L5.
+ if(m=plain.match(new RegExp('^('+NUM_WORDS+') (cervical|thoracic|lumbar) vertebra$'))){
+  const num=ORDINAL_EN[m[1]],type={cervical:'Krčný stavec C',thoracic:'Hrudný stavec Th',lumbar:'Driekový stavec L'}[m[2]];
+  return type+num;
+ }
+ if(m=plain.match(new RegExp('^('+NUM_WORDS+') (rib|costal cartilage|metacarpal bone|metatarsal bone)$'))){
+  return ORDINAL_EN[m[1]]+'. '+{rib:'rebro','costal cartilage':'rebrová chrupavka','metacarpal bone':'záprstná kosť','metatarsal bone':'predpriehlavková kosť'}[m[2]];
+ }
+ if(ANATOMICAL_SK[plain])return ANATOMICAL_SK[plain];
+ // Zriedkavé varianty a pomenovania z iných verzií anatomického GLB.
+ const extra=[
+ [/^intervertebral (disc|disk)$/, 'Medzistavcová platnička'],
+ [/\bnasal concha\b/,'Nosová mušľa'],[/\blacrimal\b/,'Slzná kosť'],
+ [/\bpalatine\b/,'Podnebná kosť'],[/\bethmoid\b/,'Čuchová kosť'],
+ [/\bsphenoid\b/,'Klinová kosť'],[/\bvomer\b/,'Čerieslo'],
+ [/\bnasal cartilage\b/,'Nosová chrupavka'],[/\bcostal cartilage\b/,'Rebrová chrupavka'],
+ [/\bvertebra\b/,'Stavec'],[/\bphalanx\b/,'Článok prsta'],
+ [/\brib\b/,'Rebro'],[/\btooth\b/,'Zub'],
+ [/\bcarpal\b/,'Zápästná kosť'],[/\bmetacarpal\b/,'Záprstná kosť'],
+ [/\bmetatarsal\b/,'Predpriehlavková kosť'],[/\bcuneiform\b/,'Klinovitá kosť'],
+ [/\bskull\b|\bcranium\b/,'Lebka']
+ ];
+ for(const [rx,sk] of extra)if(rx.test(plain))return sk;
+ // Nikdy nezobraziť anglické interné označenie; neznáma štruktúra
+ // je explicitne označená, aby sa neprezentoval vymyslený preklad.
+ console.warn('Chýba slovenský názov anatomickej štruktúry:',en);
+ return tissue==='cartilage'?'Nepomenovaná chrupavka':tissue==='tooth'?'Nepomenovaný zub':'Nepomenovaná kosť';
+}
+function parseName(s,tissue='bone'){
+ const en=s||'';
+ let side=/\bleft\b/i.test(en)?'left':/\bright\b/i.test(en)?'right':'midline';
+ const sk=translatedStructure(en,tissue);
+ const qualifier=side==='left'?'ľavá strana':side==='right'?'pravá strana':'';
+ // Anatomický opis podľa typu tkaniva, s konkrétnym vysvetlením tam, kde je dostupné.
+ const specific=INFORMATION.find(item=>item[0].test(en));
+ const cranialDescriptions={
+  'ethmoid':'Čuchová kosť sa podieľa na tvorbe nosovej dutiny, nosovej priehradky a očnice.',
+  'sphenoid bone':'Klinová kosť sa nachádza v spodine lebky a spája viaceré jej kosti.',
+  'vomer':'Čerieslo tvorí zadnú a dolnú časť kostenej nosovej priehradky.',
+  'inferior nasal concha':'Dolná nosová mušľa zväčšuje povrch nosovej dutiny a pomáha upravovať vdychovaný vzduch.',
+  'lacrimal bone':'Slzná kosť tvorí časť vnútornej steny očnice.',
+  'palatine bone':'Podnebná kosť sa podieľa na tvorbe tvrdého podnebia, nosovej dutiny a očnice.',
+  'manubrium':'Rukoväť je horná časť hrudnej kosti, ku ktorej sa pripájajú kľúčne kosti.',
+  'xiphoid process':'Mečovitý výbežok je dolné zakončenie hrudnej kosti.'
+ };
+ const stripped=en.toLowerCase().replace(/\b(left|right)\b/g,'').replace(/\s+/g,' ').trim();
+ const detail=cranialDescriptions[stripped]|| (tissue==='tooth'?'Zub stáleho chrupu; jednotlivé zuby sa odlišujú tvarom aj funkciou.':
+  tissue==='cartilage'?'Chrupavková štruktúra má pružnejšie vlastnosti než kosť.':
+  /\bphalanx\b/i.test(en)?'Jeden z článkov prsta ruky alebo nohy.':
+  /\b(vertebra|atlas|axis)\b/i.test(en)?'Súčasť chrbtice, ktorá nesie záťaž a chráni miechu.':
+  /\brib\b/i.test(en)?'Súčasť hrudného koša, ktorý chráni srdce a pľúca.':
+  specific?specific[2]:'Súčasť kostry človeka. Preskúmaj jej uloženie a spojenie so susednými štruktúrami.');
+ return {side,sk:qualifier?sk+' ('+qualifier+')':sk,description:detail};
+}
+function classify(name,center){let s=(name||'').toLowerCase(), y=center?center[1]:1; if(/(skull|cranium|mandible|maxilla|frontal|parietal|temporal|occipital|nasal|zygomatic|lacrimal|sphenoid|ethmoid|vomer|palatine|hyoid|inferior nasal|tooth|teeth|incisor|molar|canine|premolar|ear ossicle|malleus|stapes|incus|external ear|alar cartilage)/.test(s))return 'lebka';if(/(vertebra|atlas|axis|sacrum|coccyx|intervertebral|disc)/.test(s))return 'chrbtica';if(/(rib|sternum|costal cartilage|manubrium|xiphoid)/.test(s))return 'hrudnik';if(/(pelvis|hip bone|os coxae|ili[ua]|ischium|pubis|pubic)/.test(s))return 'panva';if(/(clavicle|scapula|humerus|radius|ulna|carpal|metacarpal)/.test(s))return 'horna';if(/(femur|tibia|fibula|patella|tarsal|metatarsal|calcaneus|talus|navicular|cuboid|cuneiform)/.test(s))return 'dolna';if(/(phalan|phalanges)/.test(s))return y<.55?'dolna':'horna';return y>1.60?'lebka':y<.88?'dolna':y<1.14?'panva':'hrudnik'}
 function matIdentity(){return [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]}
 function matMul(a,b){const r=new Array(16).fill(0);for(let c=0;c<4;c++)for(let row=0;row<4;row++)for(let k=0;k<4;k++)r[c*4+row]+=a[k*4+row]*b[c*4+k];return r}
 function matNode(n){if(n.matrix)return n.matrix;let t=n.translation||[0,0,0],s=n.scale||[1,1,1],q=n.rotation||[0,0,0,1], [x,y,z,w]=q,x2=x+x,y2=y+y,z2=z+z, xx=x*x2,xy=x*y2,xz=x*z2,yy=y*y2,yz=y*z2,zz=z*z2,wx=w*x2,wy=w*y2,wz=w*z2;
@@ -180,7 +322,7 @@ function getIndex(aid){if(aid===undefined)return null;const a=attrs[aid];return 
 function walk(nodeNo,parent,layer=''){const n=g.nodes[nodeNo];const M=matMul(parent,matNode(n));const l=n.extras?.layer||layer||(n.name==='Skeleton'?'skeleton':'');if(n.mesh!==undefined&&l==='skeleton'){const nm=n.extras?.name||n.name||'Bone';let tissue=n.extras?.tissue||'bone';if(tissue!=='eye'){
  const ms=g.meshes[n.mesh];let list=[],pts=[];for(const primitive of ms.primitives){if(primitive.mode!==undefined&&primitive.mode!==4)continue;if(primitive.extensions?.KHR_draco_mesh_compression||primitive.extensions?.EXT_meshopt_compression)throw Error('Vyžaduje sa dekompresor GLB');const pos=getAtt(primitive.attributes.POSITION),normal=getAtt(primitive.attributes.NORMAL),color=getAtt(primitive.attributes.COLOR_0),inds=getIndex(primitive.indices);
  if(!pos)continue;const geo={attrs:{pos,normal,color},ib:inds?.buffer,count:inds?.count||pos.count,type:inds?.type||gl.UNSIGNED_SHORT,indOffset:inds?.offset||0,hasIndex:!!inds};list.push({geo,model:M});if(pos.min&&pos.max){for(let i=0;i<8;i++)pts.push(tp(M,[i&1?pos.max[0]:pos.min[0],i&2?pos.max[1]:pos.min[1],i&4?pos.max[2]:pos.min[2]]))}}
- if(list.length){let mid=[0,0,0];pts.forEach(p=>p.forEach((v,i)=>mid[i]+=v/pts.length));let info=parseName(nm);recordsNew.push({id:recordsNew.length+1,en:nm,name:info.sk,description:info.description,side:n.extras?.side||info.side,region:classify(nm,mid),tissue,center:mid,meshes:list})}
+ if(list.length){let mid=[0,0,0];pts.forEach(p=>p.forEach((v,i)=>mid[i]+=v/pts.length));let info=parseName(nm,tissue);recordsNew.push({id:recordsNew.length+1,en:nm,name:info.sk,description:info.description,side:n.extras?.side||info.side,region:classify(nm,mid),tissue,center:mid,meshes:list})}
  }}for(const c of (n.children||[]))walk(c,M,l)}
  const sc=g.scenes?.[g.scene||0]||g.scenes?.[0];if(!sc)throw Error('V súbore GLB chýba scéna');for(const n of sc.nodes||[])walk(n,matIdentity());if(recordsNew.length<20)throw Error('Model neobsahuje kompletnú kostru; nájdených len '+recordsNew.length+' kostí');return recordsNew}
 function bindAttr(loc,entry,components,def){if(loc<0)return;if(!entry){gl.disableVertexAttribArray(loc);if(components===4)gl.vertexAttrib4f(loc,...def);else gl.vertexAttrib3f(loc,...def);return}gl.bindBuffer(gl.ARRAY_BUFFER,entry.buffer);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,entry.size,entry.type,entry.normalized,entry.stride,entry.offset)}
@@ -204,45 +346,52 @@ const LABEL_LANDMARKS=[
  [/lumbar vertebra/i,'Driekový stavec','right'],[/sacrum/i,'Krížová kosť','right'],
  [/hip bone|os coxae|ilium/i,'Panvová kosť','left'],
  [/humerus/i,'Ramenná kosť','right'],[/radius/i,'Vretenná kosť','left'],
- [/ulna/i,'Lakťová kosť','right'],[/\bcarpal\b/i,'Zápästná kosť','left'],
+ [/ulna/i,'Lakťová kosť','right'],[/scaphoid|lunate|triquetral|pisiform|hamate|capitate|trapezoid|trapezium/i,'Zápästná kosť','left'],
  [/\bmetacarpal\b/i,'Záprstná kosť','right'],
  [/femur/i,'Stehenná kosť','left'],[/patella/i,'Jabĺčko','right'],
  [/tibia/i,'Píšťala','left'],[/fibula/i,'Ihlica','right'],
  [/talus/i,'Členková kosť','left'],[/calcaneus/i,'Pätová kosť','right']
 ];
-function chosenLabels(max){
- if(!showLabels||mode==='quiz'||!records.length)return [];
- const visible=records.filter(isVisible), out=[],used=new Set();
- if(selected&&isVisible(selected)){out.push({rec:selected,label:selected.name,active:true});used.add(selected.id)}
+// Zoznam je spoločný pre 3D aj AR. Veľkosť obrazovky mení len počet
+// súčasne čitateľných štítkov, nie to, akú kosť štítok pomenúva.
+function labelPool(){
+ if(!showLabels||mode==='quiz'||!records.length)return {pool:[],pin:null};
+ const visible=records.filter(r=>isVisible(r)&&r.tissue!=='cartilage'&&r.tissue!=='eye');
+ const used=new Set(),pool=[];
+ const pin=selected&&isVisible(selected)?{rec:selected,label:selected.name,active:true}:null;
+ if(pin)used.add(selected.id);
  for(const [rx,label,preferredSide] of LABEL_LANDMARKS){
-  const options=visible.filter(r=>rx.test(r.en)&&r.tissue!=='cartilage'&&!used.has(r.id));
-  if(!options.length)continue;
-  options.sort((a,b)=>Number(b.side===preferredSide)-Number(a.side===preferredSide));
-  const rec=options[0];out.push({rec,label,active:false});used.add(rec.id);
+   const hits=visible.filter(r=>rx.test(r.en)&&!used.has(r.id));
+   if(!hits.length)continue;
+   hits.sort((a,b)=>Number(b.side===preferredSide)-Number(a.side===preferredSide));
+   const rec=hits[0];pool.push({rec,label,active:false});used.add(rec.id);
  }
  if(labelDensity==='more'){
-  for(const rec of visible){if(used.has(rec.id)||rec.tissue==='cartilage')continue;
-   const base=rec.name.replace(/ \(ľavá\)| \(pravá\)/g,'');
-   if(out.some(x=>x.label===base))continue;
-   out.push({rec,label:base,active:false});used.add(rec.id);if(out.length>=max*3)break;
-  }
+   const leftovers=visible.filter(r=>!used.has(r.id));
+   const order={lebka:0,chrbtica:1,hrudnik:2,horna:3,panva:4,dolna:5};
+   leftovers.sort((a,b)=>(order[a.region]??9)-(order[b.region]??9)||b.center[1]-a.center[1]||a.name.localeCompare(b.name,'sk'));
+   for(const rec of leftovers)pool.push({rec,label:rec.name,active:false});
  }
- // Vybraný objekt má absolútnu prioritu. Pri celej kostre rozložiť
- // popisky na výšku; pri vybranej oblasti použiť jej vlastné kosti.
- if(out.length<=max)return out;
- const keep=[out[0].active?out[0]:null].filter(Boolean),remaining=out.filter(x=>!keep.includes(x));
- if(region!=='all'){
-  remaining.sort((a,b)=>b.rec.center[1]-a.rec.center[1]);
-  const count=max-keep.length;const chosen=[];
-  for(let i=0;i<count;i++){const idx=Math.floor((i+.5)*remaining.length/count);if(remaining[idx]&&!chosen.includes(remaining[idx]))chosen.push(remaining[idx])}
-  return [...keep,...chosen];
- }
- // Približne rovnomerná vzorka z hlavy, trupu a končatín.
- remaining.sort((a,b)=>b.rec.center[1]-a.rec.center[1]);
- const count=max-keep.length,chosen=[];
- for(let i=0;i<count;i++){const idx=Math.min(remaining.length-1,Math.floor((i+.5)*remaining.length/count));if(remaining[idx]&&!chosen.includes(remaining[idx]))chosen.push(remaining[idx])}
- return [...keep,...chosen];
+ return {pool,pin};
 }
+function labelCapacity(w){return w<440?6:w<640?9:14}
+function chosenLabels(max){
+ const {pool,pin}=labelPool();
+ const room=Math.max(1,max-(pin?1:0));
+ const pages=Math.max(1,Math.ceil(pool.length/room));
+ labelPageIndex=Math.max(0,Math.min(labelPageIndex,pages-1));
+ const entries=[...(pin?[pin]:[]),...pool.slice(labelPageIndex*room,(labelPageIndex+1)*room)];
+ return {entries,pages,total:pool.length+(pin?1:0),page:labelPageIndex};
+}
+function showPager(modeName,chosen,visible){
+ const ar=modeName==='ar';
+ const status=$(ar?'arLabelPageStatus':'labelPageStatus');
+ const prev=$(ar?'arLabelsPrev':'labelsPrev'),next=$(ar?'arLabelsNext':'labelsNext');
+ const enabled=showLabels&&mode!=='quiz'&&chosen.total>0;
+ prev.disabled=!enabled||chosen.page===0;next.disabled=!enabled||chosen.page>=chosen.pages-1;
+ status.textContent=!showLabels?'Popisky sú skryté':mode==='quiz'?'V precvičovaní sú skryté':!chosen.total?'Názvy nie sú dostupné':`Sada ${chosen.page+1}/${chosen.pages} · ${visible} viditeľných z ${chosen.total}`;
+}
+function stepLabels(delta){labelPageIndex+=delta;refreshLabels();if(!xrSession)drawLabels3D();}
 function multiplyPoint(m,p){const x=p[0],y=p[1],z=p[2];return [m[0]*x+m[4]*y+m[8]*z+m[12],m[1]*x+m[5]*y+m[9]*z+m[13],m[2]*x+m[6]*y+m[10]*z+m[14],m[3]*x+m[7]*y+m[11]*z+m[15]]}
 function screenPoint(projection,view,point,w,h){const clip=multiplyPoint(projection,multiplyPoint(view,point));if(!Number.isFinite(clip[3])||clip[3]<.01)return null;const nx=clip[0]/clip[3],ny=clip[1]/clip[3],nz=clip[2]/clip[3];if(Math.abs(nx)>1.08||Math.abs(ny)>1.08||nz< -1.02||nz>1.02)return null;return {x:(nx+1)*.5*w,y:(1-ny)*.5*h,z:nz}}
 function clearLabelLayer(layerId,svgId){$(layerId).replaceChildren();$(svgId).replaceChildren()}
@@ -271,52 +420,68 @@ function layoutLabels(points,w,h,ar=false){
  return result;
 }
 function paintLabels(layerId,svgId,points,w,h,ar=false){
- const host=$(layerId),lines=$(svgId);host.replaceChildren();lines.replaceChildren();
- if(!points.length)return;
+ const host=$(layerId),lines=$(svgId),placed=layoutLabels(points,w,h,ar);
  lines.setAttribute('viewBox',`0 0 ${w} ${h}`);lines.setAttribute('preserveAspectRatio','none');
  const ns='http://www.w3.org/2000/svg';
- for(const p of layoutLabels(points,w,h,ar)){
-  const ln=document.createElementNS(ns,'line');ln.setAttribute('x1',p.x);ln.setAttribute('y1',p.y);ln.setAttribute('x2',p.atX);ln.setAttribute('y2',p.atY);lines.appendChild(ln);
-  const dot=document.createElementNS(ns,'circle');dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);dot.setAttribute('r',p.entry.active?4:3);lines.appendChild(dot);
-  const b=document.createElement('button');b.type='button';b.className='boneLabel'+(p.entry.active?' sel':'');b.textContent=p.entry.label;b.title='Vybrať: '+p.entry.rec.name;b.style.left=p.atX+'px';b.style.top=p.atY+'px';
-  b.addEventListener('click',()=>{choose(p.entry.rec);if(ar){$('arLabelInfo').replaceChildren();const strong=document.createElement('strong');strong.textContent=p.entry.rec.name;const txt=document.createTextNode(p.entry.rec.description);$('arLabelInfo').append(strong,txt);$('arLabelInfo').classList.remove('hidden');}});
-  if(ar)b.addEventListener('beforexrselect',ev=>ev.preventDefault());
-  host.appendChild(b);
+ const wanted=new Set();
+ // Prvky nechávame v DOM medzi snímkami, inak sa dotyk na mobilnom AR
+ // zruší pri každom prekreslení štítkov.
+ for(const p of placed){
+  const id=String(p.entry.rec.id);wanted.add(id);
+  let b=[...host.children].find(el=>el.dataset.boneId===id);
+  if(!b){
+   b=document.createElement('button');b.type='button';b.className='boneLabel';b.dataset.boneId=id;
+   b.addEventListener('click',()=>{const rec=records.find(x=>String(x.id)===b.dataset.boneId);if(!rec)return;choose(rec);if(ar){$('arLabelInfo').replaceChildren();const strong=document.createElement('strong');strong.textContent=rec.name;const txt=document.createTextNode(rec.description);$('arLabelInfo').append(strong,txt);$('arLabelInfo').classList.remove('hidden');}});
+   if(ar)b.addEventListener('beforexrselect',ev=>ev.preventDefault());
+   host.appendChild(b);
+  }
+  b.textContent=p.entry.label;b.title='Vybrať: '+p.entry.rec.name;
+  b.classList.toggle('sel',!!p.entry.active);b.style.left=p.atX+'px';b.style.top=p.atY+'px';
+  let ln=[...lines.children].find(el=>el.dataset.boneId===id&&el.localName==='line');
+  let dot=[...lines.children].find(el=>el.dataset.boneId===id&&el.localName==='circle');
+  if(!ln){ln=document.createElementNS(ns,'line');ln.dataset.boneId=id;lines.appendChild(ln)}
+  if(!dot){dot=document.createElementNS(ns,'circle');dot.dataset.boneId=id;lines.appendChild(dot)}
+  ln.setAttribute('x1',p.x);ln.setAttribute('y1',p.y);ln.setAttribute('x2',p.atX);ln.setAttribute('y2',p.atY);
+  dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);dot.setAttribute('r',p.entry.active?4:3);
  }
+ for(const b of [...host.children])if(!wanted.has(b.dataset.boneId))b.remove();
+ for(const e of [...lines.children])if(!wanted.has(e.dataset.boneId))e.remove();
+ return placed.length;
 }
 function drawLabels3D(){
  const now=performance.now();if(now-last3DLabelsAt<30)return;last3DLabelsAt=now;
  const w=canvas.clientWidth,h=canvas.clientHeight;
- if(!records.length||!showLabels||mode==='quiz'||xrSession||w<20||h<20){clearLabelLayer('labels3D','labelLines');return;}
+ const max=labelCapacity(w),chosen=chosenLabels(max);
+ if(!records.length||!showLabels||mode==='quiz'||xrSession||w<20||h<20){clearLabelLayer('labels3D','labelLines');showPager('3d',chosen,0);return;}
  const eye=[target[0]+dist*Math.sin(yaw)*Math.cos(pitch),target[1]+dist*Math.sin(pitch),target[2]+dist*Math.cos(yaw)*Math.cos(pitch)];
  const V=matLook(eye,target),P=matPerspective(.72,w/h,.01,40);
- const max=w<420?7:w<640?11:16;
- const points=chosenLabels(max).map(entry=>{const p=screenPoint(P,V,entry.rec.center,w,h);return p&&{...p,entry}}).filter(Boolean);
- paintLabels('labels3D','labelLines',points,w,h);
+ const points=chosen.entries.map(entry=>{const p=screenPoint(P,V,entry.rec.center,w,h);return p&&{...p,entry}}).filter(Boolean);
+ const count=paintLabels('labels3D','labelLines',points,w,h);showPager('3d',chosen,count);
 }
 function drawLabelsAR(view,t){
  if(t-lastArLabelsAt<85)return;lastArLabelsAt=t;
- if(!showLabels||!arPlaced||!arAnchorPoint||mode==='quiz') {clearLabelLayer('arLabels','arLabelLines');return;}
  const w=$('arOverlay').clientWidth,h=$('arOverlay').clientHeight;
+ const chosen=chosenLabels(labelCapacity(w));
+ if(!showLabels||!arPlaced||!arAnchorPoint||mode==='quiz'){clearLabelLayer('arLabels','arLabelLines');showPager('ar',chosen,0);return;}
  if(!w||!h)return;
- const max=w<440?6:9,base=arWorldMatrix(arAnchorPoint);
- const points=chosenLabels(max).map(entry=>{const world=tp(base,entry.rec.center),p=screenPoint(view.projectionMatrix,view.transform.inverse.matrix,world,w,h);return p&&{...p,entry}}).filter(Boolean);
- paintLabels('arLabels','arLabelLines',points,w,h,true);
+ const base=arWorldMatrix(arAnchorPoint);
+ const points=chosen.entries.map(entry=>{const world=tp(base,entry.rec.center),p=screenPoint(view.projectionMatrix,view.transform.inverse.matrix,world,w,h);return p&&{...p,entry}}).filter(Boolean);
+ const count=paintLabels('arLabels','arLabelLines',points,w,h,true);showPager('ar',chosen,count);
 }
 function refreshLabels(){last3DLabelsAt=0;lastArLabelsAt=0;needsDraw=true;if(!showLabels||mode==='quiz'){clearLabelLayer('labels3D','labelLines');clearLabelLayer('arLabels','arLabelLines');$('arLabelInfo').classList.add('hidden');}}
-function refreshArLabelControl(){$('arLabelsToggle').textContent=showLabels?'Skryť popisky':'Zobraziť popisky';$('arLabelsToggle').setAttribute('aria-pressed',String(showLabels));$('showLabels').checked=showLabels;refreshLabels()}
+function refreshArLabelControl(){$('arLabelsToggle').textContent=showLabels?'Skryť popisky':'Zobraziť popisky';$('arLabelsToggle').setAttribute('aria-pressed',String(showLabels));$('showLabels').checked=showLabels;$('arLabelDensity').value=labelDensity;refreshLabels()}
 
 function updateStatus(msg,type){$('status').innerHTML='<strong>'+type+'</strong>'+msg}
 function updateList(){let q=$('search').value.trim().toLocaleLowerCase('sk'),items=records.filter(r=>(region==='all'||r.region===region)&&(r.name.toLocaleLowerCase('sk').includes(q)||r.en.toLowerCase().includes(q))).sort((a,b)=>a.name.localeCompare(b.name,'sk'));$('count').textContent=items.length+' položiek';let box=$('boneList');box.replaceChildren();const frag=document.createDocumentFragment();for(let r of items.slice(0,180)){let b=document.createElement('button');b.textContent=r.name;b.className=r===selected?'active':'';b.addEventListener('click',()=>choose(r));frag.appendChild(b)}box.appendChild(frag);if(items.length>180){let e=document.createElement('div');e.className='listCount';e.textContent='Zobrazuje sa prvých 180 výsledkov. Spresni vyhľadávanie.';box.appendChild(e)}}
 function choose(r){if(!r)return;selected=r;isolate=false;$('isolateBtn').textContent='◉ Zobraziť iba výber';if(mode==='quiz'){checkQuiz(r)}else showInfo(r);updateList();refreshLabels()}
-function showInfo(r){$('category').textContent=REGION_NAMES[r.region];$('selectedName').textContent=r.name;$('selectedEn').textContent=r.en;$('selectedDesc').textContent=r.description;$('selectedSide').textContent=r.side==='left'?'Ľavá strana tela':r.side==='right'?'Pravá strana tela':'Stredová štruktúra'}
+function showInfo(r){$('category').textContent=REGION_NAMES[r.region];$('selectedName').textContent=r.name;$('selectedEn').textContent='Slovenský anatomický názov';$('selectedDesc').textContent=r.description;$('selectedSide').textContent=r.side==='left'?'Ľavá strana tela':r.side==='right'?'Pravá strana tela':'Stredová štruktúra'}
 function centerOn(r){if(!r)return;target=[...r.center];dist=.65;if(/(femur|tibia|humerus|radius|ulna|panv)/i.test(r.en))dist=1.06;else if(/(rib|scapula|sternum)/i.test(r.en))dist=.95;else if(/(phal|carpal|tarsal)/i.test(r.en))dist=.37;yaw=0;pitch=.05;needsDraw=true}
-function setRegion(r){region=r;isolate=false;selected=null;document.querySelectorAll('#regions button').forEach(b=>b.classList.toggle('active',b.dataset.region===r));$('dimOthers').checked=false;dimOthers=false;target=[0,r==='lebka'?1.64:r==='chrbtica'?1.3:r==='hrudnik'?1.38:r==='horna'?1.26:r==='panva'?1.01:r==='dolna'?.48:.91,0];dist=r==='all'?2.55:r==='lebka'?.63:r==='chrbtica'?1.27:r==='hrudnik'?1.12:r==='horna'?1.52:r==='panva'?.83:1.4;showIntro();updateList();refreshLabels()}
-function showIntro(){$('category').textContent=region==='all'?'Anatomický atlas':REGION_NAMES[region];$('selectedName').textContent=region==='all'?'Ľudská kostra':REGION_NAMES[region];$('selectedEn').textContent='Vyber kosť kliknutím';$('selectedDesc').textContent='Otáčaj 3D model, približuj detaily a klikni na konkrétnu kosť. Zoznam vľavo umožňuje výber aj bez presného klikania.';$('selectedSide').textContent='Interaktívny 3D model'}
+function setRegion(r){labelPageIndex=0;region=r;isolate=false;selected=null;document.querySelectorAll('#regions button').forEach(b=>b.classList.toggle('active',b.dataset.region===r));$('dimOthers').checked=false;dimOthers=false;target=[0,r==='lebka'?1.64:r==='chrbtica'?1.3:r==='hrudnik'?1.38:r==='horna'?1.26:r==='panva'?1.01:r==='dolna'?.48:.91,0];dist=r==='all'?2.55:r==='lebka'?.63:r==='chrbtica'?1.27:r==='hrudnik'?1.12:r==='horna'?1.52:r==='panva'?.83:1.4;showIntro();updateList();refreshLabels()}
+function showIntro(){$('category').textContent=region==='all'?'Anatomický atlas':REGION_NAMES[region];$('selectedName').textContent=region==='all'?'Ľudská kostra':REGION_NAMES[region];$('selectedEn').textContent='Slovenské anatomické pomenovanie';$('selectedDesc').textContent='Otáčaj 3D model, približuj detaily a klikni na konkrétnu kosť. Zoznam vľavo umožňuje výber aj bez presného klikania.';$('selectedSide').textContent='Interaktívny 3D model'}
 const quizSpecs=[[/femur|stehenn/i,'Stehennú kosť'],[/humerus|ramenná kosť/i,'Ramennú kosť'],[/tibia|píšťal/i,'Píšťalu'],[/fibula|ihlic/i,'Ihlicu'],[/patella|jabĺčk/i,'Jabĺčko'],[/radius|vretenn/i,'Vretennú kosť'],[/ulna|lakťov/i,'Lakťovú kosť'],[/clavicle|kľúčov/i,'Kľúčnu kosť'],[/scapula|lopatk/i,'Lopatku'],[/sternum|hrudná kosť/i,'Hrudnú kosť'],[/mandible|sánk/i,'Sánku'],[/sacrum|krížov/i,'Krížovú kosť'],[/coccyx|kostrč/i,'Kostrč'],[/calcaneus|pätov/i,'Pätovú kosť'],[/atlas|nosič/i,'Nosič (C1)']];
 function newQuestion(){const choices=quizSpecs.filter(([rx])=>records.some(r=>rx.test(r.en))&&!asked.some(i=>quizSpecs[i][0].source===rx.source));if(!choices.length)asked=[];const pool=quizSpecs.map((v,i)=>({v,i})).filter(({v,i})=>!asked.includes(i)&&records.some(r=>v[0].test(r.en)));if(!pool.length){$('quizQuestion').textContent='V aktuálnom modeli nie sú dostupné otázky.';return}const take=pool[Math.floor(Math.random()*pool.length)];asked.push(take.i);activeQuestion=take.v;$('quizQuestion').textContent='Nájdi: '+take.v[1]+'.';$('quizFeedback').textContent='Klikni na správnu kosť v modeli alebo v zozname.';$('quizFeedback').className='quizFeedback';selected=null;isolate=false;region='all';document.querySelectorAll('#regions button').forEach(b=>b.classList.toggle('active',b.dataset.region==='all'));target=[0,.91,0];dist=2.55;yaw=0;pitch=.055;updateList();refreshLabels()}
 function checkQuiz(r){if(!activeQuestion)return;let success=activeQuestion[0].test(r.en);if(success){quizCorrect++;quizTotal++;$('quizFeedback').textContent='Správne! '+r.name+'.';$('quizFeedback').className='quizFeedback good';activeQuestion=null}else{$('quizFeedback').textContent='To je '+r.name+'. Skús inú kosť.';$('quizFeedback').className='quizFeedback bad'}$('quizScore').textContent=quizCorrect+' / '+quizTotal}
-function setMode(m){if(m==='quiz'&&!records.length){updateStatus('Najskôr je potrebné načítať skutočnú anatomickú kostru.','Model sa ešte nenačítal');return}mode=m;$('explorePanel').classList.toggle('hidden',mode!=='explore');$('quizPanel').classList.toggle('hidden',mode!=='quiz');$('exploreBtn').classList.toggle('active',mode==='explore');$('quizBtn').classList.toggle('active',mode==='quiz');if(mode==='quiz'){asked=[];quizCorrect=0;quizTotal=0;$('quizScore').textContent='0 / 0';newQuestion()}else{activeQuestion=null;showIntro()}refreshLabels()}
+function setMode(m){labelPageIndex=0;if(m==='quiz'&&!records.length){updateStatus('Najskôr je potrebné načítať skutočnú anatomickú kostru.','Model sa ešte nenačítal');return}mode=m;$('explorePanel').classList.toggle('hidden',mode!=='explore');$('quizPanel').classList.toggle('hidden',mode!=='quiz');$('exploreBtn').classList.toggle('active',mode==='explore');$('quizBtn').classList.toggle('active',mode==='quiz');if(mode==='quiz'){asked=[];quizCorrect=0;quizTotal=0;$('quizScore').textContent='0 / 0';newQuestion()}else{activeQuestion=null;showIntro()}refreshLabels()}
 function gate(text,title='Načítavam detailnú 3D kostru',isError=false){
  $('loader').classList.remove('hidden');$('gateTitle').textContent=title;$('loadText').textContent=text;
  $('gateSpin').classList.toggle('hidden',isError);$('retryModel').classList.toggle('hidden',!isError);
@@ -421,10 +586,12 @@ $('arReset').addEventListener('click',()=>{arScale=.25;arAngle=0;$('arSize').val
 $('arSize').addEventListener('input',e=>{arScale=Math.max(.15,Math.min(1,Number(e.target.value)));arScaleLabel()});
 $('arAngle').addEventListener('input',e=>{arAngle=Number(e.target.value)*Math.PI/180;$('arAngleLabel').textContent=e.target.value+'°'});
 $('showLabels').addEventListener('change',e=>{showLabels=e.target.checked;refreshArLabelControl()});
-$('labelDensity').addEventListener('change',e=>{labelDensity=e.target.value;refreshLabels()});
+$('labelDensity').addEventListener('change',e=>{labelDensity=e.target.value;labelPageIndex=0;refreshLabels()});
+$('arLabelDensity').addEventListener('change',e=>{labelDensity=e.target.value;$('labelDensity').value=labelDensity;labelPageIndex=0;refreshLabels()});
 $('arLabelsToggle').addEventListener('click',()=>{showLabels=!showLabels;refreshArLabelControl()});
+for(const [id,delta] of [['labelsPrev',-1],['labelsNext',1],['arLabelsPrev',-1],['arLabelsNext',1]])$(id).addEventListener('click',()=>stepLabels(delta));
 // Dotyky na ovládacích prvkoch nesmú umiestniť model.
-for(const el of $('arOverlay').querySelectorAll('button,input,#arLabelInfo'))el.addEventListener('beforexrselect',e=>e.preventDefault());
+for(const el of $('arOverlay').querySelectorAll('button,input,select,#arLabelInfo'))el.addEventListener('beforexrselect',e=>e.preventDefault());
 arButtonState();arScaleLabel();
 if(glInit()){
  records=[];updateList();setMode('explore');requestAnimationFrame(animate);loadRemote();
@@ -438,7 +605,7 @@ if(glInit()){
  $('focusBtn').addEventListener('click',()=>centerOn(selected));$('isolateBtn').addEventListener('click',()=>{if(!selected)return;isolate=!isolate;$('isolateBtn').textContent=isolate?'◉ Zobraziť celú oblasť':'◉ Zobraziť iba výber';needsDraw=true});
  $('plus').addEventListener('click',()=>{dist=Math.max(.23,dist*.8);needsDraw=true});$('minus').addEventListener('click',()=>{dist=Math.min(7,dist*1.25);needsDraw=true});
  document.querySelectorAll('.viewBtns button').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.view;if(v==='front')yaw=0;if(v==='back')yaw=Math.PI;if(v==='side')yaw=Math.PI/2;if(v==='reset'){yaw=0;pitch=.055;dist=2.55;target=[0,.91,0]}document.querySelectorAll('.viewBtns button').forEach(x=>x.classList.toggle('active',x===b));needsDraw=true}));
- $('helpBtn').addEventListener('click',()=>alert('Otáčanie: ťahaj myšou alebo jedným prstom.\nPriblíženie: koliesko myši, dva prsty alebo tlačidlá +/−.\nVýber: klikni na kosť, popisok alebo jej názov v zozname.\nPopisky: vpravo zapni/vypni názvy kostí, prípadne zvýš ich podrobnosť. V AR je na to tlačidlo Názvy kostí. V režime Precvičiť sa nezobrazujú.\nV režime Precvičiť hľadaj kosti podľa zadania.\nPresné anatomické dáta Écorché sa načítavajú cez internet, prípadne môžeš otvoriť vlastný súbor ecorche.glb. Nezobrazuje sa žiadna schematická náhrada.\nAR: otvor stránku cez HTTPS v Chrome na podporovanom Androide, stlač Spustiť AR, nasmeruj na stôl a klepnutím model umiestni.\nKlávesy: 1 spredu, 2 zozadu, 3 zboku, R východiskový pohľad.'));
+ $('helpBtn').addEventListener('click',()=>alert('Otáčanie: ťahaj myšou alebo jedným prstom.\nPriblíženie: koliesko myši, dva prsty alebo tlačidlá +/−.\nVýber: klikni na kosť, popisok alebo jej názov v zozname.\nPopisky: vpravo zapni/vypni názvy kostí, prípadne zvýš ich podrobnosť a tlačidlami Predošlé / Ďalšie prechádzaj sadami. Rovnaké sady sú aj v AR. V režime Precvičiť sa nezobrazujú.\nV režime Precvičiť hľadaj kosti podľa zadania.\nPresné anatomické dáta Écorché sa načítavajú cez internet, prípadne môžeš otvoriť vlastný súbor ecorche.glb. Nezobrazuje sa žiadna schematická náhrada.\nAR: otvor stránku cez HTTPS v Chrome na podporovanom Androide, stlač Spustiť AR, nasmeruj na stôl a klepnutím model umiestni.\nKlávesy: 1 spredu, 2 zozadu, 3 zboku, R východiskový pohľad.'));
  canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===1)drag={id:e.pointerId,x:e.clientX,y:e.clientY,px:e.clientX,py:e.clientY,moved:false};if(pointers.size===2){drag=null;const ps=[...pointers.values()];pinchLast=Math.hypot(ps[0].x-ps[1].x,ps[0].y-ps[1].y)}canvas.classList.add('dragging')});
  canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===2){const ps=[...pointers.values()],d=Math.hypot(ps[0].x-ps[1].x,ps[0].y-ps[1].y);if(pinchLast>0&&d>0)dist=Math.max(.23,Math.min(7,dist*pinchLast/d));pinchLast=d;needsDraw=true;return}if(!drag||e.pointerId!==drag.id)return;let dx=e.clientX-drag.px,dy=e.clientY-drag.py;if(Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y)>5)drag.moved=true;yaw-=dx*.009;pitch=Math.max(-1.34,Math.min(1.34,pitch+dy*.008));drag.px=e.clientX;drag.py=e.clientY;needsDraw=true});
  const end=e=>{if(!pointers.has(e.pointerId))return;let d=drag;pointers.delete(e.pointerId);drag=null;pinchLast=0;if(pointers.size===0)canvas.classList.remove('dragging');if(d&&d.id===e.pointerId&&!d.moved&&e.type==='pointerup'){let r=pick(e.clientX,e.clientY);if(r)choose(r)}};
