@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Kostra človeka · 3D a AR anatomický atlas</title>
+<html lang="sk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Kostra človeka · 3D, AR a vysvetlivky</title>
 <style>
 :root{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#e8edf7;background:#0b1220;--line:#29354c;--muted:#aab9ce;--accent:#60d6d6;--card:#151f31;--glass:#0b1523e8}
 *{box-sizing:border-box}body{margin:0;min-height:100svh}button,input,select{font:inherit}button{cursor:pointer;border:1px solid #34435e;border-radius:11px;background:#1a2b40;color:#eef4ff;padding:10px 13px;min-height:42px;transition:background .15s,border-color .15s}button:hover{background:#2b4561;border-color:#69d8d8}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #61d6d6;outline-offset:2px}button.active{background:#174a57;border-color:#62dad5;color:#cffff5}.ghost{background:transparent}.small{padding:7px 10px;min-height:36px;font-size:13px}.primary{background:#166a70;border-color:#3ec2ba}.primary:hover{background:#15808a}.brand{height:69px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 23px;border-bottom:1px solid var(--line);background:#111b2b}.brandTitle{display:flex;gap:12px;align-items:center}.emblem{width:41px;height:41px;border:1px solid #5b999e;border-radius:12px;display:grid;place-items:center;background:#18323c;font-size:25px;color:#e9dcbf}.brand h1{font-size:20px;font-weight:750;letter-spacing:.2px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:2px 0 0}.topright{display:flex;gap:9px;align-items:center}.tag{border:1px solid #40576e;background:#202d42;color:#c3def0;border-radius:99px;padding:5px 10px;font-size:11px}.layout{display:grid;grid-template-columns:300px minmax(0,1fr) 306px;min-height:calc(100svh - 69px)}.side{background:#111b2b;padding:20px 16px;overflow-y:auto;max-height:calc(100svh - 69px)}.left{border-right:1px solid var(--line)}.right{border-left:1px solid var(--line)}.sectName{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:#93abbf;margin:13px 0 9px;font-weight:800}.searchBox{display:flex;align-items:center;background:#0d1523;border:1px solid #3a4b65;border-radius:12px;padding:0 12px;gap:8px}.searchBox input{width:100%;border:0;background:transparent;color:#fff;outline:0;min-height:46px;min-width:0}.searchBox input:focus-visible{outline:0}.searchBox:focus-within{border-color:#6fe6d8;box-shadow:0 0 0 2px #60d6d629}.searchBox span{color:#90aac4}.regionButtons{display:grid;grid-template-columns:1fr 1fr;gap:7px}.regionButtons button{text-align:left;font-size:13px}.regionButtons button:first-child{grid-column:span 2}.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.grow{flex:1}.boneList{display:flex;flex-direction:column;gap:5px;max-height:calc(100svh - 410px);min-height:180px;overflow:auto;padding-right:2px}.boneList button{min-height:38px;font-size:13px;text-align:left;border:1px solid transparent;background:transparent;padding:8px;border-radius:7px}.boneList button:hover{background:#23364c}.boneList button.active{background:#19464d;border-color:#4dcaca}.listCount{color:#8da7bf;font-size:12px}.stage{position:relative;min-width:0;min-height:630px;overflow:hidden;background:radial-gradient(circle at 53% 41%,#283c50 0%,#132236 42%,#0d1729 79%)}#view{width:100%;height:100%;display:block;touch-action:none;cursor:grab;outline:none}#view.dragging{cursor:grabbing}.stageTop{position:absolute;z-index:2;left:18px;top:16px;right:18px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;pointer-events:none}.stageTop>*{pointer-events:auto}.status{border:1px solid #354964;background:#111e30dd;border-radius:12px;padding:9px 12px;max-width:320px;backdrop-filter:blur(8px);font-size:12px;color:#a8c6d8}.status strong{color:#e6f4ff;display:block;font-size:13px;margin-bottom:3px}.viewBtns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.viewBtns button{font-size:12px;padding:8px 11px;background:#111e30ef;min-height:34px}.stageBottom{position:absolute;z-index:2;left:16px;right:16px;bottom:15px;display:flex;justify-content:space-between;gap:12px;align-items:flex-end;pointer-events:none}.stageBottom>*{pointer-events:auto}.hint{background:#101f30de;color:#bed0df;font-size:12px;line-height:1.5;border:1px solid #31435c;padding:9px 12px;border-radius:11px;max-width:420px}.zoomBtns{display:flex;flex-direction:column;gap:6px}.zoomBtns button{background:#15273aee;font-size:19px;width:42px;height:42px;min-height:42px;padding:0}.eyebrow{letter-spacing:1px;color:#82c6c7;text-transform:uppercase;font-size:11px;font-weight:800}.infoName{font-size:26px;letter-spacing:-.5px;line-height:1.12;margin:9px 0}.infoEn{color:#9fb6cb;font-style:italic;font-size:13px;margin-top:6px}.info{color:#c4d1e0;line-height:1.55;font-size:15px}.panelCard{border:1px solid #34415c;border-radius:14px;padding:14px;background:#172438;margin-bottom:15px}.panelCard p{font-size:13px;color:#bdcfe0;line-height:1.55}.partBadge{display:inline-block;background:#233f51;border:1px solid #486a7b;padding:5px 9px;border-radius:99px;color:#b5ece3;font-size:12px}.div{height:1px;background:#2b3c53;margin:18px 0}.toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0;color:#dfebf7;font-size:14px}.toggle input{width:19px;height:19px;accent-color:#45c8c3}.quizQ{font-size:18px;font-weight:750;line-height:1.4;margin:12px 0}.quizFeedback{font-size:14px;line-height:1.5;min-height:18px;margin:9px 0}.good{color:#87f6c6}.bad{color:#ffad9f}.quizScore{color:#c9e6e4;font-size:13px}.notice{font-size:12px;color:#b8c9d8;border-left:3px solid #65c7bc;padding-left:10px;line-height:1.55}.fileBtn{display:block;text-align:center;background:#1b2e43;border:1px solid #40556d;border-radius:10px;padding:10px;margin-top:9px;cursor:pointer;font-size:13px}.fileBtn input{display:none}.fileBtn:hover{background:#29415a}.footer{font-size:11px;line-height:1.6;color:#a6b5c7;margin-top:18px}.footer a{color:#78d8de}#loader{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;pointer-events:auto;background:radial-gradient(circle at 50% 35%,#1e3645,#0b1726 72%);padding:20px}#loader .bubble{background:#152438;border:1px solid #45687c;padding:27px 25px;border-radius:18px;font-size:14px;box-shadow:0 12px 38px #080f2055;max-width:490px;width:min(100%,490px);text-align:center;color:#d9e6f2;line-height:1.55}#loader .bubble h2{font-size:22px;line-height:1.25;color:#fff;margin:8px 0 13px}.gateEyebrow{font-size:11px;letter-spacing:1.8px;font-weight:850;color:#76e0d8}.gateActions{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}.assetLink{display:inline-block;font-size:13px;color:#a5f4ec;text-decoration:underline;text-underline-offset:3px}.gateSmall{font-size:12px;color:#aebfd0;line-height:1.45;margin:18px 0 0}.spin{width:19px;height:19px;border:2px solid #5ab6c04c;border-top-color:#5ad9d2;border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 9px}@keyframes spin{to{transform:rotate(360deg)}}.hidden{display:none!important}.modeRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.modeRow button{font-size:14px}.legend{display:flex;gap:8px;flex-wrap:wrap;color:#aebcd0;font-size:12px;margin-top:10px}.legend span{display:flex;align-items:center;gap:6px}.dot{width:9px;height:9px;border-radius:50%;background:#d8c99f}.dot.a{background:#5ed2cf}.dot.b{background:#9abdd4}.onlyAlt{color:#ffe0a0;font-size:12px;margin:10px 0}.hintMobile{display:none}
@@ -29,6 +29,23 @@
 .arLegal{font-size:10px;text-align:center;color:#c7d7da}
 @media(max-width:610px){#launchAR{font-size:12px;padding:8px 10px;min-height:36px}.stageTop .viewBtns{width:100%;justify-content:center;gap:4px}.arControls{padding:9px 11px}.arHead{padding:10px 11px}.arBottom{gap:6px}.arCrosshair{font-size:43px}}
 @media(max-height:660px){.arCrosshair{font-size:29px}.arControls{gap:1px;padding:7px}.arLegal{display:none}.arBottom{gap:3px}}
+
+/* Popisky pripojené k reálnym 3D súradniciam konkrétnych kostí */
+.labelLayer{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.labelLines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.boneLabel{position:absolute;display:block;max-width:145px;min-height:29px;width:max-content;padding:5px 8px;border-radius:8px;background:#10263be8;border:1px solid #80b7c1cc;color:#eff9ff;font-size:12px;line-height:1.2;font-weight:700;text-align:center;box-shadow:0 2px 7px #0009;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;white-space:normal}
+.boneLabel:hover,.boneLabel:focus-visible{background:#155367;border-color:#8cfce2}
+.boneLabel.sel{background:#17695e;color:#fff;border:2px solid #8dffe1}
+.labelLines line{stroke:#78dcd6;stroke-width:1.5;stroke-opacity:.75}
+.labelLines circle{fill:#85f9e4;stroke:#11253c;stroke-width:1.5}
+.labelNote{font-size:12px;color:#abc7d1;line-height:1.4}
+#arLabelLayer{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#arLabelLayer .boneLabel{background:#092c3bea;max-width:118px;font-size:11px;min-height:30px;padding:6px 8px}
+#arLabelInfo{pointer-events:auto;align-self:center;max-width:min(95%,430px);padding:10px 13px;border:1px solid #6ed6cb;border-radius:12px;background:#081f2af2;font-size:13px;line-height:1.4;color:#efffff;text-align:center}
+#arLabelInfo strong{display:block;margin-bottom:3px;color:#9effe6}
+#arLabelsToggle{min-height:36px;font-size:12px}
+.labelToggleRow{display:flex;justify-content:space-between;align-items:center;gap:9px}
+@media(max-width:610px){.boneLabel{font-size:11px;max-width:112px;padding:4px 5px}.labelLines line{stroke-width:1.2}#arLabelLayer .boneLabel{max-width:105px;font-size:10px}}
 </style></head><body>
 <header class="brand"><div class="brandTitle"><div class="emblem" aria-hidden="true">♙</div><div><h1>Kostra človeka <span style="font-weight:400;color:#96b5c8">/ 3D + AR atlas</span></h1><p>Biológia · skutočná anatomická kostra v 3D aj v rozšírenej realite</p></div></div><div class="topright"><span class="tag">Gymnázium · anatómia</span><button class="ghost small" id="helpBtn" title="Ako ovládať model">? Návod</button></div></header>
 <main class="layout">
@@ -37,7 +54,7 @@
 <button data-region="all" class="active">◈ Celá kostra</button><button data-region="lebka">Lebka</button><button data-region="chrbtica">Chrbtica</button><button data-region="hrudnik">Hrudník</button><button data-region="horna">Horná končatina</button><button data-region="panva">Panva</button><button data-region="dolna">Dolná končatina</button></div>
 <div class="row" style="justify-content:space-between;margin-top:17px"><div class="sectName" style="margin:0">Kosti a štruktúry</div><span class="listCount" id="count">—</span></div><div id="boneList" class="boneList" aria-label="Zoznam kostí"></div>
 <div class="legend"><span><i class="dot"></i> Kosť</span><span><i class="dot a"></i> Výber</span><span><i class="dot b"></i> Chrupavka</span></div></aside>
-<section class="stage" aria-label="Interaktívny 3D model kostry"><canvas id="view" tabindex="0" aria-label="Kostra v 3D. Potiahnutím otáčajte, kolieskom približujte. Výber je možný aj cez zoznam vľavo."></canvas><div id="loader" class="loaderGate" role="status" aria-live="polite"><div class="bubble">
+<section class="stage" aria-label="Interaktívny 3D model kostry"><canvas id="view" tabindex="0" aria-label="Kostra v 3D. Potiahnutím otáčajte, kolieskom približujte. Výber je možný aj cez zoznam vľavo."></canvas><div id="labelLayer" class="labelLayer" aria-label="Vysvetlivky kostí"><svg id="labelLines" class="labelLines" aria-hidden="true"></svg><div id="labels3D"></div></div><div id="loader" class="loaderGate" role="status" aria-live="polite"><div class="bubble">
  <div class="spin" id="gateSpin"></div><div class="gateEyebrow">SKUTOČNÉ ANATOMICKÉ TVARY</div>
  <h2 id="gateTitle">Načítavam detailnú 3D kostru</h2>
  <p id="loadText">Kosti sa načítavajú z otvorených anatomických dát Écorché, BodyParts3D a Z-Anatomy. Môže to chvíľu trvať.</p>
@@ -50,6 +67,10 @@
 <div class="sectName" style="margin-top:0">Režim učenia</div><div class="modeRow"><button id="exploreBtn" class="active">Preskúmať</button><button id="quizBtn">Precvičiť</button></div>
 <div id="explorePanel"><div class="div"></div><div class="eyebrow" id="category">Anatomický atlas</div><h2 id="selectedName" class="infoName">Ľudská kostra</h2><div id="selectedEn" class="infoEn">Kostrová sústava</div><p id="selectedDesc" class="info">Kostra poskytuje oporu telu, chráni orgány a spolu so svalmi umožňuje pohyb. Dospelý človek má spravidla 206 kostí.</p><div id="selectedSide" class="partBadge">Vyber kostru alebo jej časť</div><div class="row" style="margin-top:14px"><button class="small" id="focusBtn">◎ Priblížiť výber</button><button class="small" id="isolateBtn">◉ Zobraziť iba výber</button></div></div>
 <div id="quizPanel" class="hidden"><div class="div"></div><div class="eyebrow">Ukáž správnu kosť</div><div id="quizQuestion" class="quizQ">Klikni na požadovanú kosť v modeli.</div><p class="quizFeedback" id="quizFeedback">Vyber kosť kliknutím alebo v zozname.</p><div class="row"><button class="primary" id="nextQuestion">Ďalšia otázka →</button><span class="quizScore" id="quizScore">0 / 0</span></div><p class="notice">Po nesprávnej odpovedi môžeš skúsiť vybrať inú kosť. Správna odpoveď sa zobrazí až po kliknutí.</p></div>
+<div class="div"></div><div class="sectName">Vysvetlivky v modeli</div>
+<label class="toggle"><span>Zobrazovať názvy priamo pri kostiach</span><input id="showLabels" type="checkbox" checked></label>
+<label for="labelDensity" class="toggle"><span>Počet popiskov</span><select id="labelDensity" style="max-width:130px;background:#1b2f44;color:#efffff;border:1px solid #49647a;border-radius:8px;padding:7px"><option value="main">Hlavné kosti</option><option value="more">Podrobnejšie</option></select></label>
+<div class="labelNote" id="labelNote">Názvy ukazujú na konkrétne anatomické kosti. Kliknutím na popisok zobrazíš vysvetlenie. Pri precvičovaní sa popisky automaticky skryjú.</div>
 <div class="div"></div><div class="sectName">Zobrazenie</div><label class="toggle"><span>Zobraziť chrupavky</span><input id="cartilage" type="checkbox" checked></label><label class="toggle"><span>Automaticky otáčať</span><input id="autospin" type="checkbox"></label><label class="toggle"><span>Zvýrazniť vybranú oblasť</span><input id="dimOthers" type="checkbox"></label><button id="showAll" class="small" style="width:100%;margin-top:5px">Obnoviť všetky časti</button>
 <div class="div"></div><div class="sectName">Kostra v rozšírenej realite</div>
 <div id="arExplanation" class="notice">Na podporovanom Androide otvor túto stránku cez HTTPS (napríklad GitHub Pages) v prehliadači Chrome. Po načítaní kostry stlač <strong>Spustiť AR</strong>, namier kameru na stôl a ťuknutím kostru umiestni. V AR môžeš meniť mierku a natočenie. Ak AR nie je dostupné, 3D atlas funguje ďalej.</div>
@@ -63,10 +84,12 @@
     <div class="arHeadline"><strong>AR · Anatomická kostra</strong><span id="arStatus" aria-live="polite">Hľadaj vodorovný povrch, napríklad stôl.</span></div>
     <button id="arExit" type="button" class="arExit">✕ Koniec AR</button>
   </div>
-  <div class="arCrosshair" id="arCrosshair" aria-hidden="true">⌖</div>
+  <div class="arCrosshair" id="arCrosshair" aria-hidden="true">⌖</div><div id="arLabelLayer" aria-label="Názvy kostí v AR"><svg id="arLabelLines" class="labelLines" aria-hidden="true"></svg><div id="arLabels"></div></div>
   <div class="arBottom">
+    <div id="arLabelInfo" class="hidden" role="status" aria-live="polite"></div>
     <div class="arHelp" id="arHelp">Pomaly pohybuj mobilom nad stolom. Po zobrazení zameriavacieho kruhu ťukni do obrazu.</div>
     <div class="arControls">
+      <div class="labelToggleRow"><span style="font-size:13px;font-weight:700">Názvy kostí</span><button type="button" id="arLabelsToggle">Skryť popisky</button></div>
       <label for="arSize">Veľkosť kostry <strong id="arSizeLabel">25 % · približne 44 cm</strong></label>
       <input id="arSize" type="range" min="0.15" max="1" step="0.05" value="0.25" aria-label="Mierka kostry v AR">
       <label for="arAngle">Natočenie <strong id="arAngleLabel">0°</strong></label>
@@ -86,6 +109,7 @@ const GLB_URLS=[
 ];
 let gl,prog,pickProg,fb=null,depthRb=null,colorTex=null,records=[],selected=null,region='all',mode='explore',isolate=false,auto=false,hideCartilage=false,dimOthers=false,usingDetailed=false,loading=true;
 let xrSession=null,xrRefSpace=null,xrHitSource=null,arHitPoint=null,arAnchorPoint=null,arPlaced=false,arScale=0.25,arAngle=0,arMarker=null,arStatusKey='',arBusy=false;
+let showLabels=true,labelDensity='main',lastArLabelsAt=0,last3DLabelsAt=0;
 let yaw=0,pitch=.055,dist=2.55,target=[0,.91,0],drag=null,pointers=new Map(),pinchLast=0,needsDraw=true,activeQuestion=null,quizCorrect=0,quizTotal=0,asked=[], lastTime=0;
 const REGION_NAMES={all:'Celá kostra',lebka:'Lebka',chrbtica:'Chrbtica',hrudnik:'Hrudník',horna:'Horná končatina',panva:'Panva',dolna:'Dolná končatina'};
 const SIDE_NAMES={left:'ľavá',right:'pravá',midline:'stredová'};
@@ -165,21 +189,134 @@ function drawMesh(g,p,mat){const a=g.attrs;if(a){bindAttr(p.loc.pos,a.pos,3,[0,0
  if(g.ib){gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,g.ib);gl.drawElements(gl.TRIANGLES,g.count,g.type,g.indOffset)}else gl.drawArrays(gl.TRIANGLES,0,g.count)}
 function render(picking=false){if(!gl)return;resizeCanvas();let W=canvas.width,H=canvas.height;gl.bindFramebuffer(gl.FRAMEBUFFER,picking?fb:null);gl.viewport(0,0,W,H);if(!picking){gl.clearColor(.049,.091,.152,1)}else gl.clearColor(0,0,0,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);const eye=[target[0]+dist*Math.sin(yaw)*Math.cos(pitch),target[1]+dist*Math.sin(pitch),target[2]+dist*Math.cos(yaw)*Math.cos(pitch)],V=matLook(eye,target),P=matPerspective(.72,W/H,.01,40),pr=picking?pickProg:prog;gl.useProgram(pr);gl.uniformMatrix4fv(pr.loc.P,false,new Float32Array(P));gl.uniformMatrix4fv(pr.loc.V,false,new Float32Array(V));
  for(const record of records){if(!isVisible(record))continue;let highlight=record===selected,id=record.id; if(picking)gl.uniform3f(pr.loc.id,(id&255)/255,((id>>8)&255)/255,((id>>16)&255)/255);else{let col=record.tissue==='cartilage'?[.61,.75,.83]:record.tissue==='tooth'?[.98,.95,.85]:[.95,.88,.75];gl.uniform3fv(pr.loc.tint,col);gl.uniform1f(pr.loc.hi,highlight?1:0);gl.uniform1f(pr.loc.dim,dimOthers&&region!=='all'&&record.region!==region?1:0)}
- for(const part of record.meshes){gl.uniformMatrix4fv(pr.loc.M,false,new Float32Array(part.model));drawMesh(part.geo,pr,part.model)}}gl.bindFramebuffer(gl.FRAMEBUFFER,null);needsDraw=false}
+ for(const part of record.meshes){gl.uniformMatrix4fv(pr.loc.M,false,new Float32Array(part.model));drawMesh(part.geo,pr,part.model)}}gl.bindFramebuffer(gl.FRAMEBUFFER,null);needsDraw=false;if(!picking)drawLabels3D()}
 function isVisible(r){if(isolate&&selected&&r!==selected)return false;if(region!=='all'&&r.region!==region&&!dimOthers)return false;if(hideCartilage&&r.tissue==='cartilage')return false;return true}
 function resizeCanvas(){let rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,1.75),w=Math.max(2,Math.floor(rect.width*dpr)),h=Math.max(2,Math.floor(rect.height*dpr));if(w===canvas.width&&h===canvas.height)return;canvas.width=w;canvas.height=h;needsDraw=true;if(!gl)return;if(fb){gl.deleteFramebuffer(fb);gl.deleteTexture(colorTex);gl.deleteRenderbuffer(depthRb)}fb=gl.createFramebuffer();gl.bindFramebuffer(gl.FRAMEBUFFER,fb);colorTex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,colorTex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);depthRb=gl.createRenderbuffer();gl.bindRenderbuffer(gl.RENDERBUFFER,depthRb);gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT16,w,h);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,colorTex,0);gl.framebufferRenderbuffer(gl.FRAMEBUFFER,gl.DEPTH_ATTACHMENT,gl.RENDERBUFFER,depthRb);gl.bindFramebuffer(gl.FRAMEBUFFER,null)}
 function pick(clientX,clientY){if(!gl)return null;let r=canvas.getBoundingClientRect();render(true);let pix=new Uint8Array(4),x=Math.max(0,Math.min(canvas.width-1,Math.floor((clientX-r.left)/r.width*canvas.width))),y=Math.max(0,Math.min(canvas.height-1,Math.floor((1-(clientY-r.top)/r.height)*canvas.height)));gl.bindFramebuffer(gl.FRAMEBUFFER,fb);gl.readPixels(x,y,1,1,gl.RGBA,gl.UNSIGNED_BYTE,pix);gl.bindFramebuffer(gl.FRAMEBUFFER,null);needsDraw=true;let id=pix[0]+(pix[1]<<8)+(pix[2]<<16);return records.find(r=>r.id===id)||null}
+
+// Názvy sú vždy viazané na konkrétny pomenovaný objekt anatomického GLB.
+// Hlavné kosti dostanú prednosť, aby štítky nezahltili model.
+const LABEL_LANDMARKS=[
+ [/frontal/i,'Čelová kosť','right'],[/mandible/i,'Sánka','left'],
+ [/clavicle/i,'Kľúčna kosť','left'],[/scapula/i,'Lopatka','right'],
+ [/sternum/i,'Hrudná kosť','left'],[/rib/i,'Rebro','right'],
+ [/cervical vertebra|atlas/i,'Krčný stavec','right'],[/thoracic vertebra/i,'Hrudný stavec','left'],
+ [/lumbar vertebra/i,'Driekový stavec','right'],[/sacrum/i,'Krížová kosť','right'],
+ [/hip bone|os coxae|ilium/i,'Panvová kosť','left'],
+ [/humerus/i,'Ramenná kosť','right'],[/radius/i,'Vretenná kosť','left'],
+ [/ulna/i,'Lakťová kosť','right'],[/\bcarpal\b/i,'Zápästná kosť','left'],
+ [/\bmetacarpal\b/i,'Záprstná kosť','right'],
+ [/femur/i,'Stehenná kosť','left'],[/patella/i,'Jabĺčko','right'],
+ [/tibia/i,'Píšťala','left'],[/fibula/i,'Ihlica','right'],
+ [/talus/i,'Členková kosť','left'],[/calcaneus/i,'Pätová kosť','right']
+];
+function chosenLabels(max){
+ if(!showLabels||mode==='quiz'||!records.length)return [];
+ const visible=records.filter(isVisible), out=[],used=new Set();
+ if(selected&&isVisible(selected)){out.push({rec:selected,label:selected.name,active:true});used.add(selected.id)}
+ for(const [rx,label,preferredSide] of LABEL_LANDMARKS){
+  const options=visible.filter(r=>rx.test(r.en)&&r.tissue!=='cartilage'&&!used.has(r.id));
+  if(!options.length)continue;
+  options.sort((a,b)=>Number(b.side===preferredSide)-Number(a.side===preferredSide));
+  const rec=options[0];out.push({rec,label,active:false});used.add(rec.id);
+ }
+ if(labelDensity==='more'){
+  for(const rec of visible){if(used.has(rec.id)||rec.tissue==='cartilage')continue;
+   const base=rec.name.replace(/ \(ľavá\)| \(pravá\)/g,'');
+   if(out.some(x=>x.label===base))continue;
+   out.push({rec,label:base,active:false});used.add(rec.id);if(out.length>=max*3)break;
+  }
+ }
+ // Vybraný objekt má absolútnu prioritu. Pri celej kostre rozložiť
+ // popisky na výšku; pri vybranej oblasti použiť jej vlastné kosti.
+ if(out.length<=max)return out;
+ const keep=[out[0].active?out[0]:null].filter(Boolean),remaining=out.filter(x=>!keep.includes(x));
+ if(region!=='all'){
+  remaining.sort((a,b)=>b.rec.center[1]-a.rec.center[1]);
+  const count=max-keep.length;const chosen=[];
+  for(let i=0;i<count;i++){const idx=Math.floor((i+.5)*remaining.length/count);if(remaining[idx]&&!chosen.includes(remaining[idx]))chosen.push(remaining[idx])}
+  return [...keep,...chosen];
+ }
+ // Približne rovnomerná vzorka z hlavy, trupu a končatín.
+ remaining.sort((a,b)=>b.rec.center[1]-a.rec.center[1]);
+ const count=max-keep.length,chosen=[];
+ for(let i=0;i<count;i++){const idx=Math.min(remaining.length-1,Math.floor((i+.5)*remaining.length/count));if(remaining[idx]&&!chosen.includes(remaining[idx]))chosen.push(remaining[idx])}
+ return [...keep,...chosen];
+}
+function multiplyPoint(m,p){const x=p[0],y=p[1],z=p[2];return [m[0]*x+m[4]*y+m[8]*z+m[12],m[1]*x+m[5]*y+m[9]*z+m[13],m[2]*x+m[6]*y+m[10]*z+m[14],m[3]*x+m[7]*y+m[11]*z+m[15]]}
+function screenPoint(projection,view,point,w,h){const clip=multiplyPoint(projection,multiplyPoint(view,point));if(!Number.isFinite(clip[3])||clip[3]<.01)return null;const nx=clip[0]/clip[3],ny=clip[1]/clip[3],nz=clip[2]/clip[3];if(Math.abs(nx)>1.08||Math.abs(ny)>1.08||nz< -1.02||nz>1.02)return null;return {x:(nx+1)*.5*w,y:(1-ny)*.5*h,z:nz}}
+function clearLabelLayer(layerId,svgId){$(layerId).replaceChildren();$(svgId).replaceChildren()}
+function layoutLabels(points,w,h,ar=false){
+ const left=points.filter(p=>p.x<w*.50).sort((a,b)=>a.y-b.y),right=points.filter(p=>p.x>=w*.50).sort((a,b)=>a.y-b.y);
+ const result=[],small=w<460;
+ const container=(ar?$('arOverlay'):$('labelLayer')).getBoundingClientRect();
+ const head=(ar?$('arOverlay').querySelector('.arHead'):$('labelLayer').parentElement.querySelector('.stageTop')).getBoundingClientRect();
+ const foot=(ar?$('arOverlay').querySelector('.arBottom'):$('labelLayer').parentElement.querySelector('.stageBottom')).getBoundingClientRect();
+ const top=Math.min(h-150,Math.max(ar?120:70,head.bottom-container.top+18));
+ const bottom=Math.max(ar?175:95,container.bottom-foot.top+29);
+ const pad=ar?(small?50:65):(small?62:84),gap=small?42:39;
+ for(const [side,items] of [['left',left],['right',right]]){
+  const x=side==='left'?pad:w-pad;
+  let last=top-gap;
+  for(const it of items){
+   const y=Math.max(top,Math.min(h-bottom,it.y));
+   const placedY=Math.max(last+gap,y);
+   if(placedY>h-bottom){
+     if(it.entry.active){let drop=-1;for(let k=result.length-1;k>=0;k--)if(result[k].side===side){drop=k;break;}if(drop>=0)result.splice(drop,1);result.push({...it,side,atX:x,atY:h-bottom});}
+     continue;
+   }
+   result.push({...it,side,atX:x,atY:placedY});last=placedY;
+  }
+ }
+ return result;
+}
+function paintLabels(layerId,svgId,points,w,h,ar=false){
+ const host=$(layerId),lines=$(svgId);host.replaceChildren();lines.replaceChildren();
+ if(!points.length)return;
+ lines.setAttribute('viewBox',`0 0 ${w} ${h}`);lines.setAttribute('preserveAspectRatio','none');
+ const ns='http://www.w3.org/2000/svg';
+ for(const p of layoutLabels(points,w,h,ar)){
+  const ln=document.createElementNS(ns,'line');ln.setAttribute('x1',p.x);ln.setAttribute('y1',p.y);ln.setAttribute('x2',p.atX);ln.setAttribute('y2',p.atY);lines.appendChild(ln);
+  const dot=document.createElementNS(ns,'circle');dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);dot.setAttribute('r',p.entry.active?4:3);lines.appendChild(dot);
+  const b=document.createElement('button');b.type='button';b.className='boneLabel'+(p.entry.active?' sel':'');b.textContent=p.entry.label;b.title='Vybrať: '+p.entry.rec.name;b.style.left=p.atX+'px';b.style.top=p.atY+'px';
+  b.addEventListener('click',()=>{choose(p.entry.rec);if(ar){$('arLabelInfo').replaceChildren();const strong=document.createElement('strong');strong.textContent=p.entry.rec.name;const txt=document.createTextNode(p.entry.rec.description);$('arLabelInfo').append(strong,txt);$('arLabelInfo').classList.remove('hidden');}});
+  if(ar)b.addEventListener('beforexrselect',ev=>ev.preventDefault());
+  host.appendChild(b);
+ }
+}
+function drawLabels3D(){
+ const now=performance.now();if(now-last3DLabelsAt<30)return;last3DLabelsAt=now;
+ const w=canvas.clientWidth,h=canvas.clientHeight;
+ if(!records.length||!showLabels||mode==='quiz'||xrSession||w<20||h<20){clearLabelLayer('labels3D','labelLines');return;}
+ const eye=[target[0]+dist*Math.sin(yaw)*Math.cos(pitch),target[1]+dist*Math.sin(pitch),target[2]+dist*Math.cos(yaw)*Math.cos(pitch)];
+ const V=matLook(eye,target),P=matPerspective(.72,w/h,.01,40);
+ const max=w<420?7:w<640?11:16;
+ const points=chosenLabels(max).map(entry=>{const p=screenPoint(P,V,entry.rec.center,w,h);return p&&{...p,entry}}).filter(Boolean);
+ paintLabels('labels3D','labelLines',points,w,h);
+}
+function drawLabelsAR(view,t){
+ if(t-lastArLabelsAt<85)return;lastArLabelsAt=t;
+ if(!showLabels||!arPlaced||!arAnchorPoint||mode==='quiz') {clearLabelLayer('arLabels','arLabelLines');return;}
+ const w=$('arOverlay').clientWidth,h=$('arOverlay').clientHeight;
+ if(!w||!h)return;
+ const max=w<440?6:9,base=arWorldMatrix(arAnchorPoint);
+ const points=chosenLabels(max).map(entry=>{const world=tp(base,entry.rec.center),p=screenPoint(view.projectionMatrix,view.transform.inverse.matrix,world,w,h);return p&&{...p,entry}}).filter(Boolean);
+ paintLabels('arLabels','arLabelLines',points,w,h,true);
+}
+function refreshLabels(){last3DLabelsAt=0;lastArLabelsAt=0;needsDraw=true;if(!showLabels||mode==='quiz'){clearLabelLayer('labels3D','labelLines');clearLabelLayer('arLabels','arLabelLines');$('arLabelInfo').classList.add('hidden');}}
+function refreshArLabelControl(){$('arLabelsToggle').textContent=showLabels?'Skryť popisky':'Zobraziť popisky';$('arLabelsToggle').setAttribute('aria-pressed',String(showLabels));$('showLabels').checked=showLabels;refreshLabels()}
+
 function updateStatus(msg,type){$('status').innerHTML='<strong>'+type+'</strong>'+msg}
 function updateList(){let q=$('search').value.trim().toLocaleLowerCase('sk'),items=records.filter(r=>(region==='all'||r.region===region)&&(r.name.toLocaleLowerCase('sk').includes(q)||r.en.toLowerCase().includes(q))).sort((a,b)=>a.name.localeCompare(b.name,'sk'));$('count').textContent=items.length+' položiek';let box=$('boneList');box.replaceChildren();const frag=document.createDocumentFragment();for(let r of items.slice(0,180)){let b=document.createElement('button');b.textContent=r.name;b.className=r===selected?'active':'';b.addEventListener('click',()=>choose(r));frag.appendChild(b)}box.appendChild(frag);if(items.length>180){let e=document.createElement('div');e.className='listCount';e.textContent='Zobrazuje sa prvých 180 výsledkov. Spresni vyhľadávanie.';box.appendChild(e)}}
-function choose(r){if(!r)return;selected=r;isolate=false;$('isolateBtn').textContent='◉ Zobraziť iba výber';if(mode==='quiz'){checkQuiz(r)}else showInfo(r);updateList();needsDraw=true}
+function choose(r){if(!r)return;selected=r;isolate=false;$('isolateBtn').textContent='◉ Zobraziť iba výber';if(mode==='quiz'){checkQuiz(r)}else showInfo(r);updateList();refreshLabels()}
 function showInfo(r){$('category').textContent=REGION_NAMES[r.region];$('selectedName').textContent=r.name;$('selectedEn').textContent=r.en;$('selectedDesc').textContent=r.description;$('selectedSide').textContent=r.side==='left'?'Ľavá strana tela':r.side==='right'?'Pravá strana tela':'Stredová štruktúra'}
 function centerOn(r){if(!r)return;target=[...r.center];dist=.65;if(/(femur|tibia|humerus|radius|ulna|panv)/i.test(r.en))dist=1.06;else if(/(rib|scapula|sternum)/i.test(r.en))dist=.95;else if(/(phal|carpal|tarsal)/i.test(r.en))dist=.37;yaw=0;pitch=.05;needsDraw=true}
-function setRegion(r){region=r;isolate=false;selected=null;document.querySelectorAll('#regions button').forEach(b=>b.classList.toggle('active',b.dataset.region===r));$('dimOthers').checked=false;dimOthers=false;target=[0,r==='lebka'?1.64:r==='chrbtica'?1.3:r==='hrudnik'?1.38:r==='horna'?1.26:r==='panva'?1.01:r==='dolna'?.48:.91,0];dist=r==='all'?2.55:r==='lebka'?.63:r==='chrbtica'?1.27:r==='hrudnik'?1.12:r==='horna'?1.52:r==='panva'?.83:1.4;showIntro();updateList();needsDraw=true}
+function setRegion(r){region=r;isolate=false;selected=null;document.querySelectorAll('#regions button').forEach(b=>b.classList.toggle('active',b.dataset.region===r));$('dimOthers').checked=false;dimOthers=false;target=[0,r==='lebka'?1.64:r==='chrbtica'?1.3:r==='hrudnik'?1.38:r==='horna'?1.26:r==='panva'?1.01:r==='dolna'?.48:.91,0];dist=r==='all'?2.55:r==='lebka'?.63:r==='chrbtica'?1.27:r==='hrudnik'?1.12:r==='horna'?1.52:r==='panva'?.83:1.4;showIntro();updateList();refreshLabels()}
 function showIntro(){$('category').textContent=region==='all'?'Anatomický atlas':REGION_NAMES[region];$('selectedName').textContent=region==='all'?'Ľudská kostra':REGION_NAMES[region];$('selectedEn').textContent='Vyber kosť kliknutím';$('selectedDesc').textContent='Otáčaj 3D model, približuj detaily a klikni na konkrétnu kosť. Zoznam vľavo umožňuje výber aj bez presného klikania.';$('selectedSide').textContent='Interaktívny 3D model'}
 const quizSpecs=[[/femur|stehenn/i,'Stehennú kosť'],[/humerus|ramenná kosť/i,'Ramennú kosť'],[/tibia|píšťal/i,'Píšťalu'],[/fibula|ihlic/i,'Ihlicu'],[/patella|jabĺčk/i,'Jabĺčko'],[/radius|vretenn/i,'Vretennú kosť'],[/ulna|lakťov/i,'Lakťovú kosť'],[/clavicle|kľúčov/i,'Kľúčnu kosť'],[/scapula|lopatk/i,'Lopatku'],[/sternum|hrudná kosť/i,'Hrudnú kosť'],[/mandible|sánk/i,'Sánku'],[/sacrum|krížov/i,'Krížovú kosť'],[/coccyx|kostrč/i,'Kostrč'],[/calcaneus|pätov/i,'Pätovú kosť'],[/atlas|nosič/i,'Nosič (C1)']];
-function newQuestion(){const choices=quizSpecs.filter(([rx])=>records.some(r=>rx.test(r.en))&&!asked.some(i=>quizSpecs[i][0].source===rx.source));if(!choices.length)asked=[];const pool=quizSpecs.map((v,i)=>({v,i})).filter(({v,i})=>!asked.includes(i)&&records.some(r=>v[0].test(r.en)));if(!pool.length){$('quizQuestion').textContent='V aktuálnom modeli nie sú dostupné otázky.';return}const take=pool[Math.floor(Math.random()*pool.length)];asked.push(take.i);activeQuestion=take.v;$('quizQuestion').textContent='Nájdi: '+take.v[1]+'.';$('quizFeedback').textContent='Klikni na správnu kosť v modeli alebo v zozname.';$('quizFeedback').className='quizFeedback';selected=null;isolate=false;region='all';document.querySelectorAll('#regions button').forEach(b=>b.classList.toggle('active',b.dataset.region==='all'));target=[0,.91,0];dist=2.55;yaw=0;pitch=.055;updateList();needsDraw=true}
+function newQuestion(){const choices=quizSpecs.filter(([rx])=>records.some(r=>rx.test(r.en))&&!asked.some(i=>quizSpecs[i][0].source===rx.source));if(!choices.length)asked=[];const pool=quizSpecs.map((v,i)=>({v,i})).filter(({v,i})=>!asked.includes(i)&&records.some(r=>v[0].test(r.en)));if(!pool.length){$('quizQuestion').textContent='V aktuálnom modeli nie sú dostupné otázky.';return}const take=pool[Math.floor(Math.random()*pool.length)];asked.push(take.i);activeQuestion=take.v;$('quizQuestion').textContent='Nájdi: '+take.v[1]+'.';$('quizFeedback').textContent='Klikni na správnu kosť v modeli alebo v zozname.';$('quizFeedback').className='quizFeedback';selected=null;isolate=false;region='all';document.querySelectorAll('#regions button').forEach(b=>b.classList.toggle('active',b.dataset.region==='all'));target=[0,.91,0];dist=2.55;yaw=0;pitch=.055;updateList();refreshLabels()}
 function checkQuiz(r){if(!activeQuestion)return;let success=activeQuestion[0].test(r.en);if(success){quizCorrect++;quizTotal++;$('quizFeedback').textContent='Správne! '+r.name+'.';$('quizFeedback').className='quizFeedback good';activeQuestion=null}else{$('quizFeedback').textContent='To je '+r.name+'. Skús inú kosť.';$('quizFeedback').className='quizFeedback bad'}$('quizScore').textContent=quizCorrect+' / '+quizTotal}
-function setMode(m){if(m==='quiz'&&!records.length){updateStatus('Najskôr je potrebné načítať skutočnú anatomickú kostru.','Model sa ešte nenačítal');return}mode=m;$('explorePanel').classList.toggle('hidden',mode!=='explore');$('quizPanel').classList.toggle('hidden',mode!=='quiz');$('exploreBtn').classList.toggle('active',mode==='explore');$('quizBtn').classList.toggle('active',mode==='quiz');if(mode==='quiz'){asked=[];quizCorrect=0;quizTotal=0;$('quizScore').textContent='0 / 0';newQuestion()}else{activeQuestion=null;showIntro()}needsDraw=true}
+function setMode(m){if(m==='quiz'&&!records.length){updateStatus('Najskôr je potrebné načítať skutočnú anatomickú kostru.','Model sa ešte nenačítal');return}mode=m;$('explorePanel').classList.toggle('hidden',mode!=='explore');$('quizPanel').classList.toggle('hidden',mode!=='quiz');$('exploreBtn').classList.toggle('active',mode==='explore');$('quizBtn').classList.toggle('active',mode==='quiz');if(mode==='quiz'){asked=[];quizCorrect=0;quizTotal=0;$('quizScore').textContent='0 / 0';newQuestion()}else{activeQuestion=null;showIntro()}refreshLabels()}
 function gate(text,title='Načítavam detailnú 3D kostru',isError=false){
  $('loader').classList.remove('hidden');$('gateTitle').textContent=title;$('loadText').textContent=text;
  $('gateSpin').classList.toggle('hidden',isError);$('retryModel').classList.toggle('hidden',!isError);
@@ -255,8 +392,9 @@ function arRenderFrame(t,frame){
    }
  }
  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+ if(anchor&&pose.views[0])drawLabelsAR(pose.views[0],t);else clearLabelLayer('arLabels','arLabelLines');
 }
-function arSessionEnded(){xrSession=null;xrRefSpace=null;xrHitSource?.cancel?.();xrHitSource=null;arHitPoint=null;arAnchorPoint=null;arPlaced=false;arBusy=false;arStatusKey='';$('arOverlay').classList.add('hidden');$('launchAR').textContent='◈ Spustiť AR';arSetStatus('search','Hľadaj vodorovný povrch.');needsDraw=true;updateStatus('AR bolo ukončené. Znovu môžeš otáčať a skúmať 3D model.','Späť v 3D atlase')}
+function arSessionEnded(){xrSession=null;xrRefSpace=null;xrHitSource?.cancel?.();xrHitSource=null;arHitPoint=null;arAnchorPoint=null;arPlaced=false;arBusy=false;arStatusKey='';$('arOverlay').classList.add('hidden');clearLabelLayer('arLabels','arLabelLines');$('arLabelInfo').classList.add('hidden');$('launchAR').textContent='◈ Spustiť AR';arSetStatus('search','Hľadaj vodorovný povrch.');needsDraw=true;updateStatus('AR bolo ukončené. Znovu môžeš otáčať a skúmať 3D model.','Späť v 3D atlase')}
 async function startAR(){if(arBusy||xrSession)return;
  if(!records.length){arMessage('Najprv sa musí načítať anatomická kostra. Použi internet alebo načítaj súbor ecorche.glb.');return}
  if(!window.isSecureContext){arMessage('AR potrebuje zabezpečenú stránku HTTPS. Nahraj HTML na GitHub Pages a otvor ju v mobile.');return}
@@ -268,7 +406,7 @@ async function startAR(){if(arBusy||xrSession)return;
   s=await navigator.xr.requestSession('immersive-ar',{requiredFeatures:['hit-test','dom-overlay'],domOverlay:{root:$('arOverlay')}});
   await gl.makeXRCompatible();s.updateRenderState({baseLayer:new XRWebGLLayer(s,gl,{alpha:true,antialias:true,depth:true})});
   xrRefSpace=await s.requestReferenceSpace('local');const viewer=await s.requestReferenceSpace('viewer');xrHitSource=await s.requestHitTestSource({space:viewer});
-  xrSession=s;arPlaced=false;arAnchorPoint=null;arHitPoint=null;arStatusKey='';arSetStatus('search','Hľadám vodorovný povrch.');
+  xrSession=s;$('arLabelInfo').classList.add('hidden');refreshArLabelControl();arPlaced=false;arAnchorPoint=null;arHitPoint=null;arStatusKey='';arSetStatus('search','Hľadám vodorovný povrch.');
   s.addEventListener('select',()=>{if(!arPlaced&&arHitPoint){arAnchorPoint=[...arHitPoint];arPlaced=true;arSetStatus('placed','Kostra bola umiestnená na povrch.')}});
   s.addEventListener('end',arSessionEnded,{once:true});
   s.requestAnimationFrame(arRenderFrame);$('launchAR').textContent='◈ AR je spustené';$('arNotice').textContent='';
@@ -278,12 +416,15 @@ async function startAR(){if(arBusy||xrSession)return;
 }
 $('launchAR').addEventListener('click',startAR);
 $('arExit').addEventListener('click',()=>xrSession?.end());
-$('arMove').addEventListener('click',()=>{if(!xrSession)return;arPlaced=false;arAnchorPoint=null;arSetStatus('search','Hľadaj nový povrch pre kostru.');});
+$('arMove').addEventListener('click',()=>{if(!xrSession)return;arPlaced=false;arAnchorPoint=null;clearLabelLayer('arLabels','arLabelLines');$('arLabelInfo').classList.add('hidden');arSetStatus('search','Hľadaj nový povrch pre kostru.');});
 $('arReset').addEventListener('click',()=>{arScale=.25;arAngle=0;$('arSize').value=arScale;$('arAngle').value=0;arScaleLabel();$('arAngleLabel').textContent='0°'});
 $('arSize').addEventListener('input',e=>{arScale=Math.max(.15,Math.min(1,Number(e.target.value)));arScaleLabel()});
 $('arAngle').addEventListener('input',e=>{arAngle=Number(e.target.value)*Math.PI/180;$('arAngleLabel').textContent=e.target.value+'°'});
+$('showLabels').addEventListener('change',e=>{showLabels=e.target.checked;refreshArLabelControl()});
+$('labelDensity').addEventListener('change',e=>{labelDensity=e.target.value;refreshLabels()});
+$('arLabelsToggle').addEventListener('click',()=>{showLabels=!showLabels;refreshArLabelControl()});
 // Dotyky na ovládacích prvkoch nesmú umiestniť model.
-for(const el of $('arOverlay').querySelectorAll('button,input'))el.addEventListener('beforexrselect',e=>e.preventDefault());
+for(const el of $('arOverlay').querySelectorAll('button,input,#arLabelInfo'))el.addEventListener('beforexrselect',e=>e.preventDefault());
 arButtonState();arScaleLabel();
 if(glInit()){
  records=[];updateList();setMode('explore');requestAnimationFrame(animate);loadRemote();
@@ -297,7 +438,7 @@ if(glInit()){
  $('focusBtn').addEventListener('click',()=>centerOn(selected));$('isolateBtn').addEventListener('click',()=>{if(!selected)return;isolate=!isolate;$('isolateBtn').textContent=isolate?'◉ Zobraziť celú oblasť':'◉ Zobraziť iba výber';needsDraw=true});
  $('plus').addEventListener('click',()=>{dist=Math.max(.23,dist*.8);needsDraw=true});$('minus').addEventListener('click',()=>{dist=Math.min(7,dist*1.25);needsDraw=true});
  document.querySelectorAll('.viewBtns button').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.view;if(v==='front')yaw=0;if(v==='back')yaw=Math.PI;if(v==='side')yaw=Math.PI/2;if(v==='reset'){yaw=0;pitch=.055;dist=2.55;target=[0,.91,0]}document.querySelectorAll('.viewBtns button').forEach(x=>x.classList.toggle('active',x===b));needsDraw=true}));
- $('helpBtn').addEventListener('click',()=>alert('Otáčanie: ťahaj myšou alebo jedným prstom.\nPriblíženie: koliesko myši, dva prsty alebo tlačidlá +/−.\nVýber: klikni na kosť alebo jej názov v zozname.\nV režime Precvičiť hľadaj kosti podľa zadania.\nPresné anatomické dáta Écorché sa načítavajú cez internet, prípadne môžeš otvoriť vlastný súbor ecorche.glb. Nezobrazuje sa žiadna schematická náhrada.\nAR: otvor stránku cez HTTPS v Chrome na podporovanom Androide, stlač Spustiť AR, nasmeruj na stôl a klepnutím model umiestni.\nKlávesy: 1 spredu, 2 zozadu, 3 zboku, R východiskový pohľad.'));
+ $('helpBtn').addEventListener('click',()=>alert('Otáčanie: ťahaj myšou alebo jedným prstom.\nPriblíženie: koliesko myši, dva prsty alebo tlačidlá +/−.\nVýber: klikni na kosť, popisok alebo jej názov v zozname.\nPopisky: vpravo zapni/vypni názvy kostí, prípadne zvýš ich podrobnosť. V AR je na to tlačidlo Názvy kostí. V režime Precvičiť sa nezobrazujú.\nV režime Precvičiť hľadaj kosti podľa zadania.\nPresné anatomické dáta Écorché sa načítavajú cez internet, prípadne môžeš otvoriť vlastný súbor ecorche.glb. Nezobrazuje sa žiadna schematická náhrada.\nAR: otvor stránku cez HTTPS v Chrome na podporovanom Androide, stlač Spustiť AR, nasmeruj na stôl a klepnutím model umiestni.\nKlávesy: 1 spredu, 2 zozadu, 3 zboku, R východiskový pohľad.'));
  canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===1)drag={id:e.pointerId,x:e.clientX,y:e.clientY,px:e.clientX,py:e.clientY,moved:false};if(pointers.size===2){drag=null;const ps=[...pointers.values()];pinchLast=Math.hypot(ps[0].x-ps[1].x,ps[0].y-ps[1].y)}canvas.classList.add('dragging')});
  canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pointers.size===2){const ps=[...pointers.values()],d=Math.hypot(ps[0].x-ps[1].x,ps[0].y-ps[1].y);if(pinchLast>0&&d>0)dist=Math.max(.23,Math.min(7,dist*pinchLast/d));pinchLast=d;needsDraw=true;return}if(!drag||e.pointerId!==drag.id)return;let dx=e.clientX-drag.px,dy=e.clientY-drag.py;if(Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y)>5)drag.moved=true;yaw-=dx*.009;pitch=Math.max(-1.34,Math.min(1.34,pitch+dy*.008));drag.px=e.clientX;drag.py=e.clientY;needsDraw=true});
  const end=e=>{if(!pointers.has(e.pointerId))return;let d=drag;pointers.delete(e.pointerId);drag=null;pinchLast=0;if(pointers.size===0)canvas.classList.remove('dragging');if(d&&d.id===e.pointerId&&!d.moved&&e.type==='pointerup'){let r=pick(e.clientX,e.clientY);if(r)choose(r)}};
