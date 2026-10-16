@@ -80,12 +80,12 @@ button{font:inherit;cursor:pointer}button:focus-visible,input:focus-visible{outl
 .xr-toolbar{pointer-events:auto;align-self:center;max-width:100%;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:7px;background:#0b1c39d9;padding:10px;border:1px solid #89b4d188;border-radius:17px;box-shadow:0 4px 30px #0005}
 .xr-toolbar button{background:#e8f1ff;color:#16345f;border:0;padding:10px 12px;border-radius:11px;min-height:44px;min-width:44px;font-size:14px;font-weight:800}
 .xr-toolbar button:disabled{opacity:.4}
-.xr-toolbar button.xr-exit{background:#be4457;color:white}
+.xr-toolbar button.xr-exit{background:#be4457;color:white}.xr-actions button{background:#d7f5ed;color:#11584f}.xr-sex-actions button{background:#eae4ff;color:#493875}.xr-toolbar button:focus-visible{outline:3px solid #ffce73;outline-offset:2px}
 .xr-toolbar .xr-divider{height:28px;width:1px;background:#ffffff50}
 .xr-control-group{display:flex;gap:6px;align-items:center}
 #xrDepthLabel{font-size:13px;background:#162c50;border-radius:9px;padding:8px 10px;max-width:120px;text-align:center}
 #xrWebGLCanvas{position:fixed;inset:0;width:100%;height:100%;opacity:0;pointer-events:none}
-@media(max-width:420px){.xr-toolbar{gap:5px;padding:7px}.xr-toolbar button{font-size:12px;padding:9px 10px}.xr-status{font-size:13px}}
+@media(max-width:420px){.xr-toolbar{gap:5px;padding:7px}.xr-toolbar button{font-size:12px;padding:9px 9px}.xr-status{font-size:13px}.xr-actions{flex-basis:100%;justify-content:center}.xr-actions button{flex:1}}
 </style>
 </head>
 <body>
@@ -139,7 +139,7 @@ button{font:inherit;cursor:pointer}button:focus-visible,input:focus-visible{outl
    <p class="intro" id="sexIntro">Porovnaj ich v spoločnej približnej mierke. X je výrazne väčší než Y.</p>
    <div class="detail" aria-live="polite"><div class="detail-label">ČO VIDÍŠ</div><h3 id="sexTitle">Pár XY</h3><p id="sexDesc"></p></div>
    <div class="mini-task"><strong>Otázka pre žiakov:</strong> Prečo po replikácii zobrazujeme pri označení XY štyri chromatídy, ale iba dva chromozómy?</div>
-   <div class="phase-note">X a Y sú <strong>názvy pohlavných chromozómov</strong>, nie pomenovania ich geometrického tvaru. Aj replikovaný chromozóm Y pozostáva z dvoch chromatíd. Pomer veľkostí a poloha centroméry sú schematické.</div>
+   <div class="phase-note">X a Y sú <strong>názvy pohlavných chromozómov</strong>, nie pomenovania ich geometrického tvaru. Chromozóm X je <strong>submetacentrický</strong> (ramená p a q nie sú rovnako dlhé), zatiaľ čo Y je <strong>malý akrocentrický</strong> chromozóm s veľmi krátkym ramenom p. Oba majú po replikácii dve sesterské chromatídy. Ich proporcie sú schematické, nie v presnej mierke; Jemné tieňovanie je len ilustračné a nie je to skutočné cytogenetické G-pruhovanie. Sesterské chromatídy majú rovnaký základný obsah, aj keď ich ohyb nemusí byť v 3D dokonale zrkadlový.</div>
  </section>
  <section class="panel aside-card hidden" id="unpackInfoPanel"><div class="as-head"><h2>Cesta do vnútra chromozómu</h2><span class="tag">OBJAVOVANIE</span></div>
   <p class="intro">Najprv kliknutím oddeľ obe sesterské chromatídy — bez zoomu. Potom klikni na jednu z nich a pokračuj zväčšovaním detailov chromatínu až k DNA.</p>
@@ -151,7 +151,7 @@ button{font:inherit;cursor:pointer}button:focus-visible,input:focus-visible{outl
  <section class="panel aside-card" id="quizPanel"><div class="quiz-head"><div class="as-head"><h2>Over si porozumenie</h2></div><span class="counter" id="quizCounter">1 / 3</span></div><p class="question" id="question"></p><div class="choices" id="choices"></div><div class="feedback hidden" id="feedback" role="status"></div><div class="quiz-actions"><button class="secondary" id="quizReset">Začať znova</button><button class="primary" id="quizAction" disabled>Skontrolovať</button></div></section>
 </aside>
 </div>
-<section class="panel bottom-note"><div class="note-icon" aria-hidden="true">ⓘ</div><div><h3>Dôležité biologické spresnenie</h3><p>Tvar X je typický pre <strong>silne kondenzovaný replikovaný chromozóm</strong> pri bunkovom delení, nie pre chromozóm počas celej existencie bunky. V interfáze je chromatín spravidla rozvoľnený. Model chromozómu s jednou chromatídou je preto zámerne schematicky zhustený, aby bolo možné porovnať jeho časti. Dvojzávitnica DNA aj chromatídy sú zobrazené bez zachovania skutočnej mierky. Režim X/Y schematicky porovnáva ľudské pohlavné chromozómy; režim rozbalenia ukazuje <strong>rôzne úrovne organizácie chromatínu</strong>, nie doslovné roztiahnutie celého chromozómu do niekoľkých závitov DNA. Skutočné AR využíva WebXR, detekciu plochy stola a polohovanie modelu vo fyzickom priestore. Vyžaduje kompatibilný mobil, podporovaný prehliadač a zabezpečenú HTTPS stránku.</p></div></section>
+<section class="panel bottom-note"><div class="note-icon" aria-hidden="true">ⓘ</div><div><h3>Dôležité biologické spresnenie</h3><p>Tvar X je typický pre <strong>silne kondenzovaný replikovaný chromozóm</strong> pri bunkovom delení, nie pre chromozóm počas celej existencie bunky. V interfáze je chromatín spravidla rozvoľnený. Model chromozómu s jednou chromatídou je preto zámerne schematicky zhustený, aby bolo možné porovnať jeho časti. Dvojzávitnica DNA aj chromatídy sú zobrazené bez zachovania skutočnej mierky. Režim X/Y schematicky porovnáva ľudské pohlavné chromozómy; režim rozbalenia ukazuje <strong>rôzne úrovne organizácie chromatínu</strong>, nie doslovné roztiahnutie celého chromozómu do niekoľkých závitov DNA. AR využíva WebXR na položenie modelu na stôl. V AR možno spustiť <strong>schematickú replikáciu</strong>, oddelenie chromatíd a postupné skúmanie DNA. Replikácia DNA prebieha v S fáze interfázy pri rozvoľnenom chromatíne; animácia tvorby druhého viditeľného ramena je iba didaktická pomôcka, nie verný záber z bunky. Vyžaduje kompatibilný mobil, podporovaný prehliadač a zabezpečenú HTTPS stránku.</p></div></section>
 </div>
 
 <div id="xrDomOverlay" aria-label="Ovládanie skutočného AR umiestnenia">
@@ -160,6 +160,8 @@ button{font:inherit;cursor:pointer}button:focus-visible,input:focus-visible{outl
   <div class="xr-control-group"><button type="button" id="xrRotateL" aria-label="Otočiť doľava">↶</button><button type="button" id="xrRotateR" aria-label="Otočiť doprava">↷</button></div>
   <div class="xr-control-group"><button type="button" id="xrScaleDown" aria-label="Zmenšiť">−</button><button type="button" id="xrScaleUp" aria-label="Zväčšiť">+</button></div>
   <div class="xr-control-group" id="xrDepthControls" style="display:none"><button type="button" id="xrDepthPrev" aria-label="Predchádzajúca úroveň">←</button><span id="xrDepthLabel">Chromozóm</span><button type="button" id="xrDepthNext" aria-label="Ďalšia úroveň">→</button></div>
+  <div class="xr-control-group xr-actions"><button type="button" id="xrReplication">Replikácia</button><button type="button" id="xrSeparation">Oddelenie</button><button type="button" id="xrExplore">Odhaľ DNA</button></div>
+  <div class="xr-control-group xr-sex-actions"><button type="button" id="xrShowXY">XY</button><button type="button" id="xrShowX">X</button><button type="button" id="xrShowY">Y</button></div>
   <button type="button" id="xrMove" aria-label="Premiestniť model">Presunúť</button>
   <button type="button" class="xr-exit" id="xrExit">Ukončiť AR</button>
  </div>
@@ -192,10 +194,10 @@ const questions=[
 ];
 const sexInfo={
  auto:['Ilustračný autozóm','Autozómy sú nepohlavné chromozómy. Zobrazený je všeobecný replikovaný autozóm, nie konkrétne číslo z ľudského karyotypu.'],
- X:['Chromozóm X','Ľudský chromozóm X je výrazne väčší než Y. Tu je zobrazený v kondenzovanej replikovanej podobe: dve sesterské chromatídy spolu tvoria jeden chromozóm X.'],
- Y:['Chromozóm Y','Ľudský chromozóm Y je oproti X menší. Jeho názov nevyjadruje geometrický tvar; aj replikovaný Y pozostáva z dvoch sesterských chromatíd.'],
+ X:['Chromozóm X','Ľudský chromozóm X je stredne veľký submetacentrický chromozóm: centroméra je trochu mimo stredu a rameno p je kratšie ako rameno q. Dve sesterské chromatídy tu tvoria jeden replikovaný chromozóm.'],
+ Y:['Chromozóm Y','Ľudský chromozóm Y je malý akrocentrický chromozóm. Jeho veľmi krátke rameno p je nad centromérou, dlhšie rameno q pod ňou; na krátkom ramene nemá satelity. Jemné rozdiely v ohnutí chromatíd sú priestorovou ilustráciou, nie rozdielom v počte génov.'],
  XX:['Dvojica XX','Dva chromozómy X v typickej dvojici pohlavných chromozómov XX. V tomto pohľade sú oba replikované: spolu ide o dva chromozómy a štyri chromatídy.'],
- XY:['Dvojica XY','X a Y majú odlišnú veľkosť aj obsah génov; spoločné majú iba niektoré homologické úseky. V tomto zobrazení ide o dva replikované chromozómy, každý s dvoma chromatídami.']
+ XY:['Dvojica XY','X je stredne veľký submetacentrický chromozóm s kratším p a dlhším q ramenom; Y je malý akrocentrický s veľmi krátkym p ramenom. Oba vidíme po replikácii: každý má dve sesterské chromatídy.']
 };
 const unpackInfo=[
  ['Replikovaný chromozóm','Dve sesterské chromatídy patria zatiaľ k jednému chromozómu. Kliknutím sa od seba oddelia — bez priblíženia a bez zmeny mierky.'],
@@ -218,16 +220,16 @@ function setARNotice(msg=''){state.arStatus=msg;const n=$('arNotice');n.textCont
 const xrCanvas=$('xrWebGLCanvas'),xrOverlay=$('xrDomOverlay');
 const xr={session:null,gl:null,layer:null,ref:null,viewer:null,hit:null,placed:null,lastHit:null,
  buffer:null,program:null,attrib:{},uniform:{},count:0,minY:-3,maxY:2.2,cx:0,cz:0,
- geometryKey:'',size:1,angle:0,reticleBuffer:null,reticleCount:0};
+ geometryKey:'',size:1,angle:0,reticleBuffer:null,reticleCount:0,motion:null,lastMotionGeometry:0};
 function xrMessage(s){$('xrStatus').textContent=s}
 function xrErrorText(e){
  if(e&&e.name==='NotAllowedError')return 'AR nebolo povolené. Skontroluj prístup ku kamere a povolenia prehliadača.';
- if(e&&e.name==='NotSupportedError')return 'Toto zariadenie nepodporuje priestorové AR s detekciou povrchu.';
+ if(e&&e.name==='NotSupportedError')return 'Toto zariadenie nepodporuje WebXR AR s detekciou povrchu a interaktívnym ovládaním.';
  return 'AR sa nepodarilo spustiť: '+(e?.message||'neznáma chyba')+'. Použi Chrome v Androide so službami Google Play pre AR.';
 }
 function xrCleanup(){
  try{xr.hit?.cancel()}catch(e){}
- xr.session=null;xr.layer=null;xr.ref=null;xr.viewer=null;xr.hit=null;xr.lastHit=null;xr.placed=null;
+ xr.session=null;xr.layer=null;xr.ref=null;xr.viewer=null;xr.hit=null;xr.lastHit=null;xr.placed=null;xr.motion=null;
  state.ar=false;state.arStream=null;
  stage.classList.remove('ar-on');$('arToggle').textContent='AR';$('arToggle').setAttribute('aria-pressed','false');
  xrOverlay.classList.remove('xr-visible');xrCanvas.style.opacity='0';
@@ -281,7 +283,26 @@ function xrRebuildGeometry(){
  const arOriginal=arCollector,vertices=[];
  arCollector={triangle:(a,b,c,rgb,alpha)=>xrTri(vertices,a,b,c,rgb,alpha),ball:(p,r,col,alpha)=>xrBall(vertices,p,r,col,alpha)};
  try{
-  if(state.scene==='chromo'){
+  const mo=xr.motion;
+  if(mo && mo.kind==='replication'){
+   const q=smoothstep(mo.progress);
+   // Vizuálna ilustrácia dvoch kópií DNA: jedna chromatída sa postupne zmení na dve.
+   drawChromatid(0,0,false,{morph:1-q,compact:true,noHigh:true});
+   drawChromatid(1,0,false,{morph:1-q,compact:true,noHigh:true,opacity:Math.max(.02,q)});
+  }else if(mo && mo.kind==='separation'){
+   const sep=smoothstep(mo.progress);
+   drawChromatid(0,sep,false,{compact:true,noHigh:true});
+   drawChromatid(1,sep,false,{compact:true,noHigh:true});
+  }else if(mo && mo.kind==='drill'){
+   const q=mo.reverse?1-smoothstep(mo.progress):smoothstep(mo.progress);
+   if(mo.low===0){drawChromatid(0,q,false,{compact:true,noHigh:true});drawChromatid(1,q,false,{compact:true,noHigh:true});}
+   else if(mo.low===1){
+    const f=Math.max(0,Math.min(1,(q-.20)/.8));
+    if(f<.65){drawChromatid(0,1,false,{compact:true,noHigh:true,opacity:Math.max(.05,1-f)});drawChromatid(1,1,false,{compact:true,noHigh:true,opacity:Math.max(.05,1-f)});}
+    if(f>.05)drawMorphStageSingleToChromatin(f);
+   }else if(mo.low===2){drawMorphStageChromatinToNucleosomes(q);}
+   else if(mo.low===3){drawMorphStageNucleosomesToDNA(q);}
+  }else if(state.scene==='chromo'){
    if(state.phase==='single')drawChromatid(0,0,true);
    else if(state.phase==='separated'){drawChromatid(0,1);drawChromatid(1,1)}
    else{drawChromatid(0,0);drawChromatid(1,0)}
@@ -290,7 +311,7 @@ function xrRebuildGeometry(){
   else if(state.scene==='unpack'){
    switch(Math.round(state.unpack)){
     case 0:drawChromatid(0,0,false,{noHigh:true});drawChromatid(1,0,false,{noHigh:true});break;
-    case 1:drawChromatid(0,0,false,{noHigh:true,cx:-.95,base:[60,154,183]});drawChromatid(1,0,false,{noHigh:true,cx:.95,base:[177,157,247]});break;
+    case 1:drawChromatid(0,1,false,{noHigh:true,compact:true});drawChromatid(1,1,false,{noHigh:true,compact:true});break;
     case 2:drawChromatin(1);break;
     case 3:drawNucleosomes(1);break;
     default:drawDNA();break;
@@ -304,7 +325,7 @@ function xrRebuildGeometry(){
  }
  xr.minY=isFinite(minY)?minY:-3;xr.maxY=isFinite(maxY)?maxY:2;
  xr.cx=isFinite(minX)?(minX+maxX)/2:0;xr.cz=isFinite(minZ)?(minZ+maxZ)/2:0;
- gl.bindBuffer(gl.ARRAY_BUFFER,xr.buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW);
+ gl.bindBuffer(gl.ARRAY_BUFFER,xr.buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.DYNAMIC_DRAW||gl.STATIC_DRAW);
  xr.count=vertices.length/9;xr.geometryKey=xrGeometryKey();
 }
 function xrBindGeometry(buf){const gl=xr.gl;gl.bindBuffer(gl.ARRAY_BUFFER,buf);
@@ -321,22 +342,67 @@ function xrModelMatrix(){
  return matMul(matMul(matMul(matTranslate(pt.x,pt.y,pt.z),matRotateY(xr.angle)),matScale(s)),matTranslate(-xr.cx,-xr.minY,-xr.cz));
 }
 function xrUpdateDepthControls(){const show=state.scene==='unpack';$('xrDepthControls').style.display=show?'flex':'none';
+ $('xrReplication').disabled=!!xr.motion;$('xrSeparation').disabled=!!xr.motion;$('xrExplore').disabled=!!xr.motion;
  if(!show)return;
  $('xrDepthLabel').textContent=['Chromozóm','Oddelené','Chromatín','Nukleozómy','DNA'][Math.round(state.unpack)];
- $('xrDepthPrev').disabled=state.unpack<=0;$('xrDepthNext').disabled=state.unpack>=4;
+ $('xrDepthPrev').disabled=state.unpack<=0||!!xr.motion;$('xrDepthNext').disabled=state.unpack>=4||!!xr.motion;
+}
+function xrStartMotion(kind,opts={}){
+ if(xr.motion){xrMessage('Počkaj na dokončenie aktuálnej animácie.');return false;}
+ if(!xr.placed){xrMessage('Najskôr polož model na stôl.');return false;}
+ const duration=kind==='replication'?2200:kind==='separation'?1700:1700;
+ xr.motion={kind,start:performance.now(),duration,progress:0,lastBuild:0,...opts};
+ xr.geometryKey='';xrUpdateDepthControls();
+ return true;
+}
+function xrStartReplication(){
+ if(!xrStartMotion('replication'))return;
+ state.scene='chromo';state.phase='single';state.unpack=0;
+ xrMessage('Replikácia DNA – schematická animácia vzniku druhej chromatídy. V bunke prebieha v rozvoľnenom chromatíne.');
+ xrUpdateDepthControls();refreshUI();
+}
+function xrStartSeparation(){
+ if(!xrStartMotion('separation'))return;
+ state.scene='chromo';state.phase='paired';state.unpack=0;
+ xrMessage('Oddelenie: dve sesterské chromatídy sa na stole vzďaľujú od seba, bez zoomovania.');
+ xrUpdateDepthControls();refreshUI();
+}
+function xrStartExploring(){
+ if(xr.motion)return;
+ state.scene='unpack';state.unpack=0;xr.geometryKey='';xrUpdateDepthControls();refreshUI();
+ xrMessage('Cesta k DNA: ťukni na model alebo na šípku →. Prvé odhalenie je iba oddelenie, ďalšie priblíženie.');
+}
+function xrAdvanceDepth(delta){
+ if(xr.motion)return;
+ if(state.scene!=='unpack'){xrStartExploring();return;}
+ const from=state.unpack,to=Math.max(0,Math.min(4,from+delta));if(to===from)return;
+ const low=Math.min(from,to);
+ if(xrStartMotion('drill',{low,from,to,reverse:to<from})){
+  xrMessage(low===0?'Sesterské chromatídy sa oddeľujú / približujú. Bez zoomu.':'Približujeme sa k '+unpackInfo[to][0].toLowerCase()+'.');
+ }
 }
 function xrOnSelect(){
  if(!xr.placed){if(!xr.lastHit){xrMessage('Namier kameru na rovný stôl a čakaj na kruh.');return;}
   xr.placed={...xr.lastHit};xrMessage('Chromozóm stojí na stole. Pohybuj telefónom okolo neho.');
- }else if(state.scene==='unpack'){
-  if(state.unpack<4){state.unpack++;xr.geometryKey='';xrUpdateDepthControls();refreshUI();xrMessage(state.unpack===1?'Sesterské chromatídy sú oddelené. Ďalším ťuknutím odhalíš chromatín.':'Ďalšia úroveň: '+unpackInfo[state.unpack][0]);}
-  else xrMessage('Toto je DNA. Môžeš sa vrátiť ovládaním na obrazovke.');
- }else if(xr.lastHit){xr.placed={...xr.lastHit};xrMessage('Model premiestnený na nové miesto.')}
+ }else if(xr.motion){xrMessage('Počkaj na koniec animácie.');}
+ else if(state.scene==='unpack'){
+  if(state.unpack<4)xrAdvanceDepth(1);
+  else xrMessage('Toto je DNA. Pomocou šípky sa môžeš vrátiť.');
+ }else xrMessage('Model zostáva ukotvený na stole. Na ďalšiu animáciu použi spodné tlačidlá.');
 }
 function xrFrame(time,frame){if(!xr.session)return;
  xr.session.requestAnimationFrame(xrFrame);
  const gl=xr.gl,pose=frame.getViewerPose(xr.ref);if(!pose)return;
  try{
+  if(xr.motion){
+   const m=xr.motion;m.progress=Math.max(0,Math.min(1,(time-m.start)/m.duration));
+   if(m.progress>=1){
+    if(m.kind==='replication'){state.phase='paired';xrMessage('Replikovaný chromozóm: dve sesterské chromatídy.');}
+    else if(m.kind==='separation'){state.phase='separated';xrMessage('Po oddelení sú to dva dcérske chromozómy.');}
+    else if(m.kind==='drill'){state.unpack=m.to;xrMessage('Teraz vidíš: '+unpackInfo[state.unpack][0]+'.');}
+    xr.motion=null;xr.geometryKey='';xrUpdateDepthControls();refreshUI();
+   }else if(time-m.lastBuild>55){m.lastBuild=time;xr.geometryKey='';}
+  }
   let hits=xr.hit?frame.getHitTestResults(xr.hit):[];
   xr.lastHit=null;
   if(hits.length){const hp=hits[0].getPose(xr.ref);if(hp){const p=hp.transform.position;xr.lastHit={x:p.x,y:p.y,z:p.z}}}
@@ -358,7 +424,7 @@ async function startAR(){
  try{
   // Request XR from a direct click, before any unrelated awaited operation.
   xrOverlay.classList.add('xr-visible');
-  session=await navigator.xr.requestSession('immersive-ar',{requiredFeatures:['local','hit-test'],optionalFeatures:['dom-overlay'],domOverlay:{root:xrOverlay}});
+  session=await navigator.xr.requestSession('immersive-ar',{requiredFeatures:['local','hit-test','dom-overlay'],domOverlay:{root:xrOverlay}});
   xr.session=session;
   session.addEventListener('end',xrCleanup,{once:true});
   const gl=xrCanvas.getContext('webgl',{alpha:true,antialias:true,preserveDrawingBuffer:false,xrCompatible:true});
@@ -368,11 +434,11 @@ async function startAR(){
   xr.ref=await session.requestReferenceSpace('local');
   xr.viewer=await session.requestReferenceSpace('viewer');
   xr.hit=await session.requestHitTestSource({space:xr.viewer});
-  xrInitGL();xr.geometryKey='';xr.placed=null;xr.lastHit=null;xr.size=1;xr.angle=0;
+  xrInitGL();xr.geometryKey='';xr.placed=null;xr.lastHit=null;xr.size=1;xr.angle=0;xr.motion=null;
   session.addEventListener('select',xrOnSelect);
   state.ar=true;stage.classList.add('ar-on');$('arToggle').textContent='AR ON';$('arToggle').setAttribute('aria-pressed','true');
   setARNotice('');xrUpdateDepthControls();
-  xrMessage('Namier kameru na stôl. Keď uvidíš svetlý kruh, ťukni naň a polož chromozóm.');
+  xrMessage('Namier kameru na stôl. Keď uvidíš kruh, ťukni naň. Potom môžeš spustiť replikáciu, oddelenie alebo objavovanie DNA.');
   session.requestAnimationFrame(xrFrame);
  }catch(e){console.warn('WebXR AR:',e);if(session)try{await session.end()}catch(_){};
   xrCleanup();setARNotice(xrErrorText(e));}
@@ -385,8 +451,14 @@ $('xrRotateL').onclick=()=>{xr.angle-=Math.PI/10};
 $('xrRotateR').onclick=()=>{xr.angle+=Math.PI/10};
 $('xrScaleUp').onclick=()=>{xr.size=Math.min(2.5,xr.size*1.2)};
 $('xrScaleDown').onclick=()=>{xr.size=Math.max(.4,xr.size/1.2)};
-$('xrDepthPrev').onclick=()=>{if(state.unpack>0){state.unpack--;xr.geometryKey='';xrUpdateDepthControls();refreshUI()}};
-$('xrDepthNext').onclick=()=>{if(state.unpack<4){state.unpack++;xr.geometryKey='';xrUpdateDepthControls();refreshUI()}};
+$('xrDepthPrev').onclick=()=>xrAdvanceDepth(-1);
+$('xrDepthNext').onclick=()=>xrAdvanceDepth(1);
+$('xrReplication').onclick=()=>xrStartReplication();
+$('xrSeparation').onclick=()=>xrStartSeparation();
+$('xrExplore').onclick=()=>xrStartExploring();
+for(const [id,sex] of [['xrShowXY','XY'],['xrShowX','X'],['xrShowY','Y']]){
+ $(id).onclick=()=>{if(xr.motion)return;state.scene='sex';state.sex=sex;xr.geometryKey='';xrUpdateDepthControls();refreshUI();xrMessage('Porovnanie pohlavných chromozómov: '+sex+'.')};
+}
 function refreshUI(){
  const scene=state.scene, chromo=scene==='chromo',dna=scene==='dna',sex=scene==='sex',unpack=scene==='unpack';
  $('phaseNav').classList.toggle('hidden',!chromo);
@@ -450,6 +522,36 @@ function ball(pos,r,rgb,alpha=1){if(arCollector){arCollector.ball(pos,r,rgb,alph
 function pointOnChromo(t,id,sep,c=.345){const sign=id===0?-1:1,d=t-c,upper=d<0;
  const spread=Math.pow(Math.abs(d)/(upper?c:1-c),1.06);
  return {x:sign*(.227+(upper?.75:.84)*spread+(.035*Math.sin(t*21+id*1.7)*Math.sin(Math.PI*t))+sep*.92),y:2.08-5.04*t,z:sign*.10+.12*Math.sin(t*7.3+id*.85)};}
+// Špecifická, deterministická morfológia pohlavných chromozómov (bez náhodného menenia medzi snímkami).
+// Obidve chromatídy zostávajú veľmi podobné: rozdiel je v ich miernom priestorovom ohybe, nie v genetickej dĺžke.
+function sexChromatidPoint(t,id,sep,c,type){
+ const p=pointOnChromo(t,id,sep,c),sgn=id===0?-1:1;
+ const q=Math.max(0,Math.min(1,(t-c)/(1-c)));
+ const arm=Math.sin(Math.PI*q);
+ if(type==='Y'){
+  // Krátke rameno p, dlhé q: spoločný pozvoľný ohyb dlhého ramena a jemná nesúmernosť v priestore.
+  p.x+=.19*q*q+.095*arm*q+sgn*.035*q*Math.sin(2.5*Math.PI*q);
+  p.z+=.14*arm*Math.cos(1.35*Math.PI*q+.25)+sgn*.06*q*Math.sin(2.0*Math.PI*q);
+  p.y+=sgn*.025*Math.sin(Math.PI*t)+.035*q*Math.sin(2.1*Math.PI*q);
+ }else{
+  // X má dve nerovnako dlhé ramená (p/q), iba mierne zakrivenie tela chromatídy.
+  const upper=t<c?Math.max(0,(c-t)/c):0;
+  p.x+=.07*Math.sin(Math.PI*t*1.55)+.055*q*q-sgn*.014*upper;
+  p.z+=.085*Math.sin(1.75*Math.PI*t+.25)+sgn*.034*Math.sin(Math.PI*t*1.5);
+  p.y+=sgn*.019*Math.sin(Math.PI*t);
+ }
+ return p;
+}
+// Vizuálne pásy sú len orientačné tieňovanie, nie autentický G-pruhovaný karyogram.
+function sexBandTint(t,c,type){
+ const q=Math.max(0,(t-c)/(1-c));
+ if(type==='Y'){
+  const distal=Math.max(0,Math.min(1,(q-.61)/.22));
+  return .07*Math.max(0,Math.sin(26*t+1.3))+.16*distal;
+ }
+ return .075*Math.max(0,Math.sin(30*t+.35))+.035*Math.max(0,Math.sin(51*t));
+}
+
 function pointSingle(t){return{x:.105*Math.sin(t*5.6),y:2.08-5.04*t,z:.1*Math.cos(7*t)}}
 function radiusAt(t,c=.345){const waist=Math.exp(-Math.pow((t-c)/.043,2)),taper=.91+.09*Math.sin(Math.PI*t);return .293*taper*(1-.43*waist)*(1-.08*Math.pow(Math.abs(2*t-1),7))}
 function selectedArea(t,c=.345){if(t<.05||t>.95)return 'telomere';if(Math.abs(t-c)<.055)return 'centromere';if(t<c)return 'p';return'q'}
@@ -459,10 +561,11 @@ function drawChromatid(id,sep,single=false,opts={}){
  const n=opts.compact?45:76,sides=opts.compact?11:16,ring=[],base=opts.base|| (single?palette.single:(id===0?palette.left:palette.right));
  const c=opts.c===undefined?.345:opts.c,opacity=opts.opacity===undefined?1:opts.opacity, morph=opts.morph||0;
  if(opacity<.012)return;
- const path=t=>{const a=single?pointSingle(t):pointOnChromo(t,id,sep,c),b=opts.morph?pointSingle(t):a,p=interp3(a,b,morph);return{x:p.x*(opts.sx||1)+(opts.cx||0),y:p.y*(opts.sy||1)+(opts.cy||0),z:p.z*(opts.sz||1)+(opts.cz||0)}};
+ const path=t=>{const a=single?pointSingle(t):(opts.sexType?sexChromatidPoint(t,id,sep,c,opts.sexType):pointOnChromo(t,id,sep,c)),b=opts.morph?pointSingle(t):a,p=interp3(a,b,morph);return{x:p.x*(opts.sx||1)+(opts.cx||0),y:p.y*(opts.sy||1)+(opts.cy||0),z:p.z*(opts.sz||1)+(opts.cz||0)}};
  for(let j=0;j<=n;j++){const t=j/n,p=path(t),ringv=[];for(let k=0;k<sides;k++){const a=k*2*Math.PI/sides,r=radiusAt(t,c)*(opts.size||1)*(1+.024*Math.sin(a*5+47*t))*(1-morph*.07);ringv.push({x:p.x+r*Math.cos(a),y:p.y,z:p.z+r*Math.sin(a)})}ring.push(ringv)}
  for(let j=0;j<n;j++){const t=(j+.5)/n,area=selectedArea(t,c),highlight=opts.noHigh||state.focus==='all'||state.focus==='sisters'||state.focus===area;
  let color=base,band=.98+.055*Math.cos(13*Math.PI*t)+.07*Math.sin(t*86);
+ if(opts.sexType)color=blendedColor(base,[39,46,83],sexBandTint(t,c,opts.sexType));
  if(!opts.noHigh){if(area==='centromere'&&state.focus==='centromere'){color=blendedColor(base,palette.center,.84);band=1.1}
  else if(area==='telomere'&&state.focus==='telomere'){color=blendedColor(base,palette.tel,.78);band=1.14}
  else if(area==='p'&&state.focus==='p'){color=blendedColor(base,palette.p,.40);band=1.10}
@@ -477,11 +580,17 @@ function addCylinder(a,b,r,color,alpha=1,n=9){const dir={x:b.x-a.x,y:b.y-a.y,z:b
 function dnaPoint(t,i){const theta=2*Math.PI*(3.35*t)+(i?Math.PI:0);return {x:.68*Math.cos(theta),y:2.48-4.98*t,z:.68*Math.sin(theta)}}
 function drawDNA(alpha=1){if(alpha<.012)return;const count=150;for(let id=0;id<2;id++){for(let j=0;j<count;j++){const a=dnaPoint(j/count,id),b=dnaPoint((j+1)/count,id);addCylinder(a,b,.072,id===0?palette.dnablue:palette.dnapink,alpha,6)}for(let j=0;j<=count;j+=6){ball(dnaPoint(j/count,id),.097,id===0?palette.dnablue:palette.dnapink,alpha)}}
  for(let i=0;i<35;i++){const t=(i+.55)/35,a=dnaPoint(t,0),b=dnaPoint(t,1),mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2,z:(a.z+b.z)/2};let col=i%2===0?palette.baseAT:palette.baseGC;addCylinder(a,mid,.065,col,alpha*.95,6);addCylinder(mid,b,.065,col,alpha*.95,6);ball(mid,.070,col,alpha*.98)} }
-// Chromozómy X a Y: spoločný porovnávací pohľad (schematické proporcie).
+// X – submetacentrický, Y – malý akrocentrický (bez satelitov); rozmery iba schematické.
 function drawSexChromosome(type,cx=0,which=0){
- const isY=type==='Y', scale=isY?.49:.77,c=isY?.28:.40;
- const base=isY?[183,143,245]:type==='auto'?[105,170,235]:[42,196,215];
- for(let id=0;id<2;id++)drawChromatid(id,0,false,{cx,sx:scale,sy:isY?.47:.77,sz:scale,size:isY?.56:.83,c,base:id===0?base:blendedColor(base,[246,242,255],.24),compact:true,noHigh:true,cy:.22});
+ const isY=type==='Y',isAuto=type==='auto';
+ const scale=isY?.48:.78,c=isY?.105:isAuto?.345:.385;
+ const base=isY?[183,143,245]:isAuto?[105,170,235]:[42,196,215];
+ for(let id=0;id<2;id++){
+  drawChromatid(id,0,false,{cx,sx:scale,sy:isY?.46:.78,sz:scale,
+   size:isY?.55:.83,c,sexType:isAuto?null:type,
+   base:id===0?base:blendedColor(base,[246,242,255],.19),
+   compact:true,noHigh:true,cy:.22});
+ }
 }
 function sexLocations(){if(state.sex==='XX')return[['X',-1.55],['X',1.55]];if(state.sex==='XY')return[['X',-1.60],['Y',1.50]];return[[state.sex,0]]}
 function drawSex(){sexLocations().forEach(([type,x])=>drawSexChromosome(type,x));}
