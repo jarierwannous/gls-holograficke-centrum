@@ -14,6 +14,36 @@
 .landing{min-height:min(660px,calc(100vh - 170px));display:flex;align-items:center;justify-content:space-around;gap:35px;padding:35px 55px;background:linear-gradient(145deg,#122b3d,#091827 70%);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}.landing-content{max-width:580px}.landing h1{font-size:clamp(42px,6vw,76px);margin:12px 0 20px}.landing p{font-size:clamp(17px,2.1vw,21px);color:#c2d4df;max-width:550px}.landing-cta{font-size:clamp(20px,2.5vw,26px);padding:19px 28px;min-height:67px;min-width:260px;box-shadow:0 12px 32px #42cdb83d}.landing-cta span{margin-left:10px}.landing-note{font-size:14px;color:var(--sub);margin-top:16px}.landing-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}.landing .hero-art{margin-right:10px;transform:rotate(9deg) scale(1.12)}.wizard{max-width:880px;margin:0 auto}.wizard-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}.wizard-progress{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:17px}.wizard-progress span{border:1px solid #33516a;border-radius:11px;padding:10px 8px;text-align:center;color:#9eb7c9;background:#0d2234;font-size:13px;font-weight:750}.wizard-progress span.active{border-color:var(--teal);background:#1b4b4a;color:#e4fffa}.wizard-progress span.done{border-color:#467c70;color:#b6f4dd}.wizard-main{padding:clamp(20px,3vw,36px);min-height:470px}.wizard-step h2{font-size:clamp(25px,3.1vw,37px);margin:8px 0}.wizard-intro{font-size:16px;margin:0 0 25px}.mode-tiles,.pick-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.pick-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-tiles .choice,.pick-tiles .choice{min-height:180px;padding:19px}.mode-symbol{display:grid;place-items:center;height:46px;width:46px;border-radius:13px;background:#244c5a;border:1px solid #467e89;font-size:28px;color:var(--teal);margin-bottom:15px}.mode-tiles .choice strong,.pick-tiles .choice strong{font-size:18px;line-height:1.3}.mode-tiles .choice small,.pick-tiles .choice small{font-size:13px;line-height:1.5}.level-icon{width:52px;height:52px;border:1px solid #52857f;background:#183e42;color:var(--teal);font-size:22px;font-weight:900;display:grid;place-items:center;border-radius:13px;margin-bottom:12px}.wizard-step #levels .choice{min-height:160px;padding:18px}.wizard-footer{display:flex;justify-content:space-between;gap:13px;align-items:center;border-top:1px solid var(--line);margin-top:30px;padding-top:22px}.wizard-finish{display:flex;justify-content:flex-end;flex:1}.wizard-footer .action{min-height:50px}.narrow-field{max-width:370px}.small-note{font-size:14px!important;margin-top:12px}.join-box{background:#0c2434;border:1px solid #36586c;border-radius:14px;padding:19px}.join-grid{display:flex;align-items:end;gap:10px}.join-grid .field{flex:1}.join-grid .action{min-height:47px}.wizard .choice.selected{box-shadow:inset 0 0 0 1px #65e6d6,0 0 0 1px #65e6d633}.wizard .choice:disabled{opacity:.42}
 @media(max-width:780px){.landing{padding:32px 25px;min-height:calc(100svh - 145px)}.landing .hero-art{display:none}.mode-tiles{grid-template-columns:1fr}.mode-tiles .choice{min-height:100px;padding:15px 17px;display:grid;grid-template-columns:50px 1fr;column-gap:14px;align-items:center}.mode-tiles .choice .mode-symbol{grid-row:span 2;margin:0}.mode-tiles .choice small{margin-top:2px}.wizard-main{min-height:0}.wizard-progress span{font-size:12px;padding:9px 4px}}
 @media(max-width:520px){.landing{padding:37px 22px;align-items:flex-start;min-height:0}.landing h1{font-size:43px}.landing-cta{width:100%;min-width:0}.landing-links .action{flex:1}.wizard-progress{gap:5px}.wizard-progress span{font-size:10px;line-height:1.2;padding:8px 2px}.wizard-main{padding:19px 15px}.pick-tiles{grid-template-columns:1fr}.pick-tiles .choice{min-height:110px;padding:15px;display:grid;grid-template-columns:50px 1fr;align-items:center;column-gap:12px}.pick-tiles .choice .mode-symbol{grid-row:span 2;margin:0}.join-grid{display:block}.join-grid button{width:100%;margin-top:10px}.wizard-footer .action{padding:11px 13px;font-size:14px}.wizard-step #levels{grid-template-columns:1fr;gap:8px}.wizard-step #levels .choice{min-height:76px;display:grid;grid-template-columns:44px 1fr;align-items:center;column-gap:10px;padding:9px 13px}.wizard-step #levels .level-icon{height:42px;width:42px;grid-row:span 2;margin:0;font-size:18px}.wizard-step #levels .choice small{margin-top:0}}
+
+/* Grafické kartičky – všetky grafy sú vykresľované lokálne cez SVG. */
+.front.graph-front{padding:1px;overflow:hidden}
+.graph-card{display:block;width:100%;height:100%;min-height:0;pointer-events:none}
+.graph-card svg{display:block;width:100%;height:100%}
+.graph-tools{justify-content:center;margin:14px 0 3px}
+.graph-tools .muted{font-size:12px}
+.graph-dialog{width:min(95vw,590px);max-height:94vh;overflow:auto;border-radius:17px;border:1px solid #62b9b2;background:#102335;color:#ecf8f7;padding:18px 20px;box-shadow:0 25px 90px #000a}
+.graph-dialog::backdrop{background:#00101bcc}
+.graph-dialog-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.graph-big{margin:15px auto 10px;width:min(100%,460px);aspect-ratio:1;background:#f0f8f2;border-radius:12px;overflow:hidden}
+.graph-big .graph-card{height:100%;width:100%}
+.graph-dialog p{font-size:13px;margin:10px 0 2px}
+@media(max-width:520px){.deck:has(.graph-card){grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.front.graph-front{padding:0}}
+
+/* Obrázkové kartičky: náhľad, jednoduché nahrávanie a detail. */
+.pairrow{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 40px;align-items:start;padding:11px 0;border-bottom:1px solid #29445b}
+.pairrow .pair-side{display:flex;flex-direction:column;gap:7px;min-width:0}
+.pair-side-label{font-size:12px;font-weight:800;color:#b8dbdf}
+.pair-side input[type=text]{width:100%;min-width:0}
+.pair-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pair-actions button{padding:6px 10px!important;min-height:35px}
+.pair-preview{height:94px;width:100%;max-width:210px;background:#ebf5f4;border:1px solid #62999d;border-radius:9px;overflow:hidden}
+.pair-preview img{width:100%;height:100%;object-fit:contain;display:block}
+.pair-preview .graph-card{width:100%;height:100%}
+.pairrow .pair-remove{margin-top:25px}
+.front.image-front{padding:2px;background:#eff8f5}
+.card-image{display:block;width:100%;height:100%;object-fit:contain;background:#f3faf6;pointer-events:none}
+.graph-big .card-image{width:100%;height:100%;object-fit:contain}
+@media(max-width:560px){.pairrow{grid-template-columns:minmax(0,1fr);position:relative;padding-right:41px}.pairrow .pair-remove{position:absolute;right:0;top:8px;margin:0}.pair-preview{height:100px}.deck:has(.image-front){grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}}
 </style>
 </head>
 <body>
@@ -47,13 +77,13 @@
   </section>
  </div>
  <div id="onlineLobby" class="panel" hidden><div class="split"><div><span class="eyebrow">Online miestnosť</span><h2 id="lobbyTitle">Čakáme na hráčov</h2></div><button class="action ghost small" id="leaveLobby">Opustiť miestnosť</button></div><div class="lobbybox"><div class="micro">Kód miestnosti (zadajú ho ostatní hráči)</div><div class="roomcode" id="lobbyCode">—</div><div class="row"><button class="action small secondary" id="copyCode">Kopírovať kód</button><button class="action small secondary" id="copyLink">Kopírovať pozvánku</button></div></div><div class="space"></div><h3>Pripojení hráči</h3><div id="lobbyPlayers" class="scoreboard"></div><div class="row"><button class="action" id="startOnline">Začať hru</button><span class="muted" id="lobbyHelp">Na spustenie treba aspoň dvoch hráčov.</span></div></div>
- <div id="gameArena" hidden><div class="panel"><div class="arena-header"><div><span class="eyebrow" id="arenaMode">Miestna hra</span><h2 id="arenaTitle">Matematické pexeso</h2><span class="muted" id="arenaSubtitle">Nájdi zodpovedajúce dvojice.</span></div><div class="row"><button class="action small ghost" id="restartGame">Nová hra</button><button class="action small secondary" id="leaveGame">Späť na výber</button></div></div><div id="scoreboard" class="scoreboard"></div><div class="statusbar"><span id="turnText">Na ťahu: —</span><span id="progressText">0 / 6 dvojíc</span><span id="movesText">0 pokusov</span><span id="elapsedText">00:00</span></div><div id="board" class="deck" role="group" aria-label="Karty matematického pexesa"></div><div class="end-screen" id="endScreen" hidden><span class="eyebrow">Dokončené</span><h2 id="winnerText">Výborne!</h2><p id="endDetails"></p><button class="action" id="playAgain">Hrať znova</button></div></div></div>
+ <div id="gameArena" hidden><div class="panel"><div class="arena-header"><div><span class="eyebrow" id="arenaMode">Miestna hra</span><h2 id="arenaTitle">Matematické pexeso</h2><span class="muted" id="arenaSubtitle">Nájdi zodpovedajúce dvojice.</span></div><div class="row"><button class="action small ghost" id="restartGame">Nová hra</button><button class="action small secondary" id="leaveGame">Späť na výber</button></div></div><div id="scoreboard" class="scoreboard"></div><div class="statusbar"><span id="turnText">Na ťahu: —</span><span id="progressText">0 / 6 dvojíc</span><span id="movesText">0 pokusov</span><span id="elapsedText">00:00</span></div><div id="board" class="deck" role="group" aria-label="Karty matematického pexesa"></div><div class="row graph-tools"><button id="enlargeGraph" type="button" class="action small secondary" hidden>Zväčšiť odkrytý graf / obrázok</button><span id="graphHint" class="muted" hidden>Zväčšený náhľad ti pomôže rozpoznať aj drobné detaily.</span></div><div class="end-screen" id="endScreen" hidden><span class="eyebrow">Dokončené</span><h2 id="winnerText">Výborne!</h2><p id="endDetails"></p><button class="action" id="playAgain">Hrať znova</button></div></div></div>
 </section>
 <section id="view-kniznica" class="view" hidden><div class="hero"><div><span class="eyebrow">Zbierka úloh</span><h1>Knižnica pexies</h1><p>Vyber si pripravenú sadu, importuj vlastnú alebo použi pexeso z online knižnice.</p></div></div><div class="panel"><div class="section-top"><h2>Dostupné tematické sady</h2><button class="action secondary small" id="refreshPacks">Obnoviť online sady</button></div><div class="packs" id="packCards"></div></div></section>
-<section id="view-sprava" class="view" hidden><div class="hero"><div><span class="eyebrow">Administrácia obsahu</span><h1>Vytvor vlastné pexeso.</h1><p>Pridávaj matematické dvojice ručne alebo importuj JSON/CSV. Lokálne sady zostanú uložené v tomto prehliadači; online publikovanie vyžaduje administrátorské prihlásenie.</p></div></div><div class="admin-layout"><section class="panel"><h2>Editor sady</h2><div class="formgrid"><div class="field"><label for="editTitle">Názov pexesa</label><input id="editTitle" maxlength="90" placeholder="Napr. Kvadratické rovnice"></div><div class="field"><label for="editTopic">Téma / kategória</label><input id="editTopic" maxlength="70" value="Matematika"></div></div><div class="space"></div><div class="field"><label for="editDesc">Krátky opis</label><textarea id="editDesc" maxlength="300" placeholder="Čo si žiaci precvičia?"></textarea></div><div class="sep"></div><div class="section-top"><h3>Dvojice kartičiek</h3><span class="pill" id="editCount">0 dvojíc</span></div><p class="micro">Ľavá a pravá kartička tvoria správnu dvojicu. Každá sada musí mať aspoň 6 dvojíc; úroveň Expert vyžaduje 12.</p><div id="editorPairs" class="pairlist"></div><div class="space"></div><div class="row"><button class="action small secondary" id="addPair">+ Pridať dvojicu</button><button class="action small ghost" id="clearEditor">Vyprázdniť editor</button></div><div class="sep"></div><div class="row"><button class="action" id="savePack">Uložiť do prehliadača</button><button class="action secondary" id="publishPack">Publikovať online</button></div><p class="micro" id="adminSaveInfo">Najprv vyplň názov a aspoň 6 dvojíc.</p></section>
-<section class="stack"><div class="panel"><h2>Import a export</h2><div class="filezone"><div class="field"><label for="importFile">Nahrať pexeso zo súboru</label><input id="importFile" type="file" accept=".json,.csv,.txt,application/json,text/csv"></div><p class="micro">Podporuje JSON (jednu alebo viac sád) a CSV so stĺpcami <code>a;b</code>. Importované sady sa uložia lokálne.</p></div><div class="space"></div><button class="action secondary full" id="exportPacks">Stiahnuť všetky vlastné sady (JSON)</button><div class="space"></div><details><summary style="cursor:pointer;font-weight:750">Vzor formátu JSON</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;color:var(--teal);font-size:12px">{"name":"Moje pexeso","topic":"Algebra","pairs":[{"a":"2³","b":"8"},{"a":"3²","b":"9"}]}</pre><p class="micro">Pre funkčnú sadu pridaj aspoň 6 dvojíc. Môžeš použiť aj pole dvojíc: <code>[["2³","8"], ...]</code>.</p></details></div><div class="panel"><h2>Moje lokálne sady</h2><div id="myPacks"></div></div><div class="panel"><h2>Online administrátor</h2><p class="muted" style="font-size:14px">Online sady sú dostupné na všetkých zariadeniach. Zverejňovať ich môžu iba administrátori Holografického centra (tabuľka holo_admins).</p><div id="adminLogin"><div class="field"><label for="adminEmail">E-mail</label><input type="email" id="adminEmail" autocomplete="username"></div><div class="space"></div><div class="field"><label for="adminPassword">Heslo</label><input type="password" id="adminPassword" autocomplete="current-password"></div><div class="space"></div><button class="action secondary full" id="adminSignIn">Prihlásiť sa</button></div><div id="adminLogged" hidden><p id="adminWho"></p><button id="adminLogout" class="action ghost small">Odhlásiť sa</button></div><div class="space"></div><div id="onlineManage"></div></div></section></div></section>
+<section id="view-sprava" class="view" hidden><div class="hero"><div><span class="eyebrow">Administrácia obsahu</span><h1>Vytvor vlastné pexeso.</h1><p>Pridávaj matematické dvojice, nahraj obrázky grafov (PNG/JPG/WebP) alebo importuj JSON/CSV. Graf možno vytvoriť aj zápisom graf:a|b|n|c. Lokálne sady zostanú uložené v tomto prehliadači; online publikovanie vyžaduje administrátorské prihlásenie.</p></div></div><div class="admin-layout"><section class="panel"><h2>Editor sady</h2><p class="micro">Pre graf použi zápis <code>graf:a|b|n|c</code>, napríklad <code>graf:2|1|2|-3</code> pre y = 2(x + 1)² − 3. Funguje aj import cez JSON. Pri každej karte môžeš namiesto textu kliknúť na „Nahrať obrázok“. Obrázky sa pre menšiu veľkosť automaticky zmenšia.</p><div class="formgrid"><div class="field"><label for="editTitle">Názov pexesa</label><input id="editTitle" maxlength="90" placeholder="Napr. Kvadratické rovnice"></div><div class="field"><label for="editTopic">Téma / kategória</label><input id="editTopic" maxlength="70" value="Matematika"></div></div><div class="space"></div><div class="field"><label for="editDesc">Krátky opis</label><textarea id="editDesc" maxlength="300" placeholder="Čo si žiaci precvičia?"></textarea></div><div class="sep"></div><div class="section-top"><h3>Dvojice kartičiek</h3><span class="pill" id="editCount">0 dvojíc</span></div><p class="micro">Ľavá a pravá kartička tvoria správnu dvojicu. Každá sada musí mať aspoň 6 dvojíc; úroveň Expert vyžaduje 12.</p><div id="editorPairs" class="pairlist"></div><div class="space"></div><div class="row"><button class="action small secondary" id="addPair">+ Pridať dvojicu</button><button class="action small ghost" id="clearEditor">Vyprázdniť editor</button></div><div class="sep"></div><div class="row"><button class="action" id="savePack">Uložiť do prehliadača</button><button class="action secondary" id="publishPack">Publikovať online</button></div><p class="micro" id="adminSaveInfo">Najprv vyplň názov a aspoň 6 dvojíc. Obrázkové kartičky možno používať offline; pri publikovaní sa obrázky nahrajú do úložiska centra.</p></section>
+<section class="stack"><div class="panel"><h2>Import a export</h2><div class="filezone"><div class="field"><label for="importFile">Nahrať pexeso zo súboru</label><input id="importFile" type="file" accept=".json,.csv,.txt,application/json,text/csv"></div><p class="micro">Podporuje JSON (jednu alebo viac sád), vrátane obrázkových a grafických kariet, a CSV so stĺpcami <code>a;b</code>. Importované sady sa uložia lokálne.</p></div><div class="space"></div><button class="action secondary full" id="exportPacks">Stiahnuť všetky vlastné sady (JSON)</button><div class="space"></div><details><summary style="cursor:pointer;font-weight:750">Vzor formátu JSON</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;color:var(--teal);font-size:12px">{"name":"Moje pexeso","topic":"Algebra","pairs":[{"a":"2³","b":"8"},{"a":"3²","b":"9"}]}</pre><p class="micro">Pre funkčnú sadu pridaj aspoň 6 dvojíc. Môžeš použiť aj pole dvojíc: <code>[["2³","8"], ...]</code>.</p></details></div><div class="panel"><h2>Moje lokálne sady</h2><div id="myPacks"></div></div><div class="panel"><h2>Online administrátor</h2><p class="muted" style="font-size:14px">Online sady sú dostupné na všetkých zariadeniach. Zverejňovať ich môžu iba administrátori Holografického centra (tabuľka holo_admins).</p><div id="adminLogin"><div class="field"><label for="adminEmail">E-mail</label><input type="email" id="adminEmail" autocomplete="username"></div><div class="space"></div><div class="field"><label for="adminPassword">Heslo</label><input type="password" id="adminPassword" autocomplete="current-password"></div><div class="space"></div><button class="action secondary full" id="adminSignIn">Prihlásiť sa</button></div><div id="adminLogged" hidden><p id="adminWho"></p><button id="adminLogout" class="action ghost small">Odhlásiť sa</button></div><div class="space"></div><div id="onlineManage"></div></div></section></div></section>
 <section id="view-pripojenie" class="view" hidden><div class="hero"><div><span class="eyebrow">Nastavenia online hry</span><h1>Prepojenie so Supabase.</h1><p>Offline hra funguje hneď. Pre pexeso na rôznych mobiloch potrebuje aplikácia jednu spoločnú databázu.</p></div></div><div class="layout"><div class="panel"><h2>Pripoj projekt</h2><div class="field"><label for="sbUrl">Supabase Project URL</label><input id="sbUrl" placeholder="https://projekt.supabase.co" type="url" spellcheck="false"></div><div class="space"></div><div class="field"><label for="sbKey">Publishable / anon key (verejný)</label><input id="sbKey" type="text" placeholder="sb_publishable_... alebo eyJ..." spellcheck="false" autocomplete="off"></div><p class="micro">Používaj iba <strong>publishable</strong> alebo starší <strong>anon</strong> kľúč. Nikdy sem nezadávaj <strong>secret / service_role</strong> kľúč.</p><div class="row"><button class="action" id="saveConnection">Uložiť pripojenie</button><button class="action secondary" id="testConnection">Otestovať</button></div><div class="space"></div><div class="hint" id="connectionState">Zatiaľ nepripojené.</div></div><div class="stack"><div class="panel"><h2>Jednorazové nastavenie v Holografickom centre</h2><ol style="padding-left:22px;color:#d1e2eb"><li>V Supabase otvor <strong>SQL Editor</strong> a spusti priložený SQL súbor.</li><li>V nastaveniach projektu skopíruj <strong>Project URL</strong> a <strong>publishable key</strong>.</li><li>Vyplň ich tu. Ak je HTML v rovnakom priečinku ako <code>config.js</code> Holografického centra, nastavenia sa načítajú automaticky. Pri inom repozitári treba verejné hodnoty doplniť do konštánt na začiatku JavaScriptu.</li><li>Pre správu online sád použi existujúci účet správcu Holografického centra. Oprávnenie sa overuje v tabuľke <code>holo_admins</code>; nový účet netreba vytvárať.</li></ol></div><div class="panel"><h2>Čo sa synchronizuje?</h2><p class="muted">Online sa synchronizujú miestnosť, hráči, poradie ťahov, odkryté karty a skóre. Aktualizácia ostatných mobilov prebieha približne každých 1,3 sekundy. Každý hráč má vlastný náhodný prístupový token.</p><p class="micro">Na online hranie používaj HTTPS stránku, napríklad GitHub Pages. HTML nie je potrebné spúšťať cez vlastný server.</p></div></div></div></section>
-</main><footer class="footer"><div class="shell split"><span>Matematické pexeso · učebná aplikácia</span><span>Lokálne funguje bez internetu · online režim so Supabase</span></div></footer>
+</main><dialog id="graphDialog" class="graph-dialog" aria-label="Zväčšený graf alebo obrázok"><div class="graph-dialog-top"><strong>Detail kartičky</strong><button type="button" class="action small secondary" id="closeGraph">Zavrieť ×</button></div><div id="graphDialogBody" class="graph-big"></div><p class="muted">Obrázok alebo graf sa dá zväčšiť, aby boli detaily dobre čitateľné aj na mobile.</p></dialog><footer class="footer"><div class="shell split"><span>Matematické pexeso · učebná aplikácia</span><span>Lokálne funguje bez internetu · online režim so Supabase</span></div></footer>
 <div id="toast" class="toast" hidden role="status" aria-live="polite"></div>
 <script src="./config.js"></script>
 <script>
@@ -69,7 +99,7 @@ const LS = 'matpex-v1-';
 const $ = id => document.getElementById(id);
 const safe = s => String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const load = (k,fallback) => {try{const s=localStorage.getItem(LS+k);return s===null?fallback:JSON.parse(s)}catch{return fallback}};
-const store = (k,v) => {try{localStorage.setItem(LS+k,JSON.stringify(v))}catch{toast('Prehliadač neumožnil uloženie údajov.',true)}};
+const store = (k,v) => {try{localStorage.setItem(LS+k,JSON.stringify(v));return true}catch{toast('Úložisko prehliadača je plné. Exportuj sady do JSON alebo zmenši počet obrázkov.',true);return false}};
 const builtins = [
  {id:'basic-fractions',name:'Zlomky a percentá',topic:'Aritmetika',description:'Hľadaj rovnaké hodnoty zapísané zlomkom a percentami.',pairs:[['1/2','50 %'],['1/4','25 %'],['3/4','75 %'],['1/5','20 %'],['2/5','40 %'],['3/5','60 %'],['4/5','80 %'],['1/8','12,5 %'],['3/8','37,5 %'],['5/8','62,5 %'],['7/8','87,5 %'],['1/10','10 %']].map(([a,b])=>({a,b})),source:'builtin'},
  {id:'basic-powers',name:'Mocniny a odmocniny',topic:'Algebra',description:'Priraď mocninu alebo odmocninu k jej číselnej hodnote.',pairs:[['2³','8'],['3²','9'],['2⁴','16'],['√25','5'],['√49','7'],['5²','25'],['√144','12'],['3³','27'],['4³','64'],['√121','11'],['√169','13'],['5³','125']].map(([a,b])=>({a,b})),source:'builtin'},
@@ -87,19 +117,84 @@ if(DEFAULT_SUPABASE_URL && DEFAULT_SUPABASE_KEY){
 }
 let adminSession = null;
 try{adminSession=JSON.parse(sessionStorage.getItem(LS+'admin')||'null')}catch{}
-const normalizePairs = arr => arr.map(x=>Array.isArray(x)?{a:String(x[0]??''),b:String(x[1]??'')}:{a:String(x.a??''),b:String(x.b??'')});
+// Kartičky: bežný text, matematický SVG graf (graf:...) alebo obrázok.
+// Lokálne obrázky sú komprimované base64; online sú uložené v existujúcom
+// buckete holo-applet-images/pexeso a v sade sa používa krátky odkaz.
+const IMG_LOCAL=/^data:image\/(webp|jpeg|png);base64,[a-z0-9+/=]+$/i;
+const IMG_CLOUD=/^obrazok:([a-f0-9-]{36})\.(webp|jpg)$/i;
+const imageCard=v=>IMG_LOCAL.test(v)||IMG_CLOUD.test(v);
+function imageUrl(v){
+ if(IMG_LOCAL.test(v))return v;
+ const match=IMG_CLOUD.exec(v);
+ return match&&isConfigured()?sb.url+'/storage/v1/object/public/holo-applet-images/pexeso/'+match[1]+'.'+match[2]:null;
+}
+function cardMediaMarkup(v){
+ const graph=graphCardMarkup(v);if(graph)return graph;
+ const url=imageUrl(v);return url?'<img class="card-image" src="'+safe(url)+'" alt="Obrázok na kartičke" loading="lazy">':null;
+}
+const mediaCard=v=>imageCard(v)||!!parseGraphCard(v);
+const normalizePairs=arr=>arr.map(x=>Array.isArray(x)?{a:String(x[0]??''),b:String(x[1]??'')}:{a:String(x.a??''),b:String(x.b??'')});
 function validatePack(p){
- const name=String(p.name??p.title??'').trim();const topic=String(p.topic??'Matematika').trim()||'Matematika';
+ const name=String(p.name??p.title??'').trim(),topic=String(p.topic??'Matematika').trim()||'Matematika';
  const description=String(p.description??'').trim();if(name.length<2||name.length>90)throw Error('Názov sady musí mať 2 až 90 znakov.');
  if(!Array.isArray(p.pairs)||p.pairs.length<6||p.pairs.length>50)throw Error('Sada musí obsahovať 6 až 50 dvojíc.');
  const pairs=normalizePairs(p.pairs),used=new Set();
  for(let i=0;i<pairs.length;i++)for(const side of ['a','b']){
-  const value=pairs[i][side].trim();if(!value||value.length>70)throw Error('Karta '+(i+1)+' musí obsahovať text (max. 70 znakov).');
-  const key=value.replace(/\s+/g,'').toLocaleLowerCase('sk');if(used.has(key))throw Error('Text „'+value+'“ sa opakuje na viacerých kartách. Každá karta musí byť jednoznačná.');
+  const value=pairs[i][side].trim();
+  if(!value)throw Error('Doplň obsah karty v dvojici '+(i+1)+'.');
+  if(IMG_LOCAL.test(value)){
+   if(value.length>120000)throw Error('Obrázok v dvojici '+(i+1)+' je priveľký. Nahraj menší obrázok.');
+  }else if(!IMG_CLOUD.test(value)&&value.length>70)throw Error('Text karty '+(i+1)+' je pridlhý (najviac 70 znakov).');
+  const key=imageCard(value)?value:value.replace(/\s+/g,'').toLocaleLowerCase('sk');
+  if(used.has(key))throw Error('Každá kartička musí byť jedinečná (opakovaný obsah v dvojici '+(i+1)+').');
   used.add(key);pairs[i][side]=value;
  }
  return {name,topic:topic.slice(0,70),description:description.slice(0,300),pairs};
 }
+// Špeciálna textová kartička graf:a|b|n|c má vždy tvar y=a(x+b)^n+c.
+// Hodnoty sú čísla, žiadny text z importu sa nespúšťa ako HTML ani JavaScript.
+const graphMemo=new Map();
+function parseGraphCard(t){
+ const m=/^graf:([+-]?(?:\d+(?:\.\d+)?|\.\d+))\|([+-]?(?:\d+(?:\.\d+)?|\.\d+))\|(-?[1-5])\|([+-]?(?:\d+(?:\.\d+)?|\.\d+))$/.exec(String(t||'').trim());
+ if(!m)return null;
+ const [a,b,n,c]=m.slice(1).map(Number);
+ if(![a,b,n,c].every(Number.isFinite)||a===0||Math.abs(a)>10||Math.abs(b)>5||Math.abs(c)>5)return null;
+ return {a,b,n,c};
+}
+function graphCardMarkup(text){
+ if(graphMemo.has(text))return graphMemo.get(text);
+ const g=parseGraphCard(text);if(!g)return null;
+ const size=160,pad=12,span=size-pad*2,scale=span/10;
+ const xp=x=>pad+(x+5)*scale,yp=y=>pad+(5-y)*scale;
+ const fmt=x=>Number(x.toFixed(2));
+ let grid='';
+ for(let v=-5;v<=5;v++){
+  const k=fmt(xp(v)),l=fmt(yp(v));
+  grid+=`<line x1="${k}" y1="${pad}" x2="${k}" y2="${size-pad}" stroke="${v===0?'#344c5a':'#d2dedf'}" stroke-width="${v===0?1.5:.65}"/>`;
+  grid+=`<line x1="${pad}" y1="${l}" x2="${size-pad}" y2="${l}" stroke="${v===0?'#344c5a':'#d2dedf'}" stroke-width="${v===0?1.5:.65}"/>`;
+ }
+ let asym='';
+ if(g.n<0){
+  const xx=fmt(xp(-g.b)),yy=fmt(yp(g.c));
+  asym=`<line x1="${xx}" y1="${pad}" x2="${xx}" y2="${size-pad}" stroke="#b87b8f" stroke-width="1.4" stroke-dasharray="4 3"/><line x1="${pad}" y1="${yy}" x2="${size-pad}" y2="${yy}" stroke="#b87b8f" stroke-width="1.4" stroke-dasharray="4 3"/>`;
+ }
+ let paths='',d='',wasValid=false,lastX=0,lastY=0;
+ for(let i=0;i<=1200;i++){
+  const x=-5+10*i/1200,offset=x+g.b;
+  const y=g.a*Math.pow(offset,g.n)+g.c;
+  const good=Number.isFinite(y)&&y>=-5.08&&y<=5.08&&(g.n>0||Math.abs(offset)>.015);
+  if(!good){if(d)paths+=`<path d="${d}"/>`;d='';wasValid=false;continue}
+  // Do not join the two sides of the vertical asymptote.
+  if(g.n<0&&wasValid&&(x+g.b)*(lastX+g.b)<0){if(d)paths+=`<path d="${d}"/>`;d='';wasValid=false}
+  if(g.n<0&&wasValid&&Math.abs(y-lastY)>1.5){if(d)paths+=`<path d="${d}"/>`;d='';wasValid=false}
+  d+=(wasValid?' L':'M')+fmt(xp(x))+' '+fmt(yp(y));
+  wasValid=true;lastX=x;lastY=y;
+ }
+ if(d)paths+=`<path d="${d}"/>`;
+ const svg=`<span class="graph-card"><svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graf funkcie, súradnicová sieť po 1 jednotke"><rect width="160" height="160" fill="#f5fbf7"/>${grid}${asym}<g fill="none" stroke="#047f99" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${paths}</g><g font-family="system-ui,sans-serif" font-size="10" fill="#36525c"><text x="147" y="91">x</text><text x="83" y="10">y</text><text x="83" y="92">0</text><text x="121" y="92">3</text><text x="31" y="92">−3</text></g></svg></span>`;
+ graphMemo.set(text,svg);return svg;
+}
+
 function packs(){return [...builtins,...custom.map(p=>({...p,source:'local'})),...onlinePacks.map(p=>({...p,source:'online'}))]}
 function chosen(){return packs().find(p=>p.id===selectedPack)||packs()[0]}
 function choosePackAtStart(){
@@ -249,10 +344,15 @@ function renderGame(){const v=gameView();if(!v)return;$('arenaMode').textContent
  const identity=(remote?'r'+remote.code:'l'+localGame.stamp)+'-'+v.cards.length;
  if(boardIdentity!==identity){boardIdentity=identity;$('board').innerHTML=v.cards.map((c,i)=>`<button type="button" class="flip" data-index="${i}" aria-label="Karta ${i+1}, zakrytá"><span class="flipinner"><span class="face back">∑</span><span class="face front"></span></span></button>`).join('');}
  $('board').dataset.size=v.pairCount;
- [...$('board').children].forEach((btn,i)=>{const c=v.cards[i];let opened=!!c.open||!!c.matched;btn.classList.toggle('open',opened);btn.classList.toggle('matched',!!c.matched);btn.querySelector('.front').textContent=opened?c.text??'':'';btn.disabled=opened||v.finished||v.locked||(remote&&v.mySeat!==v.turn)||(!remote&&!!localGame?.bot&&v.turn===1);btn.setAttribute('aria-label','Karta '+(i+1)+', '+(c.matched?'nájdená dvojica: '+c.text:opened?'odkrytá: '+c.text:'zakrytá'))});
+ [...$('board').children].forEach((btn,i)=>{const c=v.cards[i];let opened=!!c.open||!!c.matched;btn.classList.toggle('open',opened);btn.classList.toggle('matched',!!c.matched);const front=btn.querySelector('.front'),value=opened?(c.text??''):'';if(front.dataset.value!==value){front.dataset.value=value;const media=cardMediaMarkup(value);front.classList.toggle('graph-front',!!parseGraphCard(value));front.classList.toggle('image-front',imageCard(value));if(media)front.innerHTML=media;else front.textContent=value;}btn.disabled=opened||v.finished||v.locked||(remote&&v.mySeat!==v.turn)||(!remote&&!!localGame?.bot&&v.turn===1);btn.setAttribute('aria-label','Karta '+(i+1)+', '+(c.matched?'nájdená dvojica: '+(mediaCard(c.text)?'graf alebo obrázok':c.text):opened?'odkrytá: '+(mediaCard(c.text)?'graf alebo obrázok':c.text):'zakrytá'))});
+ const hasGraph=v.cards.some(c=>c.open&&mediaCard(c.text));$('enlargeGraph').hidden=!hasGraph;$('graphHint').hidden=!hasGraph;
  $('endScreen').hidden=!v.finished;
  if(v.finished){const max=Math.max(...v.players.map(p=>p.score));const winner=v.players.filter(p=>p.score===max).map(p=>p.name);$('winnerText').textContent=winner.length===1?'Vyhráva '+winner[0]+'!':'Remíza: '+winner.join(', ');$('endDetails').textContent='Nájdených '+v.pairCount+' dvojíc na '+v.moves+' pokusov. Každá správna dvojica priniesla bod.';$('playAgain').hidden=!!remote;}
  updateTimer();}
+
+$('enlargeGraph').onclick=()=>{const v=gameView();if(!v)return;const found=v.cards.find(c=>c.open&&!c.matched&&mediaCard(c.text))||v.cards.find(c=>c.open&&mediaCard(c.text));if(!found)return;$('graphDialogBody').innerHTML=cardMediaMarkup(found.text)||'';$('graphDialog').showModal()};
+$('closeGraph').onclick=()=>$('graphDialog').close();
+
 $('board').addEventListener('click',e=>{const b=e.target.closest('.flip');if(!b)return;const n=Number(b.dataset.index);if(remote)remoteFlip(n);else localFlip(n)});
 function updateTimer(){if($('gameArena').hidden)return;const ts=remote?snapshot?.startedAt:gameStartedAt;if(!ts){$('elapsedText').textContent='00:00';return}const s=Math.max(0,Math.floor((Date.now()-new Date(ts).getTime())/1000));$('elapsedText').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 setInterval(updateTimer,1000);
@@ -272,7 +372,7 @@ function playerToken(){return crypto.randomUUID?crypto.randomUUID()+'-'+crypto.r
 function rememberedRoom(r){try{sessionStorage.setItem(LS+'room',JSON.stringify(r))}catch{}}
 function stopRemote(){clearInterval(pollTimer);pollTimer=null;remote=null;snapshot=null;polling=false;try{sessionStorage.removeItem(LS+'room')}catch{}}
 function roomInvitation(){const url=new URL(location.href);url.searchParams.set('room',remote?.code||'');return url.href}
-async function createOnline(){if(busy)return;const name=$('onlineName').value.trim();if(!name){toast('Zadaj svoje meno.',true);return}if(!isConfigured()){tab('pripojenie');toast('Najprv nastav Supabase.',true);return}busy=true;$('createRoom').disabled=true;try{const p=choosePackAtStart();const token=playerToken();const code=await rpc('pexeso_create',{p_name:p.name,p_pairs:shuffle(p.pairs),p_count:level,p_player:name,p_token:token});remote={code,token,name};rememberedRoom(remote);const url=new URL(location.href);url.searchParams.set('room',code);history.replaceState(null,'',url);await pollState();beginPolling();toast('Miestnosť '+code+' je vytvorená.')}catch(e){toast('Nepodarilo sa vytvoriť miestnosť: '+e.message,true)}finally{busy=false;$('createRoom').disabled=false}}
+async function createOnline(){if(busy)return;const name=$('onlineName').value.trim();if(!name){toast('Zadaj svoje meno.',true);return}if(!isConfigured()){tab('pripojenie');toast('Najprv nastav Supabase.',true);return}busy=true;$('createRoom').disabled=true;try{const p=choosePackAtStart();if(p.pairs.some(x=>IMG_LOCAL.test(x.a)||IMG_LOCAL.test(x.b)))throw Error('Obrázkové pexeso najprv publikuj ako administrátor a potom vyber jeho ONLINE verziu.');const token=playerToken();const code=await rpc('pexeso_create',{p_name:p.name,p_pairs:shuffle(p.pairs),p_count:level,p_player:name,p_token:token});remote={code,token,name};rememberedRoom(remote);const url=new URL(location.href);url.searchParams.set('room',code);history.replaceState(null,'',url);await pollState();beginPolling();toast('Miestnosť '+code+' je vytvorená.')}catch(e){toast('Nepodarilo sa vytvoriť miestnosť: '+e.message,true)}finally{busy=false;$('createRoom').disabled=false}}
 async function joinOnline(){if(busy)return;const code=$('roomInput').value.toUpperCase().replace(/\s+/g,'');const name=$('onlineName').value.trim();if(!/^[A-F0-9]{8}$/.test(code)){toast('Kód má 8 písmen A–F a číslic.',true);return}if(!name){toast('Zadaj svoje meno.',true);return}busy=true;$('joinRoom').disabled=true;try{const token=playerToken();await rpc('pexeso_join',{p_code:code,p_player:name,p_token:token});remote={code,token,name};rememberedRoom(remote);await pollState();beginPolling();toast('Pripojený do miestnosti '+code+'.')}catch(e){toast('Pripojenie zlyhalo: '+e.message,true)}finally{busy=false;$('joinRoom').disabled=false}}
 $('createRoom').onclick=createOnline;$('joinRoom').onclick=joinOnline;
 async function pollState(){if(!remote||polling)return;polling=true;try{const result=await rpc('pexeso_state',{p_code:remote.code,p_token:remote.token});if(!remote||remote.code!==result.code)return;snapshot=result;if(result.status==='lobby')renderLobby();else{if($('gameArena').hidden)openArena({name:result.name});else renderGame()}}catch(e){console.warn('Chyba synchronizácie',e.message);if(!$('gameArena').hidden||!$('onlineLobby').hidden)toast('Synchronizácia: '+e.message,true)}finally{polling=false}}
@@ -285,14 +385,89 @@ async function copyText(s){try{await navigator.clipboard.writeText(s);toast('Sko
 $('copyCode').onclick=()=>remote&&copyText(remote.code);$('copyLink').onclick=()=>remote&&copyText(roomInvitation());
 // Správa obsahu
 let editorPairs=[];let editingLocalId=null;
-function renderEditor(){const box=$('editorPairs');box.innerHTML=editorPairs.map((p,i)=>`<div class="pairrow"><input data-pair="${i}" data-side="a" aria-label="Dvojica ${i+1}, ľavá karta" placeholder="Karta A" maxlength="70" value="${safe(p.a)}"><input data-pair="${i}" data-side="b" aria-label="Dvojica ${i+1}, pravá karta" placeholder="Karta B" maxlength="70" value="${safe(p.b)}"><button class="action danger small" data-remove="${i}" aria-label="Odstrániť dvojicu ${i+1}" title="Odstrániť dvojicu">×</button></div>`).join('');$('editCount').textContent=editorPairs.length+' dvojíc';box.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>editorPairs[Number(i.dataset.pair)][i.dataset.side]=i.value));box.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{editorPairs.splice(Number(b.dataset.remove),1);renderEditor()})}
+function renderEditor(){
+ const box=$('editorPairs');
+ box.innerHTML=editorPairs.map((p,i)=>{
+  const sideHTML=side=>{
+   const v=p[side],im=imageCard(v),graph=!!parseGraphCard(v),media=(im||graph)?cardMediaMarkup(v):null;
+   const preview=media?'<div class="pair-preview">'+media+'</div>':'';
+   const placeholder=im?'Obrázok je pripojený':graph?'Graf vytvorený z predpisu':'Zadaj text alebo predpis grafu';
+   return `<div class="pair-side"><label class="pair-side-label" for="editor-${i}-${side}">Dvojica ${i+1} · karta ${side.toUpperCase()}</label><input type="text" id="editor-${i}-${side}" data-pair="${i}" data-side="${side}" maxlength="70" value="${im?'':safe(v)}" placeholder="${placeholder}" ${im?'disabled':''}>${preview}<div class="pair-actions"><button type="button" class="action secondary small" data-openfile="${i}" data-side="${side}">${im?'Zmeniť obrázok':'Nahrať obrázok'}</button>${im?`<button type="button" class="action ghost small" data-clearimage="${i}" data-side="${side}">Odstrániť obrázok</button>`:''}<input type="file" hidden data-filepair="${i}" data-side="${side}" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp"></div></div>`;
+  };
+  return `<div class="pairrow">${sideHTML('a')}${sideHTML('b')}<button type="button" class="action danger small pair-remove" data-remove="${i}" aria-label="Odstrániť dvojicu ${i+1}">×</button></div>`;
+ }).join('');
+ $('editCount').textContent=editorPairs.length+' dvojíc';
+ box.querySelectorAll('input[data-pair]').forEach(input=>input.addEventListener('input',()=>{editorPairs[Number(input.dataset.pair)][input.dataset.side]=input.value;}));
+ box.querySelectorAll('button[data-openfile]').forEach(btn=>btn.onclick=()=>{
+  const file=box.querySelector(`input[data-filepair="${btn.dataset.openfile}"][data-side="${btn.dataset.side}"]`);
+  file?.click();
+ });
+ box.querySelectorAll('input[data-filepair]').forEach(input=>input.onchange=async()=>{
+  const file=input.files?.[0];if(!file)return;
+  const idx=Number(input.dataset.filepair),side=input.dataset.side;
+  try{
+   const encoded=await compressImage(file);
+   if(!editorPairs[idx])return;
+   editorPairs[idx][side]=encoded;renderEditor();toast('Obrázok bol pridaný ku kartičke.');
+  }catch(e){toast('Obrázok: '+e.message,true)}finally{input.value=''}
+ });
+ box.querySelectorAll('button[data-clearimage]').forEach(btn=>btn.onclick=()=>{editorPairs[Number(btn.dataset.clearimage)][btn.dataset.side]='';renderEditor()});
+ box.querySelectorAll('[data-remove]').forEach(btn=>btn.onclick=()=>{editorPairs.splice(Number(btn.dataset.remove),1);renderEditor()});
+}
+async function compressImage(file){
+ if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('Podporované sú iba PNG, JPG a WebP.');
+ if(file.size>8*1024*1024)throw Error('Zdrojový obrázok má viac než 8 MB.');
+ const blobUrl=URL.createObjectURL(file);
+ try{
+  const image=new Image();await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('Obrázok sa nepodarilo otvoriť.'));image.src=blobUrl});
+  for(const [maxSize,quality] of [[600,.78],[480,.70],[360,.58],[300,.45]]){
+   const scale=Math.min(1,maxSize/Math.max(image.naturalWidth,image.naturalHeight));
+   const w=Math.max(1,Math.round(image.naturalWidth*scale)),h=Math.max(1,Math.round(image.naturalHeight*scale));
+   const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+   const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(image,0,0,w,h);
+   let encoded=canvas.toDataURL('image/webp',quality);
+   if(!encoded.startsWith('data:image/webp;'))encoded=canvas.toDataURL('image/jpeg',quality);
+   if(encoded.length<=120000)return encoded;
+  }
+  throw Error('Obrázok má aj po zmenšení priveľa údajov. Použi jednoduchší alebo menší obrázok.');
+ }finally{URL.revokeObjectURL(blobUrl)}
+}
 function blankEditor(){editingLocalId=null;editorPairs=Array.from({length:6},()=>({a:'',b:''}));$('editTitle').value='';$('editTopic').value='Matematika';$('editDesc').value='';$('savePack').textContent='Uložiť do prehliadača';renderEditor()}
 $('addPair').onclick=()=>{if(editorPairs.length>=50){toast('Najviac 50 dvojíc.',true);return}editorPairs.push({a:'',b:''});renderEditor();$('editorPairs').lastElementChild?.querySelector('input')?.focus()};
 $('clearEditor').onclick=blankEditor;
 function packFromEditor(){return validatePack({name:$('editTitle').value,topic:$('editTopic').value,description:$('editDesc').value,pairs:editorPairs})}
-function saveLocalPack(p){const item={...p,id:'local-'+(crypto.randomUUID?crypto.randomUUID():Date.now())};custom.push(item);store('packs',custom);renderPacks();renderManagement();return item}
-$('savePack').onclick=()=>{try{const p=packFromEditor();if(editingLocalId){const index=custom.findIndex(x=>x.id===editingLocalId);if(index<0)throw Error('Upravovaná sada už neexistuje.');custom[index]={...p,id:editingLocalId};store('packs',custom);selectedPack=editingLocalId;renderPacks();renderManagement();toast('Zmeny v sade boli uložené.')}else{const item=saveLocalPack(p);selectedPack=item.id;renderPacks();toast('Sada bola uložená v tomto prehliadači.')}}catch(e){toast(e.message,true)}};
-async function publish(p){if(!adminSession?.access_token){toast('Najprv sa prihlás ako online administrátor.',true);return}if(!isConfigured()){toast('Nastav Supabase pripojenie.',true);return}await ensureAdminSession();await api('/rest/v1/pexeso_packs',{method:'POST',jwt:adminSession.access_token,prefer:'return=representation',body:{name:p.name,topic:p.topic,description:p.description,pairs:p.pairs,published:true}});await loadOnline();await renderOnlineManagement();toast('Pexeso je zverejnené v online knižnici.')}
+function saveLocalPack(p){const item={...p,id:'local-'+(crypto.randomUUID?crypto.randomUUID():Date.now())};custom.push(item);if(!store('packs',custom)){custom.pop();throw Error('Sadu sa nepodarilo uložiť. Skús menšie obrázky alebo export JSON.')}renderPacks();renderManagement();return item}
+$('savePack').onclick=()=>{try{const p=packFromEditor();if(editingLocalId){const index=custom.findIndex(x=>x.id===editingLocalId);if(index<0)throw Error('Upravovaná sada už neexistuje.');const before=custom[index];custom[index]={...p,id:editingLocalId};if(!store('packs',custom)){custom[index]=before;throw Error('Na uloženie sady nezostalo miesto.')}selectedPack=editingLocalId;renderPacks();renderManagement();toast('Zmeny v sade boli uložené.')}else{const item=saveLocalPack(p);selectedPack=item.id;renderPacks();toast('Sada bola uložená v tomto prehliadači.')}}catch(e){toast(e.message,true)}};
+// Obrázky publikujeme ako autentifikovaný správca do existujúceho bucketu.
+// Do pexeso_packs ukladáme iba krátky odkaz, aby fungovalo online RPC s limitom 70 znakov/kartu.
+async function uploadCardImage(data){
+ const mime=data.startsWith('data:image/webp;')?'image/webp':data.startsWith('data:image/jpeg;')?'image/jpeg':'image/png';
+ const ext=mime==='image/webp'?'webp':'jpg';
+ if(mime==='image/png')throw Error('Obrázok je potrebné najprv skonvertovať na WebP alebo JPEG.');
+ const base64=data.slice(data.indexOf(',')+1),bytes=Uint8Array.from(atob(base64),c=>c.charCodeAt(0));
+ const rawId=crypto.getRandomValues(new Uint8Array(16));rawId[6]=(rawId[6]&15)|64;rawId[8]=(rawId[8]&63)|128;const hex=Array.from(rawId,b=>b.toString(16).padStart(2,'0')).join('');const name=[hex.slice(0,8),hex.slice(8,12),hex.slice(12,16),hex.slice(16,20),hex.slice(20)].join('-'),file=`pexeso/${name}.${ext}`;
+ const response=await fetch(sb.url+'/storage/v1/object/holo-applet-images/'+file,{
+  method:'POST',headers:{apikey:sb.key,Authorization:'Bearer '+adminSession.access_token,'Content-Type':mime,'x-upsert':'false'},body:bytes
+ });
+ if(!response.ok){let reason=await response.text();try{reason=JSON.parse(reason).message||reason}catch{}throw Error('Uloženie obrázka do Supabase zlyhalo: '+String(reason).slice(0,220)+' (skontroluj pravidlá bucketu holo-applet-images)')}
+ return 'obrazok:'+name+'.'+ext;
+}
+async function publish(p){
+ if(!adminSession?.access_token){toast('Najprv sa prihlás ako online administrátor.',true);return}
+ if(!isConfigured()){toast('Nastav Supabase pripojenie.',true);return}
+ await ensureAdminSession();
+ const uploaded=new Map();let count=0;
+ const pairs=[];
+ for(const pair of p.pairs){const target={};for(const side of ['a','b']){
+  const value=pair[side];
+  if(IMG_LOCAL.test(value)){
+   if(!uploaded.has(value)){count++;toast('Nahrávam obrázok '+count+' do Holografického centra…');uploaded.set(value,await uploadCardImage(value))}
+   target[side]=uploaded.get(value);
+  }else target[side]=value;
+ }pairs.push(target)}
+ await api('/rest/v1/pexeso_packs',{method:'POST',jwt:adminSession.access_token,prefer:'return=representation',body:{name:p.name,topic:p.topic,description:p.description,pairs,published:true}});
+ await loadOnline();await renderOnlineManagement();toast('Pexeso je zverejnené vrátane '+count+' obrázkov.');
+}
 $('publishPack').onclick=async()=>{try{await publish(packFromEditor())}catch(e){toast('Publikovanie: '+e.message,true)}};
 function renderManagement(){$('myPacks').innerHTML=custom.length?custom.map(p=>`<div class="pack-summary"><div><strong>${safe(p.name)}</strong><small>${p.pairs.length} dvojíc</small></div><div class="row"><button class="action small secondary" data-editlocal="${safe(p.id)}">Upraviť</button><button class="action small ghost" data-exportlocal="${safe(p.id)}">JSON</button><button class="action small danger" data-deletelocal="${safe(p.id)}">Zmazať</button></div></div>`).join(''):'<p class="muted">Zatiaľ nemáš uložené žiadne vlastné sady.</p>';
  $('myPacks').querySelectorAll('[data-editlocal]').forEach(b=>b.onclick=()=>{const p=custom.find(p=>p.id===b.dataset.editlocal);if(!p)return;$('editTitle').value=p.name;$('editTopic').value=p.topic;$('editDesc').value=p.description;editorPairs=p.pairs.map(v=>({...v}));editingLocalId=p.id;$('savePack').textContent='Uložiť zmeny';renderEditor();$('editTitle').focus();toast('Sada je pripravená na úpravu.')});
@@ -302,7 +477,7 @@ function renderManagement(){$('myPacks').innerHTML=custom.length?custom.map(p=>`
 function downloadJSON(data,name){const blob=new Blob([JSON.stringify(data.map(p=>({name:p.name,topic:p.topic,description:p.description,pairs:p.pairs})),null,2)],{type:'application/json;charset=utf-8'});const href=URL.createObjectURL(blob);const a=document.createElement('a');a.href=href;a.download=(name||'matematicke_pexesa').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w-]+/g,'_')+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(href),1000)}
 $('exportPacks').onclick=()=>custom.length?downloadJSON(custom,'moje_pexesa'):toast('Zatiaľ nemáš žiadne vlastné sady.',true);
 function parseCSV(str,fileName){const text=str.replace(/^\ufeff/,'');const first=text.split(/\r?\n/,1)[0];const delim=first.includes(';')?';':',';let rows=[],row=[],cell='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){cell+='"';i++}else quoted=!quoted}else if(!quoted&&c===delim){row.push(cell.trim());cell=''}else if(!quoted&&(c==='\n'||c==='\r')){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell.trim());if(row.some(x=>x))rows.push(row);row=[];cell=''}else cell+=c}if(quoted)throw Error('CSV obsahuje neuzavreté úvodzovky.');row.push(cell.trim());if(row.some(x=>x))rows.push(row);if(rows.length&&rows[0][0]?.toLowerCase()==='a'&&rows[0][1]?.toLowerCase()==='b')rows.shift();return [{name:fileName.replace(/\.[^.]+$/,''),topic:'Matematika',description:'Importované z CSV',pairs:rows.map(r=>({a:r[0],b:r[1]}))}]}
-$('importFile').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>500000)throw Error('Súbor je príliš veľký (maximum 500 kB).');const raw=await f.text();let items;if(/\.csv$/i.test(f.name))items=parseCSV(raw,f.name);else{const obj=JSON.parse(raw);items=Array.isArray(obj)?obj:Array.isArray(obj.packs)?obj.packs:[obj]};if(items.length>100)throw Error('Naraz možno importovať maximálne 100 sád.');const clean=items.map(validatePack);clean.forEach(saveLocalPack);toast('Importovaných '+clean.length+' sád.')}catch(err){toast('Import sa nepodaril: '+err.message,true)}finally{e.target.value=''}});
+$('importFile').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>6*1024*1024)throw Error('Súbor je príliš veľký (maximum 6 MB).');const raw=await f.text();let items;if(/\.csv$/i.test(f.name))items=parseCSV(raw,f.name);else{const obj=JSON.parse(raw);items=Array.isArray(obj)?obj:Array.isArray(obj.packs)?obj.packs:[obj]};if(items.length>100)throw Error('Naraz možno importovať maximálne 100 sád.');const clean=items.map(validatePack);clean.forEach(saveLocalPack);toast('Importovaných '+clean.length+' sád.')}catch(err){toast('Import sa nepodaril: '+err.message,true)}finally{e.target.value=''}});
 function persistAdmin(){try{if(adminSession)sessionStorage.setItem(LS+'admin',JSON.stringify(adminSession));else sessionStorage.removeItem(LS+'admin')}catch{}}
 async function ensureAdminSession(){if(!adminSession)throw Error('Nie si prihlásený.');if(adminSession.expires_at&&Date.now()<adminSession.expires_at-60000)return;const data=await api('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:{refresh_token:adminSession.refresh_token}});adminSession={...data,expires_at:Date.now()+(data.expires_in||3600)*1000,email:adminSession.email};persistAdmin()}
 $('adminSignIn').onclick=async()=>{const email=$('adminEmail').value.trim(),password=$('adminPassword').value;if(!email||!password){toast('Zadaj e-mail a heslo.',true);return}try{const data=await api('/auth/v1/token?grant_type=password',{method:'POST',body:{email,password}});adminSession={...data,email,expires_at:Date.now()+(data.expires_in||3600)*1000};persistAdmin();$('adminPassword').value='';renderManagement();toast('Prihlásenie bolo úspešné. Publikovať môže iba schválený administrátor.')}catch(e){toast('Prihlásenie: '+e.message,true)}};
