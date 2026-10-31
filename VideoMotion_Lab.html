@@ -2,7 +2,7 @@
 <html lang="sk">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0e2637"><title>VideoMotion Lab v4 — automatická videoanalýza pohybu</title>
+<meta name="theme-color" content="#0e2637"><title>VideoMotion Lab v6 — automatická videoanalýza pohybu</title>
 <style>
 :root{--ink:#153043;--muted:#597182;--blue:#195a94;--teal:#008b7d;--line:#dbe6ed;--bg:#f2f7fa;--card:#fff;--orange:#d27d2d;--red:#b54747;--radius:17px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,.video-overlay:focus-visible{outline:3px solid #f09e37;outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}header{background:#0e2637;color:#fff;padding:22px max(18px,calc((100vw - 1320px)/2));display:flex;justify-content:space-between;align-items:center;gap:20px}header h1{font-size:clamp(23px,3vw,32px);margin:0;font-weight:800;letter-spacing:-.6px}header p{margin:3px 0 0;color:#afcbd7;font-size:14px}.tag{color:#99e8dc;background:#204553;border:1px solid #3c6b74;padding:8px 12px;border-radius:30px;font-size:13px;white-space:nowrap}main{max-width:1360px;padding:24px 18px 55px;margin:auto}.top{display:grid;grid-template-columns:1fr 310px;gap:18px;align-items:stretch}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 22px #12344d0b;overflow:hidden}.card.pad{padding:20px}.sectiontitle{font-size:20px;line-height:1.2;margin:0 0 14px}.desc{font-size:14px;color:var(--muted);margin:6px 0 13px}.badge{border-radius:99px;background:#eaf3f8;color:#2a5872;padding:4px 9px;display:inline-flex;font-size:12px;font-weight:700}.upload{display:flex;flex-wrap:wrap;align-items:center;gap:11px}.upload input{max-width:100%;font-size:14px}.pill{border:1px solid #c8d8e2;background:#fff;color:#21516c;border-radius:9px;padding:10px 12px;min-height:44px;font-weight:700}.pill.active{border-color:#008b7d;background:#e2f6f1;color:#006c61}.pill:hover:not(:disabled){filter:brightness(.97)}.primary{background:#087b72;color:white;border-color:#087b72}.danger{border-color:#f0c1c1;color:#a23a3a;background:#fff6f6}.btnbar{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.meter{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:650}.field input,.field select{width:100%;color:var(--ink);background:#fff;border-radius:9px;border:1px solid #cbdce5;padding:9px 10px;min-height:42px}.field input[type=range]{padding:0;min-height:24px;accent-color:#078777}.field label{display:block}.workspace{margin-top:17px;display:grid;grid-template-columns:minmax(0,1.62fr) minmax(300px,.82fr);align-items:start;gap:18px}.videohead{padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.videohead h2{margin:0;font-size:19px}.viewer{background:#122936;padding:13px;position:relative}.video-box{position:relative;max-width:100%;margin:auto;min-height:230px;display:grid;place-items:center;overflow:hidden;background:#07151f;border-radius:10px}.video-box.loaded{min-height:0}.video-box video{width:100%;height:auto;display:block;max-height:65vh}.video-overlay{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:none}.video-box.loaded .video-overlay{display:block}.empty{min-height:240px;display:grid;place-items:center;text-align:center;color:#b0cbd5;padding:30px}.empty strong{display:block;color:white;font-size:20px}.empty svg{width:50px;height:50px;opacity:.55}.belowvideo{padding:12px 18px 18px}.timeline{display:grid;grid-template-columns:58px 1fr 58px;gap:8px;align-items:center;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}.timeline input{width:100%;accent-color:var(--teal)}.status{padding:10px 13px;background:#edf6f9;border-radius:9px;color:#31546a;font-size:14px;min-height:43px}.status.warn{background:#fff3df;color:#835617}.status.error{background:#fff0f0;color:#9a2c36}.controls{padding:18px}.controls h3,.results h3{font-size:16px;margin:0 0 12px}.howto{padding:11px 12px;border-left:3px solid #0b998b;background:#f0f9f7;color:#1c5660;border-radius:6px;font-size:14px;margin:10px 0}.small{font-size:12px;color:var(--muted)}.settings{margin-top:12px;display:grid;gap:11px}.bararea{height:8px;border-radius:99px;background:#e0eaf0;overflow:hidden;margin-top:10px}.bararea>div{height:100%;width:0;background:linear-gradient(90deg,#148c7c,#4fbba8);transition:width .2s}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.summary .metric{border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center}.summary b{display:block;font-size:17px;font-variant-numeric:tabular-nums}.summary span{font-size:11px;color:var(--muted)}.results{margin-top:18px;padding:20px}.result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.results h2{font-size:21px;margin:0}.tabs{display:flex;gap:6px;flex-wrap:wrap}.chart-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}.chart-controls label{display:flex;align-items:center;gap:4px;font-size:14px}.chart-controls input{accent-color:var(--teal)}.plot-wrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.plot-wrap canvas{width:100%;height:335px;display:block;cursor:crosshair;touch-action:pan-y}.plot-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);pointer-events:none;background:#fff9}.legend{display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:13px}.swatch{width:9px;height:9px;display:inline-block;vertical-align:middle;margin-right:7px;border-radius:50%}.tablehead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}.tablehead h3{margin:0}.table-wrap{max-height:265px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:9px}.table-wrap table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}.table-wrap th{position:sticky;top:0;background:#eaf2f7;color:#274b60;padding:9px;z-index:1}.table-wrap td{padding:7px 9px;border-top:1px solid #e7eff3}.table-wrap tr:nth-child(even){background:#f9fcfd}.table-wrap td:first-child,.table-wrap th:first-child{text-align:left}.table-wrap tr.selected{background:#ddf5ee}footer{font-size:13px;color:var(--muted);padding:22px 0;line-height:1.6}.hidden{display:none!important}.checkrow{display:flex;align-items:center;gap:9px;font-size:13px}.checkrow input{width:18px;height:18px;accent-color:#087b72}kbd{font-family:inherit;background:#e6edf2;border-radius:3px;padding:2px 5px}.info-line{font-size:13px;color:var(--muted);margin-top:10px}.alert{background:#fff5df;padding:12px 15px;border-radius:11px;color:#72561f;border:1px solid #f4dfac;font-size:13px;margin-top:13px}@media(max-width:900px){.top,.workspace{grid-template-columns:1fr}.video-box video{max-height:55vh}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.controls .full{grid-column:1/-1}}@media(max-width:540px){header{padding:18px}header .tag{display:none}main{padding:12px 10px 38px}.card.pad,.results{padding:15px}.videohead{padding:13px}.viewer{padding:7px}.belowvideo{padding:12px}.controls{display:block}.controls>*{margin-bottom:14px}.plot-wrap canvas{height:280px}.meter{grid-template-columns:1fr 1fr}.summary{grid-template-columns:repeat(3,minmax(0,1fr))}.summary b{font-size:15px}.btnbar .pill{flex:1}header h1{font-size:23px}}
 
@@ -23,18 +23,32 @@
 .settingrow .field{min-width:160px;flex:1}
 .axes-help{font-size:12px;color:#597182;margin:8px 0}
 @media(max-width:540px){.zoomtools{gap:5px}.zoomtools .pill{padding:7px 10px}.settingrow .pill{flex:1}}
+
+.conversion-panel{margin:13px 0 14px;padding:14px 15px;border:1px solid #91c4c0;background:#ecf9f7;border-radius:11px}
+.conversion-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.conversion-options{max-width:470px;margin:8px 0}
+.conversion-panel .bararea{height:9px;background:#c9e5e0}
+.conversion-panel .desc{margin:6px 0 10px}
+.conversion-panel .small{margin-bottom:0}
 </style>
 </head><body>
 <header><div><h1>◉ VideoMotion Lab</h1><p>Meranie pohybu z videa · poloha, rýchlosť, zrýchlenie</p></div><span class="tag">Lokálne spracovanie · bez servera</span></header>
 <main>
 <section class="top">
- <div class="card pad"><h2 class="sectiontitle">1. Nahraj video</h2><div class="upload"><input id="file" type="file" accept="video/*" aria-label="Vybrať video"><span id="fileDetail" class="badge">Zatiaľ bez videa</span></div><p class="desc">MP4 alebo WebM, podľa podpory prehliadača. Najlepšie funguje kamera na statíve, kontrastný predmet a nemenné osvetlenie. Video neopúšťa tvoje zariadenie. Ak sa zobrazí iba čierna plocha, skontroluj upozornenie pod videom.</p><div id="message" class="status" role="status" aria-live="polite">Začni výberom videa. Potom označ predmet myšou alebo prstom.</div></div>
+ <div class="card pad"><h2 class="sectiontitle">1. Nahraj video</h2><div class="upload"><input id="file" type="file" accept="video/*" aria-label="Vybrať video"><span id="fileDetail" class="badge">Zatiaľ bez videa</span></div><p class="desc">Bežné MP4/H.264 sa spracujú okamžite. Pri nepodporovanom H.265/HEVC alebo HDR možno zapnúť konverziu priamo v prehliadači. Najlepšie funguje kamera na statíve, kontrastný predmet a nemenné osvetlenie. Video neopúšťa tvoje zariadenie. Rozšírený prevod vyžaduje internet na prvé načítanie knižnice, nie odoslanie videa.</p><div id="conversionPanel" class="conversion-panel hidden" aria-live="polite">
+ <div class="conversion-head"><strong id="conversionTitle">Rozšírené spracovanie videa</strong><span class="badge">HEVC / HDR</span></div>
+ <p id="conversionIntro" class="desc">Ak tablet nevie dekódovať video, môžeme ho v tomto zariadení previesť na MP4/H.264 (8-bit SDR). Prvé použitie vyžaduje internet a stiahne približne 32 MB knižníc. Video sa nikam neodosiela.</p>
+ <div class="conversion-options"><label class="field" for="convertResolution">Maximálny rozmer obrazu<select id="convertResolution"><option value="640">640 px – šetrné pre starší tablet</option><option value="960" selected>960 px – odporúčané</option><option value="1280">1280 px – viac detailov</option><option value="0">Pôvodné rozlíšenie – vyššie nároky</option></select></label></div>
+ <div class="btnbar"><button id="convertButton" type="button" class="pill primary">Spracovať video na tomto zariadení</button><button id="convertCancel" type="button" class="pill danger hidden">Zrušiť prevod</button><button id="convertedDownload" type="button" class="pill hidden">Stiahnuť upravené video</button></div>
+ <div class="bararea" role="progressbar" id="convertProgressBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Postup prevodu videa"><div id="convertProgress"></div></div>
+ <p id="convertStatus" class="small">Knižnica sa načíta len pri použití rozšíreného spracovania. Ak zariadeniu dôjde pamäť, skús menšie rozlíšenie alebo kratšie video.</p>
+ </div><div id="message" class="status" role="status" aria-live="polite">Začni výberom videa. Potom označ predmet myšou alebo prstom.</div></div>
  <div class="card pad"><h2 class="sectiontitle">2. Nastav mierku</h2><div class="meter"><label class="field">Známa dĺžka (m)<input id="meters" type="number" min="0.00001" step="any" value="1" inputmode="decimal"></label><div class="field"><label>Kalibrácia</label><button id="calibTool" class="pill" disabled>Označiť 2 body</button></div></div><p id="calibInfo" class="desc">Bez kalibrácie budú súradnice v pixeloch, nie v metroch.</p><div class="settingrow"><button id="originTool" class="pill" disabled>Umiestniť počiatok</button><button id="originFirst" class="pill" disabled>Počiatok = prvý bod</button></div>
 <div class="settingrow"><button id="axisTool" class="pill" disabled>Natočiť os +x</button><button id="axisAuto" class="pill" disabled>Automaticky podľa pohybu</button><button id="axisReset" class="pill" disabled>Pôvodný smer osí</button></div>
 <p id="axisInfo" class="axes-help">Štandardne: +x doprava, +y nahor. Smer možno nastaviť ručne alebo z približne priamočiareho pohybu.</p><p class="small">Automatické otočenie osí neurčuje metre. Na fyzikálnu mierku je stále potrebná známa dĺžka v zábere; inak výsledky zostanú v px.</p></div>
 </section>
 <section class="workspace">
- <div class="card"><div class="videohead"><h2>3. Video a namerané polohy</h2><span id="modeBadge" class="badge">Režim: náhľad</span></div><div class="viewer"><div class="zoomtools"><button id="zoomOut" class="pill" disabled aria-label="Oddialiť">−</button><label for="zoomLevel">Priblíženie</label><input id="zoomLevel" type="range" min="100" max="800" step="25" value="100" disabled><output id="zoomLabel" for="zoomLevel">100 %</output><button id="zoomIn" class="pill" disabled aria-label="Priblížiť">+</button><button id="zoomReset" class="pill" disabled>1 : 1</button><button id="panTool" class="pill" disabled>Posúvať obraz</button><button id="previewMode" class="pill" disabled title="Náhradné zobrazovanie videa, ak je na tablete čierny obraz">Náhradný obraz</button></div><div id="videoBox" class="video-box"><div id="emptyVideo" class="empty"><div><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="38" height="28" rx="4"/><path d="m19 17 13 7-13 7z"/></svg><strong>Tu sa zobrazí video</strong>Označíš objekt a uvidíš jednotlivé merané body.</div></div><div id="videoSurface" class="video-surface"><video id="video" playsinline webkit-playsinline preload="auto"></video><canvas id="videoPreview" class="video-preview" aria-hidden="true"></canvas><canvas id="overlay" class="video-overlay" tabindex="0" aria-label="Plocha na vyznačenie objektu, mierky, osí a počiatku"></canvas></div></div><div id="mediaWarning" class="media-warning hidden" role="alert"><p id="mediaWarningText">Načítavanie obrazu videa trvá dlhšie.</p><button id="mediaRetry" class="pill" type="button">Skúsiť načítať obraz</button><details><summary>Technické informácie o videu</summary><span id="mediaDiag"></span></details></div></div><div class="belowvideo"><div class="timeline"><span id="currentTime">0,00 s</span><input id="seek" type="range" min="0" max="1000" value="0" disabled aria-label="Čas vo videu"><span id="duration">0,00 s</span></div><div class="btnbar"><button class="pill" id="backFrame" disabled>◀ Snímka</button><button class="pill" id="play" disabled>▶ Prehrať</button><button class="pill" id="forwardFrame" disabled>Snímka ▶</button><button class="pill" id="targetTool" disabled>◎ Označiť objekt</button><button class="pill" id="correctTool" disabled>✎ Opraviť bod</button><button class="pill" id="doneTool" disabled>✓ Hotovo / náhľad</button></div><p id="timeInfo" class="info-line">Pri označovaní objektu pretiahni obdĺžnik tesne okolo telesa.</p><p class="info-line">Aktívne nástroje ostávajú zapnuté, kým nevyberieš iný nástroj alebo „Hotovo“. Koliesko myši približuje obraz; na mobile použi +/− a „Posúvať obraz“.</p></div></div>
+ <div class="card"><div class="videohead"><h2>3. Video a namerané polohy</h2><span id="modeBadge" class="badge">Režim: náhľad</span></div><div class="viewer"><div class="zoomtools"><button id="zoomOut" class="pill" disabled aria-label="Oddialiť">−</button><label for="zoomLevel">Priblíženie</label><input id="zoomLevel" type="range" min="100" max="800" step="25" value="100" disabled><output id="zoomLabel" for="zoomLevel">100 %</output><button id="zoomIn" class="pill" disabled aria-label="Priblížiť">+</button><button id="zoomReset" class="pill" disabled>1 : 1</button><button id="panTool" class="pill" disabled>Posúvať obraz</button><button id="previewMode" class="pill" disabled title="Náhradné zobrazovanie videa, ak je na tablete čierny obraz">Náhradný obraz</button></div><div id="videoBox" class="video-box"><div id="emptyVideo" class="empty"><div><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="38" height="28" rx="4"/><path d="m19 17 13 7-13 7z"/></svg><strong>Tu sa zobrazí video</strong>Označíš objekt a uvidíš jednotlivé merané body.</div></div><div id="videoSurface" class="video-surface"><video id="video" playsinline webkit-playsinline preload="auto"></video><canvas id="videoPreview" class="video-preview" aria-hidden="true"></canvas><canvas id="overlay" class="video-overlay" tabindex="0" aria-label="Plocha na vyznačenie objektu, mierky, osí a počiatku"></canvas></div></div><div id="mediaWarning" class="media-warning hidden" role="alert"><p id="mediaWarningText">Načítavanie obrazu videa trvá dlhšie.</p><button id="mediaRetry" class="pill" type="button">Skúsiť načítať obraz</button> <button id="mediaConvert" class="pill primary" type="button">Spracovať HEVC/HDR</button><details><summary>Technické informácie o videu</summary><span id="mediaDiag"></span></details></div></div><div class="belowvideo"><div class="timeline"><span id="currentTime">0,00 s</span><input id="seek" type="range" min="0" max="1000" value="0" disabled aria-label="Čas vo videu"><span id="duration">0,00 s</span></div><div class="btnbar"><button class="pill" id="backFrame" disabled>◀ Snímka</button><button class="pill" id="play" disabled>▶ Prehrať</button><button class="pill" id="forwardFrame" disabled>Snímka ▶</button><button class="pill" id="targetTool" disabled>◎ Označiť objekt</button><button class="pill" id="correctTool" disabled>✎ Opraviť bod</button><button class="pill" id="doneTool" disabled>✓ Hotovo / náhľad</button></div><p id="timeInfo" class="info-line">Pri označovaní objektu pretiahni obdĺžnik tesne okolo telesa.</p><p class="info-line">Aktívne nástroje ostávajú zapnuté, kým nevyberieš iný nástroj alebo „Hotovo“. Koliesko myši približuje obraz; na mobile použi +/− a „Posúvať obraz“.</p></div></div>
  <div class="card controls">
   <div class="full"><h3>4. Automatické sledovanie</h3><p class="desc">Aplikácia porovnáva vzhľad označeného objektu v jednotlivých snímkach. Ak ho nevie spoľahlivo rozpoznať, označí bod ako neistý.</p><div id="targetInfo" class="howto">Najprv nahraj video a klikni na „Označiť objekt“.</div>
 <div class="settingrow"><label class="field">Presný sledovaný bod v označenom obdĺžniku<select id="anchorPreset" disabled><option value="center">Stred obdĺžnika</option><option value="top">Horný okraj – stred</option><option value="bottom">Dolný okraj – stred</option><option value="left">Ľavý okraj – stred</option><option value="right">Pravý okraj – stred</option><option value="custom">Vlastný bod (kliknutie vo videu)</option></select></label><button id="anchorTool" class="pill" disabled>◎ Spresniť bod kliknutím</button></div><p class="small">Zelený obdĺžnik = rozpoznávaná oblasť; červený krížik = bod používaný v grafoch. Ak chceš stred loptičky, označ ju tesne a zvoľ stred alebo vlastný bod. Zmenou bodu sa staré meranie vymaže a môžeš ho spustiť znova.</p></div>
@@ -44,41 +58,207 @@
  </div>
 </section>
 <section class="card results" id="results"><div class="result-head"><div><h2>5. Grafy a namerané dáta</h2><p class="desc">Namerané a vypočítané hodnoty zobrazujeme ako samostatné body, bez spojovacích čiar. Rýchlosť a zrýchlenie sú numerické odhady z nameraných polôh.</p></div><div class="tabs"><button class="pill active" data-kind="pos">Poloha</button><button class="pill" data-kind="vel">Rýchlosť</button><button class="pill" data-kind="acc">Zrýchlenie</button></div></div><div class="chart-controls"><label><input type="checkbox" id="showX" checked> x — vodorovná</label><label><input type="checkbox" id="showY" checked> y — zvislá</label><label><input type="checkbox" id="showMag"> Veľkosť vektora (v alebo a)</label></div><div class="plot-wrap"><canvas id="chart" aria-label="Graf závislosti veličiny od času"></canvas><div id="plotEmpty" class="plot-empty">Po automatickom sledovaní sa tu zobrazia grafy.</div></div><div class="legend"><span><i class="swatch" style="background:#206eb7"></i>vodorovná zložka x</span><span><i class="swatch" style="background:#e18038"></i>zvislá zložka y</span><span><i class="swatch" style="background:#07957d"></i>veľkosť vektora</span></div><div class="tablehead"><h3>Tabuľka meraní</h3><div class="btnbar" style="margin:0"><button id="csv" class="pill" disabled>Stiahnuť CSV</button><button id="png" class="pill" disabled>Uložiť graf PNG</button></div></div><div class="table-wrap"><table><thead><tr><th>t (s)</th><th>x</th><th>y</th><th>vₓ</th><th>vᵧ</th><th>aₓ</th><th>aᵧ</th><th>Istota</th></tr></thead><tbody id="rows"><tr><td colspan="8" style="text-align:center;padding:24px">Zatiaľ žiadne merania</td></tr></tbody></table></div><p id="unitsNote" class="info-line">Jednotky sa automaticky zmenia z px na m po kalibrácii.</p></section>
-<footer><strong>Poznámka k fyzike:</strong> Poloha má znamienko; dráha a veľkosť rýchlosti sú nezáporné. Diferencovanie zvýrazňuje chyby merania, najmä pri zrýchlení. Meranie je dvojrozmerné a neodstraňuje perspektívne skreslenie. Náročnosť a presnosť automatického sledovania závisia od kvality videa a zariadenia. Súbor funguje offline v kompatibilnom modernom prehliadači.</footer>
+<footer><strong>Poznámka k fyzike:</strong> Poloha má znamienko; dráha a veľkosť rýchlosti sú nezáporné. Diferencovanie zvýrazňuje chyby merania, najmä pri zrýchlení. Meranie je dvojrozmerné a neodstraňuje perspektívne skreslenie. Náročnosť a presnosť automatického sledovania závisia od kvality videa a zariadenia. Bežné videá možno spracovať aj offline. Rozšírené dekódovanie cez FFmpeg.wasm vyžaduje pri prvom použití internet, výkon a dostatok pamäte; na niektorých tabletoch nemusí uspieť. Použitý FFmpeg.wasm core je distribuovaný pod GPL-2.0-or-later. <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" rel="noopener">Zdrojový kód a licencie</a>.</footer>
 </main>
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
 const v=$('video'),overlay=$('overlay'),chart=$('chart'),file=$('file'),box=$('videoBox');
 const capture=document.createElement('canvas'),cx=capture.getContext('2d',{willReadFrequently:true});const preview=$('videoPreview'),previewCtx=preview.getContext('2d');let canvasPreview=false,previewRaf=0,previewLast=0;
-let workW=0,workH=0,duration=0,frameReady=false,frameTimer=null,loadSerial=0,sourceUrl=null,mode='view',target=null,calPoints=[],calibration=null,origin=null,axisAngle=0,drag=null,measurements=[],computed=[],tracking=false,cancelled=false,graphKind='pos',selectedIndex=-1,chartView=null,lockedFrame=false;
+let originalFile=null, activeFile=null, convertedVideoBlob=null, converting=false, conversionCancel=false, ffmpegInstance=null, ffmpegBlobURLs=[], ffmpegLoading=null, conversionToken=0;
+const CDN_FFMPEG='https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/umd';
+const CDN_CORE='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
+const CDN_WORKER='https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/esm';
+let workW=0,workH=0,duration=0,frameReady=false,frameTimer=null,loadSerial=0,preparedSerial=-1,sourceUrl=null,mode='view',target=null,calPoints=[],calibration=null,origin=null,axisAngle=0,drag=null,measurements=[],computed=[],tracking=false,cancelled=false,graphKind='pos',selectedIndex=-1,chartView=null,lockedFrame=false;
 const surface=$('videoSurface');let zoom=1,panX=0,panY=0;
 const pick={pos:['pX','pY'],vel:['vX','vY'],acc:['aX','aY']};
 const fmt=(n,d=2)=>Number.isFinite(n)?n.toFixed(d).replace('.',','):'—';
 const err=e=>e instanceof Error?e.message:String(e);
 function notice(msg,type=''){let el=$('message');el.textContent=msg;el.className='status '+type;}
 function setMode(m){if(tracking)return;mode=m;calPoints=[];drag=null;const active={target:'targetTool',cal:'calibTool',origin:'originTool',axis:'axisTool',correct:'correctTool',anchor:'anchorTool',pan:'panTool'}[m];document.querySelectorAll('#targetTool,#calibTool,#originTool,#axisTool,#correctTool,#anchorTool,#panTool').forEach(e=>e.classList.toggle('active',e.id===active));$('modeBadge').textContent='Režim: '+({view:'náhľad',target:'označenie objektu',cal:'kalibrácia',origin:'počiatok osí',axis:'smer osi +x',correct:'ručná oprava',anchor:'výber sledovaného bodu',pan:'posúvanie videa'}[m]||'náhľad');$('timeInfo').textContent=({view:'Posúvaj čas vo videu alebo klikni do grafu.',target:'Ťahom vyznač nový obdĺžnik. Môžeš ho označovať opakovane, až budeš spokojný.',cal:'Klikni na oba konce známej vzdialenosti. Ďalšie dva kliky kalibráciu nahradia.',origin:'Opakovane klikaj na želaný počiatok (0;0). Nástroj zostáva aktívny.',axis:'Klikni v smere, ktorým má od počiatku viesť kladná os x. Klikanie môžeš opakovať.',correct:'Vyber okamih na časovej osi a klikni na požadovaný bod. Nástroj ostáva aktívny.',anchor:'Na začiatočnej snímke klikni na konkrétny bod vo vnútri zeleného obdĺžnika.',pan:'Potiahni obraz myšou alebo prstom. Kolieskom alebo +/− môžeš zoomovať.'})[m];overlay.classList.toggle('pan-mode',m==='pan');redrawOverlay();}
-function ui(){let loaded=!!workW&&frameReady;for(let id of ['backFrame','forwardFrame','targetTool','calibTool','originTool','axisTool','axisReset','doneTool','panTool','zoomOut','zoomIn','zoomReset','zoomLevel'])$(id).disabled=!loaded||tracking;for(let id of ['originFirst','axisAuto'])$(id).disabled=!measurements.some(m=>m.valid)||tracking;$('play').disabled=!workW||tracking;$('previewMode').disabled=!workW||tracking;$('seek').disabled=!workW||tracking;$('anchorTool').disabled=!target||tracking;$('anchorPreset').disabled=!target||tracking;$('start').disabled=!target||tracking;$('stop').disabled=!tracking;$('correctTool').disabled=!computed.length||tracking;$('csv').disabled=!computed.length||tracking;$('png').disabled=!computed.length||tracking;$('fps').disabled=tracking;$('radius').disabled=tracking;$('meters').disabled=tracking;$('file').disabled=tracking;$('plotEmpty').classList.toggle('hidden',computed.some(r=>r.valid));}
+function ui(){let loaded=!!workW&&frameReady;for(let id of ['backFrame','forwardFrame','targetTool','calibTool','originTool','axisTool','axisReset','doneTool','panTool','zoomOut','zoomIn','zoomReset','zoomLevel'])$(id).disabled=!loaded||tracking;for(let id of ['originFirst','axisAuto'])$(id).disabled=!measurements.some(m=>m.valid)||tracking;$('play').disabled=!workW||tracking;$('previewMode').disabled=!workW||tracking;$('seek').disabled=!workW||tracking;$('anchorTool').disabled=!target||tracking;$('anchorPreset').disabled=!target||tracking;$('start').disabled=!target||tracking;$('stop').disabled=!tracking;$('correctTool').disabled=!computed.length||tracking;$('csv').disabled=!computed.length||tracking;$('png').disabled=!computed.length||tracking;$('fps').disabled=tracking;$('radius').disabled=tracking;$('meters').disabled=tracking;$('file').disabled=tracking||converting;$('plotEmpty').classList.toggle('hidden',computed.some(r=>r.valid));
+$('convertButton').disabled=converting||tracking||!originalFile;
+$('convertResolution').disabled=converting||tracking;
+$('convertedDownload').disabled=!convertedVideoBlob||converting;
+$('mediaConvert').disabled=converting||tracking||!originalFile;
+$('convertCancel').classList.toggle('hidden',!converting);
+}
 function resizeCanvases(){if(workW){const rect=overlay.getBoundingClientRect();const dpr=Math.min(2,window.devicePixelRatio||1);overlay.width=Math.max(1,Math.round(rect.width*dpr));overlay.height=Math.max(1,Math.round(rect.height*dpr));redrawOverlay();}drawChart();}
 new ResizeObserver(resizeCanvases).observe(box);
-async function loadVideo(f){if(!f)return;loadSerial++;frameReady=false;canvasPreview=false;surface.classList.remove('canvas-preview');$('previewMode').classList.remove('active');$('previewMode').textContent='Náhradný obraz';clearTimeout(frameTimer);$('mediaWarning').classList.add('hidden');v.pause();if(sourceUrl)URL.revokeObjectURL(sourceUrl);sourceUrl=URL.createObjectURL(f);workW=workH=0;target=null;origin=null;axisAngle=0;calibration=null;calPoints=[];measurements=[];computed=[];selectedIndex=-1;resetZoom();setMode('view');$('anchorPreset').value='center';$('axisInfo').textContent='Štandardne: +x doprava, +y nahor.';$('fileDetail').textContent=f.name;notice('Video sa načítava…');v.style.display='block';$('emptyVideo').classList.remove('hidden');box.classList.remove('loaded');ui();v.src=sourceUrl;v.load();}
+async function loadVideo(f,{converted=false}={}){if(!f)return; if(!converted){originalFile=f;convertedVideoBlob=null;$('convertedDownload').classList.add('hidden');$('conversionPanel').classList.add('hidden');conversionToken++;}activeFile=f;loadSerial++;preparedSerial=-1;frameReady=false;canvasPreview=false;surface.classList.remove('canvas-preview');$('previewMode').classList.remove('active');$('previewMode').textContent='Náhradný obraz';clearTimeout(frameTimer);frameTimer=null;$('mediaWarning').classList.add('hidden');v.pause();if(sourceUrl)URL.revokeObjectURL(sourceUrl);sourceUrl=URL.createObjectURL(f);workW=workH=0;target=null;origin=null;axisAngle=0;calibration=null;calPoints=[];measurements=[];computed=[];selectedIndex=-1;resetZoom();setMode('view');$('anchorPreset').value='center';$('axisInfo').textContent='Štandardne: +x doprava, +y nahor.';$('fileDetail').textContent=converted?(originalFile?.name||f.name)+' • kompatibilná kópia':f.name;notice(converted?'Načítavam prevedené video…':'Video sa načítava…');v.style.display='block';$('emptyVideo').classList.remove('hidden');box.classList.remove('loaded');ui();v.src=sourceUrl;v.load();
+ if(!converted){
+   // Rozpoznanie názvu kodeku z MP4 hlavičky je iba pomocný signál; dekódovanie rozhoduje prehliadač.
+   try{const serial=loadSerial;const bytes=await f.slice(0,Math.min(f.size,262144)).arrayBuffer();
+     const head=new TextDecoder('latin1').decode(bytes);
+     if(serial===loadSerial&&!frameReady&&/hvc1|hev1|hvcC/.test(head)){
+       showConversionPanel(false);
+       conversionStatus('Vo videu bol zistený záznam HEVC/H.265. Ak sa obraz nezobrazí, klikni na „Spracovať video na tomto zariadení“.');
+     }
+   }catch(e){} // Ak hlavičku nemožno prečítať, zostane dostupná bežná diagnostika.
+ }
+}
 file.addEventListener('change',()=>loadVideo(file.files[0]));
+// Rozšírený lokálny prevod videa (na požiadanie), bez odosielania média na server.
+// UMD rozhranie a ESM modulový worker sú zo zhodnej verzie ffmpeg.wasm; worker beží z blob URL,
+// aby fungoval na GitHub Pages aj bez hlavičiek COOP/COEP (jednovláknový core).
+function showConversionPanel(scroll=false){
+  $('conversionPanel').classList.remove('hidden');
+  if(scroll)$('conversionPanel').scrollIntoView({block:'nearest',behavior:'smooth'});
+  ui();
+}
+function conversionStatus(s){$('convertStatus').textContent=s;}
+function conversionProgress(p){const n=Math.max(0,Math.min(100,Math.round(p)));$('convertProgress').style.width=n+'%';$('convertProgressBar').setAttribute('aria-valuenow',String(n));}
+function loadExternalScript(url){return new Promise((resolve,reject)=>{if(window.FFmpegWASM?.FFmpeg){resolve();return;}const s=document.createElement('script');s.src=url;s.async=true;s.onload=()=>window.FFmpegWASM?.FFmpeg?resolve():reject(new Error('Knižnica sa nenačítala správne.'));s.onerror=()=>reject(new Error('Nedá sa stiahnuť knižnica. Skontroluj internet.'));document.head.append(s);});}
+async function fetchedBlobURL(url,mime){
+  const r=await fetch(url,{mode:'cors',cache:'force-cache'});
+  if(!r.ok)throw new Error('Sťahovanie knižnice zlyhalo (HTTP '+r.status+').');
+  const buf=await r.arrayBuffer(); const u=URL.createObjectURL(new Blob([buf],{type:mime}));
+  ffmpegBlobURLs.push(u);return u;
+}
+async function moduleWorkerBlobURL(){
+  // Modulový worker si na rozdiel od klasickej UMD verzie vie importovať ESM core.
+  // Dva malé importované moduly vložíme do blob URL, aby relatívne importy fungovali aj na GitHub Pages.
+  const [constURL,errorsURL]=await Promise.all([
+    fetchedBlobURL(CDN_WORKER+'/const.js','text/javascript'),
+    fetchedBlobURL(CDN_WORKER+'/errors.js','text/javascript')
+  ]);
+  const response=await fetch(CDN_WORKER+'/worker.js',{mode:'cors',cache:'force-cache'});
+  if(!response.ok)throw new Error('Nedá sa stiahnuť modulový worker.');
+  let source=await response.text();
+  source=source.replace(/from\s+["']\.\/const\.js["']/g,`from "${constURL}"`)
+               .replace(/from\s+["']\.\/errors\.js["']/g,`from "${errorsURL}"`);
+  if(!source.includes(constURL)||!source.includes(errorsURL))throw new Error('Nekompatibilná verzia FFmpeg workeru.');
+  const blob=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+  ffmpegBlobURLs.push(blob);return blob;
+}
+async function initializeFFmpeg(){
+  if(ffmpegInstance?.loaded)return ffmpegInstance;
+  conversionStatus('Načítavam modul FFmpeg.wasm – pri prvom použití približne 32 MB…');
+  await loadExternalScript(CDN_FFMPEG+'/ffmpeg.js');
+  const ff=new window.FFmpegWASM.FFmpeg(); ffmpegInstance=ff;
+  ff.on('progress',({progress})=>{
+    if(converting&&Number.isFinite(progress)&&progress>=0&&progress<=1)
+      conversionProgress(Math.min(98,Math.max(0,Math.round(progress*95))));
+  });
+  let lastLog=''; ff.on('log',({message})=>{lastLog=String(message||'').slice(0,250);window.__lastVideoTranscodeLog=lastLog;});
+  // classWorkerURL je potrebný: CDN worker je inak na cudzom origin-e.
+  // Používame ESM core s modulovým workerom a bez SharedArrayBuffer.
+  const [classWorkerURL,coreURL,wasmURL]=await Promise.all([
+    moduleWorkerBlobURL(),
+    fetchedBlobURL(CDN_CORE+'/ffmpeg-core.js','text/javascript'),
+    fetchedBlobURL(CDN_CORE+'/ffmpeg-core.wasm','application/wasm')
+  ]);
+  conversionStatus('Inicializujem dekodér (na slabších tabletoch to môže trvať)…');
+  await Promise.race([
+    ff.load({classWorkerURL,coreURL,wasmURL}),
+    new Promise((_,reject)=>setTimeout(()=>reject(new Error('Inicializácia trvá príliš dlho; skús iný prehliadač alebo zariadenie.')),90000))
+  ]);
+  if(!ff.loaded)throw new Error('FFmpeg sa nepodarilo inicializovať.');
+  return ff;
+}
+$('convertButton').addEventListener('click',async()=>{
+  if(converting||tracking||!originalFile)return;
+  const videoToConvert=originalFile;
+  if(videoToConvert.size>250*1024*1024){
+    conversionStatus('Video má viac ako 250 MB. Na tablete je spoľahlivejšie ho najskôr skrátiť; spracovanie takto veľkého súboru môže prekročiť pamäť.');return;
+  }
+  converting=true;conversionCancel=false;const token=++conversionToken;
+  conversionProgress(0);$('convertedDownload').classList.add('hidden');showConversionPanel(false);ui();
+  let ff=null, inputName='video_input.mp4',outputName='video_videomotion_h264.mp4';
+  try{
+    if(!navigator.onLine)conversionStatus('Potrebný internet na stiahnutie dekodéra (video sa neodosiela).');
+    ff=await initializeFFmpeg();
+    if(conversionCancel||token!==conversionToken)throw new Error('Prevod bol zrušený.');
+    conversionStatus('Pripravujem '+(videoToConvert.size/1024/1024).toFixed(1).replace('.',',')+' MB videa v pamäti…');
+    const suffix=(videoToConvert.name.toLowerCase().match(/\.([a-z0-9]{2,5})$/)||[])[1];
+    inputName='videomotion_input.'+(suffix&&/^[a-z0-9]+$/.test(suffix)?suffix:'mp4');
+    await ff.writeFile(inputName,new Uint8Array(await videoToConvert.arrayBuffer()));
+    if(conversionCancel||token!==conversionToken)throw new Error('Prevod bol zrušený.');
+    conversionStatus('Dekódujem video a prevádzam ho na H.264 (8-bit SDR). Ponechávam časovanie snímok…');
+    conversionProgress(2);
+    const maxDim=+$('convertResolution').value;
+    let vf=[];
+    if(maxDim)vf.push(`scale=min(${maxDim}\\,iw):min(${maxDim}\\,ih):force_original_aspect_ratio=decrease:force_divisible_by=2`);
+    vf.push('format=yuv420p');
+    const args=['-hide_banner','-loglevel','error','-i',inputName,'-map','0:v:0','-an',
+      '-vf',vf.join(','),'-c:v','libx264','-preset','ultrafast','-crf','22',
+      '-pix_fmt','yuv420p','-color_primaries','bt709','-color_trc','bt709','-colorspace','bt709','-movflags','+faststart','-fps_mode','vfr',outputName];
+    const result=await ff.exec(args,240000);
+    if(conversionCancel||token!==conversionToken)throw new Error('Prevod bol zrušený.');
+    if(result!==0)throw new Error('FFmpeg skončil s chybou '+result+'. '+(window.__lastVideoTranscodeLog||''));
+    const data=await ff.readFile(outputName);
+    if(!data||data.length<100)throw new Error('Výstupné video je prázdne.');
+    const copied=new Uint8Array(data.length);copied.set(data);
+    convertedVideoBlob=new Blob([copied],{type:'video/mp4'});
+    conversionProgress(100);
+    conversionStatus('Hotovo: vytvorená kompatibilná kópia ('+(convertedVideoBlob.size/1024/1024).toFixed(1).replace('.',',')+' MB). Nahrávam ju na analýzu.');
+    await loadVideo(convertedVideoBlob,{converted:true});
+    if(token!==conversionToken)throw new Error('Medzitým bolo vybrané nové video.');
+    $('convertedDownload').classList.remove('hidden');$('conversionPanel').classList.remove('hidden');
+    $('conversionIntro').textContent='Video bolo prevedené lokálne na H.264. Môžeš ho analyzovať alebo si kompatibilnú kópiu uložiť. Ak stále nebude fungovať, skús menšie rozlíšenie.';
+    conversionStatus('Prevod dokončený. Ak nie je obraz pripravený, pozri upozornenie pod videom.');
+    notice('Prevedené video sa načítava. Keď sa zobrazí obraz, môžeš označiť objekt.');
+  }catch(e){
+    const msg=err(e);
+    conversionStatus((conversionCancel?'Prevod zrušený. ':'Prevod sa nepodaril: ')+msg+' Pri starších tabletoch skús nižšie rozlíšenie alebo skrátenie videa.');
+    if(!conversionCancel)notice('Rozšírené spracovanie zlyhalo: '+msg,'warn');
+    conversionProgress(0);
+  }finally{
+    if(ff){try{await ff.deleteFile(inputName)}catch(e){}try{await ff.deleteFile(outputName)}catch(e){}}
+    converting=false;ui();
+  }
+});
+$('convertCancel').addEventListener('click',()=>{
+  if(!converting)return;
+  conversionCancel=true;conversionToken++;
+  conversionStatus('Zastavujem spracovanie…');
+  if(ffmpegInstance){try{ffmpegInstance.terminate()}catch(e){}ffmpegInstance=null;}
+  for(let u of ffmpegBlobURLs)URL.revokeObjectURL(u);ffmpegBlobURLs=[];
+});
+$('convertedDownload').addEventListener('click',()=>{
+  if(convertedVideoBlob)downloadBlob(convertedVideoBlob,'VideoMotion_kompatibilne_H264.mp4');
+});
+
 // Na tabletoch sa môžu metadáta načítať bez prvej dekódovanej snímky.
 function paintPreview(){if(!canvasPreview||!decodedFrameAvailable())return;try{previewCtx.drawImage(v,0,0,preview.width,preview.height)}catch(e){showMediaWarning('Náhradné zobrazenie sa nepodarilo vykresliť: '+err(e))}}
 function previewTick(ts){previewRaf=0;if(!canvasPreview)return;if(ts-previewLast>=33){previewLast=ts;paintPreview()}if(!v.paused)previewRaf=requestAnimationFrame(previewTick)}
 $('previewMode').addEventListener('click',()=>{if(!workW)return;canvasPreview=!canvasPreview;surface.classList.toggle('canvas-preview',canvasPreview);$('previewMode').classList.toggle('active',canvasPreview);$('previewMode').textContent=canvasPreview?'Pôvodný obraz':'Náhradný obraz';if(canvasPreview){paintPreview();if(!v.paused)previewRaf=requestAnimationFrame(previewTick);if(!frameReady)showMediaWarning('Zvolený náhradný obraz, ale na dekódovanie sa stále čaká.')}else if(previewRaf){cancelAnimationFrame(previewRaf);previewRaf=0}});
 for(const ev of ['seeked','loadeddata','timeupdate','pause'])v.addEventListener(ev,()=>{if(canvasPreview)paintPreview()});v.addEventListener('play',()=>{if(canvasPreview&&!previewRaf)previewRaf=requestAnimationFrame(previewTick)});
-function mediaInfo(){const ec=v.error?.code??'bez chyby';return `rozlíšenie ${v.videoWidth} × ${v.videoHeight}; dĺžka ${fmt(v.duration)} s; readyState ${v.readyState}/4; networkState ${v.networkState}; chyba ${ec}; čas ${fmt(v.currentTime)} s; typ ${file.files[0]?.type||'neznámy'}`;}
-function showMediaWarning(detail){$('mediaWarning').classList.remove('hidden');$('mediaWarningText').textContent=detail+' Ak sa video nespustí ani tlačidlom „Prehrať“, skús MP4 s kodekom H.264 (AVC).';$('mediaDiag').textContent=mediaInfo();}
+function mediaInfo(){const ec=v.error?.code??'bez chyby';return `rozlíšenie ${v.videoWidth} × ${v.videoHeight}; dĺžka ${fmt(v.duration)} s; readyState ${v.readyState}/4; networkState ${v.networkState}; chyba ${ec}; čas ${fmt(v.currentTime)} s; typ ${activeFile?.type||'neznámy'}`;}
+function showMediaWarning(detail){$('mediaWarning').classList.remove('hidden');$('mediaWarningText').textContent=detail+' Ak je video HEVC/HDR, použi Spracovať HEVC/HDR. Prevod sa vykoná iba v tvojom zariadení.';$('mediaDiag').textContent=mediaInfo();if(originalFile&&!convertedVideoBlob)showConversionPanel(false);}
 function decodedFrameAvailable(){return !!workW&&v.readyState>=HTMLMediaElement.HAVE_CURRENT_DATA&&v.videoWidth>0&&v.videoHeight>0;}
-function markFrameReady(){if(frameReady||!decodedFrameAvailable())return;frameReady=true;clearTimeout(frameTimer);$('mediaWarning').classList.add('hidden');$('emptyVideo').classList.add('hidden');notice('Obraz videa je pripravený. Označ sledované teleso.');ui();resizeCanvases();}
-for(const ev of ['loadeddata','canplay','seeked','playing'])v.addEventListener(ev,()=>{if(decodedFrameAvailable())markFrameReady();});
-v.addEventListener('loadedmetadata',async()=>{if(!Number.isFinite(v.duration)||v.duration<=0||!v.videoWidth||!v.videoHeight){notice('Video má neplatné metadáta alebo rozmery. Skús MP4/H.264.','error');return;}
-const serial=loadSerial;duration=v.duration;const factor=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight));workW=Math.max(1,Math.round(v.videoWidth*factor));workH=Math.max(1,Math.round(v.videoHeight*factor));capture.width=workW;capture.height=workH;preview.width=workW;preview.height=workH;surface.style.maxWidth=`min(100%, calc(65vh * ${v.videoWidth/v.videoHeight}))`;v.style.display='block';$('emptyVideo').classList.add('hidden');box.classList.add('loaded');$('duration').textContent=fmt(duration)+' s';$('calibInfo').textContent='Nezadaná mierka – zatiaľ sa používa px.';$('targetInfo').textContent='Po načítaní obrazovej snímky stlač „Označiť objekt“.';notice('Metadáta sú načítané. Čakám na dekódovanie obrazu…');ui();resizeCanvases();
-frameTimer=setTimeout(()=>{if(serial===loadSerial&&!frameReady){showMediaWarning('Video má načítanú dĺžku, ale prehliadač zatiaľ nevydal obrazovú snímku.');notice('Obraz videa zatiaľ nie je dostupný. Skús „Prehrať“ alebo „Skúsiť načítať obraz“.','warn')}},4500);
-try{await seekTime(Math.min(.04,duration/15));if(serial!==loadSerial)return;markFrameReady();if(decodedFrameAvailable())drawFrame()}catch(e){if(serial===loadSerial&&!frameReady){showMediaWarning('Nepodarilo sa dekódovať snímku: '+err(e));notice('Video nie je pripravené na analýzu. Skontroluj formát alebo skús načítať obraz.','warn')}}});
-v.addEventListener('error',()=>{clearTimeout(frameTimer);if(!tracking){showMediaWarning('Prehliadač nedokáže dekódovať toto video.');notice('Prehliadač nedokáže prehrať toto video. Skús MP4/H.264.','error')}});
-$('mediaRetry').addEventListener('click',async()=>{if(!workW)return;try{await v.play();await new Promise(r=>setTimeout(r,250));v.pause();await seekTime(Math.max(.04,Math.min(v.currentTime,.2)));markFrameReady();if(frameReady){$('mediaWarning').classList.add('hidden');notice('Obraz sa podarilo načítať.')}else showMediaWarning('Po pokuse o prehratie stále nemáme dekódovanú snímku.')}catch(e){showMediaWarning('Opakovaný pokus zlyhal: '+err(e));notice('Video sa nepodarilo prehrať.','warn')}});
+function markFrameReady(){if(frameReady||!decodedFrameAvailable())return;frameReady=true;clearTimeout(frameTimer);$('mediaWarning').classList.add('hidden');$('emptyVideo').classList.add('hidden');notice('Obraz videa je pripravený. Označ sledované teleso.');if(!convertedVideoBlob)$('conversionPanel').classList.add('hidden');ui();resizeCanvases();}
+// Metadáta (napr. dĺžka) môžu prísť aj pri videu, ktorého HEVC snímky zariadenie nedokáže dekódovať.
+for(const ev of ['loadeddata','canplay','seeked','playing'])v.addEventListener(ev,()=>{
+  if(!workW&&v.videoWidth>0&&v.videoHeight>0)prepareVideo();
+  if(decodedFrameAvailable())markFrameReady();
+});
+async function prepareVideo(){
+  const serial=loadSerial;
+  if(preparedSerial===serial)return;
+  if(!Number.isFinite(v.duration)||v.duration<=0){
+    showMediaWarning('Prehliadač neprečítal platnú dĺžku videa.');
+    notice('Video sa nepodarilo načítať. Skús MP4/H.264.','error');return;
+  }
+  duration=v.duration;$('duration').textContent=fmt(duration)+' s';
+  if(!v.videoWidth||!v.videoHeight){
+    notice('Dĺžka videa je známa, ale obrazové rozmery zatiaľ nie sú dostupné. Môže ísť o nepodporovaný kodek (HEVC/H.265) alebo HDR.','warn');
+    if(!frameTimer)frameTimer=setTimeout(()=>{
+      frameTimer=null;
+      if(serial!==loadSerial||workW)return;
+      showMediaWarning('Video má načítanú dĺžku, ale prehliadač nevrátil obrazové rozmery. Toto správanie často znamená nepodporovaný kodek.');
+    },2500);
+    return;
+  }
+  preparedSerial=serial;clearTimeout(frameTimer);frameTimer=null;
+  const factor=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight));workW=Math.max(1,Math.round(v.videoWidth*factor));workH=Math.max(1,Math.round(v.videoHeight*factor));capture.width=workW;capture.height=workH;preview.width=workW;preview.height=workH;surface.style.maxWidth=`min(100%, calc(65vh * ${v.videoWidth/v.videoHeight}))`;v.style.display='block';$('emptyVideo').classList.add('hidden');box.classList.add('loaded');$('calibInfo').textContent='Nezadaná mierka – zatiaľ sa používa px.';$('targetInfo').textContent='Po načítaní obrazovej snímky stlač „Označiť objekt“.';notice('Metadáta sú načítané. Čakám na dekódovanie obrazu…');ui();resizeCanvases();
+  frameTimer=setTimeout(()=>{if(serial===loadSerial&&!frameReady){showMediaWarning('Video má načítanú dĺžku, ale prehliadač zatiaľ nevydal obrazovú snímku.');notice('Obraz videa zatiaľ nie je dostupný. Skús „Prehrať“ alebo „Skúsiť načítať obraz“.','warn')}},4500);
+  try{await seekTime(Math.min(.04,duration/15));if(serial!==loadSerial)return;markFrameReady();if(decodedFrameAvailable())drawFrame()}catch(e){if(serial===loadSerial&&!frameReady){showMediaWarning('Nepodarilo sa dekódovať snímku: '+err(e));notice('Video nie je pripravené na analýzu. Skontroluj formát alebo skús načítať obraz.','warn')}}
+}
+v.addEventListener('loadedmetadata',prepareVideo);
+v.addEventListener('error',()=>{clearTimeout(frameTimer);frameTimer=null;if(!tracking){showMediaWarning('Prehliadač video nerozpoznal alebo nedokáže dekódovať jeho snímky.');notice('Obraz sa nedá dekódovať. Skús MP4/H.264, 8-bit SDR.','error')}});
+$('mediaConvert').addEventListener('click',()=>{showConversionPanel(true);$('conversionPanel').scrollIntoView({behavior:'smooth',block:'nearest'});});
+$('mediaRetry').addEventListener('click',async()=>{if(!workW){showMediaWarning('Obrazové rozmery sú stále nedostupné. Najprv skús video MP4/H.264 (8-bit SDR).');return;}try{await v.play();await new Promise(r=>setTimeout(r,250));v.pause();await seekTime(Math.max(.04,Math.min(v.currentTime,.2)));markFrameReady();if(frameReady){$('mediaWarning').classList.add('hidden');notice('Obraz sa podarilo načítať.')}else showMediaWarning('Po pokuse o prehratie stále nemáme dekódovanú snímku.')}catch(e){showMediaWarning('Opakovaný pokus zlyhal: '+err(e));notice('Video sa nepodarilo prehrať.','warn')}});
 function drawFrame(){if(!decodedFrameAvailable())throw new Error('Obrazová snímka ešte nie je dekódovaná (readyState '+v.readyState+').');cx.drawImage(v,0,0,workW,workH);return cx.getImageData(0,0,workW,workH).data;}
 function seekTime(t){if(!workW)return Promise.reject(new Error('Najprv nahraj video.'));t=Math.max(0,Math.min(Math.max(0,duration-.003),t));v.pause();if(Math.abs(v.currentTime-t)<.001&&decodedFrameAvailable()&&!v.seeking){updateTime();return Promise.resolve()}
 return new Promise((resolve,reject)=>{let timer=setTimeout(()=>{cleanup();reject(new Error('Čakanie na dekódovanie snímky trvalo príliš dlho.'))},9000);function cleanup(){clearTimeout(timer);for(let ev of ['seeked','loadeddata','canplay','timeupdate'])v.removeEventListener(ev,check);v.removeEventListener('error',fail)}function check(){if(!v.seeking&&decodedFrameAvailable()&&Math.abs(v.currentTime-t)<.02){cleanup();updateTime();resolve()}}function fail(){cleanup();reject(new Error('Chyba načítania snímky.'))}for(let ev of ['seeked','loadeddata','canplay','timeupdate'])v.addEventListener(ev,check);v.addEventListener('error',fail,{once:true});try{if(Math.abs(v.currentTime-t)>.001)v.currentTime=t;else if(!decodedFrameAvailable())v.currentTime=Math.min(duration-.003,t+.01);check()}catch(e){cleanup();reject(e)}});}
@@ -193,5 +373,5 @@ $('png').addEventListener('click',()=>{if(!computed.length)return;chart.toBlob(b
 function downloadBlob(blob,name){const link=document.createElement('a');const url=URL.createObjectURL(blob);link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 window.addEventListener('resize',resizeCanvases);$('showMag').disabled=true;ui();drawChart();
 // Diagnostics for an automated reproducible in-browser check (does not transmit data).
-window.__labTest={getState:()=>({workW,workH,duration,target,calibration,origin,axisAngle,zoom,panX,panY,mode,measurements,computed,tracking}),scoreAt,sampleTemplate,findBest,solve3,localRegression,estimateStraightAxis,setZoom};
+window.__labTest={getState:()=>({workW,workH,duration,target,calibration,origin,axisAngle,zoom,panX,panY,mode,measurements,computed,tracking}),scoreAt,sampleTemplate,findBest,solve3,localRegression,estimateStraightAxis,setZoom,showConversionPanel,conversionProgress};
 </script></body></html>
