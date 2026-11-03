@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101a30">
+<title>Pohybové laboratórium – zrýchlenie → rýchlosť → poloha</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1020;--panel:#121d31;--panel2:#17243c;--border:#293854;--text:#edf3fe;--muted:#9aadc9;--a:#ffbd62;--v:#60d6cf;--s:#b79aff;--blue:#7ba7ff;--good:#87e6be;--warn:#f9c879;--radius:17px}
+*{box-sizing:border-box}html{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse 90% 45% at 50% -10%,#172b4d 0%,transparent 85%),var(--bg);color:var(--text);min-height:100vh}button,input,select{font:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.4;cursor:not-allowed}.wrap{width:min(1170px,100%);margin:0 auto;padding:19px clamp(12px,2.8vw,28px) 58px}.hero{display:flex;align-items:start;justify-content:space-between;gap:15px;margin-bottom:17px}.brand{display:flex;gap:12px;align-items:center}.brandmark{height:48px;width:48px;background:linear-gradient(140deg,#63cddd,#7777ff);display:grid;place-items:center;border-radius:14px;box-shadow:0 8px 28px #348aa73d;color:#081529;font-size:25px;font-weight:900;flex-shrink:0}h1{font-size:clamp(23px,3.6vw,31px);line-height:1.14;letter-spacing:-.035em;margin:0 0 5px}h2{font-size:17px;letter-spacing:-.015em;margin:0}.subtitle{font-size:13px;color:var(--muted);margin:0}.pill{display:inline-flex;gap:7px;align-items:center;font-size:12px;border:1px solid var(--border);padding:8px 10px;border-radius:99px;color:var(--muted);white-space:nowrap;background:#121e32}.dot{width:8px;height:8px;border-radius:100%;background:#71809a}.dot.active{background:var(--good);box-shadow:0 0 0 4px #87e6be19}.dot.wait{background:var(--warn)}.intro{font-size:13px;color:#c7d7f1;margin:4px 0 20px;line-height:1.6}.formula{display:flex;flex-wrap:wrap;align-items:center;gap:9px;color:#e4ebff}.formula span{display:inline-block;border:1px solid var(--border);background:#14233b;border-radius:9px;padding:4px 9px;font-variant-numeric:tabular-nums}.formula small{color:var(--muted);font-size:12px}.layout{display:grid;grid-template-columns:minmax(272px,338px) minmax(0,1fr);gap:18px;align-items:start}.card{border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(170deg,#142239,#101b2e);box-shadow:0 7px 30px #00000018}.sidebar{display:grid;gap:15px}.section{padding:18px}.heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}.step{font-size:11px;color:#a6b9dd;background:#263752;border-radius:7px;padding:4px 7px;font-weight:750}.caption{color:var(--muted);font-size:12px;line-height:1.5;margin:8px 0 0}.segmented{display:flex;background:#0d1729;border:1px solid #273956;border-radius:11px;padding:4px;gap:4px}.segmented button{flex:1;padding:10px 9px;background:transparent;border:0;color:#b0bed6;border-radius:8px;font-size:13px;font-weight:650}.segmented button.active{background:#2b4264;color:white;box-shadow:0 2px 8px #0003}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:13px}.field{display:flex;flex-direction:column;gap:5px}.field label{color:#b5c7e4;font-size:12px;font-weight:600}.field input,.field select{background:#0c1526;color:var(--text);border:1px solid #354764;border-radius:9px;width:100%;min-height:41px;padding:9px 10px;font-size:14px;outline:0}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px #7ba7ff20}.wide{grid-column:1/-1}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{border:1px solid #375071;background:#1c3051;color:#e6f0ff;border-radius:10px;min-height:43px;font-weight:700;font-size:12.5px;padding:9px 10px;display:flex;align-items:center;justify-content:center;gap:7px}.btn.primary{background:linear-gradient(115deg,#75bbd9,#8aa9ff);color:#071525;border-color:transparent}.btn.secondary{background:#203755;color:#eff7ff}.btn.soft{background:#15233c;color:#c6d8ee}.btn:active:not(:disabled){transform:translateY(1px)}.btn.full{grid-column:1/-1}.helpicon{font-size:16px}.statusbox{background:#0e192b;border:1px solid #2b405d;border-left:3px solid #7ca4ec;border-radius:10px;padding:11px 12px;color:#c3d4ef;font-size:12px;line-height:1.5;margin-top:12px;min-height:62px}.statusbox.warn{border-left-color:var(--warn)}.statusbox.ok{border-left-color:var(--good)}.topline{display:flex;justify-content:space-between;align-items:center;gap:8px}.smallkey{font-size:11px;color:var(--muted)}.axisrow{display:flex;justify-content:space-between;align-items:center;gap:7px;color:#b9c9e3;font-size:12px;margin-top:13px}.axisrow strong{font-size:12px;color:#ebf4ff;font-weight:600}.switcher{display:flex;gap:5px}.switcher button{background:#0b1526;border:1px solid #2c405d;color:#becde2;border-radius:7px;padding:7px 12px;font-weight:750}.switcher button.active{background:#2d4566;color:white;border-color:#5c7bac}.range{width:100%;accent-color:#8caefa;margin:10px 0 2px}.rangehead{display:flex;justify-content:space-between;font-size:12px;color:#b9c9e3}.rangehead strong{color:white;font-variant-numeric:tabular-nums}.rightcolumn{min-width:0;display:grid;gap:14px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.metric{padding:13px 15px;border:1px solid var(--border);border-radius:13px;background:linear-gradient(155deg,#16243b,#101a2b);min-width:0}.metric .name{color:var(--muted);font-size:11px;display:block;white-space:nowrap}.metric .number{font-size:clamp(18px,2.8vw,26px);font-weight:750;letter-spacing:-.035em;margin:7px 0 2px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metric .unit{color:#98abc7;font-size:11px}.metric.acc .number{color:var(--a)}.metric.vel .number{color:var(--v)}.metric.pos .number{color:var(--s)}.metric.time .number{color:#edf3ff}.graphcard{padding:13px 14px 9px}.graphtop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 3px 6px}.graphname{font-size:14px;font-weight:750;display:flex;align-items:center;gap:9px}.graphchip{width:10px;height:10px;border-radius:3px}.graphunit{color:var(--muted);font-size:11px}.plot{display:block;width:100%;height:158px;touch-action:pan-y}.notice{border:1px solid #3d3c50;background:#202137;border-radius:12px;padding:13px 15px;color:#d2c9e0;font-size:12px;line-height:1.6}.notice strong{color:#fae1bb}.footer{margin-top:18px;font-size:12px;line-height:1.6;color:#8fa2c2}.hidden{display:none!important}#downloadBtn{width:100%;margin-top:11px}.tag{border-radius:50px;border:1px solid var(--border);padding:4px 8px;color:#b6c8e1;background:#101e32;font-size:11px}.toolhint{font-size:11px;color:#8ea9cc;margin-top:8px}.footer a{color:#a4c5fd}@media(max-width:850px){.layout{grid-template-columns:1fr}.sidebar{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.metrics{order:0}.rightcolumn{order:1}.sidebar{order:0}.intro{margin-bottom:15px}}@media(max-width:610px){.wrap{padding:14px 11px 40px}.hero{align-items:center}.brandmark{width:40px;height:40px;font-size:22px}.pill{padding:7px 8px;font-size:10px}.subtitle{font-size:12px}.formula{gap:5px}.formula span{font-size:12px}.intro{font-size:12px}.sidebar{grid-template-columns:1fr}.section{padding:16px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:11px 13px}.metric .number{font-size:23px}.graphcard{padding:11px 7px 7px}.plot{height:164px}.graphunit{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+ <header class="hero">
+  <div class="brand"><div class="brandmark" aria-hidden="true">∫</div><div><h1>Pohybové laboratórium</h1><p class="subtitle">Zrýchlenie → rýchlosť → poloha</p></div></div>
+  <div class="pill"><span id="light" class="dot"></span><span id="connection">Nepripojené</span></div>
+ </header>
+ <div class="intro">
+  <div class="formula"><span>merané <b style="color:var(--a)">a(t)</b></span><small>integrácia ↓</small><span><b style="color:var(--v)">v(t)</b> = v₀ + ∫a dt</span><small>integrácia ↓</small><span><b style="color:var(--s)">s(t)</b> = s₀ + ∫v dt</span></div>
+ </div>
+ <div class="layout">
+  <aside class="sidebar">
+   <section class="card section">
+    <div class="heading"><h2>Zdroj zrýchlenia</h2><span class="step">1. krok</span></div>
+    <div class="segmented" role="group" aria-label="Zdroj merania"><button id="sourceSensor" class="active" aria-pressed="true">📱 Mobilný senzor</button><button id="sourceDemo" aria-pressed="false">▶ Simulácia</button></div>
+    <div id="sensorControls">
+      <p class="caption">Zmeraj reálny pohyb mobilu. Najskôr pripoj senzor, potom mobil polož a kalibruj.</p>
+      <div class="actions" style="margin-top:13px"><button class="btn secondary full" id="connectBtn">◉ Pripojiť senzor</button><button class="btn soft full" id="calBtn" disabled>◎ Kalibrovať v pokoji (2 s)</button></div>
+      <div class="axisrow"><strong>Meraná os</strong><div class="switcher" role="group" aria-label="Os merania"><button data-axis="x" class="active">X</button><button data-axis="y">Y</button><button data-axis="z">Z</button></div></div>
+      <p class="toolhint">X: doprava po obrazovke · Y: nahor · Z: kolmo von z obrazovky. Počas merania mobil neotáčaj.</p>
+      <div id="sensorKind" class="tag" style="display:inline-block;margin-top:11px">Typ senzora: čakám na údaje</div>
+    </div>
+    <div id="demoControls" class="hidden">
+      <p class="caption">Vyskúšaj aplikáciu bez mobilného senzora. Zrýchlenie poznáme presne.</p>
+      <div class="field" style="margin-top:12px"><label for="demoShape">Priebeh pohybu</label><select id="demoShape"><option value="car">Rozbeh – rovnomerná jazda – brzdenie</option><option value="constant">Stále kladné zrýchlenie</option><option value="sine">Kmitavý pohyb</option></select></div>
+      <p class="toolhint">Tip: pre presné priebehy nastav vyhladzovanie na 0 ms a prah na 0.</p>
+    </div>
+   </section>
+   <section class="card section">
+    <div class="heading"><h2>Počiatočné podmienky</h2><span class="step">2. krok</span></div>
+    <div class="formgrid">
+     <div class="field"><label for="v0">Počiatočná rýchlosť v₀ (m/s)</label><input id="v0" inputmode="decimal" type="number" step="any" value="0"></div>
+     <div class="field"><label for="s0">Počiatočná poloha s₀ (m)</label><input id="s0" inputmode="decimal" type="number" step="any" value="0"></div>
+    </div>
+    <div class="rangehead" style="margin-top:18px"><span>Vyhladzovanie zrýchlenia</span><strong id="smoothLabel">80 ms</strong></div>
+    <input id="smooth" class="range" aria-label="Doba vyhladzovania" type="range" min="0" max="400" step="20" value="80">
+    <div class="rangehead" style="margin-top:10px"><span>Prahová hodnota šumu</span><strong id="noiseLabel">0,06 m/s²</strong></div>
+    <input id="noise" class="range" aria-label="Prahová hodnota šumu" type="range" min="0" max="0.4" step="0.02" value="0.06">
+    <p class="caption">Tieto úpravy potláčajú šum, ale zároveň môžu skresliť malé zrýchlenia. Počiatočné podmienky nastav pred štartom.</p>
+   </section>
+   <section class="card section">
+    <div class="heading"><h2>Záznam pohybu</h2><span class="step">3. krok</span></div>
+    <div class="actions">
+     <button id="startBtn" class="btn primary full">▶ Spustiť meranie</button>
+     <button id="pauseBtn" class="btn secondary" disabled>Ⅱ Pauza</button>
+     <button id="resetBtn" class="btn soft">↺ Nový záznam</button>
+     <button id="zeroVelBtn" class="btn soft full" disabled>◎ Telefón stojí: nastav v = 0</button>
+    </div>
+    <div id="message" role="status" aria-live="polite" class="statusbox">Pripoj senzor alebo vyber simuláciu. Meranie vyhodnocujeme iba v jednej zvolenej osi.</div>
+    <button id="downloadBtn" class="btn secondary" disabled>↓ Exportovať namerané údaje (CSV)</button>
+    <p class="toolhint">Dáta zostávajú v tvojom prehliadači. Export ich uloží ako tabuľku.</p>
+   </section>
+  </aside>
+  <section class="rightcolumn" aria-label="Merané údaje a grafy">
+   <div class="metrics">
+    <div class="metric acc"><span class="name">Zrýchlenie a</span><div class="number" id="aValue">0,000</div><span class="unit">m/s²</span></div>
+    <div class="metric vel"><span class="name">Rýchlosť v</span><div class="number" id="vValue">0,000</div><span class="unit">m/s</span></div>
+    <div class="metric pos"><span class="name">Poloha s</span><div class="number" id="sValue">0,000</div><span class="unit">m</span></div>
+    <div class="metric time"><span class="name">Čas t</span><div class="number" id="tValue">0,00</div><span class="unit">s · <span id="samples">0</span> vzoriek</span></div>
+   </div>
+   <div class="card graphcard"><div class="graphtop"><div class="graphname"><span class="graphchip" style="background:var(--a)"></span>Zrýchlenie a(t)</div><span class="graphunit">m/s²</span></div><canvas id="chartA" class="plot" role="img" aria-label="Graf zrýchlenia v čase"></canvas></div>
+   <div class="card graphcard"><div class="graphtop"><div class="graphname"><span class="graphchip" style="background:var(--v)"></span>Rýchlosť v(t)</div><span class="graphunit">m/s</span></div><canvas id="chartV" class="plot" role="img" aria-label="Graf rýchlosti v čase"></canvas></div>
+   <div class="card graphcard"><div class="graphtop"><div class="graphname"><span class="graphchip" style="background:var(--s)"></span>Poloha s(t)</div><span class="graphunit">m</span></div><canvas id="chartS" class="plot" role="img" aria-label="Graf polohy v čase"></canvas></div>
+   <div class="card section" style="padding:12px 15px"><div class="topline"><span style="font-size:12px;color:var(--muted);font-weight:650">Časové okno grafov</span><select id="chartWindow" style="background:#0c1729;color:#dfebff;border:1px solid #304665;border-radius:8px;padding:7px;font-size:12px"><option value="20">20 sekúnd</option><option value="60" selected>60 sekúnd</option><option value="120">120 sekúnd</option><option value="all">Celý záznam</option></select></div></div>
+   <div class="notice"><strong>⚠ Dôležité pre fyziku:</strong> Aplikácia počíta <b>jednorozmerný pohyb</b> v osi telefónu. Pri otáčaní mobilu sa táto os mení, takže odvodené grafy už nemusia opisovať jeden pevný smer v priestore. Aj malá chyba meraného zrýchlenia sa integráciou kumuluje: rýchlosť postupne odchádza a poloha ešte výraznejšie. Ber ju ako experiment, nie presný merač dráhy.</div>
+  </section>
+ </div>
+ <div class="footer">Numerická metóda: lichobežníkové pravidlo pre <b>Δv = ∫a dt</b> a následne pre <b>Δs = ∫v dt</b>. Grafy a export zobrazujú výsledok po kalibrácii a prípadnom vyhladzovaní. Ak chceš reálny senzor, otvor stránku v mobilnom prehliadači cez <b>HTTPS</b> (napr. po umiestnení súboru na GitHub Pages alebo Netlify); samotné otvorenie stiahnutého HTML súboru nemusí mať povolený prístup k senzorom. V simulácii aplikácia funguje aj offline.</div>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const el={sourceSensor:$('sourceSensor'),sourceDemo:$('sourceDemo'),sensorControls:$('sensorControls'),demoControls:$('demoControls'),connect:$('connectBtn'),cal:$('calBtn'),axisBtns:[...document.querySelectorAll('[data-axis]')],sensorKind:$('sensorKind'),demoShape:$('demoShape'),v0:$('v0'),s0:$('s0'),smooth:$('smooth'),noise:$('noise'),smoothLabel:$('smoothLabel'),noiseLabel:$('noiseLabel'),start:$('startBtn'),pause:$('pauseBtn'),reset:$('resetBtn'),zeroVel:$('zeroVelBtn'),download:$('downloadBtn'),message:$('message'),connection:$('connection'),light:$('light'),chartWindow:$('chartWindow'),aVal:$('aValue'),vVal:$('vValue'),sVal:$('sValue'),tVal:$('tValue'),samples:$('samples'),charts:{a:$('chartA'),v:$('chartV'),s:$('chartS')}};
+const MAX_POINTS=20000;
+const st={source:'sensor',axis:'x',connected:false,hasReading:false,sensorKind:null,raw:0,offset:0,calibrated:false,calibration:null,run:false,paused:false,lastTime:null,t:0,a:0,v:0,s:0,lastA:0,points:[],simTimer:null,statusType:'',lastStatus:'',lastPaint:0};
+const localeNum=(n,d=3)=>Number.isFinite(n)?n.toFixed(d).replace('.',','):'–';
+const num=(input,fallback=0)=>{let x=Number(String(input.value).replace(',','.'));return Number.isFinite(x)?x:fallback};
+const safelySetStatus=(message,type='info')=>{if(st.lastStatus===message&&st.statusType===type)return;st.lastStatus=message;st.statusType=type;el.message.textContent=message;el.message.className='statusbox '+(type==='warn'?'warn':type==='ok'?'ok':'')};
+const baseline=()=>{st.v=num(el.v0);st.s=num(el.s0);st.a=0;st.lastA=0;st.t=0;st.lastTime=null;st.points=[{t:0,a:0,v:st.v,s:st.s}]};
+function stopSimulator(){if(st.simTimer!==null){clearInterval(st.simTimer);st.simTimer=null}}
+function reset(){stopSimulator();st.run=false;st.paused=false;st.calibration=null;baseline();el.v0.disabled=false;el.s0.disabled=false;syncUI();paint(true);safelySetStatus('Nový záznam je pripravený. Stlač „Spustiť meranie“.','info')}
+function syncUI(){
+ el.sourceSensor.classList.toggle('active',st.source==='sensor');el.sourceDemo.classList.toggle('active',st.source==='demo');
+ el.sourceSensor.setAttribute('aria-pressed',String(st.source==='sensor'));el.sourceDemo.setAttribute('aria-pressed',String(st.source==='demo'));
+ el.sensorControls.classList.toggle('hidden',st.source!=='sensor');el.demoControls.classList.toggle('hidden',st.source!=='demo');
+ el.connect.disabled=st.connected||st.source!=='sensor';el.connect.textContent=st.connected?'✓ Senzor pripojený':'◉ Pripojiť senzor';
+ el.cal.disabled=!st.connected||!st.hasReading||st.run||!!st.calibration||st.source!=='sensor';
+ el.start.disabled=st.run&&!st.paused||!!st.calibration;
+ el.start.textContent=st.run&&st.paused?'▶ Pokračovať':st.source==='demo'?'▶ Spustiť simuláciu':'▶ Spustiť meranie';
+ el.pause.disabled=!st.run||st.paused;el.zeroVel.disabled=!st.run||st.paused;
+ el.v0.disabled=st.run;el.s0.disabled=st.run;el.demoShape.disabled=st.run;
+ el.download.disabled=st.points.length<=1;
+ const connected=st.source==='demo'||st.connected&&st.hasReading;
+ el.connection.textContent=st.source==='demo'?'Simulácia':connected?(st.run&&!st.paused?'Meranie beží':st.paused?'Pozastavené':'Senzor pripravený'):(st.connected?'Čakám na údaje':'Nepripojené');
+ el.light.className='dot'+(connected?' active':st.connected?' wait':'');
+}
+function selectSource(source){if(source===st.source)return;st.source=source;st.offset=0;st.calibrated=false;st.sensorKind=null;st.hasReading=false;reset();safelySetStatus(source==='demo'?'Simulácia nepotrebuje senzor. Nastav podmienky a stlač „Spustiť simuláciu“.':'Najskôr pripoj mobilný senzor a kalibruj ho v pokoji.');}
+function changeAxis(axis){if(st.axis===axis)return;st.axis=axis;st.offset=0;st.calibrated=false;st.hasReading=false;st.sensorKind=null;st.calibration=null;el.axisBtns.forEach(b=>b.classList.toggle('active',b.dataset.axis===axis));el.sensorKind.textContent='Typ senzora: čakám na údaje';reset();safelySetStatus('Os '+axis.toUpperCase()+' je zvolená. Pred reálnym meraním znovu kalibruj mobil v pokoji.','info')}
+async function connectSensor(){
+ if(!('DeviceMotionEvent' in window)){safelySetStatus('Prehliadač neposkytuje DeviceMotionEvent. Skús Chrome alebo Safari na mobile, prípadne simuláciu.','warn');return}
+ if(!window.isSecureContext){safelySetStatus('Senzor vyžaduje bezpečné prostredie HTTPS. Nahraj tento HTML súbor na HTTPS hosting (napr. GitHub Pages / Netlify) a otvor odkaz v mobile.','warn');return}
+ try{
+  if(typeof DeviceMotionEvent.requestPermission==='function'){
+   // Toto musí byť volané priamo z kliknutia používateľa.
+   const permission=await DeviceMotionEvent.requestPermission();
+   if(permission!=='granted'){safelySetStatus('Prístup k pohybovému senzoru nebol povolený. Skontroluj povolenia stránky alebo použi simuláciu.','warn');return}
+  }
+  if(st.connected)return;
+  window.addEventListener('devicemotion',onMotion,{passive:true});st.connected=true;
+  safelySetStatus('Pripojené. Čakám na prvé údaje senzora; polož telefón na stabilný podklad a kalibruj.');syncUI();
+  setTimeout(()=>{if(st.connected&&!st.hasReading&&st.source==='sensor')safelySetStatus('Zatiaľ neprišli platné údaje. Skontroluj povolenie „Senzory pohybu“, otvorenie cez HTTPS a či prehliadač umožňuje prístup k senzorom.','warn')},3500);
+ }catch(e){safelySetStatus('Senzor sa nepodarilo povoliť: '+(e?.message||e)+'. Skús HTTPS alebo simuláciu.','warn')}
+}
+function onMotion(event){
+ const axis=st.axis;
+ const linear=event.acceleration && Number.isFinite(event.acceleration[axis]) ? event.acceleration[axis]:null;
+ const incl=event.accelerationIncludingGravity&& Number.isFinite(event.accelerationIncludingGravity[axis])?event.accelerationIncludingGravity[axis]:null;
+ if(linear===null&&incl===null)return;
+ const kind=linear!==null?'linear':'gravity';
+ if(st.sensorKind!==null&&kind!==st.sensorKind){st.offset=0;st.calibrated=false;st.calibration=null;if(st.run){st.paused=true;st.lastTime=null;safelySetStatus('Zmenil sa typ údajov zo senzora. Záznam pozastavený – založ nový záznam a urob kalibráciu.','warn')}}
+ st.sensorKind=kind;st.hasReading=true;st.raw=linear!==null?linear:incl;
+ el.sensorKind.textContent=kind==='linear'?'Senzor: zrýchlenie bez g':'Senzor: zrýchlenie s g (vyžaduje kalibráciu)';
+ if(st.calibration){const c=st.calibration;c.samples.push(st.raw);
+  if(performance.now()-c.since>=2000&&c.samples.length>=10)finishCalibration();
+  else if(performance.now()-c.since>5500){st.calibration=null;safelySetStatus('Kalibrácia neúspešná: príliš málo vzoriek. Skús znova.','warn')}
+ }
+ if(st.source==='sensor'&&st.run&&!st.paused&&!st.calibration){integrate(st.raw,performance.now())}
+ syncUI();
+}
+function beginCalibration(){if(!st.connected||!st.hasReading||st.run)return;st.calibration={since:performance.now(),samples:[]};safelySetStatus('Kalibrujem 2 sekundy. Nehýb ani neotáčaj mobil!');syncUI();}
+function finishCalibration(){const c=st.calibration;if(!c)return;st.calibration=null;
+ const mean=c.samples.reduce((a,b)=>a+b,0)/c.samples.length;
+ const sd=Math.sqrt(c.samples.reduce((a,b)=>a+(b-mean)**2,0)/c.samples.length);
+ st.offset=mean;st.calibrated=true;
+ safelySetStatus('Kalibrácia hotová ('+c.samples.length+' vzoriek, odchýlka '+localeNum(sd,3)+' m/s²). '+(sd>0.25?'Senzor sa výrazne hýbal – odporúčam kalibráciu zopakovať.':'Môžeš spustiť meranie.'),sd>0.25?'warn':'ok');syncUI();}
+function start(){
+ if(st.run&&st.paused){st.paused=false;st.lastTime=null;if(st.source==='demo')startSimClock();safelySetStatus('Záznam pokračuje (čas pauzy sa nezapočítava).','ok');syncUI();return}
+ if(st.source==='sensor'){
+  if(!st.connected||!st.hasReading){safelySetStatus('Najprv stlač „Pripojiť senzor“ a počkaj na údaje.','warn');return}
+  if(st.sensorKind==='gravity'&&!st.calibrated){safelySetStatus('Senzor poskytuje zrýchlenie aj s gravitáciou. Najprv polož mobil a stlač „Kalibrovať“.','warn');return}
+  if(!st.calibrated)safelySetStatus('Meranie začalo. Pre menší drift odporúčam nabudúce najskôr kalibrovať senzor v pokoji.','warn');
+  else safelySetStatus('Meriam. Pohybuj mobilom pozdĺž zvolenej osi bez otáčania.','ok');
+ }else{safelySetStatus('Simulujem pohyb. Grafy vznikajú dvojitou numerickou integráciou.','ok')}
+ baseline();st.run=true;st.paused=false;
+ el.v0.disabled=true;el.s0.disabled=true;
+ if(st.source==='demo')startSimClock();syncUI();paint(true);
+}
+function pause(){if(!st.run||st.paused)return;st.paused=true;st.lastTime=null;stopSimulator();safelySetStatus('Pozastavené. Pauza sa nezapočítava do meraného času.','info');syncUI()}
+function applyFilter(raw,dt){let a=raw-st.offset;
+ const tau=Number(el.smooth.value)/1000;
+ if(tau>0){const alpha=1-Math.exp(-dt/tau);a=st.lastA+alpha*(a-st.lastA)}
+ if(Math.abs(a)<Number(el.noise.value))a=0;
+ return a;
+}
+function integrate(raw,now){
+ if(!st.run||st.paused)return;
+ if(st.lastTime===null){st.lastTime=now;return}
+ const realDt=(now-st.lastTime)/1000;st.lastTime=now;
+ if(!Number.isFinite(realDt)||realDt<=0||realDt>0.5)return;
+ const dt=Math.min(realDt,0.15);
+ const a=applyFilter(raw,dt);
+ const nextV=st.v+(st.lastA+a)*0.5*dt;
+ const nextS=st.s+(st.v+nextV)*0.5*dt;
+ st.t+=dt;st.a=a;st.v=nextV;st.s=nextS;st.lastA=a;
+ st.points.push({t:st.t,a:st.a,v:st.v,s:st.s});
+ if(st.points.length>=MAX_POINTS){pause();safelySetStatus('Dosiahol sa limit '+MAX_POINTS+' vzoriek. Exportuj CSV a založ nový záznam.','warn')}
+}
+function demoAccel(t){switch(el.demoShape.value){
+ case 'constant': return t<8?0.8:0;
+ case 'sine':return t<12?1.6*Math.sin((2*Math.PI/3)*t):0;
+ default:return t<2?1:t<4?0:t<6?-1:0;
+}}
+function startSimClock(){stopSimulator();st.lastTime=performance.now();st.simTimer=setInterval(()=>{
+ if(!st.run||st.paused)return;
+ const now=performance.now();integrate(demoAccel(st.t),now);
+ const end=el.demoShape.value==='sine'?12.15:el.demoShape.value==='constant'?8.15:8.15;
+ if(st.t>=end){pause();safelySetStatus('Simulácia skončila. Pozri grafy alebo exportuj výsledky.','ok')}
+ },20)}
+function zeroVelocity(){if(!st.run||st.paused)return;st.v=0;st.points.push({t:st.t,a:st.a,v:0,s:st.s});safelySetStatus('Rýchlosť bola ručne nastavená na nulu. Používaj len v okamihu, keď je telefón naozaj v pokoji.','ok');paint(true)}
+function exportCsv(){if(st.points.length<=1)return;
+ const lines=['sep=;','# Zdroj: '+(st.source==='demo'?'simulácia':'senzor')+'; os: '+st.axis.toUpperCase()+'; kalibračný offset: '+st.offset.toFixed(5).replace('.',','),'t (s);a (m/s²);v (m/s);s (m)'];
+ const cell=n=>n.toFixed(6).replace('.',',');st.points.forEach(p=>lines.push([p.t,p.a,p.v,p.s].map(cell).join(';')));
+ const csv='\ufeff'+lines.join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pohybove_meranie_'+new Date().toISOString().replace(/[.:]/g,'-')+'.csv';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function gridStep(raw){if(!Number.isFinite(raw)||raw<=0)return 1;const k=Math.pow(10,Math.floor(Math.log10(raw)));const z=raw/k;return(z<=1?1:z<=2?2:z<=2.5?2.5:z<=5?5:10)*k}
+function gridFormat(v,step){if(Math.abs(v)<step*0.001)v=0;const dec=step<0.01?3:step<0.1?2:step<1?1:step<10?1:0;return v.toFixed(dec).replace('.',',')}
+function drawChart(canvas,key,color){
+ const rect=canvas.getBoundingClientRect();const w=rect.width,h=rect.height;if(w<30||h<30)return;
+ const dpr=Math.min(3,window.devicePixelRatio||1);if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}
+ const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ const L=52,R=12,T=11,B=26,Pw=w-L-R,Ph=h-T-B;
+ const end=st.t;const win=el.chartWindow.value;const left=win==='all'?0:Math.max(0,end-Number(win));const right=win==='all'?Math.max(5,end):Math.max(Number(win),end);
+ let shown=st.points.filter(p=>p.t>=left-0.12);if(!shown.length)shown=st.points.slice(-1);
+ let lo=Math.min(...shown.map(p=>p[key])),hi=Math.max(...shown.map(p=>p[key]));
+ if(key!=='s'){lo=Math.min(lo,0);hi=Math.max(hi,0)}
+ let padding=Math.max((hi-lo)*.13,key==='a'?.13:key==='v'?.13:.18);lo-=padding;hi+=padding;
+ if(!Number.isFinite(lo+hi)||hi<=lo){lo=-1;hi=1}
+ const yStep=gridStep((hi-lo)/4),yMin=Math.floor(lo/yStep)*yStep,yMax=Math.ceil(hi/yStep)*yStep;
+ const mx=t=>L+(t-left)/(right-left)*Pw;const my=v=>T+(yMax-v)/(yMax-yMin)*Ph;
+ ctx.font='11px system-ui, sans-serif';ctx.textBaseline='middle';ctx.lineWidth=1;ctx.strokeStyle='#2c3e58';ctx.fillStyle='#9cb0cd';
+ for(let v=Math.ceil(yMin/yStep)*yStep,ct=0;v<=yMax+yStep*.01&&ct++<30;v+=yStep){const y=my(v);ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(w-R,y);ctx.strokeStyle=Math.abs(v)<yStep*0.01?'#60738c':'#293950';ctx.stroke();ctx.textAlign='right';ctx.fillText(gridFormat(v,yStep),L-8,y)}
+ const xStep=gridStep((right-left)/5);for(let t=Math.ceil(left/xStep)*xStep,ct=0;t<=right+xStep*.01&&ct++<30;t+=xStep){const x=mx(t);ctx.strokeStyle='#26364d';ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,h-B);ctx.stroke();ctx.fillStyle='#99aac5';ctx.textAlign='center';ctx.fillText(gridFormat(t,xStep),x,h-12)}
+ ctx.fillStyle='#8195b6';ctx.textAlign='right';ctx.fillText('t (s)',w-11,h-12);
+ if(st.points.length<2)return;
+ // Vrátane predchádzajúceho bodu na hranici časového okna, aby nevznikol zdanlivý skok.
+ const first=st.points.findIndex(p=>p.t>=left);const visible=st.points.slice(Math.max(0,first-1));
+ ctx.save();ctx.beginPath();ctx.rect(L,T,Pw,Ph);ctx.clip();ctx.beginPath();
+ let didStart=false;
+ for(const p of visible){const x=mx(p.t),y=my(p[key]);if(!didStart){ctx.moveTo(x,y);didStart=true}else ctx.lineTo(x,y)}
+ ctx.strokeStyle=color;ctx.lineWidth=2.15;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
+ const last=st.points[st.points.length-1];const lx=mx(last.t),ly=my(last[key]);ctx.beginPath();ctx.arc(lx,ly,3.3,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.restore();
+}
+function paint(force=false){const now=performance.now();if(!force&&now-st.lastPaint<40)return;st.lastPaint=now;el.aVal.textContent=localeNum(st.a);el.vVal.textContent=localeNum(st.v);el.sVal.textContent=localeNum(st.s);el.tVal.textContent=localeNum(st.t,2);el.samples.textContent=String(Math.max(0,st.points.length-1));el.download.disabled=st.points.length<=1;
+ drawChart(el.charts.a,'a','#ffbd62');drawChart(el.charts.v,'v','#60d6cf');drawChart(el.charts.s,'s','#b79aff');}
+function animate(){paint();requestAnimationFrame(animate)}
+el.sourceSensor.addEventListener('click',()=>selectSource('sensor'));el.sourceDemo.addEventListener('click',()=>selectSource('demo'));
+el.axisBtns.forEach(btn=>btn.addEventListener('click',()=>changeAxis(btn.dataset.axis)));
+el.connect.addEventListener('click',connectSensor);el.cal.addEventListener('click',beginCalibration);el.start.addEventListener('click',start);el.pause.addEventListener('click',pause);el.reset.addEventListener('click',reset);el.zeroVel.addEventListener('click',zeroVelocity);el.download.addEventListener('click',exportCsv);
+el.smooth.addEventListener('input',()=>el.smoothLabel.textContent=el.smooth.value+' ms');el.noise.addEventListener('input',()=>el.noiseLabel.textContent=localeNum(Number(el.noise.value),2)+' m/s²');
+el.chartWindow.addEventListener('change',()=>paint(true));window.addEventListener('resize',()=>paint(true));
+// Keď sa používateľ vráti na stránku po prepnutí aplikácií, nepripočítavame čas na pozadí.
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&st.run&&!st.paused)pause()});
+baseline();syncUI();paint(true);requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>
