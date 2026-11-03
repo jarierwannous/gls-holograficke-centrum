@@ -2,7 +2,7 @@
 <html lang="sk">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0e2637"><title>VideoMotion Lab v8 — automatická videoanalýza pohybu</title>
+<meta name="theme-color" content="#0e2637"><title>VideoMotion Lab v9 — automatická videoanalýza pohybu</title>
 <style>
 :root{--ink:#153043;--muted:#597182;--blue:#195a94;--teal:#008b7d;--line:#dbe6ed;--bg:#f2f7fa;--card:#fff;--orange:#d27d2d;--red:#b54747;--radius:17px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,.video-overlay:focus-visible{outline:3px solid #f09e37;outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}header{background:#0e2637;color:#fff;padding:22px max(18px,calc((100vw - 1320px)/2));display:flex;justify-content:space-between;align-items:center;gap:20px}header h1{font-size:clamp(23px,3vw,32px);margin:0;font-weight:800;letter-spacing:-.6px}header p{margin:3px 0 0;color:#afcbd7;font-size:14px}.tag{color:#99e8dc;background:#204553;border:1px solid #3c6b74;padding:8px 12px;border-radius:30px;font-size:13px;white-space:nowrap}main{max-width:1360px;padding:24px 18px 55px;margin:auto}.top{display:grid;grid-template-columns:1fr 310px;gap:18px;align-items:stretch}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 22px #12344d0b;overflow:hidden}.card.pad{padding:20px}.sectiontitle{font-size:20px;line-height:1.2;margin:0 0 14px}.desc{font-size:14px;color:var(--muted);margin:6px 0 13px}.badge{border-radius:99px;background:#eaf3f8;color:#2a5872;padding:4px 9px;display:inline-flex;font-size:12px;font-weight:700}.upload{display:flex;flex-wrap:wrap;align-items:center;gap:11px}.upload input{max-width:100%;font-size:14px}.pill{border:1px solid #c8d8e2;background:#fff;color:#21516c;border-radius:9px;padding:10px 12px;min-height:44px;font-weight:700}.pill.active{border-color:#008b7d;background:#e2f6f1;color:#006c61}.pill:hover:not(:disabled){filter:brightness(.97)}.primary{background:#087b72;color:white;border-color:#087b72}.danger{border-color:#f0c1c1;color:#a23a3a;background:#fff6f6}.btnbar{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.meter{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:650}.field input,.field select{width:100%;color:var(--ink);background:#fff;border-radius:9px;border:1px solid #cbdce5;padding:9px 10px;min-height:42px}.field input[type=range]{padding:0;min-height:24px;accent-color:#078777}.field label{display:block}.workspace{margin-top:17px;display:grid;grid-template-columns:minmax(0,1.62fr) minmax(300px,.82fr);align-items:start;gap:18px}.videohead{padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.videohead h2{margin:0;font-size:19px}.viewer{background:#122936;padding:13px;position:relative}.video-box{position:relative;max-width:100%;margin:auto;min-height:230px;display:grid;place-items:center;overflow:hidden;background:#07151f;border-radius:10px}.video-box.loaded{min-height:0}.video-box video{width:100%;height:auto;display:block;max-height:65vh}.video-overlay{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:none}.video-box.loaded .video-overlay{display:block}.empty{min-height:240px;display:grid;place-items:center;text-align:center;color:#b0cbd5;padding:30px}.empty strong{display:block;color:white;font-size:20px}.empty svg{width:50px;height:50px;opacity:.55}.belowvideo{padding:12px 18px 18px}.timeline{display:grid;grid-template-columns:58px 1fr 58px;gap:8px;align-items:center;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}.timeline input{width:100%;accent-color:var(--teal)}.status{padding:10px 13px;background:#edf6f9;border-radius:9px;color:#31546a;font-size:14px;min-height:43px}.status.warn{background:#fff3df;color:#835617}.status.error{background:#fff0f0;color:#9a2c36}.controls{padding:18px}.controls h3,.results h3{font-size:16px;margin:0 0 12px}.howto{padding:11px 12px;border-left:3px solid #0b998b;background:#f0f9f7;color:#1c5660;border-radius:6px;font-size:14px;margin:10px 0}.small{font-size:12px;color:var(--muted)}.settings{margin-top:12px;display:grid;gap:11px}.bararea{height:8px;border-radius:99px;background:#e0eaf0;overflow:hidden;margin-top:10px}.bararea>div{height:100%;width:0;background:linear-gradient(90deg,#148c7c,#4fbba8);transition:width .2s}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.summary .metric{border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center}.summary b{display:block;font-size:17px;font-variant-numeric:tabular-nums}.summary span{font-size:11px;color:var(--muted)}.results{margin-top:18px;padding:20px}.result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.results h2{font-size:21px;margin:0}.tabs{display:flex;gap:6px;flex-wrap:wrap}.chart-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}.chart-controls label{display:flex;align-items:center;gap:4px;font-size:14px}.chart-controls input{accent-color:var(--teal)}.plot-wrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.plot-wrap canvas{width:100%;height:335px;display:block;cursor:crosshair;touch-action:pan-y}.plot-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);pointer-events:none;background:#fff9}.legend{display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:13px}.swatch{width:9px;height:9px;display:inline-block;vertical-align:middle;margin-right:7px;border-radius:50%}.tablehead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}.tablehead h3{margin:0}.table-wrap{max-height:265px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:9px}.table-wrap table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}.table-wrap th{position:sticky;top:0;background:#eaf2f7;color:#274b60;padding:9px;z-index:1}.table-wrap td{padding:7px 9px;border-top:1px solid #e7eff3}.table-wrap tr:nth-child(even){background:#f9fcfd}.table-wrap td:first-child,.table-wrap th:first-child{text-align:left}.table-wrap tr.selected{background:#ddf5ee}footer{font-size:13px;color:var(--muted);padding:22px 0;line-height:1.6}.hidden{display:none!important}.checkrow{display:flex;align-items:center;gap:9px;font-size:13px}.checkrow input{width:18px;height:18px;accent-color:#087b72}kbd{font-family:inherit;background:#e6edf2;border-radius:3px;padding:2px 5px}.info-line{font-size:13px;color:var(--muted);margin-top:10px}.alert{background:#fff5df;padding:12px 15px;border-radius:11px;color:#72561f;border:1px solid #f4dfac;font-size:13px;margin-top:13px}@media(max-width:900px){.top,.workspace{grid-template-columns:1fr}.video-box video{max-height:55vh}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.controls .full{grid-column:1/-1}}@media(max-width:540px){header{padding:18px}header .tag{display:none}main{padding:12px 10px 38px}.card.pad,.results{padding:15px}.videohead{padding:13px}.viewer{padding:7px}.belowvideo{padding:12px}.controls{display:block}.controls>*{margin-bottom:14px}.plot-wrap canvas{height:280px}.meter{grid-template-columns:1fr 1fr}.summary{grid-template-columns:repeat(3,minmax(0,1fr))}.summary b{font-size:15px}.btnbar .pill{flex:1}header h1{font-size:23px}}
 
@@ -43,6 +43,7 @@
 .range-footer{display:flex;gap:10px;align-items:end;justify-content:space-between;flex-wrap:wrap;margin-top:10px}
 .range-footer label{max-width:210px;flex:1}.range-footer p{flex:2;min-width:200px;margin:0;font-size:12px;color:var(--muted)}
 @media(max-width:540px){.range-picks{grid-template-columns:1fr}.range-pick .btnbar .pill{flex:1}.range-footer label{max-width:none}}
+.fps-readout{display:flex;flex-direction:column;gap:4px;border:1px solid #cfe5e4;background:#f0faf8;border-radius:9px;padding:10px 13px;min-width:210px;flex:1}.fps-readout strong{font-size:14px;color:#13665e}.fps-readout span{font-size:12px;color:#486a74}.settings #maxFps{align-self:flex-start;font-size:12px;padding:7px 10px;min-height:36px}.settings #fpsHint{line-height:1.4}
 </style>
 </head><body>
 <header><div><h1>◉ VideoMotion Lab</h1><p>Meranie pohybu z videa · poloha, rýchlosť, zrýchlenie</p></div><span class="tag">Lokálne spracovanie · bez servera</span></header>
@@ -65,13 +66,16 @@
 <div class="range-editor" aria-label="Výber snímok na meranie"><h3>Interval merania — prvá a posledná snímka</h3>
  <div class="range-picks"><div class="range-pick"><strong>Začiatok merania</strong><span class="boundary-value" id="startBoundaryLabel">Od označenia objektu</span><div class="btnbar"><button id="setStart" class="pill" disabled>Začiatok = táto snímka</button><button id="gotoStart" class="pill" disabled>Prejsť na začiatok</button></div></div>
  <div class="range-pick"><strong>Koniec merania</strong><span class="boundary-value" id="endBoundaryLabel">Koniec videa</span><div class="btnbar"><button id="setEnd" class="pill" disabled>Koniec = táto snímka</button><button id="gotoEnd" class="pill" disabled>Prejsť na koniec</button></div></div></div>
- <div class="range-footer"><button id="resetRange" class="pill" disabled>Zrušiť hranice merania</button><label class="field" for="videoFps">FPS videa (na posun o snímku)<input id="videoFps" type="number" min="1" max="240" step="1" value="30" inputmode="numeric" aria-describedby="videoFpsHelp"></label><p id="videoFpsHelp">Posun ◀/▶ používa FPS záznamu (napr. 30 alebo 60), nie frekvenciu merania. Prehliadač nemusí oznamovať skutočné FPS; zadaj ho podľa videa. Hranice platia aj pre grafy a export.</p></div>
+ <div class="range-footer"><button id="resetRange" class="pill" disabled>Zrušiť hranice merania</button>
+ <label class="field" for="frameStep">Posun o počet snímok<input id="frameStep" type="number" min="1" max="1000" step="1" value="1" inputmode="numeric" aria-describedby="frameStepHelp"></label>
+ <div class="fps-readout" aria-live="polite"><strong>FPS videa: <span id="detectedFps">Zisťujem…</span></strong><span id="fpsOrigin">Po nahratí videa sa zistí automaticky.</span></div>
+ <p id="frameStepHelp">Tlačidlá ◀/▶ posúvajú o zadaný počet snímok (štandardne 1). FPS sa zisťuje zo súboru automaticky. Pri videách s premenlivou frekvenciou môže byť krok iba približný. Hranice platia aj pre grafy a Excel.</p></div>
  </div><div class="btnbar"><button class="pill" id="backFrame" disabled>◀ Snímka</button><button class="pill" id="play" disabled>▶ Prehrať</button><button class="pill" id="forwardFrame" disabled>Snímka ▶</button><button class="pill" id="targetTool" disabled>◎ Označiť objekt</button><button class="pill" id="correctTool" disabled>✎ Opraviť bod</button><button class="pill" id="doneTool" disabled>✓ Hotovo / náhľad</button></div><p id="timeInfo" class="info-line">Pri označovaní objektu pretiahni obdĺžnik tesne okolo telesa.</p><p class="info-line">Aktívne nástroje ostávajú zapnuté, kým nevyberieš iný nástroj alebo „Hotovo“. Koliesko myši približuje obraz; na mobile použi +/− a „Posúvať obraz“.</p></div></div>
  <div class="card controls">
   <div class="full"><h3>4. Automatické sledovanie</h3><p class="desc">Aplikácia porovnáva vzhľad označeného objektu v jednotlivých snímkach. Ak ho nevie spoľahlivo rozpoznať, označí bod ako neistý.</p><div id="targetInfo" class="howto">Najprv nahraj video a klikni na „Označiť objekt“.</div>
 <div class="settingrow"><label class="field">Presný sledovaný bod v označenom obdĺžniku<select id="anchorPreset" disabled><option value="center">Stred obdĺžnika</option><option value="top">Horný okraj – stred</option><option value="bottom">Dolný okraj – stred</option><option value="left">Ľavý okraj – stred</option><option value="right">Pravý okraj – stred</option><option value="custom">Vlastný bod (kliknutie vo videu)</option></select></label><button id="anchorTool" class="pill" disabled>◎ Spresniť bod kliknutím</button></div><p class="small">Zelený obdĺžnik = rozpoznávaná oblasť; červený krížik = bod používaný v grafoch. Ak chceš stred loptičky, označ ju tesne a zvoľ stred alebo vlastný bod. Zmenou bodu sa staré meranie vymaže a môžeš ho spustiť znova.</p></div>
-  <div><h3>Nastavenia sledovania</h3><div class="settings"><label class="field">Počet meraní za sekundu <input id="fps" type="range" min="5" max="30" step="1" value="12"><span id="fpsV">12 snímok/s</span></label><label class="field">Oblasť hľadania <input id="radius" type="range" min="20" max="160" step="10" value="80"><span id="radiusV">80 px (v pracovnom rozlíšení)</span></label><label class="field">Vyhladenie údajov pre výpočty <select id="smooth"><option value="0">Vypnuté (citlivé na šum)</option><option value="2">Jemné (5 bodov)</option><option value="3" selected>Stredné (7 bodov)</option><option value="5">Silnejšie (11 bodov)</option></select></label></div></div>
-  <div><h3>Spustenie analýzy</h3><div class="btnbar"><button id="start" class="pill primary" disabled>▶ Analyzovať pohyb</button><button id="stop" class="pill danger" disabled>Zastaviť</button></div><div class="bararea" role="progressbar" id="progressBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress"></div></div><p id="progressText" class="desc">Čaká sa na video.</p><p class="small">Sledovanie prebieha iba medzi prvou a poslednou zvolenou snímkou (vrátane hraníc). Ak začiatok nenastavíš, začne sa pri označení objektu. Limit je 900 meraní; pri dlhšom intervale sa spracuje len prvých 900 vzoriek.</p></div>
+  <div><h3>Nastavenia sledovania</h3><div class="settings"><label class="field">Počet meraní za sekundu <input id="fps" type="range" min="1" max="30" step="any" value="12"><span id="fpsV">12 meraní/s</span><button id="maxFps" type="button" class="pill" disabled>Maximum – každá snímka</button><span id="fpsHint" class="small">Maximálna frekvencia sa nastaví podľa videa.</span></label><label class="field">Oblasť hľadania <input id="radius" type="range" min="20" max="160" step="10" value="80"><span id="radiusV">80 px (v pracovnom rozlíšení)</span></label><label class="field">Vyhladenie údajov pre výpočty <select id="smooth"><option value="0">Vypnuté (citlivé na šum)</option><option value="2">Jemné (5 bodov)</option><option value="3" selected>Stredné (7 bodov)</option><option value="5">Silnejšie (11 bodov)</option></select></label></div></div>
+  <div><h3>Spustenie analýzy</h3><div class="btnbar"><button id="start" class="pill primary" disabled>▶ Analyzovať pohyb</button><button id="stop" class="pill danger" disabled>Zastaviť</button></div><div class="bararea" role="progressbar" id="progressBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress"></div></div><p id="progressText" class="desc">Čaká sa na video.</p><p class="small">Sledovanie prebieha iba medzi prvou a poslednou zvolenou snímkou (vrátane hraníc). Ak začiatok nenastavíš, začne sa pri označení objektu. Maximálna frekvencia merania je FPS videa. Limit je 900 meraní; pri dlhšom intervale sa spracuje len prvých 900 vzoriek.</p></div>
   <div class="full"><div class="summary"><div class="metric"><b id="countStat">—</b><span>bodov</span></div><div class="metric"><b id="validStat">—</b><span>rozpoznaných</span></div><div class="metric"><b id="spanStat">—</b><span>dĺžka merania</span></div></div><div id="trackingInfo" class="alert">Výsledok je odhad z obrazu. Pre presné meranie maj v zábere pravítko a používaj nepohyblivú kameru.</div></div>
  </div>
 </section>
@@ -89,6 +93,105 @@ const CDN_CORE='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
 const CDN_WORKER='https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/esm';
 let workW=0,workH=0,duration=0,frameReady=false,frameTimer=null,loadSerial=0,preparedSerial=-1,sourceUrl=null,mode='view',target=null,calPoints=[],calibration=null,origin=null,axisAngle=0,drag=null,measurements=[],computed=[],tracking=false,cancelled=false,graphKind='pos',selectedIndex=-1,chartView=null,lockedFrame=false,rangeStart=null,rangeEnd=null;
 const surface=$('videoSurface');let zoom=1,panX=0,panY=0;
+// Načítané FPS z MP4 stts/mdhd alebo odhad podľa zobrazených obrazových snímok.
+// Neznáme súbory používajú iba predbežnú hodnotu 30 (nikdy ju neoznačujeme ako zistenú).
+let detectedVideoFps=30,fpsOrigin='fallback',fpsVariable=false,frameRateSerial=0;
+let observedFrameTimes=[],videoFrameCbId=0;
+const fpsNumber=n=>Number.isInteger(n)?String(n):Number(n.toFixed(3)).toString().replace('.',',');
+function updateFpsControls(){
+ const max=detectedVideoFps;
+ const slider=$('fps');slider.min='1';slider.max=String(max);slider.step='any';
+ if(Number(slider.value)>max)slider.value=String(max);
+ const selected=Math.min(max,Math.max(1,Number(slider.value)||1));
+ $('fpsV').textContent=fpsNumber(selected)+' meraní/s'+(Math.abs(selected-max)<.005?' · každá snímka':'');
+ $('fpsHint').textContent=fpsOrigin==='fallback'?'FPS zatiaľ nebolo možné overiť. Limit 30 meraní/s je predbežný.':`Maximum ${fpsNumber(max)} meraní/s${fpsVariable?' · premenlivé FPS, časové kroky sú približné':''}.`;
+ $('detectedFps').textContent=fpsOrigin==='fallback'?'nezistené (predbežne 30)':fpsNumber(max)+' snímok/s';
+ $('fpsOrigin').textContent=fpsOrigin==='mp4'?(fpsVariable?'Zistené z MP4 (priemerné FPS, premenlivý interval).':'Zistené z MP4 (časová tabuľka snímok).'):fpsOrigin==='playback'?'Odhad zo snímok počas prehrávania.':'Nie je známe; pri prehrávaní sa pokúsim určiť odhad.';
+ $('maxFps').disabled=!workW||tracking;
+}
+function setDetectedFps(fps,origin,variable=false){
+ if(!Number.isFinite(fps)||fps<1||fps>960)return;
+ detectedVideoFps=fps;fpsOrigin=origin;fpsVariable=!!variable;
+ updateFpsControls();
+}
+// ISO BMFF/MP4: stts definuje počet snímok a ich dekódovacie intervaly;
+// mdhd obsahuje časovú základňu video stopy. Nepoužívame trvanie audio stopy.
+function fpsFromMoov(data){
+ const dv=new DataView(data);
+ const tag=(o)=>String.fromCharCode(dv.getUint8(o),dv.getUint8(o+1),dv.getUint8(o+2),dv.getUint8(o+3));
+ function boxes(from,to){const out=[];let pos=from;while(pos+8<=to){let size=dv.getUint32(pos),hdr=8;
+  if(size===1){if(pos+16>to)break;const hi=dv.getUint32(pos+8),lo=dv.getUint32(pos+12);size=hi*4294967296+lo;hdr=16;}
+  if(size===0)size=to-pos;
+  if(!Number.isSafeInteger(size)||size<hdr||pos+size>to)break;
+  out.push({type:tag(pos+4),start:pos+hdr,end:pos+size});pos+=size;
+ }return out}
+ function child(parent,type){return boxes(parent.start,parent.end).find(b=>b.type===type)}
+ const root={start:0,end:dv.byteLength};
+ for(const trak of boxes(0,dv.byteLength).filter(b=>b.type==='trak')){
+  const mdia=child(trak,'mdia');if(!mdia)continue;
+  const hdlr=child(mdia,'hdlr');if(!hdlr||hdlr.start+12>hdlr.end||tag(hdlr.start+8)!=='vide')continue;
+  const mdhd=child(mdia,'mdhd');if(!mdhd)continue;
+  const version=dv.getUint8(mdhd.start);const tsOffset=mdhd.start+(version===1?20:12);
+  if(tsOffset+4>mdhd.end)continue;const timescale=dv.getUint32(tsOffset);if(!timescale)continue;
+  const minf=child(mdia,'minf'),stbl=minf&&child(minf,'stbl'),stts=stbl&&child(stbl,'stts');
+  if(!stts||stts.start+8>stts.end)continue;
+  const entries=dv.getUint32(stts.start+4);if(!entries||entries>100000||stts.start+8+8*entries>stts.end)continue;
+  let count=0,ticks=0,first=0,variable=false;
+  for(let i=0;i<entries;i++){const n=dv.getUint32(stts.start+8+8*i),delta=dv.getUint32(stts.start+12+8*i);
+   if(!n||!delta)continue;count+=n;ticks+=n*delta;if(!first)first=delta;else if(first!==delta)variable=true;
+  }
+  const fps=count&&ticks?count*timescale/ticks:0;
+  if(Number.isFinite(fps)&&fps>=1&&fps<=960)return {fps,variable,samples:count};
+ }
+ return null;
+}
+async function detectMP4Fps(f,serial){
+ if(!f?.slice)return null;try{
+  let offset=0;
+  while(offset+8<=f.size){
+   const head= new DataView(await f.slice(offset,Math.min(offset+16,f.size)).arrayBuffer());
+   if(head.byteLength<8)return null;
+   let size=head.getUint32(0),type=String.fromCharCode(...new Uint8Array(head.buffer,4,4));
+   if(size===1){if(head.byteLength<16)return null;size=head.getUint32(8)*4294967296+head.getUint32(12)}
+   else if(size===0)size=f.size-offset;
+   if(!Number.isSafeInteger(size)||size<8||offset+size>f.size)return null;
+   if(type==='moov'){
+    if(size>48*1024*1024)return null;
+    const moov=await f.slice(offset+(head.getUint32(0)===1?16:8),offset+size).arrayBuffer();
+    if(serial!==loadSerial)return null;
+    return fpsFromMoov(moov);
+   }
+   offset+=size;
+  }
+ }catch(e){return null;}return null;
+}
+async function detectFrameRate(file,serial){
+ const value=await detectMP4Fps(file,serial);
+ if(serial!==loadSerial)return;
+ if(value)setDetectedFps(value.fps,'mp4',value.variable);
+ else updateFpsControls();
+}
+// Pri WebM a iných súboroch môže byť odhad dostupný až pri prehrávaní.
+function observeVideoFrames(){
+ if(typeof v.requestVideoFrameCallback!=='function')return;
+ const serial=loadSerial;
+ if(videoFrameCbId&&typeof v.cancelVideoFrameCallback==='function')v.cancelVideoFrameCallback(videoFrameCbId);
+ observedFrameTimes=[];
+ const tick=(now,meta)=>{
+   if(serial!==loadSerial)return;
+   const mediaT=meta.mediaTime;
+   if(fpsOrigin==='fallback'&&Number.isFinite(mediaT)){
+    const prev=observedFrameTimes.at(-1);if(prev!==undefined&&mediaT>prev+.001&&mediaT-prev<.25)observedFrameTimes.push(mediaT);
+    else if(prev===undefined)observedFrameTimes.push(mediaT);
+    if(observedFrameTimes.length>=9){
+      const ds=observedFrameTimes.slice(1).map((t,i)=>t-observedFrameTimes[i]).sort((a,b)=>a-b);
+      const median=ds[Math.floor(ds.length/2)];if(median>.001)setDetectedFps(1/median,'playback',false);
+    }
+   }
+   if(!v.paused&&fpsOrigin==='fallback')videoFrameCbId=v.requestVideoFrameCallback(tick);
+ };
+ videoFrameCbId=v.requestVideoFrameCallback(tick);
+}
 const pick={pos:['pX','pY'],vel:['vX','vY'],acc:['aX','aY']};
 const fmt=(n,d=2)=>Number.isFinite(n)?n.toFixed(d).replace('.',','):'—';
 const err=e=>e instanceof Error?e.message:String(e);
@@ -108,7 +211,7 @@ function ui(){let loaded=!!workW&&frameReady;for(let id of ['backFrame','forward
  for(let id of ['setStart','setEnd','gotoEnd'])$(id).disabled=!loaded||tracking;
  $('gotoStart').disabled=!loaded||tracking||(rangeStart===null&&!target);
  $('resetRange').disabled=!loaded||tracking||(rangeStart===null&&rangeEnd===null);
- $('videoFps').disabled=!loaded||tracking;
+ $('frameStep').disabled=!loaded||tracking; $('maxFps').disabled=!loaded||tracking;
  updateRangeInfo();
 $('convertButton').disabled=converting||tracking||!originalFile;
 $('convertResolution').disabled=converting||tracking;
@@ -118,7 +221,7 @@ $('convertCancel').classList.toggle('hidden',!converting);
 }
 function resizeCanvases(){if(workW){const rect=overlay.getBoundingClientRect();const dpr=Math.min(2,window.devicePixelRatio||1);overlay.width=Math.max(1,Math.round(rect.width*dpr));overlay.height=Math.max(1,Math.round(rect.height*dpr));redrawOverlay();}drawChart();}
 new ResizeObserver(resizeCanvases).observe(box);
-async function loadVideo(f,{converted=false}={}){if(!f)return; if(!converted){originalFile=f;convertedVideoBlob=null;$('convertedDownload').classList.add('hidden');$('conversionPanel').classList.add('hidden');conversionToken++;}activeFile=f;loadSerial++;preparedSerial=-1;frameReady=false;canvasPreview=false;surface.classList.remove('canvas-preview');$('previewMode').classList.remove('active');$('previewMode').textContent='Náhradný obraz';clearTimeout(frameTimer);frameTimer=null;$('mediaWarning').classList.add('hidden');v.pause();if(sourceUrl)URL.revokeObjectURL(sourceUrl);sourceUrl=URL.createObjectURL(f);workW=workH=0;target=null;rangeStart=null;rangeEnd=null;$('videoFps').value='30';origin=null;axisAngle=0;calibration=null;calPoints=[];measurements=[];computed=[];selectedIndex=-1;resetZoom();setMode('view');$('anchorPreset').value='center';$('axisInfo').textContent='Štandardne: +x doprava, +y nahor.';$('fileDetail').textContent=converted?(originalFile?.name||f.name)+' • kompatibilná kópia':f.name;notice(converted?'Načítavam prevedené video…':'Video sa načítava…');v.style.display='block';$('emptyVideo').classList.remove('hidden');box.classList.remove('loaded');ui();v.src=sourceUrl;v.load();
+async function loadVideo(f,{converted=false}={}){if(!f)return; if(!converted){originalFile=f;convertedVideoBlob=null;$('convertedDownload').classList.add('hidden');$('conversionPanel').classList.add('hidden');conversionToken++;}activeFile=f;loadSerial++;preparedSerial=-1;frameReady=false;canvasPreview=false;surface.classList.remove('canvas-preview');$('previewMode').classList.remove('active');$('previewMode').textContent='Náhradný obraz';clearTimeout(frameTimer);frameTimer=null;$('mediaWarning').classList.add('hidden');v.pause();if(sourceUrl)URL.revokeObjectURL(sourceUrl);sourceUrl=URL.createObjectURL(f);workW=workH=0;target=null;rangeStart=null;rangeEnd=null;detectedVideoFps=30;fpsOrigin='fallback';fpsVariable=false;observedFrameTimes=[];$('frameStep').value='1';$('fps').value='12';updateFpsControls();origin=null;axisAngle=0;calibration=null;calPoints=[];measurements=[];computed=[];selectedIndex=-1;resetZoom();setMode('view');$('anchorPreset').value='center';$('axisInfo').textContent='Štandardne: +x doprava, +y nahor.';$('fileDetail').textContent=converted?(originalFile?.name||f.name)+' • kompatibilná kópia':f.name;notice(converted?'Načítavam prevedené video…':'Video sa načítava…');v.style.display='block';$('emptyVideo').classList.remove('hidden');box.classList.remove('loaded');ui();v.src=sourceUrl;v.load();void detectFrameRate(f,loadSerial);
  if(!converted){
    // Rozpoznanie názvu kodeku z MP4 hlavičky je iba pomocný signál; dekódovanie rozhoduje prehliadač.
    try{const serial=loadSerial;const bytes=await f.slice(0,Math.min(f.size,262144)).arrayBuffer();
@@ -296,12 +399,18 @@ function drawFrame(){if(!decodedFrameAvailable())throw new Error('Obrazová sní
 function seekTime(t){if(!workW)return Promise.reject(new Error('Najprv nahraj video.'));t=Math.max(0,Math.min(Math.max(0,duration-.003),t));v.pause();if(Math.abs(v.currentTime-t)<.001&&decodedFrameAvailable()&&!v.seeking){updateTime();return Promise.resolve()}
 return new Promise((resolve,reject)=>{let timer=setTimeout(()=>{cleanup();reject(new Error('Čakanie na dekódovanie snímky trvalo príliš dlho.'))},9000);function cleanup(){clearTimeout(timer);for(let ev of ['seeked','loadeddata','canplay','timeupdate'])v.removeEventListener(ev,check);v.removeEventListener('error',fail)}function check(){if(!v.seeking&&decodedFrameAvailable()&&Math.abs(v.currentTime-t)<.02){cleanup();updateTime();resolve()}}function fail(){cleanup();reject(new Error('Chyba načítania snímky.'))}for(let ev of ['seeked','loadeddata','canplay','timeupdate'])v.addEventListener(ev,check);v.addEventListener('error',fail,{once:true});try{if(Math.abs(v.currentTime-t)>.001)v.currentTime=t;else if(!decodedFrameAvailable())v.currentTime=Math.min(duration-.003,t+.01);check()}catch(e){cleanup();reject(e)}});}
 function updateTime(){$('currentTime').textContent=fmt(v.currentTime)+' s';$('seek').value=duration?Math.round(1000*v.currentTime/duration):0;$('play').textContent=v.paused?'▶ Prehrať':'❚❚ Pauza';redrawOverlay();updateRangeInfo();}
-v.addEventListener('timeupdate',()=>{if(!tracking)updateTime()});v.addEventListener('play',()=>{if(!tracking)setMode('view');updateTime()});v.addEventListener('pause',updateTime);v.addEventListener('ended',updateTime);
+v.addEventListener('timeupdate',()=>{if(!tracking)updateTime()});v.addEventListener('play',()=>{if(!tracking)setMode('view');updateTime();if(fpsOrigin==='fallback')observeVideoFrames()});v.addEventListener('pause',updateTime);v.addEventListener('ended',updateTime);
 let seekDebounce=0;
 $('seek').addEventListener('input',()=>{if(tracking)return;const t=+$('seek').value/1000*duration;v.pause();clearTimeout(seekDebounce);seekDebounce=setTimeout(()=>seekTime(t).catch(e=>notice(err(e),'error')),60);});
 $('play').addEventListener('click',async()=>{if(v.paused){setMode('view');try{await v.play()}catch(e){notice('Video sa nepodarilo spustiť: '+err(e),'error');showMediaWarning('Prehrávanie zlyhalo: '+err(e))}}else v.pause();updateTime()});
-function stepFPS(){return Math.max(1,Math.min(240,Number($('videoFps').value)||30))}
-for(const [id,dir] of [['backFrame',-1],['forwardFrame',1]])$(id).addEventListener('click',()=>seekTime(v.currentTime+dir/stepFPS()).catch(e=>notice(err(e),'error')));
+function stepFPS(){return detectedVideoFps}
+function numberOfStepFrames(){return Math.max(1,Math.min(1000,Math.floor(Number($('frameStep').value)||1)))}
+function jumpFrames(dir){
+ const rate=stepFPS();const frame=Math.round(v.currentTime*rate);
+ const next=Math.max(0,frame+dir*numberOfStepFrames());
+ return seekTime(Math.min(Math.max(0,duration-.004),next/rate+.00025));
+}
+for(const [id,dir] of [['backFrame',-1],['forwardFrame',1]])$(id).addEventListener('click',()=>jumpFrames(dir).catch(e=>notice(err(e),'error')));
 function resetTargetForStart(newStart){
  if(!target||Math.abs(target.startTime-newStart)<.012)return false;
  target=null;$('anchorPreset').value='center';
@@ -332,7 +441,7 @@ $('resetRange').addEventListener('click',()=>{
  rangeStart=null;rangeEnd=null;invalidateResults('Po zrušení hraníc merania spusti analýzu znova.');updateRangeInfo();
  notice('Hranice boli zrušené. Meranie sa znovu začne pri snímke, na ktorej označíš objekt, a skončí na konci videa.');
 });
-$('videoFps').addEventListener('change',()=>{$('videoFps').value=String(stepFPS())});
+$('frameStep').addEventListener('change',()=>{$('frameStep').value=String(numberOfStepFrames())});
 function eventPos(e){const r=overlay.getBoundingClientRect();return {x:Math.max(0,Math.min(workW-1,(e.clientX-r.left)/r.width*workW)),y:Math.max(0,Math.min(workH-1,(e.clientY-r.top)/r.height*workH))}}
 function overlayCtx(){const c=overlay.getContext('2d'),sx=overlay.width/workW,sy=overlay.height/workH;c.setTransform(sx,0,0,sy,0,0);c.clearRect(0,0,workW,workH);c.lineWidth=2/sx;c.font=`${13/sx}px system-ui`;return c}
 function strokeMark(c,x,y,color){const s=7*workW/Math.max(overlay.clientWidth*zoom,1);c.strokeStyle=color;c.lineWidth=Math.max(.5,2*workW/Math.max(overlay.clientWidth*zoom,1));c.beginPath();c.moveTo(x-s,y);c.lineTo(x+s,y);c.moveTo(x,y-s);c.lineTo(x,y+s);c.stroke()}
@@ -395,7 +504,7 @@ if(mode==='axis'){const org=origin||{x:0,y:workH},dx=p.x-org.x,dy=p.y-org.y;if(M
 if(mode==='correct'){if(!measurements.length)return;const i=nearIndex(v.currentTime);if(i<0)return;measurements[i]={...measurements[i],px:p.x,py:p.y,boxX:target?p.x-target.anchorX:null,boxY:target?p.y-target.anchorY:null,valid:true,conf:1,manual:true};selectedIndex=i;notice(`Bod č. ${i+1} bol ručne opravený. Môžeš opraviť aj ďalšie body.`);recompute();redrawOverlay()}});
 overlay.addEventListener('pointercancel',()=>{drag=null;redrawOverlay()});
 $('meters').addEventListener('change',()=>{if(!calibration)return;const n=+$('meters').value;if(n>0&&Number.isFinite(n)){calibration.meters=n;$('calibInfo').textContent=`${fmt(calibration.pxDistance,1)} px = ${fmt(n,3)} m.`;recompute()}else notice('Zadaj kladnú dĺžku v metroch.','warn')});
-$('fps').addEventListener('input',()=>{$('fpsV').textContent=$('fps').value+' snímok/s'});$('radius').addEventListener('input',()=>{$('radiusV').textContent=$('radius').value+' px (v pracovnom rozlíšení)'});$('smooth').addEventListener('change',recompute);
+$('fps').addEventListener('input',updateFpsControls);$('maxFps').addEventListener('click',()=>{$('fps').value=String(detectedVideoFps);updateFpsControls();});$('radius').addEventListener('input',()=>{$('radiusV').textContent=$('radius').value+' px (v pracovnom rozlíšení)'});$('smooth').addEventListener('change',recompute);
 function frameData(){return drawFrame();}
 function sampleTemplate(pix,x,y,w,h){const sx=Math.max(2,Math.floor(w/13)),sy=Math.max(2,Math.floor(h/13)),samples=[];let sum=0,sum2=0;for(let dy=Math.max(1,Math.floor(sy/2));dy<h;dy+=sy){for(let dx=Math.max(1,Math.floor(sx/2));dx<w;dx+=sx){const z=((y+dy)*workW+x+dx)*4,r=pix[z],g=pix[z+1],b=pix[z+2],gray=(r*.299+g*.587+b*.114);samples.push({dx,dy,r,g,b,gray});sum+=gray;sum2+=gray*gray}}const n=samples.length,mean=sum/n,variance=Math.max(0,sum2/n-mean*mean);return{samples,mean,variance,n,w,h}}
 function scoreAt(pix,templ,x,y){const ss=templ.samples;let dColor=0,sum=0,sum2=0,cross=0;for(let i=0;i<ss.length;i++){let s=ss[i],j=((y+s.dy)*workW+x+s.dx)*4,r=pix[j],g=pix[j+1],b=pix[j+2],gr=.299*r+.587*g+.114*b;dColor+=Math.abs(r-s.r)+Math.abs(g-s.g)+Math.abs(b-s.b);sum+=gr;sum2+=gr*gr;cross+=gr*(s.gray-templ.mean)}const cd=dColor/(ss.length*3),color=Math.max(0,1-cd/80);if(templ.variance<65)return color;let norm=Math.sqrt(Math.max(.0001,(sum2-sum*sum/ss.length)*templ.variance*ss.length));let corr=norm?cross/norm:0;let texture=(Math.max(-1,Math.min(1,corr))+1)/2;return .63*texture+.37*color}
@@ -403,7 +512,7 @@ function findBest(pix,templ,oldX,oldY,radius){let r=Math.round(radius),minX=Math
 const sleep=()=>new Promise(r=>setTimeout(r,0));
 async function track(){if(!target||tracking)return;v.pause();tracking=true;cancelled=false;measurements=[];computed=[];selectedIndex=-1;ui();$('progress').style.width='0%';$('progressBar').setAttribute('aria-valuenow','0');notice('Prebieha sledovanie vo vybranom intervale…','');$('progressText').textContent='Pripravujem prvú vybranú snímku…';drawChart();renderTable();
 try{
- const t0=effectiveStart(),end=effectiveEnd(),fps=+$('fps').value,dt=1/fps;
+ const t0=effectiveStart(),end=effectiveEnd(),fps=Math.min(stepFPS(),Math.max(1,+$('fps').value)),dt=1/fps;
  if(Math.abs(target.startTime-t0)>Math.max(.025,.8/stepFPS()))throw new Error('Označ objekt znova na vybranej prvej snímke merania (t = '+fmt(t0,3)+' s).');
  if(end<=t0+.008)throw new Error('Nastav koncovú snímku neskôr než začiatočnú.');
  // Pravidelné vzorky sú len vo vybranom intervale. Voliteľná koncová snímka
@@ -514,7 +623,10 @@ function makeExcel(){
   ['Posledný meraný čas vo videu (s)',last?.videoT??''],
   ['Čas od prvej vzorky (s)',last?.t??''],
   ['Počet meraní za sekundu (nastavenie)',Number($('fps').value)],
-  ['FPS videa pre krokovanie',Number($('videoFps').value)],
+  ['Zistené FPS videa',fpsOrigin==='fallback'?'Nezistené':detectedVideoFps],
+  ['Metóda určenia FPS',fpsOrigin==='mp4'?'MP4 časová tabuľka':fpsOrigin==='playback'?'Odhad počas prehrávania':'Predbežná hodnota 30'],
+  ['Premenlivé FPS videa',fpsVariable?'Áno':'Nie / nezistené'],
+  ['Počet snímok na krok',numberOfStepFrames()],
   ['Kalibrácia',calibration?'Áno':'Nie — údaje sú v pixeloch'],
   ['Jednotka polohy',unit],
   ['Jednotka rýchlosti',vUnit],
@@ -541,5 +653,5 @@ $('png').addEventListener('click',()=>{if(!computed.length)return;chart.toBlob(b
 function downloadBlob(blob,name){const link=document.createElement('a');const url=URL.createObjectURL(blob);link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 window.addEventListener('resize',resizeCanvases);$('showMag').disabled=true;ui();drawChart();
 // Diagnostics for an automated reproducible in-browser check (does not transmit data).
-window.__labTest={getState:()=>({workW,workH,duration,target,calibration,origin,axisAngle,zoom,panX,panY,mode,measurements,computed,tracking,rangeStart,rangeEnd,effectiveStart:effectiveStart(),effectiveEnd:effectiveEnd()}),scoreAt,sampleTemplate,findBest,solve3,localRegression,estimateStraightAxis,setZoom,showConversionPanel,conversionProgress};
+window.__labTest={getState:()=>({workW,workH,duration,target,calibration,origin,axisAngle,zoom,panX,panY,mode,measurements,computed,tracking,rangeStart,rangeEnd,detectedVideoFps,fpsOrigin,fpsVariable,numberOfStepFrames:numberOfStepFrames(),measurementFps:Number($('fps').value),effectiveStart:effectiveStart(),effectiveEnd:effectiveEnd()}),scoreAt,sampleTemplate,findBest,solve3,localRegression,estimateStraightAxis,setZoom,showConversionPanel,conversionProgress};
 </script></body></html>
