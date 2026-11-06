@@ -1,0 +1,911 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0e2637"><title>VideoMotion Lab v12 — automatická videoanalýza pohybu</title>
+<style>
+:root{--ink:#153043;--muted:#597182;--blue:#195a94;--teal:#008b7d;--line:#dbe6ed;--bg:#f2f7fa;--card:#fff;--orange:#d27d2d;--red:#b54747;--radius:17px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,.video-overlay:focus-visible{outline:3px solid #f09e37;outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}header{background:#0e2637;color:#fff;padding:22px max(18px,calc((100vw - 1320px)/2));display:flex;justify-content:space-between;align-items:center;gap:20px}header h1{font-size:clamp(23px,3vw,32px);margin:0;font-weight:800;letter-spacing:-.6px}header p{margin:3px 0 0;color:#afcbd7;font-size:14px}.tag{color:#99e8dc;background:#204553;border:1px solid #3c6b74;padding:8px 12px;border-radius:30px;font-size:13px;white-space:nowrap}main{max-width:1360px;padding:24px 18px 55px;margin:auto}.top{display:grid;grid-template-columns:1fr 310px;gap:18px;align-items:stretch}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 22px #12344d0b;overflow:hidden}.card.pad{padding:20px}.sectiontitle{font-size:20px;line-height:1.2;margin:0 0 14px}.desc{font-size:14px;color:var(--muted);margin:6px 0 13px}.badge{border-radius:99px;background:#eaf3f8;color:#2a5872;padding:4px 9px;display:inline-flex;font-size:12px;font-weight:700}.upload{display:flex;flex-wrap:wrap;align-items:center;gap:11px}.upload input{max-width:100%;font-size:14px}.pill{border:1px solid #c8d8e2;background:#fff;color:#21516c;border-radius:9px;padding:10px 12px;min-height:44px;font-weight:700}.pill.active{border-color:#008b7d;background:#e2f6f1;color:#006c61}.pill:hover:not(:disabled){filter:brightness(.97)}.primary{background:#087b72;color:white;border-color:#087b72}.danger{border-color:#f0c1c1;color:#a23a3a;background:#fff6f6}.btnbar{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.meter{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:650}.field input,.field select{width:100%;color:var(--ink);background:#fff;border-radius:9px;border:1px solid #cbdce5;padding:9px 10px;min-height:42px}.field input[type=range]{padding:0;min-height:24px;accent-color:#078777}.field label{display:block}.workspace{margin-top:17px;display:grid;grid-template-columns:minmax(0,1.62fr) minmax(300px,.82fr);align-items:start;gap:18px}.videohead{padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.videohead h2{margin:0;font-size:19px}.viewer{background:#122936;padding:13px;position:relative}.video-box{position:relative;max-width:100%;margin:auto;min-height:230px;display:grid;place-items:center;overflow:hidden;background:#07151f;border-radius:10px}.video-box.loaded{min-height:0}.video-box video{width:100%;height:auto;display:block;max-height:65vh}.video-overlay{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:none}.video-box.loaded .video-overlay{display:block}.empty{min-height:240px;display:grid;place-items:center;text-align:center;color:#b0cbd5;padding:30px}.empty strong{display:block;color:white;font-size:20px}.empty svg{width:50px;height:50px;opacity:.55}.belowvideo{padding:12px 18px 18px}.timeline{display:grid;grid-template-columns:58px 1fr 58px;gap:8px;align-items:center;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}.timeline input{width:100%;accent-color:var(--teal)}.status{padding:10px 13px;background:#edf6f9;border-radius:9px;color:#31546a;font-size:14px;min-height:43px}.status.warn{background:#fff3df;color:#835617}.status.error{background:#fff0f0;color:#9a2c36}.controls{padding:18px}.controls h3,.results h3{font-size:16px;margin:0 0 12px}.howto{padding:11px 12px;border-left:3px solid #0b998b;background:#f0f9f7;color:#1c5660;border-radius:6px;font-size:14px;margin:10px 0}.small{font-size:12px;color:var(--muted)}.settings{margin-top:12px;display:grid;gap:11px}.bararea{height:8px;border-radius:99px;background:#e0eaf0;overflow:hidden;margin-top:10px}.bararea>div{height:100%;width:0;background:linear-gradient(90deg,#148c7c,#4fbba8);transition:width .2s}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.summary .metric{border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center}.summary b{display:block;font-size:17px;font-variant-numeric:tabular-nums}.summary span{font-size:11px;color:var(--muted)}.results{margin-top:18px;padding:20px}.result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.results h2{font-size:21px;margin:0}.tabs{display:flex;gap:6px;flex-wrap:wrap}.chart-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}.chart-controls label{display:flex;align-items:center;gap:4px;font-size:14px}.chart-controls input{accent-color:var(--teal)}.plot-wrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.plot-wrap canvas{width:100%;height:335px;display:block;cursor:crosshair;touch-action:pan-y}.plot-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);pointer-events:none;background:#fff9}.legend{display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:13px}.swatch{width:9px;height:9px;display:inline-block;vertical-align:middle;margin-right:7px;border-radius:50%}.tablehead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}.tablehead h3{margin:0}.table-wrap{max-height:265px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:9px}.table-wrap table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}.table-wrap th{position:sticky;top:0;background:#eaf2f7;color:#274b60;padding:9px;z-index:1}.table-wrap td{padding:7px 9px;border-top:1px solid #e7eff3}.table-wrap tr:nth-child(even){background:#f9fcfd}.table-wrap td:first-child,.table-wrap th:first-child{text-align:left}.table-wrap tr.selected{background:#ddf5ee}footer{font-size:13px;color:var(--muted);padding:22px 0;line-height:1.6}.hidden{display:none!important}.checkrow{display:flex;align-items:center;gap:9px;font-size:13px}.checkrow input{width:18px;height:18px;accent-color:#087b72}kbd{font-family:inherit;background:#e6edf2;border-radius:3px;padding:2px 5px}.info-line{font-size:13px;color:var(--muted);margin-top:10px}.alert{background:#fff5df;padding:12px 15px;border-radius:11px;color:#72561f;border:1px solid #f4dfac;font-size:13px;margin-top:13px}@media(max-width:900px){.top,.workspace{grid-template-columns:1fr}.video-box video{max-height:55vh}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.controls .full{grid-column:1/-1}}@media(max-width:540px){header{padding:18px}header .tag{display:none}main{padding:12px 10px 38px}.card.pad,.results{padding:15px}.videohead{padding:13px}.viewer{padding:7px}.belowvideo{padding:12px}.controls{display:block}.controls>*{margin-bottom:14px}.plot-wrap canvas{height:280px}.meter{grid-template-columns:1fr 1fr}.summary{grid-template-columns:repeat(3,minmax(0,1fr))}.summary b{font-size:15px}.btnbar .pill{flex:1}header h1{font-size:23px}}
+
+/* Precise video viewport: zoom and pan affect video and measurements together. */
+.video-box.loaded{display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden}
+.video-surface{width:100%;position:relative;flex:0 0 auto;transform-origin:0 0}
+.video-surface video{width:100%;height:auto;max-height:none;display:block}
+.video-surface .video-overlay{display:block}
+.video-box:not(.loaded) .video-surface{position:absolute;inset:0;max-width:100%;height:1px;opacity:0;pointer-events:none;overflow:hidden}
+.zoomtools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 10px;color:#fff}
+.zoomtools .pill{padding:7px 12px;min-height:40px}
+.zoomtools label{font-weight:650;font-size:13px}
+.zoomtools input[type=range]{accent-color:#74dbc9;width:clamp(94px,17vw,190px)}
+.zoomtools output{min-width:46px;text-align:center;font-variant-numeric:tabular-nums}
+.media-warning{margin-top:10px;padding:12px;background:#fff4df;border:1px solid #e7c683;color:#79531d;border-radius:9px;font-size:14px}.media-warning p{margin:0 0 8px}.media-warning details{font-size:12px;margin-top:8px}.media-warning summary{cursor:pointer}.video-preview{position:absolute;inset:0;width:100%;height:100%;display:none;pointer-events:none}.video-surface.canvas-preview .video-preview{display:block}.video-surface.canvas-preview video{opacity:.01}.video-overlay.pan-mode{cursor:grab}.video-overlay.pan-mode:active{cursor:grabbing}
+.settingrow{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.settingrow .pill{font-size:13px}
+.settingrow .field{min-width:160px;flex:1}
+.axes-help{font-size:12px;color:#597182;margin:8px 0}
+@media(max-width:540px){.zoomtools{gap:5px}.zoomtools .pill{padding:7px 10px}.settingrow .pill{flex:1}}
+
+.conversion-panel{margin:13px 0 14px;padding:14px 15px;border:1px solid #91c4c0;background:#ecf9f7;border-radius:11px}
+.conversion-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.conversion-options{max-width:470px;margin:8px 0}
+.conversion-panel .bararea{height:9px;background:#c9e5e0}
+.conversion-panel .desc{margin:6px 0 10px}
+.conversion-panel .small{margin-bottom:0}
+/* Merací interval: dve nezávisle nastaviteľné hraničné snímky. */
+.range-map{height:7px;margin:5px 66px 0;border-radius:99px;background:#dce7ec;overflow:hidden;display:flex}
+.range-map .out{background:#cfdde5}.range-map .inside{background:#009888;min-width:0}
+.range-editor{margin:13px 0 7px;padding:13px;background:#f1f8fa;border:1px solid #d5e8ed;border-radius:12px}
+.range-editor h3{font-size:15px;margin:0 0 9px}
+.range-picks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.range-pick{border:1px solid #d9e7ed;background:white;padding:11px;border-radius:9px;min-width:0}
+.range-pick strong{display:block;font-size:14px}
+.range-pick .boundary-value{display:block;color:#116f69;font-weight:700;font-variant-numeric:tabular-nums;margin:4px 0;font-size:14px}
+.range-pick .btnbar{margin-top:8px}.range-pick .pill{font-size:13px;min-height:42px}
+.range-footer{display:flex;gap:10px;align-items:end;justify-content:space-between;flex-wrap:wrap;margin-top:10px}
+.range-footer label{max-width:210px;flex:1}.range-footer p{flex:2;min-width:200px;margin:0;font-size:12px;color:var(--muted)}
+@media(max-width:540px){.range-picks{grid-template-columns:1fr}.range-pick .btnbar .pill{flex:1}.range-footer label{max-width:none}}
+.fps-readout{display:flex;flex-direction:column;gap:4px;border:1px solid #cfe5e4;background:#f0faf8;border-radius:9px;padding:10px 13px;min-width:210px;flex:1}.fps-readout strong{font-size:14px;color:#13665e}.fps-readout span{font-size:12px;color:#486a74}.settings #maxFps{align-self:flex-start;font-size:12px;padding:7px 10px;min-height:36px}.settings #fpsHint{line-height:1.4}
+
+/* Export do Excelu: samostatný výber stĺpcov (nezávislý od zobrazenia grafu). */
+.export-options{margin-top:13px;border:1px solid var(--line);border-radius:11px;background:#f7fbfd;padding:0 14px}
+.export-options>summary{cursor:pointer;padding:12px 0;font-size:14px;font-weight:700;color:#205671;list-style-position:outside}
+.export-options>summary:focus-visible{outline:3px solid #f09e37;outline-offset:2px}
+.export-options p{margin:0 0 11px;font-size:13px;color:var(--muted)}
+.export-actions{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.export-actions .pill{min-height:38px;font-size:13px;padding:6px 10px}
+.export-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px 12px;margin-bottom:13px}
+.export-grid label{display:flex;gap:9px;align-items:center;font-size:13px;min-height:35px;padding:6px 8px;border:1px solid #deebf1;background:#fff;border-radius:7px;cursor:pointer}
+.export-grid input{width:17px;height:17px;accent-color:var(--teal);flex:none}
+.export-note{font-size:13px;color:var(--muted);margin:7px 0 0}
+@media(max-width:900px){.export-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.export-grid{grid-template-columns:1fr}}
+
+/* V11 – explicitny vyber exportu namiesto schovaneho details. */
+.version-chip{display:inline-block;font-size:12px;font-weight:750;vertical-align:middle;letter-spacing:0;border:1px solid #487684;color:#bce8e7;border-radius:12px;padding:3px 7px}
+.export-callout{color:#31546a;background:#eaf6f3;border:1px solid #c8e5df;padding:11px 13px;border-radius:9px;font-size:14px;line-height:1.4;margin:12px 0 4px}
+.excel-dialog{border:1px solid #bdd5e0;background:#fff;max-width:870px;width:calc(100vw - 24px);max-height:90vh;max-height:90dvh;padding:0;border-radius:17px;box-shadow:0 18px 60px #0819285c;overflow:auto;color:#153043}
+.excel-dialog::backdrop{background:#081b2caa}
+.excel-dialog-inner{padding:19px 21px}
+.excel-dialog-titlebar{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.excel-dialog-titlebar h2{font-size:21px;margin:0}
+.excel-dialog .desc{margin:10px 0}
+.excel-selected{font-size:14px;color:#17546b;margin:10px 0 14px}
+.excel-dialog .export-grid{margin:0 0 13px}
+.excel-dialog .export-grid label{min-height:44px;font-size:14px}
+.excel-dialog .export-grid input{width:19px;height:19px}
+.excel-dialog-footer{border-top:1px solid #dbe6ed;padding-top:12px;margin-top:14px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.excel-dialog-footer button{min-height:46px}
+@media(max-width:540px){.excel-dialog-inner{padding:14px}.excel-dialog-titlebar h2{font-size:18px}.excel-dialog-footer button{flex:1 1 100%}}
+
+/* v12: fitovanie a cielený výber nameraných vzoriek */
+.analysis-tools{margin:16px 0;border:1px solid #cbdfe7;border-radius:13px;background:#f5fafc;padding:15px;display:grid;gap:13px}
+.analysis-tools h3{font-size:16px;margin:0 0 4px}
+.analysis-tools .field{min-width:125px;flex:1}
+.selection-toolbar,.fit-toolbar{display:flex;flex-wrap:wrap;align-items:end;gap:8px}
+.selection-toolbar .pill,.fit-toolbar .pill{min-height:41px}
+.selection-toolbar label.checkrow,.fit-toolbar label.checkrow{padding:6px 2px;font-size:13px}
+.fit-result{border:1px solid #c8dfdc;background:#fff;border-radius:10px;padding:10px 12px;line-height:1.6;font-size:14px;overflow-wrap:anywhere}
+.fit-result strong{display:block;color:#11695e}
+.fit-result code{font-size:14px;white-space:normal;color:#173b51;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.fit-sample-info{margin:0;color:var(--muted);font-size:13px}
+.plot-wrap canvas.select-mode{cursor:cell}
+.selection-readout{font-size:13px;font-weight:650;color:#195b66}
+.selection-panel{border-bottom:1px solid #dbe6ed;padding-bottom:12px}
+.fit-hint{font-size:12px;color:#526f80;margin:0}
+.rowpick{accent-color:#087b72;width:17px;height:17px;cursor:pointer}
+.table-wrap th.pickcell,.table-wrap td.pickcell{text-align:center}
+.table-wrap tr.excluded{color:#92a4af;background:#f9fafb}
+.table-wrap tr.included td{border-left-color:#d9ebe6}
+@media(max-width:540px){.analysis-tools{padding:11px}.selection-toolbar .pill,.fit-toolbar .pill{flex:1}.selection-toolbar label.checkrow{width:100%}}
+</style>
+</head><body>
+<header><div><h1>◉ VideoMotion Lab <span class="version-chip">v12</span></h1><p>Meranie pohybu z videa · poloha, rýchlosť, zrýchlenie</p></div><span class="tag">Lokálne spracovanie · bez servera</span></header>
+<main>
+<section class="top">
+ <div class="card pad"><h2 class="sectiontitle">1. Nahraj video</h2><div class="upload"><input id="file" type="file" accept="video/*" aria-label="Vybrať video"><span id="fileDetail" class="badge">Zatiaľ bez videa</span></div><p class="desc">Bežné MP4/H.264 sa spracujú okamžite. Pri nepodporovanom H.265/HEVC alebo HDR možno zapnúť konverziu priamo v prehliadači. Najlepšie funguje kamera na statíve, kontrastný predmet a nemenné osvetlenie. Video neopúšťa tvoje zariadenie. Rozšírený prevod vyžaduje internet na prvé načítanie knižnice, nie odoslanie videa.</p><div id="conversionPanel" class="conversion-panel hidden" aria-live="polite">
+ <div class="conversion-head"><strong id="conversionTitle">Rozšírené spracovanie videa</strong><span class="badge">HEVC / HDR</span></div>
+ <p id="conversionIntro" class="desc">Ak tablet nevie dekódovať video, môžeme ho v tomto zariadení previesť na MP4/H.264 (8-bit SDR). Prvé použitie vyžaduje internet a stiahne približne 32 MB knižníc. Video sa nikam neodosiela.</p>
+ <div class="conversion-options"><label class="field" for="convertResolution">Maximálny rozmer obrazu<select id="convertResolution"><option value="640">640 px – šetrné pre starší tablet</option><option value="960" selected>960 px – odporúčané</option><option value="1280">1280 px – viac detailov</option><option value="0">Pôvodné rozlíšenie – vyššie nároky</option></select></label></div>
+ <div class="btnbar"><button id="convertButton" type="button" class="pill primary">Spracovať video na tomto zariadení</button><button id="convertCancel" type="button" class="pill danger hidden">Zrušiť prevod</button><button id="convertedDownload" type="button" class="pill hidden">Stiahnuť upravené video</button></div>
+ <div class="bararea" role="progressbar" id="convertProgressBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Postup prevodu videa"><div id="convertProgress"></div></div>
+ <p id="convertStatus" class="small">Knižnica sa načíta len pri použití rozšíreného spracovania. Ak zariadeniu dôjde pamäť, skús menšie rozlíšenie alebo kratšie video.</p>
+ </div><div id="message" class="status" role="status" aria-live="polite">Začni výberom videa. Potom označ predmet myšou alebo prstom.</div></div>
+ <div class="card pad"><h2 class="sectiontitle">2. Nastav mierku</h2><div class="meter"><label class="field">Známa dĺžka (m)<input id="meters" type="number" min="0.00001" step="any" value="1" inputmode="decimal"></label><div class="field"><label>Kalibrácia</label><button id="calibTool" class="pill" disabled>Označiť 2 body</button></div></div><p id="calibInfo" class="desc">Bez kalibrácie budú súradnice v pixeloch, nie v metroch.</p><div class="settingrow"><button id="originTool" class="pill" disabled>Umiestniť počiatok</button><button id="originFirst" class="pill" disabled>Počiatok = prvý bod</button></div>
+<div class="settingrow"><button id="axisTool" class="pill" disabled>Natočiť os +x</button><button id="axisAuto" class="pill" disabled>Automaticky podľa pohybu</button><button id="axisReset" class="pill" disabled>Pôvodný smer osí</button></div>
+<p id="axisInfo" class="axes-help">Štandardne: +x doprava, +y nahor. Smer možno nastaviť ručne alebo z približne priamočiareho pohybu.</p><p class="small">Automatické otočenie osí neurčuje metre. Na fyzikálnu mierku je stále potrebná známa dĺžka v zábere; inak výsledky zostanú v px.</p></div>
+</section>
+<section class="workspace">
+ <div class="card"><div class="videohead"><h2>3. Video a namerané polohy</h2><span id="modeBadge" class="badge">Režim: náhľad</span></div><div class="viewer"><div class="zoomtools"><button id="zoomOut" class="pill" disabled aria-label="Oddialiť">−</button><label for="zoomLevel">Priblíženie</label><input id="zoomLevel" type="range" min="100" max="800" step="25" value="100" disabled><output id="zoomLabel" for="zoomLevel">100 %</output><button id="zoomIn" class="pill" disabled aria-label="Priblížiť">+</button><button id="zoomReset" class="pill" disabled>1 : 1</button><button id="panTool" class="pill" disabled>Posúvať obraz</button><button id="previewMode" class="pill" disabled title="Náhradné zobrazovanie videa, ak je na tablete čierny obraz">Náhradný obraz</button></div><div id="videoBox" class="video-box"><div id="emptyVideo" class="empty"><div><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="38" height="28" rx="4"/><path d="m19 17 13 7-13 7z"/></svg><strong>Tu sa zobrazí video</strong>Označíš objekt a uvidíš jednotlivé merané body.</div></div><div id="videoSurface" class="video-surface"><video id="video" playsinline webkit-playsinline preload="auto"></video><canvas id="videoPreview" class="video-preview" aria-hidden="true"></canvas><canvas id="overlay" class="video-overlay" tabindex="0" aria-label="Plocha na vyznačenie objektu, mierky, osí a počiatku"></canvas></div></div><div id="mediaWarning" class="media-warning hidden" role="alert"><p id="mediaWarningText">Načítavanie obrazu videa trvá dlhšie.</p><button id="mediaRetry" class="pill" type="button">Skúsiť načítať obraz</button> <button id="mediaConvert" class="pill primary" type="button">Spracovať HEVC/HDR</button><details><summary>Technické informácie o videu</summary><span id="mediaDiag"></span></details></div></div><div class="belowvideo"><div class="timeline"><span id="currentTime">0,00 s</span><input id="seek" type="range" min="0" max="1000" value="0" disabled aria-label="Čas vo videu"><span id="duration">0,00 s</span></div><div class="range-map" aria-hidden="true"><div id="clipBefore" class="out" style="width:0%"></div><div id="clipInside" class="inside" style="width:100%"></div><div id="clipAfter" class="out" style="width:0%"></div></div>
+<div class="range-editor" aria-label="Výber snímok na meranie"><h3>Interval merania — prvá a posledná snímka</h3>
+ <div class="range-picks"><div class="range-pick"><strong>Začiatok merania</strong><span class="boundary-value" id="startBoundaryLabel">Od označenia objektu</span><div class="btnbar"><button id="setStart" class="pill" disabled>Začiatok = táto snímka</button><button id="gotoStart" class="pill" disabled>Prejsť na začiatok</button></div></div>
+ <div class="range-pick"><strong>Koniec merania</strong><span class="boundary-value" id="endBoundaryLabel">Koniec videa</span><div class="btnbar"><button id="setEnd" class="pill" disabled>Koniec = táto snímka</button><button id="gotoEnd" class="pill" disabled>Prejsť na koniec</button></div></div></div>
+ <div class="range-footer"><button id="resetRange" class="pill" disabled>Zrušiť hranice merania</button>
+ <label class="field" for="frameStep">Posun o počet snímok<input id="frameStep" type="number" min="1" max="1000" step="1" value="1" inputmode="numeric" aria-describedby="frameStepHelp"></label>
+ <div class="fps-readout" aria-live="polite"><strong>FPS videa: <span id="detectedFps">Zisťujem…</span></strong><span id="fpsOrigin">Po nahratí videa sa zistí automaticky.</span></div>
+ <p id="frameStepHelp">Tlačidlá ◀/▶ posúvajú o zadaný počet snímok (štandardne 1). FPS sa zisťuje zo súboru automaticky. Pri videách s premenlivou frekvenciou môže byť krok iba približný. Hranice platia aj pre grafy a Excel.</p></div>
+ </div><div class="btnbar"><button class="pill" id="backFrame" disabled>◀ Snímka</button><button class="pill" id="play" disabled>▶ Prehrať</button><button class="pill" id="forwardFrame" disabled>Snímka ▶</button><button class="pill" id="targetTool" disabled>◎ Označiť objekt</button><button class="pill" id="correctTool" disabled>✎ Opraviť bod</button><button class="pill" id="doneTool" disabled>✓ Hotovo / náhľad</button></div><p id="timeInfo" class="info-line">Pri označovaní objektu pretiahni obdĺžnik tesne okolo telesa.</p><p class="info-line">Aktívne nástroje ostávajú zapnuté, kým nevyberieš iný nástroj alebo „Hotovo“. Koliesko myši približuje obraz; na mobile použi +/− a „Posúvať obraz“.</p></div></div>
+ <div class="card controls">
+  <div class="full"><h3>4. Automatické sledovanie</h3><p class="desc">Aplikácia porovnáva vzhľad označeného objektu v jednotlivých snímkach. Ak ho nevie spoľahlivo rozpoznať, označí bod ako neistý.</p><div id="targetInfo" class="howto">Najprv nahraj video a klikni na „Označiť objekt“.</div>
+<div class="settingrow"><label class="field">Presný sledovaný bod v označenom obdĺžniku<select id="anchorPreset" disabled><option value="center">Stred obdĺžnika</option><option value="top">Horný okraj – stred</option><option value="bottom">Dolný okraj – stred</option><option value="left">Ľavý okraj – stred</option><option value="right">Pravý okraj – stred</option><option value="custom">Vlastný bod (kliknutie vo videu)</option></select></label><button id="anchorTool" class="pill" disabled>◎ Spresniť bod kliknutím</button></div><p class="small">Zelený obdĺžnik = rozpoznávaná oblasť; červený krížik = bod používaný v grafoch. Ak chceš stred loptičky, označ ju tesne a zvoľ stred alebo vlastný bod. Zmenou bodu sa staré meranie vymaže a môžeš ho spustiť znova.</p></div>
+  <div><h3>Nastavenia sledovania</h3><div class="settings"><label class="field">Počet meraní za sekundu <input id="fps" type="range" min="1" max="30" step="any" value="12"><span id="fpsV">12 meraní/s</span><button id="maxFps" type="button" class="pill" disabled>Maximum – každá snímka</button><span id="fpsHint" class="small">Maximálna frekvencia sa nastaví podľa videa.</span></label><label class="field">Oblasť hľadania <input id="radius" type="range" min="20" max="160" step="10" value="80"><span id="radiusV">80 px (v pracovnom rozlíšení)</span></label><label class="field">Vyhladenie údajov pre výpočty <select id="smooth"><option value="0">Vypnuté (citlivé na šum)</option><option value="2">Jemné (5 bodov)</option><option value="3" selected>Stredné (7 bodov)</option><option value="5">Silnejšie (11 bodov)</option></select></label></div></div>
+  <div><h3>Spustenie analýzy</h3><div class="btnbar"><button id="start" class="pill primary" disabled>▶ Analyzovať pohyb</button><button id="stop" class="pill danger" disabled>Zastaviť</button></div><div class="bararea" role="progressbar" id="progressBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress"></div></div><p id="progressText" class="desc">Čaká sa na video.</p><p class="small">Sledovanie prebieha iba medzi prvou a poslednou zvolenou snímkou (vrátane hraníc). Ak začiatok nenastavíš, začne sa pri označení objektu. Maximálna frekvencia merania je FPS videa. Limit je 900 meraní; pri dlhšom intervale sa spracuje len prvých 900 vzoriek.</p></div>
+  <div class="full"><div class="summary"><div class="metric"><b id="countStat">—</b><span>bodov</span></div><div class="metric"><b id="validStat">—</b><span>rozpoznaných</span></div><div class="metric"><b id="spanStat">—</b><span>dĺžka merania</span></div></div><div id="trackingInfo" class="alert">Výsledok je odhad z obrazu. Pre presné meranie maj v zábere pravítko a používaj nepohyblivú kameru.</div></div>
+ </div>
+</section>
+<section class="card results" id="results"><div class="result-head"><div><h2>5. Grafy a namerané dáta</h2><p class="desc">Namerané a vypočítané hodnoty zobrazujeme ako samostatné body, bez spojovacích čiar. Rýchlosť a zrýchlenie sú numerické odhady z nameraných polôh.</p></div><div class="tabs"><button class="pill active" data-kind="pos">Poloha</button><button class="pill" data-kind="vel">Rýchlosť</button><button class="pill" data-kind="acc">Zrýchlenie</button></div></div><div class="chart-controls"><label><input type="checkbox" id="showX" checked> x — vodorovná</label><label><input type="checkbox" id="showY" checked> y — zvislá</label><label><input type="checkbox" id="showMag"> Veľkosť vektora (v alebo a)</label></div><div class="analysis-tools" id="analysisTools">
+<div class="selection-panel"><h3>Výber nameraných bodov</h3>
+<p class="fit-sample-info">Kliknutím na „Vyberať body“ a následným kliknutím na body v grafe ich pridávaš alebo odoberáš. Výber platí aj po prepnutí polohy, rýchlosti či zrýchlenia.</p>
+<div class="selection-toolbar">
+<button type="button" class="pill" id="selectMode">Vyberať body: vypnuté</button>
+<button type="button" class="pill" id="selectAllPoints">Vybrať všetky</button>
+<button type="button" class="pill" id="selectNoPoints">Zrušiť výber</button>
+<label class="checkrow"><input type="checkbox" id="showOnlySelected"> V grafe zobraziť iba vybrané body</label>
+</div>
+<div class="selection-toolbar" style="margin-top:8px">
+<label class="field" style="max-width:160px">Od času (s)<input id="subsetFrom" type="number" min="0" step="0.01" value="0"></label>
+<label class="field" style="max-width:160px">Do času (s)<input id="subsetTo" type="number" min="0" step="0.01" value="0"></label>
+<button type="button" id="selectTimeRange" class="pill">Vybrať časový interval</button>
+<span id="selectedCount" class="selection-readout" role="status">Najprv analyzuj video.</span>
+</div></div>
+<div><h3>Fitovanie funkcie</h3>
+<p class="fit-hint">Fit sa počíta iba z vybraných bodov. Namerané body sa nespájajú; model je odlíšený prerušovanou čiarou. Sínusový fit zahŕňa aj kosínus prostredníctvom fázového posunu.</p>
+<div class="fit-toolbar" style="margin-top:9px">
+<label class="field" style="max-width:215px">Veličina<select id="fitSeries"><option value="pX">Poloha x</option><option value="pY">Poloha y</option></select></label>
+<label class="field" style="max-width:220px">Typ funkcie<select id="fitType"><option value="linear">Lineárna</option><option value="quadratic">Kvadratická</option><option value="cubic">Kubická</option><option value="sine">Sínusová (s fázou)</option></select></label>
+<button type="button" id="fitApply" class="pill primary" disabled>Nafitovať vybrané body</button>
+<button type="button" id="fitClear" class="pill" disabled>Odstrániť fit</button>
+</div>
+<div id="fitInfo" class="fit-result" role="status" style="margin-top:10px">Po analýze vyber veličinu, funkciu a stlač „Nafitovať“.</div>
+</div>
+</div><div class="plot-wrap"><canvas id="chart" aria-label="Graf závislosti veličiny od času"></canvas><div id="plotEmpty" class="plot-empty">Po automatickom sledovaní sa tu zobrazia grafy.</div></div><div class="legend"><span><i class="swatch" style="background:#206eb7"></i>vodorovná zložka x</span><span><i class="swatch" style="background:#e18038"></i>zvislá zložka y</span><span><i class="swatch" style="background:#07957d"></i>veľkosť vektora</span></div><div class="tablehead"><h3>Tabuľka meraní</h3><div class="btnbar" style="margin:0"><button id="excel" type="button" class="pill primary" disabled>Vybrať stĺpce a stiahnuť Excel…</button><button id="png" class="pill" disabled>Uložiť graf PNG</button></div></div><p class="export-callout">Po kliknutí na Excel sa otvorí výber stĺpcov. Export sa vytvorí až po potvrdení.</p>
+<div class="table-wrap"><table><thead><tr><th class="pickcell">Použiť</th><th>t (s)</th><th>x</th><th>y</th><th>vₓ</th><th>vᵧ</th><th>aₓ</th><th>aᵧ</th><th>Istota</th></tr></thead><tbody id="rows"><tr><td colspan="9" style="text-align:center;padding:24px">Zatiaľ žiadne merania</td></tr></tbody></table></div><p id="unitsNote" class="info-line">Jednotky sa automaticky zmenia z px na m po kalibrácii.</p></section>
+<dialog id="excelDialog" class="excel-dialog" aria-labelledby="excelDialogTitle">
+<div class="excel-dialog-inner">
+<div class="excel-dialog-titlebar"><h2 id="excelDialogTitle">Výber údajov do Excelu</h2><button id="excelCancel" type="button" class="pill" aria-label="Zavrieť výber Excel stĺpcov">✕ Zavrieť</button></div>
+<p class="desc">Vyber, ktoré stĺpce sa majú uložiť. Každé meranie zostane v samostatnom riadku; hárok „Informacie“ sa uloží tiež.</p>
+<label class="checkrow" style="font-size:14px;margin:9px 0 12px"><input type="checkbox" id="excelSubsetOnly" checked> Do Excelu uložiť iba vybrané merania z grafu</label>
+<p id="excelSubsetInfo" class="desc">Ak nie je nastavený vlastný výber, exportujú sa všetky merania.</p>
+<p class="excel-selected"><strong>Vybrané stĺpce: <span id="exportCount">13 z 13</span></strong></p>
+<div class="export-actions"><button id="excelAll" type="button" class="pill">Vybrať všetky</button><button id="excelNone" type="button" class="pill">Zrušiť výber</button><button id="excelVelocity" type="button" class="pill">Len čas a rýchlosť</button><button id="excelPosition" type="button" class="pill">Len čas a polohu</button></div>
+<div class="export-grid" id="exportColumns">
+<label><input type="checkbox" data-excel-col="index" checked>Poradie merania</label>
+<label><input type="checkbox" data-excel-col="t" checked>Čas od začiatku t (s)</label>
+<label><input type="checkbox" data-excel-col="videoT" checked>Čas vo videu (s)</label>
+<label><input type="checkbox" data-excel-col="pX" checked>Poloha x</label>
+<label><input type="checkbox" data-excel-col="pY" checked>Poloha y</label>
+<label><input type="checkbox" data-excel-col="vX" checked>Rýchlosť vₓ</label>
+<label><input type="checkbox" data-excel-col="vY" checked>Rýchlosť vᵧ</label>
+<label><input type="checkbox" data-excel-col="magV" checked>Veľkosť rýchlosti |v|</label>
+<label><input type="checkbox" data-excel-col="aX" checked>Zrýchlenie aₓ</label>
+<label><input type="checkbox" data-excel-col="aY" checked>Zrýchlenie aᵧ</label>
+<label><input type="checkbox" data-excel-col="magA" checked>Veľkosť zrýchlenia |a|</label>
+<label><input type="checkbox" data-excel-col="conf" checked>Istota sledovania</label>
+<label><input type="checkbox" data-excel-col="status" checked>Stav merania</label>
+</div>
+<p id="exportNote" class="export-note" role="status">Všetky stĺpce sú vybrané.</p>
+<div class="excel-dialog-footer"><button id="excelDownload" type="button" class="pill primary">Stiahnuť vybrané stĺpce (.xlsx)</button><button id="excelCancelBottom" type="button" class="pill">Späť k meraniu</button></div>
+</div></dialog>
+<footer><strong>Poznámka k fyzike:</strong> Poloha má znamienko; dráha a veľkosť rýchlosti sú nezáporné. Diferencovanie zvýrazňuje chyby merania, najmä pri zrýchlení. Meranie je dvojrozmerné a neodstraňuje perspektívne skreslenie. Náročnosť a presnosť automatického sledovania závisia od kvality videa a zariadenia. Bežné videá možno spracovať aj offline. Rozšírené dekódovanie cez FFmpeg.wasm vyžaduje pri prvom použití internet, výkon a dostatok pamäte; na niektorých tabletoch nemusí uspieť. Použitý FFmpeg.wasm core je distribuovaný pod GPL-2.0-or-later. <a href="https://github.com/ffmpegwasm/ffmpeg.wasm" target="_blank" rel="noopener">Zdrojový kód a licencie</a>.</footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const v=$('video'),overlay=$('overlay'),chart=$('chart'),file=$('file'),box=$('videoBox');
+const capture=document.createElement('canvas'),cx=capture.getContext('2d',{willReadFrequently:true});const preview=$('videoPreview'),previewCtx=preview.getContext('2d');let canvasPreview=false,previewRaf=0,previewLast=0;
+let selectedPointSet=null, selectingGraphPoints=false, onlySelectedInPlot=false, fitResult=null, fitKind='linear', fitTarget='pX', fitIsActive=false;
+let originalFile=null, activeFile=null, convertedVideoBlob=null, converting=false, conversionCancel=false, ffmpegInstance=null, ffmpegBlobURLs=[], ffmpegLoading=null, conversionToken=0;
+const CDN_FFMPEG='https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/umd';
+const CDN_CORE='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
+const CDN_WORKER='https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/esm';
+let workW=0,workH=0,duration=0,frameReady=false,frameTimer=null,loadSerial=0,preparedSerial=-1,sourceUrl=null,mode='view',target=null,calPoints=[],calibration=null,origin=null,axisAngle=0,drag=null,measurements=[],computed=[],tracking=false,cancelled=false,graphKind='pos',selectedIndex=-1,chartView=null,lockedFrame=false,rangeStart=null,rangeEnd=null;
+const surface=$('videoSurface');let zoom=1,panX=0,panY=0;
+// Načítané FPS z MP4 stts/mdhd alebo odhad podľa zobrazených obrazových snímok.
+// Neznáme súbory používajú iba predbežnú hodnotu 30 (nikdy ju neoznačujeme ako zistenú).
+let detectedVideoFps=30,fpsOrigin='fallback',fpsVariable=false,frameRateSerial=0;
+let observedFrameTimes=[],videoFrameCbId=0;
+const fpsNumber=n=>Number.isInteger(n)?String(n):Number(n.toFixed(3)).toString().replace('.',',');
+function updateFpsControls(){
+ const max=detectedVideoFps;
+ const slider=$('fps');slider.min='1';slider.max=String(max);slider.step='any';
+ if(Number(slider.value)>max)slider.value=String(max);
+ const selected=Math.min(max,Math.max(1,Number(slider.value)||1));
+ $('fpsV').textContent=fpsNumber(selected)+' meraní/s'+(Math.abs(selected-max)<.005?' · každá snímka':'');
+ $('fpsHint').textContent=fpsOrigin==='fallback'?'FPS zatiaľ nebolo možné overiť. Limit 30 meraní/s je predbežný.':`Maximum ${fpsNumber(max)} meraní/s${fpsVariable?' · premenlivé FPS, časové kroky sú približné':''}.`;
+ $('detectedFps').textContent=fpsOrigin==='fallback'?'nezistené (predbežne 30)':fpsNumber(max)+' snímok/s';
+ $('fpsOrigin').textContent=fpsOrigin==='mp4'?(fpsVariable?'Zistené z MP4 (priemerné FPS, premenlivý interval).':'Zistené z MP4 (časová tabuľka snímok).'):fpsOrigin==='playback'?'Odhad zo snímok počas prehrávania.':'Nie je známe; pri prehrávaní sa pokúsim určiť odhad.';
+ $('maxFps').disabled=!workW||tracking;
+}
+function setDetectedFps(fps,origin,variable=false){
+ if(!Number.isFinite(fps)||fps<1||fps>960)return;
+ detectedVideoFps=fps;fpsOrigin=origin;fpsVariable=!!variable;
+ updateFpsControls();
+}
+// ISO BMFF/MP4: stts definuje počet snímok a ich dekódovacie intervaly;
+// mdhd obsahuje časovú základňu video stopy. Nepoužívame trvanie audio stopy.
+function fpsFromMoov(data){
+ const dv=new DataView(data);
+ const tag=(o)=>String.fromCharCode(dv.getUint8(o),dv.getUint8(o+1),dv.getUint8(o+2),dv.getUint8(o+3));
+ function boxes(from,to){const out=[];let pos=from;while(pos+8<=to){let size=dv.getUint32(pos),hdr=8;
+  if(size===1){if(pos+16>to)break;const hi=dv.getUint32(pos+8),lo=dv.getUint32(pos+12);size=hi*4294967296+lo;hdr=16;}
+  if(size===0)size=to-pos;
+  if(!Number.isSafeInteger(size)||size<hdr||pos+size>to)break;
+  out.push({type:tag(pos+4),start:pos+hdr,end:pos+size});pos+=size;
+ }return out}
+ function child(parent,type){return boxes(parent.start,parent.end).find(b=>b.type===type)}
+ const root={start:0,end:dv.byteLength};
+ for(const trak of boxes(0,dv.byteLength).filter(b=>b.type==='trak')){
+  const mdia=child(trak,'mdia');if(!mdia)continue;
+  const hdlr=child(mdia,'hdlr');if(!hdlr||hdlr.start+12>hdlr.end||tag(hdlr.start+8)!=='vide')continue;
+  const mdhd=child(mdia,'mdhd');if(!mdhd)continue;
+  const version=dv.getUint8(mdhd.start);const tsOffset=mdhd.start+(version===1?20:12);
+  if(tsOffset+4>mdhd.end)continue;const timescale=dv.getUint32(tsOffset);if(!timescale)continue;
+  const minf=child(mdia,'minf'),stbl=minf&&child(minf,'stbl'),stts=stbl&&child(stbl,'stts');
+  if(!stts||stts.start+8>stts.end)continue;
+  const entries=dv.getUint32(stts.start+4);if(!entries||entries>100000||stts.start+8+8*entries>stts.end)continue;
+  let count=0,ticks=0,first=0,variable=false;
+  for(let i=0;i<entries;i++){const n=dv.getUint32(stts.start+8+8*i),delta=dv.getUint32(stts.start+12+8*i);
+   if(!n||!delta)continue;count+=n;ticks+=n*delta;if(!first)first=delta;else if(first!==delta)variable=true;
+  }
+  const fps=count&&ticks?count*timescale/ticks:0;
+  if(Number.isFinite(fps)&&fps>=1&&fps<=960)return {fps,variable,samples:count};
+ }
+ return null;
+}
+async function detectMP4Fps(f,serial){
+ if(!f?.slice)return null;try{
+  let offset=0;
+  while(offset+8<=f.size){
+   const head= new DataView(await f.slice(offset,Math.min(offset+16,f.size)).arrayBuffer());
+   if(head.byteLength<8)return null;
+   let size=head.getUint32(0),type=String.fromCharCode(...new Uint8Array(head.buffer,4,4));
+   if(size===1){if(head.byteLength<16)return null;size=head.getUint32(8)*4294967296+head.getUint32(12)}
+   else if(size===0)size=f.size-offset;
+   if(!Number.isSafeInteger(size)||size<8||offset+size>f.size)return null;
+   if(type==='moov'){
+    if(size>48*1024*1024)return null;
+    const moov=await f.slice(offset+(head.getUint32(0)===1?16:8),offset+size).arrayBuffer();
+    if(serial!==loadSerial)return null;
+    return fpsFromMoov(moov);
+   }
+   offset+=size;
+  }
+ }catch(e){return null;}return null;
+}
+async function detectFrameRate(file,serial){
+ const value=await detectMP4Fps(file,serial);
+ if(serial!==loadSerial)return;
+ if(value)setDetectedFps(value.fps,'mp4',value.variable);
+ else updateFpsControls();
+}
+// Pri WebM a iných súboroch môže byť odhad dostupný až pri prehrávaní.
+function observeVideoFrames(){
+ if(typeof v.requestVideoFrameCallback!=='function')return;
+ const serial=loadSerial;
+ if(videoFrameCbId&&typeof v.cancelVideoFrameCallback==='function')v.cancelVideoFrameCallback(videoFrameCbId);
+ observedFrameTimes=[];
+ const tick=(now,meta)=>{
+   if(serial!==loadSerial)return;
+   const mediaT=meta.mediaTime;
+   if(fpsOrigin==='fallback'&&Number.isFinite(mediaT)){
+    const prev=observedFrameTimes.at(-1);if(prev!==undefined&&mediaT>prev+.001&&mediaT-prev<.25)observedFrameTimes.push(mediaT);
+    else if(prev===undefined)observedFrameTimes.push(mediaT);
+    if(observedFrameTimes.length>=9){
+      const ds=observedFrameTimes.slice(1).map((t,i)=>t-observedFrameTimes[i]).sort((a,b)=>a-b);
+      const median=ds[Math.floor(ds.length/2)];if(median>.001)setDetectedFps(1/median,'playback',false);
+    }
+   }
+   if(!v.paused&&fpsOrigin==='fallback')videoFrameCbId=v.requestVideoFrameCallback(tick);
+ };
+ videoFrameCbId=v.requestVideoFrameCallback(tick);
+}
+const pick={pos:['pX','pY'],vel:['vX','vY'],acc:['aX','aY']};
+const fmt=(n,d=2)=>Number.isFinite(n)?n.toFixed(d).replace('.',','):'—';
+const err=e=>e instanceof Error?e.message:String(e);
+function notice(msg,type=''){let el=$('message');el.textContent=msg;el.className='status '+type;}
+function setMode(m){if(tracking)return;mode=m;calPoints=[];drag=null;const active={target:'targetTool',cal:'calibTool',origin:'originTool',axis:'axisTool',correct:'correctTool',anchor:'anchorTool',pan:'panTool'}[m];document.querySelectorAll('#targetTool,#calibTool,#originTool,#axisTool,#correctTool,#anchorTool,#panTool').forEach(e=>e.classList.toggle('active',e.id===active));$('modeBadge').textContent='Režim: '+({view:'náhľad',target:'označenie objektu',cal:'kalibrácia',origin:'počiatok osí',axis:'smer osi +x',correct:'ručná oprava',anchor:'výber sledovaného bodu',pan:'posúvanie videa'}[m]||'náhľad');$('timeInfo').textContent=({view:'Posúvaj čas vo videu alebo klikni do grafu.',target:'Ťahom vyznač nový obdĺžnik. Môžeš ho označovať opakovane, až budeš spokojný.',cal:'Klikni na oba konce známej vzdialenosti. Ďalšie dva kliky kalibráciu nahradia.',origin:'Opakovane klikaj na želaný počiatok (0;0). Nástroj zostáva aktívny.',axis:'Klikni v smere, ktorým má od počiatku viesť kladná os x. Klikanie môžeš opakovať.',correct:'Vyber okamih na časovej osi a klikni na požadovaný bod. Nástroj ostáva aktívny.',anchor:'Na začiatočnej snímke klikni na konkrétny bod vo vnútri zeleného obdĺžnika.',pan:'Potiahni obraz myšou alebo prstom. Kolieskom alebo +/− môžeš zoomovať.'})[m];overlay.classList.toggle('pan-mode',m==='pan');redrawOverlay();}
+function effectiveStart(){return rangeStart!==null?rangeStart:(target?.startTime??0)}
+function effectiveEnd(){return rangeEnd!==null?rangeEnd:Math.max(0,duration-.004)}
+function updateRangeInfo(){
+ const start=effectiveStart(),end=effectiveEnd();
+ $('startBoundaryLabel').textContent=rangeStart!==null?fmt(rangeStart,3)+' s (nastavené)':target?'Pri označení objektu: '+fmt(target.startTime,3)+' s':'Pri označení objektu';
+ $('endBoundaryLabel').textContent=rangeEnd!==null?fmt(rangeEnd,3)+' s (nastavené)':duration?('Koniec videa: '+fmt(duration,3)+' s'):'Koniec videa';
+ const s=duration?Math.min(100,Math.max(0,100*start/duration)):0;
+ const e=duration?Math.min(100,Math.max(0,100*end/duration)):100;
+ $('clipBefore').style.width=s+'%';$('clipInside').style.width=Math.max(0,e-s)+'%';$('clipAfter').style.width=Math.max(0,100-e)+'%';
+}
+function ui(){let loaded=!!workW&&frameReady;for(let id of ['backFrame','forwardFrame','targetTool','calibTool','originTool','axisTool','axisReset','doneTool','panTool','zoomOut','zoomIn','zoomReset','zoomLevel'])$(id).disabled=!loaded||tracking;for(let id of ['originFirst','axisAuto'])$(id).disabled=!measurements.some(m=>m.valid)||tracking;$('play').disabled=!workW||tracking;$('previewMode').disabled=!workW||tracking;$('seek').disabled=!workW||tracking;$('anchorTool').disabled=!target||tracking;$('anchorPreset').disabled=!target||tracking;$('start').disabled=!target||tracking;$('stop').disabled=!tracking;$('correctTool').disabled=!computed.length||tracking;$('excel').disabled=!computed.length||tracking;$('png').disabled=!computed.length||tracking;$('fps').disabled=tracking;$('radius').disabled=tracking;$('meters').disabled=tracking;$('file').disabled=tracking||converting;$('plotEmpty').classList.toggle('hidden',computed.some(r=>r.valid));
+ for(let id of ['setStart','setEnd','gotoEnd'])$(id).disabled=!loaded||tracking;
+ $('gotoStart').disabled=!loaded||tracking||(rangeStart===null&&!target);
+ $('resetRange').disabled=!loaded||tracking||(rangeStart===null&&rangeEnd===null);
+ $('frameStep').disabled=!loaded||tracking; $('maxFps').disabled=!loaded||tracking;
+ updateRangeInfo();
+$('convertButton').disabled=converting||tracking||!originalFile;
+$('convertResolution').disabled=converting||tracking;
+$('convertedDownload').disabled=!convertedVideoBlob||converting;
+$('mediaConvert').disabled=converting||tracking||!originalFile;
+$('convertCancel').classList.toggle('hidden',!converting);
+ updatePointSelectionInfo();
+}
+function resizeCanvases(){if(workW){const rect=overlay.getBoundingClientRect();const dpr=Math.min(2,window.devicePixelRatio||1);overlay.width=Math.max(1,Math.round(rect.width*dpr));overlay.height=Math.max(1,Math.round(rect.height*dpr));redrawOverlay();}drawChart();}
+new ResizeObserver(resizeCanvases).observe(box);
+async function loadVideo(f,{converted=false}={}){if(!f)return; if(!converted){originalFile=f;convertedVideoBlob=null;$('convertedDownload').classList.add('hidden');$('conversionPanel').classList.add('hidden');conversionToken++;}activeFile=f;loadSerial++;preparedSerial=-1;frameReady=false;canvasPreview=false;surface.classList.remove('canvas-preview');$('previewMode').classList.remove('active');$('previewMode').textContent='Náhradný obraz';clearTimeout(frameTimer);frameTimer=null;$('mediaWarning').classList.add('hidden');v.pause();if(sourceUrl)URL.revokeObjectURL(sourceUrl);sourceUrl=URL.createObjectURL(f);workW=workH=0;target=null;rangeStart=null;rangeEnd=null;detectedVideoFps=30;fpsOrigin='fallback';fpsVariable=false;observedFrameTimes=[];$('frameStep').value='1';$('fps').value='12';updateFpsControls();origin=null;axisAngle=0;calibration=null;calPoints=[];measurements=[];computed=[];selectedIndex=-1;resetAnalysisSelection();resetZoom();setMode('view');$('anchorPreset').value='center';$('axisInfo').textContent='Štandardne: +x doprava, +y nahor.';$('fileDetail').textContent=converted?(originalFile?.name||f.name)+' • kompatibilná kópia':f.name;notice(converted?'Načítavam prevedené video…':'Video sa načítava…');v.style.display='block';$('emptyVideo').classList.remove('hidden');box.classList.remove('loaded');ui();v.src=sourceUrl;v.load();void detectFrameRate(f,loadSerial);
+ if(!converted){
+   // Rozpoznanie názvu kodeku z MP4 hlavičky je iba pomocný signál; dekódovanie rozhoduje prehliadač.
+   try{const serial=loadSerial;const bytes=await f.slice(0,Math.min(f.size,262144)).arrayBuffer();
+     const head=new TextDecoder('latin1').decode(bytes);
+     if(serial===loadSerial&&!frameReady&&/hvc1|hev1|hvcC/.test(head)){
+       showConversionPanel(false);
+       conversionStatus('Vo videu bol zistený záznam HEVC/H.265. Ak sa obraz nezobrazí, klikni na „Spracovať video na tomto zariadení“.');
+     }
+   }catch(e){} // Ak hlavičku nemožno prečítať, zostane dostupná bežná diagnostika.
+ }
+}
+file.addEventListener('change',()=>loadVideo(file.files[0]));
+// Rozšírený lokálny prevod videa (na požiadanie), bez odosielania média na server.
+// UMD rozhranie a ESM modulový worker sú zo zhodnej verzie ffmpeg.wasm; worker beží z blob URL,
+// aby fungoval na GitHub Pages aj bez hlavičiek COOP/COEP (jednovláknový core).
+function showConversionPanel(scroll=false){
+  $('conversionPanel').classList.remove('hidden');
+  if(scroll)$('conversionPanel').scrollIntoView({block:'nearest',behavior:'smooth'});
+  ui();
+}
+function conversionStatus(s){$('convertStatus').textContent=s;}
+function conversionProgress(p){const n=Math.max(0,Math.min(100,Math.round(p)));$('convertProgress').style.width=n+'%';$('convertProgressBar').setAttribute('aria-valuenow',String(n));}
+function loadExternalScript(url){return new Promise((resolve,reject)=>{if(window.FFmpegWASM?.FFmpeg){resolve();return;}const s=document.createElement('script');s.src=url;s.async=true;s.onload=()=>window.FFmpegWASM?.FFmpeg?resolve():reject(new Error('Knižnica sa nenačítala správne.'));s.onerror=()=>reject(new Error('Nedá sa stiahnuť knižnica. Skontroluj internet.'));document.head.append(s);});}
+async function fetchedBlobURL(url,mime){
+  const r=await fetch(url,{mode:'cors',cache:'force-cache'});
+  if(!r.ok)throw new Error('Sťahovanie knižnice zlyhalo (HTTP '+r.status+').');
+  const buf=await r.arrayBuffer(); const u=URL.createObjectURL(new Blob([buf],{type:mime}));
+  ffmpegBlobURLs.push(u);return u;
+}
+async function moduleWorkerBlobURL(){
+  // Modulový worker si na rozdiel od klasickej UMD verzie vie importovať ESM core.
+  // Dva malé importované moduly vložíme do blob URL, aby relatívne importy fungovali aj na GitHub Pages.
+  const [constURL,errorsURL]=await Promise.all([
+    fetchedBlobURL(CDN_WORKER+'/const.js','text/javascript'),
+    fetchedBlobURL(CDN_WORKER+'/errors.js','text/javascript')
+  ]);
+  const response=await fetch(CDN_WORKER+'/worker.js',{mode:'cors',cache:'force-cache'});
+  if(!response.ok)throw new Error('Nedá sa stiahnuť modulový worker.');
+  let source=await response.text();
+  source=source.replace(/from\s+["']\.\/const\.js["']/g,`from "${constURL}"`)
+               .replace(/from\s+["']\.\/errors\.js["']/g,`from "${errorsURL}"`);
+  if(!source.includes(constURL)||!source.includes(errorsURL))throw new Error('Nekompatibilná verzia FFmpeg workeru.');
+  const blob=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+  ffmpegBlobURLs.push(blob);return blob;
+}
+async function initializeFFmpeg(){
+  if(ffmpegInstance?.loaded)return ffmpegInstance;
+  conversionStatus('Načítavam modul FFmpeg.wasm – pri prvom použití približne 32 MB…');
+  await loadExternalScript(CDN_FFMPEG+'/ffmpeg.js');
+  const ff=new window.FFmpegWASM.FFmpeg(); ffmpegInstance=ff;
+  ff.on('progress',({progress})=>{
+    if(converting&&Number.isFinite(progress)&&progress>=0&&progress<=1)
+      conversionProgress(Math.min(98,Math.max(0,Math.round(progress*95))));
+  });
+  let lastLog=''; ff.on('log',({message})=>{lastLog=String(message||'').slice(0,250);window.__lastVideoTranscodeLog=lastLog;});
+  // classWorkerURL je potrebný: CDN worker je inak na cudzom origin-e.
+  // Používame ESM core s modulovým workerom a bez SharedArrayBuffer.
+  const [classWorkerURL,coreURL,wasmURL]=await Promise.all([
+    moduleWorkerBlobURL(),
+    fetchedBlobURL(CDN_CORE+'/ffmpeg-core.js','text/javascript'),
+    fetchedBlobURL(CDN_CORE+'/ffmpeg-core.wasm','application/wasm')
+  ]);
+  conversionStatus('Inicializujem dekodér (na slabších tabletoch to môže trvať)…');
+  await Promise.race([
+    ff.load({classWorkerURL,coreURL,wasmURL}),
+    new Promise((_,reject)=>setTimeout(()=>reject(new Error('Inicializácia trvá príliš dlho; skús iný prehliadač alebo zariadenie.')),90000))
+  ]);
+  if(!ff.loaded)throw new Error('FFmpeg sa nepodarilo inicializovať.');
+  return ff;
+}
+$('convertButton').addEventListener('click',async()=>{
+  if(converting||tracking||!originalFile)return;
+  const videoToConvert=originalFile;
+  if(videoToConvert.size>250*1024*1024){
+    conversionStatus('Video má viac ako 250 MB. Na tablete je spoľahlivejšie ho najskôr skrátiť; spracovanie takto veľkého súboru môže prekročiť pamäť.');return;
+  }
+  converting=true;conversionCancel=false;const token=++conversionToken;
+  conversionProgress(0);$('convertedDownload').classList.add('hidden');showConversionPanel(false);ui();
+  let ff=null, inputName='video_input.mp4',outputName='video_videomotion_h264.mp4';
+  try{
+    if(!navigator.onLine)conversionStatus('Potrebný internet na stiahnutie dekodéra (video sa neodosiela).');
+    ff=await initializeFFmpeg();
+    if(conversionCancel||token!==conversionToken)throw new Error('Prevod bol zrušený.');
+    conversionStatus('Pripravujem '+(videoToConvert.size/1024/1024).toFixed(1).replace('.',',')+' MB videa v pamäti…');
+    const suffix=(videoToConvert.name.toLowerCase().match(/\.([a-z0-9]{2,5})$/)||[])[1];
+    inputName='videomotion_input.'+(suffix&&/^[a-z0-9]+$/.test(suffix)?suffix:'mp4');
+    await ff.writeFile(inputName,new Uint8Array(await videoToConvert.arrayBuffer()));
+    if(conversionCancel||token!==conversionToken)throw new Error('Prevod bol zrušený.');
+    conversionStatus('Dekódujem video a prevádzam ho na H.264 (8-bit SDR). Ponechávam časovanie snímok…');
+    conversionProgress(2);
+    const maxDim=+$('convertResolution').value;
+    let vf=[];
+    if(maxDim)vf.push(`scale=min(${maxDim}\\,iw):min(${maxDim}\\,ih):force_original_aspect_ratio=decrease:force_divisible_by=2`);
+    vf.push('format=yuv420p');
+    const args=['-hide_banner','-loglevel','error','-i',inputName,'-map','0:v:0','-an',
+      '-vf',vf.join(','),'-c:v','libx264','-preset','ultrafast','-crf','22',
+      '-pix_fmt','yuv420p','-color_primaries','bt709','-color_trc','bt709','-colorspace','bt709','-movflags','+faststart','-fps_mode','vfr',outputName];
+    const result=await ff.exec(args,240000);
+    if(conversionCancel||token!==conversionToken)throw new Error('Prevod bol zrušený.');
+    if(result!==0)throw new Error('FFmpeg skončil s chybou '+result+'. '+(window.__lastVideoTranscodeLog||''));
+    const data=await ff.readFile(outputName);
+    if(!data||data.length<100)throw new Error('Výstupné video je prázdne.');
+    const copied=new Uint8Array(data.length);copied.set(data);
+    convertedVideoBlob=new Blob([copied],{type:'video/mp4'});
+    conversionProgress(100);
+    conversionStatus('Hotovo: vytvorená kompatibilná kópia ('+(convertedVideoBlob.size/1024/1024).toFixed(1).replace('.',',')+' MB). Nahrávam ju na analýzu.');
+    await loadVideo(convertedVideoBlob,{converted:true});
+    if(token!==conversionToken)throw new Error('Medzitým bolo vybrané nové video.');
+    $('convertedDownload').classList.remove('hidden');$('conversionPanel').classList.remove('hidden');
+    $('conversionIntro').textContent='Video bolo prevedené lokálne na H.264. Môžeš ho analyzovať alebo si kompatibilnú kópiu uložiť. Ak stále nebude fungovať, skús menšie rozlíšenie.';
+    conversionStatus('Prevod dokončený. Ak nie je obraz pripravený, pozri upozornenie pod videom.');
+    notice('Prevedené video sa načítava. Keď sa zobrazí obraz, môžeš označiť objekt.');
+  }catch(e){
+    const msg=err(e);
+    conversionStatus((conversionCancel?'Prevod zrušený. ':'Prevod sa nepodaril: ')+msg+' Pri starších tabletoch skús nižšie rozlíšenie alebo skrátenie videa.');
+    if(!conversionCancel)notice('Rozšírené spracovanie zlyhalo: '+msg,'warn');
+    conversionProgress(0);
+  }finally{
+    if(ff){try{await ff.deleteFile(inputName)}catch(e){}try{await ff.deleteFile(outputName)}catch(e){}}
+    converting=false;ui();
+  }
+});
+$('convertCancel').addEventListener('click',()=>{
+  if(!converting)return;
+  conversionCancel=true;conversionToken++;
+  conversionStatus('Zastavujem spracovanie…');
+  if(ffmpegInstance){try{ffmpegInstance.terminate()}catch(e){}ffmpegInstance=null;}
+  for(let u of ffmpegBlobURLs)URL.revokeObjectURL(u);ffmpegBlobURLs=[];
+});
+$('convertedDownload').addEventListener('click',()=>{
+  if(convertedVideoBlob)downloadBlob(convertedVideoBlob,'VideoMotion_kompatibilne_H264.mp4');
+});
+
+// Na tabletoch sa môžu metadáta načítať bez prvej dekódovanej snímky.
+function paintPreview(){if(!canvasPreview||!decodedFrameAvailable())return;try{previewCtx.drawImage(v,0,0,preview.width,preview.height)}catch(e){showMediaWarning('Náhradné zobrazenie sa nepodarilo vykresliť: '+err(e))}}
+function previewTick(ts){previewRaf=0;if(!canvasPreview)return;if(ts-previewLast>=33){previewLast=ts;paintPreview()}if(!v.paused)previewRaf=requestAnimationFrame(previewTick)}
+$('previewMode').addEventListener('click',()=>{if(!workW)return;canvasPreview=!canvasPreview;surface.classList.toggle('canvas-preview',canvasPreview);$('previewMode').classList.toggle('active',canvasPreview);$('previewMode').textContent=canvasPreview?'Pôvodný obraz':'Náhradný obraz';if(canvasPreview){paintPreview();if(!v.paused)previewRaf=requestAnimationFrame(previewTick);if(!frameReady)showMediaWarning('Zvolený náhradný obraz, ale na dekódovanie sa stále čaká.')}else if(previewRaf){cancelAnimationFrame(previewRaf);previewRaf=0}});
+for(const ev of ['seeked','loadeddata','timeupdate','pause'])v.addEventListener(ev,()=>{if(canvasPreview)paintPreview()});v.addEventListener('play',()=>{if(canvasPreview&&!previewRaf)previewRaf=requestAnimationFrame(previewTick)});
+function mediaInfo(){const ec=v.error?.code??'bez chyby';return `rozlíšenie ${v.videoWidth} × ${v.videoHeight}; dĺžka ${fmt(v.duration)} s; readyState ${v.readyState}/4; networkState ${v.networkState}; chyba ${ec}; čas ${fmt(v.currentTime)} s; typ ${activeFile?.type||'neznámy'}`;}
+function showMediaWarning(detail){$('mediaWarning').classList.remove('hidden');$('mediaWarningText').textContent=detail+' Ak je video HEVC/HDR, použi Spracovať HEVC/HDR. Prevod sa vykoná iba v tvojom zariadení.';$('mediaDiag').textContent=mediaInfo();if(originalFile&&!convertedVideoBlob)showConversionPanel(false);}
+function decodedFrameAvailable(){return !!workW&&v.readyState>=HTMLMediaElement.HAVE_CURRENT_DATA&&v.videoWidth>0&&v.videoHeight>0;}
+function markFrameReady(){if(frameReady||!decodedFrameAvailable())return;frameReady=true;clearTimeout(frameTimer);$('mediaWarning').classList.add('hidden');$('emptyVideo').classList.add('hidden');notice('Obraz videa je pripravený. Označ sledované teleso.');if(!convertedVideoBlob)$('conversionPanel').classList.add('hidden');ui();resizeCanvases();}
+// Metadáta (napr. dĺžka) môžu prísť aj pri videu, ktorého HEVC snímky zariadenie nedokáže dekódovať.
+for(const ev of ['loadeddata','canplay','seeked','playing'])v.addEventListener(ev,()=>{
+  if(!workW&&v.videoWidth>0&&v.videoHeight>0)prepareVideo();
+  if(decodedFrameAvailable())markFrameReady();
+});
+async function prepareVideo(){
+  const serial=loadSerial;
+  if(preparedSerial===serial)return;
+  if(!Number.isFinite(v.duration)||v.duration<=0){
+    showMediaWarning('Prehliadač neprečítal platnú dĺžku videa.');
+    notice('Video sa nepodarilo načítať. Skús MP4/H.264.','error');return;
+  }
+  duration=v.duration;$('duration').textContent=fmt(duration)+' s';
+  if(!v.videoWidth||!v.videoHeight){
+    notice('Dĺžka videa je známa, ale obrazové rozmery zatiaľ nie sú dostupné. Môže ísť o nepodporovaný kodek (HEVC/H.265) alebo HDR.','warn');
+    if(!frameTimer)frameTimer=setTimeout(()=>{
+      frameTimer=null;
+      if(serial!==loadSerial||workW)return;
+      showMediaWarning('Video má načítanú dĺžku, ale prehliadač nevrátil obrazové rozmery. Toto správanie často znamená nepodporovaný kodek.');
+    },2500);
+    return;
+  }
+  preparedSerial=serial;clearTimeout(frameTimer);frameTimer=null;
+  const factor=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight));workW=Math.max(1,Math.round(v.videoWidth*factor));workH=Math.max(1,Math.round(v.videoHeight*factor));capture.width=workW;capture.height=workH;preview.width=workW;preview.height=workH;surface.style.maxWidth=`min(100%, calc(65vh * ${v.videoWidth/v.videoHeight}))`;v.style.display='block';$('emptyVideo').classList.add('hidden');box.classList.add('loaded');$('calibInfo').textContent='Nezadaná mierka – zatiaľ sa používa px.';$('targetInfo').textContent='Po načítaní obrazovej snímky stlač „Označiť objekt“.';notice('Metadáta sú načítané. Čakám na dekódovanie obrazu…');ui();resizeCanvases();
+  frameTimer=setTimeout(()=>{if(serial===loadSerial&&!frameReady){showMediaWarning('Video má načítanú dĺžku, ale prehliadač zatiaľ nevydal obrazovú snímku.');notice('Obraz videa zatiaľ nie je dostupný. Skús „Prehrať“ alebo „Skúsiť načítať obraz“.','warn')}},4500);
+  try{await seekTime(Math.min(.04,duration/15));if(serial!==loadSerial)return;markFrameReady();if(decodedFrameAvailable())drawFrame()}catch(e){if(serial===loadSerial&&!frameReady){showMediaWarning('Nepodarilo sa dekódovať snímku: '+err(e));notice('Video nie je pripravené na analýzu. Skontroluj formát alebo skús načítať obraz.','warn')}}
+}
+v.addEventListener('loadedmetadata',prepareVideo);
+v.addEventListener('error',()=>{clearTimeout(frameTimer);frameTimer=null;if(!tracking){showMediaWarning('Prehliadač video nerozpoznal alebo nedokáže dekódovať jeho snímky.');notice('Obraz sa nedá dekódovať. Skús MP4/H.264, 8-bit SDR.','error')}});
+$('mediaConvert').addEventListener('click',()=>{showConversionPanel(true);$('conversionPanel').scrollIntoView({behavior:'smooth',block:'nearest'});});
+$('mediaRetry').addEventListener('click',async()=>{if(!workW){showMediaWarning('Obrazové rozmery sú stále nedostupné. Najprv skús video MP4/H.264 (8-bit SDR).');return;}try{await v.play();await new Promise(r=>setTimeout(r,250));v.pause();await seekTime(Math.max(.04,Math.min(v.currentTime,.2)));markFrameReady();if(frameReady){$('mediaWarning').classList.add('hidden');notice('Obraz sa podarilo načítať.')}else showMediaWarning('Po pokuse o prehratie stále nemáme dekódovanú snímku.')}catch(e){showMediaWarning('Opakovaný pokus zlyhal: '+err(e));notice('Video sa nepodarilo prehrať.','warn')}});
+function drawFrame(){if(!decodedFrameAvailable())throw new Error('Obrazová snímka ešte nie je dekódovaná (readyState '+v.readyState+').');cx.drawImage(v,0,0,workW,workH);return cx.getImageData(0,0,workW,workH).data;}
+function seekTime(t){if(!workW)return Promise.reject(new Error('Najprv nahraj video.'));t=Math.max(0,Math.min(Math.max(0,duration-.003),t));v.pause();if(Math.abs(v.currentTime-t)<.001&&decodedFrameAvailable()&&!v.seeking){updateTime();return Promise.resolve()}
+return new Promise((resolve,reject)=>{let timer=setTimeout(()=>{cleanup();reject(new Error('Čakanie na dekódovanie snímky trvalo príliš dlho.'))},9000);function cleanup(){clearTimeout(timer);for(let ev of ['seeked','loadeddata','canplay','timeupdate'])v.removeEventListener(ev,check);v.removeEventListener('error',fail)}function check(){if(!v.seeking&&decodedFrameAvailable()&&Math.abs(v.currentTime-t)<.02){cleanup();updateTime();resolve()}}function fail(){cleanup();reject(new Error('Chyba načítania snímky.'))}for(let ev of ['seeked','loadeddata','canplay','timeupdate'])v.addEventListener(ev,check);v.addEventListener('error',fail,{once:true});try{if(Math.abs(v.currentTime-t)>.001)v.currentTime=t;else if(!decodedFrameAvailable())v.currentTime=Math.min(duration-.003,t+.01);check()}catch(e){cleanup();reject(e)}});}
+function updateTime(){$('currentTime').textContent=fmt(v.currentTime)+' s';$('seek').value=duration?Math.round(1000*v.currentTime/duration):0;$('play').textContent=v.paused?'▶ Prehrať':'❚❚ Pauza';redrawOverlay();updateRangeInfo();}
+v.addEventListener('timeupdate',()=>{if(!tracking)updateTime()});v.addEventListener('play',()=>{if(!tracking)setMode('view');updateTime();if(fpsOrigin==='fallback')observeVideoFrames()});v.addEventListener('pause',updateTime);v.addEventListener('ended',updateTime);
+let seekDebounce=0;
+$('seek').addEventListener('input',()=>{if(tracking)return;const t=+$('seek').value/1000*duration;v.pause();clearTimeout(seekDebounce);seekDebounce=setTimeout(()=>seekTime(t).catch(e=>notice(err(e),'error')),60);});
+$('play').addEventListener('click',async()=>{if(v.paused){setMode('view');try{await v.play()}catch(e){notice('Video sa nepodarilo spustiť: '+err(e),'error');showMediaWarning('Prehrávanie zlyhalo: '+err(e))}}else v.pause();updateTime()});
+function stepFPS(){return detectedVideoFps}
+function numberOfStepFrames(){return Math.max(1,Math.min(1000,Math.floor(Number($('frameStep').value)||1)))}
+function jumpFrames(dir){
+ const rate=stepFPS();const frame=Math.round(v.currentTime*rate);
+ const next=Math.max(0,frame+dir*numberOfStepFrames());
+ return seekTime(Math.min(Math.max(0,duration-.004),next/rate+.00025));
+}
+for(const [id,dir] of [['backFrame',-1],['forwardFrame',1]])$(id).addEventListener('click',()=>jumpFrames(dir).catch(e=>notice(err(e),'error')));
+function resetTargetForStart(newStart){
+ if(!target||Math.abs(target.startTime-newStart)<.012)return false;
+ target=null;$('anchorPreset').value='center';
+ $('targetInfo').textContent='Začiatok merania sa zmenil. Pre správne sledovanie označ objekt znovu na nastavenej prvej snímke.';
+ setMode('view');return true;
+}
+$('setStart').addEventListener('click',()=>{
+ if(!workW||tracking)return;
+ const t=Math.max(0,Math.min(duration-.004,Math.round(v.currentTime*1000)/1000));
+ if(t>=effectiveEnd()-.008){notice('Začiatok musí byť pred koncovou snímkou. Najprv nastav neskorší koniec merania.','warn');return}
+ if(rangeStart!==null&&Math.abs(t-rangeStart)<.001)return;
+ rangeStart=t;const needsTarget=resetTargetForStart(t);
+ invalidateResults('Po zmene začiatku merania spusti analýzu znova.');updateRangeInfo();
+ notice(needsTarget?'Nový začiatok: '+fmt(t,3)+' s. Označ objekt znovu na tejto snímke.':'Prvá snímka merania nastavená na '+fmt(t,3)+' s.');
+});
+$('setEnd').addEventListener('click',()=>{
+ if(!workW||tracking)return;
+ const t=Math.max(0,Math.min(duration-.004,Math.round(v.currentTime*1000)/1000));
+ if(t<=effectiveStart()+.008){notice('Koncová snímka musí byť po začiatku merania.','warn');return}
+ if(rangeEnd!==null&&Math.abs(t-rangeEnd)<.001)return;
+ rangeEnd=t;invalidateResults('Po zmene poslednej snímky spusti analýzu znova.');updateRangeInfo();
+ notice('Posledná snímka merania nastavená na '+fmt(t,3)+' s. Za týmto okamihom sa nič nemeria.');
+});
+$('gotoStart').addEventListener('click',()=>seekTime(effectiveStart()).catch(e=>notice(err(e),'error')));
+$('gotoEnd').addEventListener('click',()=>seekTime(effectiveEnd()).catch(e=>notice(err(e),'error')));
+$('resetRange').addEventListener('click',()=>{
+ if(tracking||!workW)return;
+ rangeStart=null;rangeEnd=null;invalidateResults('Po zrušení hraníc merania spusti analýzu znova.');updateRangeInfo();
+ notice('Hranice boli zrušené. Meranie sa znovu začne pri snímke, na ktorej označíš objekt, a skončí na konci videa.');
+});
+$('frameStep').addEventListener('change',()=>{$('frameStep').value=String(numberOfStepFrames())});
+function eventPos(e){const r=overlay.getBoundingClientRect();return {x:Math.max(0,Math.min(workW-1,(e.clientX-r.left)/r.width*workW)),y:Math.max(0,Math.min(workH-1,(e.clientY-r.top)/r.height*workH))}}
+function overlayCtx(){const c=overlay.getContext('2d'),sx=overlay.width/workW,sy=overlay.height/workH;c.setTransform(sx,0,0,sy,0,0);c.clearRect(0,0,workW,workH);c.lineWidth=2/sx;c.font=`${13/sx}px system-ui`;return c}
+function strokeMark(c,x,y,color){const s=7*workW/Math.max(overlay.clientWidth*zoom,1);c.strokeStyle=color;c.lineWidth=Math.max(.5,2*workW/Math.max(overlay.clientWidth*zoom,1));c.beginPath();c.moveTo(x-s,y);c.lineTo(x+s,y);c.moveTo(x,y-s);c.lineTo(x,y+s);c.stroke()}
+function nearIndex(time){if(!measurements.length)return -1;let lo=0,hi=measurements.length-1;while(lo<hi){let mid=(lo+hi)>>1;if(measurements[mid].videoT<time)lo=mid+1;else hi=mid;}return lo>0&&Math.abs(measurements[lo-1].videoT-time)<Math.abs(measurements[lo].videoT-time)?lo-1:lo}
+function invalidateResults(reason='Po úprave sledovaného bodu spusti analýzu znova.'){measurements=[];computed=[];selectedIndex=-1;resetAnalysisSelection();$('countStat').textContent=$('validStat').textContent=$('spanStat').textContent='—';$('progressText').textContent=reason;renderTable();drawChart();ui();}
+function anchorOffset(preset){if(!target)return;let w=target.w,h=target.h;const pts={center:[w/2,h/2],top:[w/2,0],bottom:[w/2,h],left:[0,h/2],right:[w,h/2]};if(pts[preset]){target.anchorX=pts[preset][0];target.anchorY=pts[preset][1];target.anchorType=preset;invalidateResults();redrawOverlay();notice('Zmenený sledovaný bod. Červený krížik ukazuje bod, z ktorého sa počítajú grafy.');}}
+function drawAxisArrow(c,ox,oy,dx,dy,color,label){const len=Math.min(workW,workH)*.17,x=ox+len*dx,y=oy+len*dy;c.strokeStyle=color;c.fillStyle=color;c.lineWidth=2*workW/Math.max(overlay.clientWidth*zoom,1);c.beginPath();c.moveTo(ox,oy);c.lineTo(x,y);c.stroke();const a=Math.atan2(dy,dx),h=len*.15;c.beginPath();c.moveTo(x,y);c.lineTo(x-h*Math.cos(a-.5),y-h*Math.sin(a-.5));c.lineTo(x-h*Math.cos(a+.5),y-h*Math.sin(a+.5));c.closePath();c.fill();c.font=`${Math.max(11,13*workW/Math.max(overlay.clientWidth*zoom,1))}px system-ui`;c.fillText(label,x+3,y-4)}
+function redrawOverlay(){if(!workW||!overlay.width)return;const c=overlayCtx(),sc=workW/Math.max(overlay.clientWidth*zoom,1);if(calibration){c.strokeStyle='#f6bf71';c.lineWidth=2.5*sc;c.beginPath();c.moveTo(calibration.a.x,calibration.a.y);c.lineTo(calibration.b.x,calibration.b.y);c.stroke();strokeMark(c,calibration.a.x,calibration.a.y,'#f6bf71');strokeMark(c,calibration.b.x,calibration.b.y,'#f6bf71')}if(calPoints.length){strokeMark(c,calPoints[0].x,calPoints[0].y,'#f6bf71')}
+const org=origin||{x:0,y:workH};if(origin||axisAngle!==0){strokeMark(c,org.x,org.y,'#81e8ff');drawAxisArrow(c,org.x,org.y,Math.cos(axisAngle),Math.sin(axisAngle),'#6cb8ff','+x');drawAxisArrow(c,org.x,org.y,Math.sin(axisAngle),-Math.cos(axisAngle),'#ffb976','+y');}
+if(measurements.length){
+// Každú zaznamenanú polohu zobrazujeme samostatným krížikom (+). Žiadne spojnice ani interpolovaná trajektória.
+const markSize=3.5*sc;
+c.strokeStyle='#67e5d6';c.lineWidth=Math.max(.55,1.35*sc);c.beginPath();
+const time=v.currentTime+.001;
+for(const m of measurements){
+  if(m.videoT>time)break;
+  if(!m.valid)continue;
+  c.moveTo(m.px-markSize,m.py);c.lineTo(m.px+markSize,m.py);
+  c.moveTo(m.px,m.py-markSize);c.lineTo(m.px,m.py+markSize);
+}
+c.stroke();
+const idx=nearIndex(v.currentTime);
+if(idx>=0&&measurements[idx].valid&&Math.abs(measurements[idx].videoT-v.currentTime)<.12)
+  strokeMark(c,measurements[idx].px,measurements[idx].py,'#72f5ab');
+}
+if(target){let at=target;let idx=nearIndex(v.currentTime);if(idx>=0&&measurements[idx]?.valid&&Math.abs(measurements[idx].videoT-v.currentTime)<.12){const m=measurements[idx];at={x:Number.isFinite(m.boxX)?m.boxX:m.px-target.anchorX,y:Number.isFinite(m.boxY)?m.boxY:m.py-target.anchorY,w:target.w,h:target.h}}c.setLineDash([7*sc,4*sc]);c.strokeStyle='#7ef7a7';c.lineWidth=2*sc;c.strokeRect(at.x,at.y,at.w,at.h);c.setLineDash([]);strokeMark(c,at.x+target.anchorX,at.y+target.anchorY,'#ff5461');}
+if(drag&&mode==='target'){c.setLineDash([5*sc,3*sc]);c.strokeStyle='#ffdf83';c.lineWidth=2*sc;c.strokeRect(Math.min(drag.start.x,drag.end.x),Math.min(drag.start.y,drag.end.y),Math.abs(drag.end.x-drag.start.x),Math.abs(drag.end.y-drag.start.y));c.setLineDash([])}}
+function getBaseDisplayBounds(){const r=overlay.getBoundingClientRect();return {left:r.left,top:r.top,width:r.width,height:r.height}}
+function applyZoom(){surface.style.transform=(zoom===1&&panX===0&&panY===0)?'none':`translate(${panX}px, ${panY}px) scale(${zoom})`;$('zoomLabel').textContent=Math.round(zoom*100)+' %';$('zoomLevel').value=Math.round(zoom*100);redrawOverlay()}
+function setZoom(next,anchorX,anchorY){next=Math.max(1,Math.min(8,next));if(!workW)return;const r=getBaseDisplayBounds();if(!Number.isFinite(anchorX)){const b=box.getBoundingClientRect();anchorX=b.left+b.width/2;anchorY=b.top+b.height/2}let factor=next/zoom;panX+=(anchorX-r.left)*(1-factor);panY+=(anchorY-r.top)*(1-factor);zoom=next;if(zoom===1){panX=0;panY=0}applyZoom()}
+function resetZoom(){zoom=1;panX=panY=0;applyZoom()}
+$('zoomOut').addEventListener('click',()=>setZoom(zoom/1.4));$('zoomIn').addEventListener('click',()=>setZoom(zoom*1.4));$('zoomReset').addEventListener('click',resetZoom);$('zoomLevel').addEventListener('input',()=>setZoom(+$('zoomLevel').value/100));box.addEventListener('wheel',e=>{if(!workW||tracking)return;e.preventDefault();setZoom(zoom*(e.deltaY<0?1.19:1/1.19),e.clientX,e.clientY)},{passive:false});
+function activateMode(m){if(mode===m)setMode('view');else{v.pause();setMode(m)}}
+$('targetTool').addEventListener('click',async()=>{
+ if(mode==='target'){setMode('view');return}
+ v.pause();
+ if(rangeStart!==null){try{await seekTime(rangeStart)}catch(e){notice('Nepodarilo sa prejsť na prvú snímku: '+err(e),'error');return}}
+ setMode('target');
+});
+$('calibTool').addEventListener('click',()=>activateMode('cal'));
+$('originTool').addEventListener('click',()=>activateMode('origin'));
+$('axisTool').addEventListener('click',()=>activateMode('axis'));
+$('panTool').addEventListener('click',()=>activateMode('pan'));
+$('correctTool').addEventListener('click',()=>activateMode('correct'));
+$('doneTool').addEventListener('click',()=>setMode('view'));
+function anchorMode(){if(!target)return;v.pause();seekTime(target.startTime).then(()=>setMode('anchor')).catch(e=>notice(err(e),'error'))}
+$('anchorTool').addEventListener('click',anchorMode);
+$('anchorPreset').addEventListener('change',e=>{if(e.target.value==='custom'){anchorMode();return}anchorOffset(e.target.value);setMode('view')});
+$('originFirst').addEventListener('click',()=>{const first=measurements.find(m=>m.valid);if(!first)return;origin={x:first.px,y:first.py};recompute();redrawOverlay();notice('Počiatok osí sa premiestnil na prvú rozpoznanú polohu.');});
+$('axisReset').addEventListener('click',()=>{axisAngle=0;$('axisInfo').textContent='Smer +x doprava, +y nahor.';recompute();redrawOverlay();});
+function estimateStraightAxis(points){const valid=points.filter(m=>m.valid);if(valid.length<5)return null;let mx=0,my=0;for(let m of valid){mx+=m.px;my+=m.py}mx/=valid.length;my/=valid.length;let a=0,b=0,d=0;for(let m of valid){let x=m.px-mx,y=m.py-my;a+=x*x;b+=x*y;d+=y*y}const theta=.5*Math.atan2(2*b,a-d);let ux=Math.cos(theta),uy=Math.sin(theta);let v1=(a+d+Math.sqrt((a-d)**2+4*b*b))/2,v2=(a+d-Math.sqrt((a-d)**2+4*b*b))/2;if(v1<400||v2/Math.max(1,v1)>.01)return null;const first=valid[0],last=valid.at(-1);const change=(last.px-first.px)*ux+(last.py-first.py)*uy;if(Math.abs(change)<Math.sqrt(v1/valid.length)*.65)return null;if(change<0){ux=-ux;uy=-uy}return {angle:Math.atan2(uy,ux),first};}
+$('axisAuto').addEventListener('click',()=>{let result=estimateStraightAxis(measurements);if(!result){notice('Pohyb nie je dostatočne priamočiary alebo je príliš krátky na jednoznačné určenie osi. Nastav ju ručne.','warn');return}axisAngle=result.angle;origin={x:result.first.px,y:result.first.py};$('axisInfo').textContent=`Automatické natočenie +x podľa pohybu: ${fmt(axisAngle*180/Math.PI,1)}°. Počiatok = prvý bod. Mierka zostáva ${calibration?'v metroch':'v pixeloch'}.`;recompute();redrawOverlay();notice('Osi sa natočili podľa priamočiareho pohybu; prvý bod je počiatok. Stále musíš prípadne nastaviť fyzikálnu mierku.');});
+overlay.addEventListener('pointerdown',e=>{if(tracking||!workW)return;if(mode==='pan'){drag={pan:true,lastX:e.clientX,lastY:e.clientY};overlay.setPointerCapture(e.pointerId);return}if(mode==='target'){const p=eventPos(e);drag={start:p,end:p};overlay.setPointerCapture(e.pointerId);redrawOverlay()}});
+overlay.addEventListener('pointermove',e=>{if(!drag)return;if(drag.pan){panX+=e.clientX-drag.lastX;panY+=e.clientY-drag.lastY;drag.lastX=e.clientX;drag.lastY=e.clientY;applyZoom()}else{drag.end=eventPos(e);redrawOverlay()}});
+overlay.addEventListener('pointerup',e=>{if(tracking||!workW)return;if(mode==='pan'){drag=null;return}const p=eventPos(e);if(mode==='target'&&drag){if(rangeStart!==null&&Math.abs(v.currentTime-rangeStart)>Math.max(.025,.8/stepFPS())){drag=null;notice('Objekt označ priamo na prvej snímke merania. Klikni na „Prejsť na začiatok“ a vyznač ho tam.','warn');redrawOverlay();return}const x=Math.min(drag.start.x,p.x),y=Math.min(drag.start.y,p.y),w=Math.abs(drag.start.x-p.x),h=Math.abs(drag.start.y-p.y);drag=null;if(w<8||h<8){notice('Vyber obdĺžnik aspoň 8 × 8 obrazových pixelov. Pri malom predmete si najprv priblíž video.','warn');redrawOverlay();return}if(w>workW*.5||h>workH*.5){notice('Označ menší obdĺžnik čo najtesnejšie okolo objektu.','warn');redrawOverlay();return}target={x:Math.round(x),y:Math.round(y),w:Math.max(8,Math.round(w)),h:Math.max(8,Math.round(h)),startTime:v.currentTime,anchorX:Math.max(8,Math.round(w))/2,anchorY:Math.max(8,Math.round(h))/2,anchorType:'center'};$('anchorPreset').value='center';invalidateResults();$('targetInfo').textContent=`Oblasť ${target.w} × ${target.h} px; červený krížik = sledovaný bod. Môžeš označiť nový obdĺžnik alebo vybrať presnejší bod.`;notice('Oblasť označená. Pre presný bod použi výber vpravo. Režim zostáva aktívny, môžeš označiť znova.');redrawOverlay();ui();updateRangeInfo();return}
+if(mode==='anchor'){if(!target)return;if(p.x<target.x||p.x>target.x+target.w||p.y<target.y||p.y>target.y+target.h){notice('Klikni dovnútra zeleného obdĺžnika.','warn');return}target.anchorX=p.x-target.x;target.anchorY=p.y-target.y;target.anchorType='custom';$('anchorPreset').value='custom';invalidateResults();notice('Vlastný sledovaný bod bol nastavený na červený krížik. Ďalším kliknutím ho môžeš spresniť.');redrawOverlay();return}
+if(mode==='cal'){calPoints.push(p);if(calPoints.length>=2){const dist=Math.hypot(calPoints[1].x-calPoints[0].x,calPoints[1].y-calPoints[0].y),meters=+$('meters').value;if(dist<4||!Number.isFinite(meters)||meters<=0){notice('Kalibrácia vyžaduje dva odlišné body a kladnú dĺžku v metroch.','warn');calPoints=[];redrawOverlay();return}calibration={a:calPoints[0],b:calPoints[1],pxDistance:dist,meters};calPoints=[];$('calibInfo').textContent=`${fmt(dist,1)} px = ${fmt(meters,3)} m; 1 px ≈ ${fmt(meters/dist,5)} m.`;notice('Mierka aktualizovaná. Klikni znovu na dva body, ak ju chceš opraviť.');recompute();}else notice('Prvý bod kalibrácie vybraný. Klikni na druhý.');redrawOverlay();return}
+if(mode==='origin'){origin=p;notice('Počiatok osí nastavený. Ďalším kliknutím ho môžeš presunúť.');recompute();redrawOverlay();return}
+if(mode==='axis'){const org=origin||{x:0,y:workH},dx=p.x-org.x,dy=p.y-org.y;if(Math.hypot(dx,dy)<8){notice('Klikni ďalej od počiatku, aby bol smer jednoznačný.','warn');return}axisAngle=Math.atan2(dy,dx);$('axisInfo').textContent=`Os +x natočená o ${fmt(axisAngle*180/Math.PI,1)}° voči pravému smeru obrazu. Os +y je kolmá.`;notice('Smer osi upravený. Klikni znova, ak ho chceš spresniť.');recompute();redrawOverlay();return}
+if(mode==='correct'){if(!measurements.length)return;const i=nearIndex(v.currentTime);if(i<0)return;measurements[i]={...measurements[i],px:p.x,py:p.y,boxX:target?p.x-target.anchorX:null,boxY:target?p.y-target.anchorY:null,valid:true,conf:1,manual:true};selectedIndex=i;notice(`Bod č. ${i+1} bol ručne opravený. Môžeš opraviť aj ďalšie body.`);recompute();redrawOverlay()}});
+overlay.addEventListener('pointercancel',()=>{drag=null;redrawOverlay()});
+$('meters').addEventListener('change',()=>{if(!calibration)return;const n=+$('meters').value;if(n>0&&Number.isFinite(n)){calibration.meters=n;$('calibInfo').textContent=`${fmt(calibration.pxDistance,1)} px = ${fmt(n,3)} m.`;recompute()}else notice('Zadaj kladnú dĺžku v metroch.','warn')});
+$('fps').addEventListener('input',updateFpsControls);$('maxFps').addEventListener('click',()=>{$('fps').value=String(detectedVideoFps);updateFpsControls();});$('radius').addEventListener('input',()=>{$('radiusV').textContent=$('radius').value+' px (v pracovnom rozlíšení)'});$('smooth').addEventListener('change',recompute);
+function frameData(){return drawFrame();}
+function sampleTemplate(pix,x,y,w,h){const sx=Math.max(2,Math.floor(w/13)),sy=Math.max(2,Math.floor(h/13)),samples=[];let sum=0,sum2=0;for(let dy=Math.max(1,Math.floor(sy/2));dy<h;dy+=sy){for(let dx=Math.max(1,Math.floor(sx/2));dx<w;dx+=sx){const z=((y+dy)*workW+x+dx)*4,r=pix[z],g=pix[z+1],b=pix[z+2],gray=(r*.299+g*.587+b*.114);samples.push({dx,dy,r,g,b,gray});sum+=gray;sum2+=gray*gray}}const n=samples.length,mean=sum/n,variance=Math.max(0,sum2/n-mean*mean);return{samples,mean,variance,n,w,h}}
+function scoreAt(pix,templ,x,y){const ss=templ.samples;let dColor=0,sum=0,sum2=0,cross=0;for(let i=0;i<ss.length;i++){let s=ss[i],j=((y+s.dy)*workW+x+s.dx)*4,r=pix[j],g=pix[j+1],b=pix[j+2],gr=.299*r+.587*g+.114*b;dColor+=Math.abs(r-s.r)+Math.abs(g-s.g)+Math.abs(b-s.b);sum+=gr;sum2+=gr*gr;cross+=gr*(s.gray-templ.mean)}const cd=dColor/(ss.length*3),color=Math.max(0,1-cd/80);if(templ.variance<65)return color;let norm=Math.sqrt(Math.max(.0001,(sum2-sum*sum/ss.length)*templ.variance*ss.length));let corr=norm?cross/norm:0;let texture=(Math.max(-1,Math.min(1,corr))+1)/2;return .63*texture+.37*color}
+function findBest(pix,templ,oldX,oldY,radius){let r=Math.round(radius),minX=Math.max(0,Math.floor(oldX-r)),maxX=Math.min(workW-templ.w,Math.ceil(oldX+r)),minY=Math.max(0,Math.floor(oldY-r)),maxY=Math.min(workH-templ.h,Math.ceil(oldY+r));let best={score:-1,x:Math.round(oldX),y:Math.round(oldY),raw:0};if(maxX<minX||maxY<minY)return best;const stride=Math.max(2,Math.round(r/22));let evaluate=(x,y)=>{x=Math.round(x);y=Math.round(y);const d=Math.hypot(x-oldX,y-oldY),raw=scoreAt(pix,templ,x,y),s=raw-.04*d/Math.max(1,r);if(s>best.score)best={score:s,raw,x,y}};for(let y=minY;y<=maxY;y+=stride)for(let x=minX;x<=maxX;x+=stride)evaluate(x,y);const bx=best.x,by=best.y;for(let y=Math.max(minY,by-stride);y<=Math.min(maxY,by+stride);y++)for(let x=Math.max(minX,bx-stride);x<=Math.min(maxX,bx+stride);x++)evaluate(x,y);function offset(x1,y1,x2,y2){const f1=scoreAt(pix,templ,x1,y1),f2=best.raw,f3=scoreAt(pix,templ,x2,y2),den=f1-2*f2+f3;return Math.abs(den)<.00001?0:Math.max(-.8,Math.min(.8,.5*(f1-f3)/den));}let dx=best.x>minX&&best.x<maxX?offset(best.x-1,best.y,best.x+1,best.y):0,dy=best.y>minY&&best.y<maxY?offset(best.x,best.y-1,best.x,best.y+1):0;return {...best,subX:best.x+dx,subY:best.y+dy}}
+const sleep=()=>new Promise(r=>setTimeout(r,0));
+async function track(){if(!target||tracking)return;v.pause();tracking=true;cancelled=false;measurements=[];computed=[];selectedIndex=-1;resetAnalysisSelection();ui();$('progress').style.width='0%';$('progressBar').setAttribute('aria-valuenow','0');notice('Prebieha sledovanie vo vybranom intervale…','');$('progressText').textContent='Pripravujem prvú vybranú snímku…';drawChart();renderTable();
+try{
+ const t0=effectiveStart(),end=effectiveEnd(),fps=Math.min(stepFPS(),Math.max(1,+$('fps').value)),dt=1/fps;
+ if(Math.abs(target.startTime-t0)>Math.max(.025,.8/stepFPS()))throw new Error('Označ objekt znova na vybranej prvej snímke merania (t = '+fmt(t0,3)+' s).');
+ if(end<=t0+.008)throw new Error('Nastav koncovú snímku neskôr než začiatočnú.');
+ // Pravidelné vzorky sú len vo vybranom intervale. Voliteľná koncová snímka
+ // je zahrnutá, ak to limit 900 vzoriek dovolí; čas sa nikdy neprekročí.
+ const sampleTimes=[];
+ for(let i=0;i<900;i++){
+   const tt=t0+i*dt;
+   if(tt>end+1e-6)break;
+   sampleTimes.push(Math.min(tt,end));
+ }
+ if(rangeEnd!==null&&sampleTimes.length&&sampleTimes.length<900){
+   if(end-sampleTimes.at(-1)>.5*dt)sampleTimes.push(end);
+   else sampleTimes[sampleTimes.length-1]=end;
+ }
+ const n=sampleTimes.length;
+ if(n<3)throw new Error('Vybraný úsek je na výpočet rýchlosti a zrýchlenia príliš krátky. Predĺž interval alebo zvýš počet meraní za sekundu.');await seekTime(t0);let pixels=frameData(),base={...target},templ=sampleTemplate(pixels,base.x,base.y,base.w,base.h);if(templ.n<12)throw new Error('Objekt je príliš malý alebo obsahuje málo rozpoznávacích bodov. Skús väčší výrez.');let oldX=base.x,oldY=base.y,prevX=oldX,prevY=oldY,failCount=0,lowCount=0;const initial={videoT:t0,t:0,px:base.x+base.anchorX,py:base.y+base.anchorY,boxX:base.x,boxY:base.y,conf:1,valid:true};measurements.push(initial);
+for(let i=1;i<n;i++){if(cancelled)break;const t=sampleTimes[i];await seekTime(t);if(cancelled)break;pixels=frameData();const reach=Math.min(180,+$('radius').value+Math.min(90,failCount*15));let expectedX=Math.max(0,Math.min(workW-templ.w,oldX+Math.max(-reach*.4,Math.min(reach*.4,(oldX-prevX)*.8)))),expectedY=Math.max(0,Math.min(workH-templ.h,oldY+Math.max(-reach*.4,Math.min(reach*.4,(oldY-prevY)*.8))));let best=findBest(pixels,templ,expectedX,expectedY,reach);let valid=best.raw>=.64; // appearance score threshold
+if(valid){prevX=oldX;prevY=oldY;oldX=best.x;oldY=best.y;failCount=0;if(best.raw<.75)lowCount++;}else{failCount++;lowCount++;}
+measurements.push({videoT:t,t:t-t0,px:valid?best.subX+base.anchorX:null,py:valid?best.subY+base.anchorY:null,boxX:valid?best.subX:null,boxY:valid?best.subY:null,conf:Math.max(0,Math.min(1,best.raw||0)),valid});if(i%4===0||i===n-1){const pct=Math.round(100*(i+1)/n);$('progress').style.width=pct+'%';$('progressBar').setAttribute('aria-valuenow',String(pct));$('progressText').textContent=`${i+1} / ${n} snímok · ${pct}%`;await sleep()}}
+recompute();let count=measurements.filter(m=>m.valid).length;$('trackingInfo').textContent=`Rozpoznaných ${count} z ${measurements.length} meraní. ${measurements.length-count} bodov je označených ako neistých. V prípade chyby použi „Opraviť bod“ a klikni na správnu polohu.`;$('progressText').textContent=cancelled?'Analýza prerušená. Získané dáta ostali zachované.':'Analýza dokončená.';if(!cancelled){$('progress').style.width='100%';$('progressBar').setAttribute('aria-valuenow','100')}notice(count>=3?`Hotovo: ${count} rozpoznaných polôh. Prezri si grafy a prípadne oprav chybné body.`:'Príliš málo rozpoznaných bodov. Skús väčší kontrast, menšiu vzorkovaciu frekvenciu alebo väčšiu oblasť hľadania.',count>=3?'':'warn')}
+catch(e){notice('Analýza sa zastavila: '+err(e),'error');$('progressText').textContent='Spracovanie zlyhalo. Skús iné video alebo nastavenia.';if(measurements.length)recompute()}
+finally{tracking=false;renderTable();ui();redrawOverlay();}}
+$('start').addEventListener('click',track);$('stop').addEventListener('click',()=>{cancelled=true;$('progressText').textContent='Ukončujem pri najbližšej snímke…'});
+function solve3(m,b){const a=m.map((r,i)=>[...r,b[i]]);for(let col=0;col<3;col++){let pivot=col;for(let i=col+1;i<3;i++)if(Math.abs(a[i][col])>Math.abs(a[pivot][col]))pivot=i;if(Math.abs(a[pivot][col])<1e-10)return null;[a[col],a[pivot]]=[a[pivot],a[col]];let div=a[col][col];for(let j=col;j<4;j++)a[col][j]/=div;for(let i=0;i<3;i++){if(i===col)continue;let z=a[i][col];for(let j=col;j<4;j++)a[i][j]-=z*a[col][j]}}return a.map(row=>row[3]);}
+function localRegression(arr,i,key,radius){const center=arr[i].t;let lo=Math.max(0,i-radius),hi=Math.min(arr.length-1,i+radius);let terms=[0,0,0,0,0],rhs=[0,0,0],count=0;for(let j=lo;j<=hi;j++){let z=arr[j];if(!z.valid)continue;let d=z.t-center,w=1;let powers=[1,d,d*d,d*d*d,d*d*d*d];for(let k=0;k<5;k++)terms[k]+=w*powers[k];rhs[0]+=z[key]*w;rhs[1]+=z[key]*d*w;rhs[2]+=z[key]*d*d*w;count++}if(count<3)return null;let sol=solve3([[terms[0],terms[1],terms[2]],[terms[1],terms[2],terms[3]],[terms[2],terms[3],terms[4]]],rhs);return sol?{p:sol[0],v:sol[1],a:2*sol[2]}:null}
+function recompute(){if(!measurements.length){computed=[];drawChart();renderTable();ui();return}const mpu=calibration?calibration.meters/calibration.pxDistance:1;const org=origin||{x:0,y:workH};const ux=Math.cos(axisAngle),uy=Math.sin(axisAngle);let radius=+$('smooth').value;let rows=measurements.map((m,i)=>({i,videoT:m.videoT,t:m.t,px:m.px,py:m.py,conf:m.conf,manual:!!m.manual,valid:m.valid,pX:m.valid?((m.px-org.x)*ux+(m.py-org.y)*uy)*mpu:null,pY:m.valid?((m.px-org.x)*uy-(m.py-org.y)*ux)*mpu:null,vX:null,vY:null,aX:null,aY:null,magV:null,magA:null}));
+// Fit a quadratic locally, using only actual valid measurements. Avoid inventing missing samples.
+const fitRadius=radius===0?2:radius;const rawRows=rows.map(r=>({...r}));for(let i=0;i<rows.length;i++){let row=rows[i];if(!row.valid)continue;let fx=localRegression(rawRows,i,'pX',fitRadius),fy=localRegression(rawRows,i,'pY',fitRadius);const aRadius=radius===0?2:Math.max(5,2*radius+1);let ax=localRegression(rawRows,i,'pX',aRadius),ay=localRegression(rawRows,i,'pY',aRadius);if(fx&&fy){if(radius>0){row.pX=fx.p;row.pY=fy.p}row.vX=fx.v;row.vY=fy.v;row.aX=ax?.a??null;row.aY=ay?.a??null;row.magV=Math.hypot(fx.v,fy.v);row.magA=Number.isFinite(row.aX)&&Number.isFinite(row.aY)?Math.hypot(row.aX,row.aY):null}}computed=rows;$('countStat').textContent=rows.length;$('validStat').textContent=rows.filter(r=>r.valid).length;$('spanStat').textContent=fmt(rows.at(-1).t)+' s';$('unitsNote').textContent=calibration?'Jednotky: poloha (m), rýchlosť (m/s), zrýchlenie (m/s²). Súradnice sú vztiahnuté k vybranému počiatku.':'Jednotky: poloha (px), rýchlosť (px/s), zrýchlenie (px/s²). Na prevod na metre nastav mierku.';if(fitIsActive)applyGraphFit(true);updatePointSelectionInfo();renderTable();drawChart();ui();}
+// v12: nezávislé fitovanie grafov a spoločný výber vzoriek.
+function selectedRows(){return selectedPointSet===null?computed.filter(r=>r.valid):computed.filter(r=>r.valid&&selectedPointSet.has(r.i))}
+function isSelectedRow(r){return selectedPointSet===null||selectedPointSet.has(r.i)}
+function resetAnalysisSelection(){selectedPointSet=null;selectingGraphPoints=false;onlySelectedInPlot=false;fitIsActive=false;fitResult=null;
+ if($('selectMode')){$('selectMode').classList.remove('active');$('selectMode').textContent='Vyberať body: vypnuté';$('showOnlySelected').checked=false;$('fitInfo').textContent='Po analýze vyber veličinu, funkciu a stlač „Nafitovať“.';$('fitClear').disabled=true;updatePointSelectionInfo();}}
+function updatePointSelectionInfo(){if(!$('selectedCount'))return;const total=computed.filter(r=>r.valid).length, n=selectedRows().length;
+ $('selectedCount').textContent=`Vybraných ${n} z ${total} platných meraní`;
+ $('fitApply').disabled=tracking||n<2;
+ $('fitClear').disabled=!fitIsActive;
+ $('excelSubsetInfo').textContent=selectedPointSet===null?'Bez vlastného výberu: exportujú sa všetky merania.':`V grafe je vybraných ${n} platných meraní. Pri zaškrtnutí sa exportujú len tieto merania.`;
+ refreshExcelSelection();}
+function refreshAnalysisSelection(){if(fitIsActive)applyGraphFit(true);updatePointSelectionInfo();renderTable();drawChart();}
+function toggleSelectedIndex(i){if(!computed[i]?.valid)return;if(selectedPointSet===null)selectedPointSet=new Set(computed.filter(r=>r.valid).map(r=>r.i));
+ if(selectedPointSet.has(i))selectedPointSet.delete(i);else selectedPointSet.add(i);
+ refreshAnalysisSelection();}
+$('selectMode').addEventListener('click',()=>{selectingGraphPoints=!selectingGraphPoints;$('selectMode').classList.toggle('active',selectingGraphPoints);
+ $('selectMode').textContent=selectingGraphPoints?'Vyberať body: zapnuté':'Vyberať body: vypnuté';chart.classList.toggle('select-mode',selectingGraphPoints);
+ if(selectingGraphPoints&&selectedPointSet===null)selectedPointSet=new Set();refreshAnalysisSelection();});
+$('selectAllPoints').addEventListener('click',()=>{selectedPointSet=null;refreshAnalysisSelection()});
+$('selectNoPoints').addEventListener('click',()=>{selectedPointSet=new Set();refreshAnalysisSelection()});
+$('showOnlySelected').addEventListener('change',()=>{onlySelectedInPlot=$('showOnlySelected').checked;drawChart()});
+$('selectTimeRange').addEventListener('click',()=>{if(!computed.length)return;let from=Number($('subsetFrom').value),to=Number($('subsetTo').value);
+ if(!Number.isFinite(from)||!Number.isFinite(to)){notice('Zadaj platné časové hranice výberu.','warn');return}
+ if(from>to)[from,to]=[to,from];selectedPointSet=new Set(computed.filter(r=>r.valid&&r.t>=from-1e-9&&r.t<=to+1e-9).map(r=>r.i));refreshAnalysisSelection()});
+const plotSeriesKeys={pos:['pX','pY'],vel:['vX','vY','magV'],acc:['aX','aY','magA']};
+const fitSeriesLabels={pX:'Poloha x',pY:'Poloha y',vX:'Rýchlosť vₓ',vY:'Rýchlosť vᵧ',magV:'Veľkosť rýchlosti',aX:'Zrýchlenie aₓ',aY:'Zrýchlenie aᵧ',magA:'Veľkosť zrýchlenia'};
+function updateFitSeries(){const list=plotSeriesKeys[graphKind];const old=$('fitSeries').value;$('fitSeries').replaceChildren();for(let key of list){let op=document.createElement('option');op.value=key;op.textContent=fitSeriesLabels[key];$('fitSeries').append(op)}$('fitSeries').value=list.includes(old)?old:list[0];fitTarget=$('fitSeries').value;
+ if(fitIsActive){fitResult=null;fitIsActive=false;$('fitInfo').textContent='Zmenil sa typ grafu. Zvoľ veličinu a spusti nový fit.';updatePointSelectionInfo()}}
+$('fitSeries').addEventListener('change',()=>{fitTarget=$('fitSeries').value;if(fitIsActive)applyGraphFit(true)});
+$('fitType').addEventListener('change',()=>{fitKind=$('fitType').value;if(fitIsActive)applyGraphFit(true)});
+$('fitApply').addEventListener('click',()=>applyGraphFit(false));
+$('fitClear').addEventListener('click',()=>{fitIsActive=false;fitResult=null;$('fitInfo').textContent='Fit bol odstránený. Namerané údaje zostali nezmenené.';updatePointSelectionInfo();drawChart()});
+// Gaussova eliminácia s čiastočným výberom pivota.
+function solveFitSystem(A,b){const n=b.length,mat=A.map((row,i)=>[...row,b[i]]);for(let k=0;k<n;k++){
+ let pivot=k;for(let j=k+1;j<n;j++)if(Math.abs(mat[j][k])>Math.abs(mat[pivot][k]))pivot=j;
+ if(!Number.isFinite(mat[pivot][k])||Math.abs(mat[pivot][k])<1e-11)return null;[mat[k],mat[pivot]]=[mat[pivot],mat[k]];
+ for(let i=k+1;i<n;i++){const factor=mat[i][k]/mat[k][k];for(let j=k;j<=n;j++)mat[i][j]-=factor*mat[k][j]}}
+ const x=Array(n).fill(0);for(let i=n-1;i>=0;i--){let sum=mat[i][n];for(let j=i+1;j<n;j++)sum-=mat[i][j]*x[j];x[i]=sum/mat[i][i]}return x.every(Number.isFinite)?x:null}
+function fitMetrics(pts,predict){let mean=pts.reduce((a,p)=>a+p.y,0)/pts.length,ss=0,sst=0;for(let p of pts){let err=p.y-predict(p.t);ss+=err*err;sst+=(p.y-mean)**2}return {sse:ss,rmse:Math.sqrt(ss/pts.length),r2:sst<1e-16?(ss<1e-14?1:null):1-ss/sst}}
+function fitPolynomial(points,degree){if(points.length<degree+1)return null;const tmin=points[0].t,tmax=points.at(-1).t,t0=(tmin+tmax)/2,scale=Math.max((tmax-tmin)/2,1e-8),d=degree+1;
+ const A=Array.from({length:d},()=>Array(d).fill(0)),b=Array(d).fill(0);
+ for(let p of points){let z=(p.t-t0)/scale,powers=[1];for(let i=1;i<=degree*2;i++)powers.push(powers[i-1]*z);
+ for(let i=0;i<d;i++){b[i]+=p.y*powers[i];for(let j=0;j<d;j++)A[i][j]+=powers[i+j]}}
+ const coeff=solveFitSystem(A,b);if(!coeff)return null;
+ const predict=t=>{const z=(t-t0)/scale;let sum=0;for(let i=degree;i>=0;i--)sum=sum*z+coeff[i];return sum};
+ const physical=coeff.map((v,i)=>v/scale**i);return {kind:'poly',degree,coeff:physical,t0,predict,...fitMetrics(points,predict),n:points.length,tmin,tmax};}
+function fitSine(points){if(points.length<6)return null;const start=points[0].t,end=points.at(-1).t,T=end-start;if(T<1e-7)return null;
+ const diffs=[];for(let i=1;i<points.length;i++){let d=points[i].t-points[i-1].t;if(d>1e-10)diffs.push(d)}
+ if(!diffs.length)return null;diffs.sort((a,b)=>a-b);const dt=diffs[Math.floor(diffs.length/2)],fmin=.3/T,fmax=Math.min(.45/dt,Math.max(10/T,fmin*1.1));if(fmax<=fmin)return null;
+ const t0=start, evaluate=f=>{const omega=2*Math.PI*f;let s=0,cs=0,ss=0,sc=0,sy=0,cy=0,y=0;
+ for(let p of points){const a=Math.sin(omega*(p.t-t0)),b=Math.cos(omega*(p.t-t0));s+=a;cs+=b;ss+=a*a;sc+=a*b;sy+=a*p.y;cy+=b*p.y;y+=p.y}
+ let cc=points.reduce((u,p)=>u+Math.cos(omega*(p.t-t0))**2,0);
+ const c=solveFitSystem([[points.length,s,cs],[s,ss,sc],[cs,sc,cc]],[y,sy,cy]);if(!c)return null;
+ const predict=t=>c[0]+c[1]*Math.sin(omega*(t-t0))+c[2]*Math.cos(omega*(t-t0));
+ const m=fitMetrics(points,predict);return {kind:'sine',omega,f,offset:c[0],sinCoef:c[1],cosCoef:c[2],amplitude:Math.hypot(c[1],c[2]),phase:Math.atan2(c[2],c[1]),t0,predict,...m,n:points.length,tmin:start,tmax:end};};
+ let best=null,bestI=0;const steps=270;
+ for(let i=0;i<=steps;i++){let f=fmin+(fmax-fmin)*i/steps,r=evaluate(f);if(r&&(!best||r.sse<best.sse)){best=r;bestI=i}}
+ if(!best)return null;
+ // Lokálna minimalizácia okolo najlepšieho frekvenčného kandidáta.
+ let left=fmin+(fmax-fmin)*Math.max(0,bestI-1)/steps,right=fmin+(fmax-fmin)*Math.min(steps,bestI+1)/steps;
+ for(let j=0;j<31;j++){let a=left+(right-left)*.38196601125,b=right-(right-left)*.38196601125,aa=evaluate(a),bb=evaluate(b);
+ if(!bb||(aa&&aa.sse<bb.sse))right=b;else left=a}
+ let refined=evaluate((left+right)/2);return refined&&refined.sse<=best.sse?refined:best;}
+function signedFit(x,d=4){if(!Number.isFinite(x))return '?';let a=Math.abs(x),txt=(a>1e5||(a!==0&&a<1e-4))?x.toExponential(3):Number(x.toFixed(d)).toString();return txt.replace('.',',')}
+function fitFormula(f){const subject={pX:'x',pY:'y',vX:'vₓ',vY:'vᵧ',magV:'|v|',aX:'aₓ',aY:'aᵧ',magA:'|a|'}[fitTarget]||'f';if(f.kind==='sine')return `${subject}(t) = ${signedFit(f.offset)} + ${signedFit(f.amplitude)}·sin(${signedFit(f.omega)}·(t − ${signedFit(f.t0,3)}) ${f.phase>=0?'+':'−'} ${signedFit(Math.abs(f.phase))})`;
+ let out=subject+'(t) = '+signedFit(f.coeff[0]);for(let i=1;i<f.coeff.length;i++){
+ let val=f.coeff[i];out+=' '+(val>=0?'+':'−')+' '+signedFit(Math.abs(val))+'·(t − '+signedFit(f.t0,3)+')'+(i>1?'^'+i:'')}
+ return out;}
+function applyGraphFit(silent){const pts=selectedRows().filter(m=>Number.isFinite(m[fitTarget])).map(m=>({t:m.t,y:m[fitTarget]})).sort((a,b)=>a.t-b.t);
+ const degree={linear:1,quadratic:2,cubic:3}[fitKind],min=fitKind==='sine'?6:degree+1;
+ if(pts.length<min){fitResult=null;fitIsActive=false;$('fitInfo').textContent=`Na tento fit potrebuješ aspoň ${min} platných vybraných bodov. Aktuálne máš ${pts.length}.`;updatePointSelectionInfo();drawChart();return}
+ fitResult=fitKind==='sine'?fitSine(pts):fitPolynomial(pts,degree);fitIsActive=!!fitResult;
+ if(!fitResult){$('fitInfo').textContent='Fit sa nedá spoľahlivo určiť. Vybrané body majú príliš malé časové rozpätie alebo sa model nedá odhadnúť.';updatePointSelectionInfo();drawChart();return}
+ const f=fitResult,quality=Number.isFinite(f.r2)?signedFit(f.r2,5):'nedefinované (rovnaké hodnoty)',period=f.kind==='sine'?` · perióda T = ${signedFit(1/f.f,4)} s`:'',note=f.kind==='sine'&&f.f*(f.tmax-f.tmin)<.9?' Pozor: výber zachytáva menej než jednu periódu; frekvencia môže byť nejednoznačná.':'';
+ $('fitInfo').replaceChildren();let b=document.createElement('strong');b.textContent=`${fitSeriesLabels[fitTarget]} — ${f.n} bodov · R² = ${quality} · RMSE = ${signedFit(f.rmse,5)}${period}`;
+ let code=document.createElement('code');code.textContent=fitFormula(f);let p=document.createElement('div');p.textContent='Model je odhad z vybraných bodov, nie nové meranie.'+note;$('fitInfo').append(b,code,p);updatePointSelectionInfo();drawChart()}
+function renderTable(){const body=$('rows');body.replaceChildren();if(!computed.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=9;td.style.cssText='text-align:center;padding:24px';td.textContent='Zatiaľ žiadne merania';tr.append(td);body.append(tr);return}let frag=document.createDocumentFragment();for(let m of computed){const tr=document.createElement('tr');if(m.i===selectedIndex)tr.classList.add('selected');if(m.valid&&isSelectedRow(m))tr.classList.add('included');else tr.classList.add('excluded');
+ const tdPick=document.createElement('td');tdPick.className='pickcell';const input=document.createElement('input');input.type='checkbox';input.className='rowpick';input.checked=m.valid&&isSelectedRow(m);input.disabled=!m.valid||tracking;input.setAttribute('aria-label',`Zahrnúť meranie ${m.i+1} do výberu`);
+ input.addEventListener('click',e=>e.stopPropagation());input.addEventListener('change',()=>toggleSelectedIndex(m.i));tdPick.append(input);tr.append(tdPick);
+ for(let value of [fmt(m.t,3),fmt(m.pX,3),fmt(m.pY,3),fmt(m.vX,3),fmt(m.vY,3),fmt(m.aX,3),fmt(m.aY,2),m.manual?'Ručne':m.valid?Math.round(m.conf*100)+' %':'Chýba']){let td=document.createElement('td');td.textContent=value;tr.append(td)}tr.addEventListener('click',()=>jumpTo(m.i));frag.append(tr)}body.append(frag)}
+async function jumpTo(i){if(tracking||!measurements[i])return;selectedIndex=i;await seekTime(measurements[i].videoT).catch(e=>notice(err(e),'error'));redrawOverlay();drawChart();const old=$('rows').querySelector('tr.selected');if(old)old.classList.remove('selected');const row=$('rows').children[i];if(row){row.classList.add('selected');row.scrollIntoView({block:'nearest',behavior:'auto'})}}
+for(let b of document.querySelectorAll('button[data-kind]'))b.addEventListener('click',()=>{graphKind=b.dataset.kind;for(let n of document.querySelectorAll('button[data-kind]'))n.classList.toggle('active',n===b);$('showMag').disabled=graphKind==='pos';if(graphKind==='pos')$('showMag').checked=false;updateFitSeries();drawChart()});
+for(let id of ['showX','showY','showMag'])$(id).addEventListener('change',drawChart);
+function drawChart(){const r=chart.getBoundingClientRect();if(!r.width||!r.height)return;let dpr=Math.min(2,window.devicePixelRatio||1);chart.width=Math.round(r.width*dpr);chart.height=Math.round(r.height*dpr);const c=chart.getContext('2d');c.scale(dpr,dpr);const w=r.width,h=r.height;c.fillStyle='#fff';c.fillRect(0,0,w,h);chartView=null;
+ if(computed.length<2)return;const allValid=computed.filter(m=>m.valid),valid=onlySelectedInPlot?allValid.filter(isSelectedRow):allValid;if(!valid.length)return;
+ const units=calibration?'m':'px',ylabel=graphKind==='pos'?`Poloha (${units})`:graphKind==='vel'?`Rýchlosť (${units}/s)`:`Zrýchlenie (${units}/s²)`;
+ const series=[];if($('showX').checked)series.push({key:pick[graphKind][0],color:'#206eb7'});if($('showY').checked)series.push({key:pick[graphKind][1],color:'#e18038'});if($('showMag').checked&&graphKind!=='pos')series.push({key:graphKind==='vel'?'magV':'magA',color:'#07957d'});
+ let data=[];for(let s of series)for(let m of valid)if(Number.isFinite(m[s.key]))data.push(m[s.key]);
+ if(fitResult&&fitIsActive&&plotSeriesKeys[graphKind].includes(fitTarget))for(let i=0;i<=90;i++){let t=fitResult.tmin+(fitResult.tmax-fitResult.tmin)*i/90,n=fitResult.predict(t);if(Number.isFinite(n))data.push(n)}
+ if(!data.length)return;
+ const pad={l:Math.min(75,Math.max(51,w*.09)),r:18,t:32,b:54},PW=w-pad.l-pad.r,PH=h-pad.t-pad.b;if(PW<30||PH<20)return;
+ let ymin=Math.min(0,...data),ymax=Math.max(0,...data);if(ymax-ymin<1e-7){ymin-=1;ymax+=1}let extra=(ymax-ymin)*.09;ymin-=extra;ymax+=extra;
+ let xmin=onlySelectedInPlot?Math.min(...valid.map(m=>m.t)):0,xmax=onlySelectedInPlot?Math.max(...valid.map(m=>m.t)):Math.max(.01,computed.at(-1).t);
+ if(xmax-xmin<.0001){xmin-=.01;xmax+=.01}
+ const X=t=>pad.l+(t-xmin)/(xmax-xmin)*PW,Y=a=>pad.t+(ymax-a)/(ymax-ymin)*PH;chartView={X,Y,xmin,xmax,ymin,ymax,pad,PW,PH,series,valid};
+ c.font='12px system-ui';c.textBaseline='middle';c.strokeStyle='#dfebf1';c.lineWidth=1;c.fillStyle='#63808f';
+ for(let i=0;i<=5;i++){const y=pad.t+PH*i/5;c.beginPath();c.moveTo(pad.l,y);c.lineTo(pad.l+PW,y);c.stroke();c.textAlign='right';const val=ymax-(ymax-ymin)*i/5;c.fillText(Number(val.toPrecision(3)).toString().replace('.',','),pad.l-8,y)}
+ for(let i=0;i<=5;i++){let x=pad.l+PW*i/5;c.beginPath();c.moveTo(x,pad.t);c.lineTo(x,pad.t+PH);c.stroke();c.textAlign='center';c.fillText(fmt(xmin+(xmax-xmin)*i/5,2),x,pad.t+PH+18)}
+ c.textAlign='center';c.fillStyle='#34566a';c.fillText('Čas t (s)',pad.l+PW/2,h-13);c.textAlign='left';c.font='600 12px system-ui';c.fillText(ylabel,pad.l,pad.t-16);
+ const zero=Y(0);if(zero>=pad.t&&zero<=pad.t+PH){c.strokeStyle='#9aaeb8';c.setLineDash([5,4]);c.beginPath();c.moveTo(pad.l,zero);c.lineTo(pad.l+PW,zero);c.stroke();c.setLineDash([])}
+ // Fit je model (prerušovaná čiara); namerané body sa nikdy nespájajú.
+ if(fitResult&&fitIsActive){const f=fitResult,tfrom=Math.max(xmin,f.tmin),tto=Math.min(xmax,f.tmax);
+ if(tto>tfrom){c.save();c.strokeStyle='#8845a5';c.lineWidth=2.2;c.setLineDash([9,5]);c.beginPath();for(let i=0;i<=240;i++){
+ let t=tfrom+(tto-tfrom)*i/240,y=f.predict(t);if(i===0)c.moveTo(X(t),Y(y));else c.lineTo(X(t),Y(y))}c.stroke();c.restore();}}
+ for(const s of series){for(const m of valid){const n=m[s.key];if(!Number.isFinite(n))continue;
+ const selected=isSelectedRow(m);c.fillStyle=selected?s.color:'#c6d2d9';c.globalAlpha=selected?1:.48;c.beginPath();c.arc(X(m.t),Y(n),selected?3.5:2.1,0,Math.PI*2);c.fill();c.globalAlpha=1;
+ if(selected&&selectedPointSet!==null){c.strokeStyle=s.color;c.lineWidth=1.25;c.beginPath();c.arc(X(m.t),Y(n),5.7,0,Math.PI*2);c.stroke();}}}
+ if(selectedIndex>=0&&computed[selectedIndex]?.valid){const m=computed[selectedIndex];for(const s of series){const n=m[s.key];if(!Number.isFinite(n))continue;c.strokeStyle=s.color;c.lineWidth=2;c.beginPath();c.arc(X(m.t),Y(n),8,0,Math.PI*2);c.stroke()}}
+}
+chart.addEventListener('pointerdown',e=>{if(!computed.length||!chartView||tracking)return;
+ const rect=chart.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top,view=chartView;
+ if(selectingGraphPoints){let best=null,dist=Infinity;for(let m of computed){if(!m.valid)continue;for(let s of view.series){const n=m[s.key];if(!Number.isFinite(n))continue;let dx=view.X(m.t)-x,dy=view.Y(n)-y,d=dx*dx+dy*dy;if(d<dist){dist=d;best=m}}}
+ if(best&&dist<=28*28)toggleSelectedIndex(best.i);return;}
+ const t=view.xmin+(x-view.pad.l)/view.PW*(view.xmax-view.xmin);let best=0;for(let i=1;i<computed.length;i++)if(Math.abs(computed[i].t-t)<Math.abs(computed[best].t-t))best=i;jumpTo(best)});
+// XLSX sa vytvára celý lokálne. XML dokumenty sú zabalené do platného ZIP/OOXML
+// formátu bez externej knižnice, preto export funguje aj v offline HTML aplikácii.
+function excelEscape(value){return String(value??'').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uFFFE\uFFFF]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')}
+function excelCol(i){let name='';for(let n=i+1;n>0;n=Math.floor((n-1)/26))name=String.fromCharCode(65+(n-1)%26)+name;return name}
+function excelCell(value,row,col,style=0){
+  if(value===null||value===undefined||value==='')return '';
+  const ref=excelCol(col)+row,st=style?` s="${style}"`:'';
+  if(typeof value==='number')return Number.isFinite(value)?`<c r="${ref}"${st}><v>${value}</v></c>`:'';
+  return `<c r="${ref}"${st} t="inlineStr"><is><t xml:space="preserve">${excelEscape(value)}</t></is></c>`;
+}
+function excelRow(index,values,styleFor=()=>0){return `<row r="${index}">${values.map((value,i)=>excelCell(value,index,i,styleFor(i,value))).join('')}</row>`}
+function excelSheet(rows,config){
+ const lastRow=Math.max(1,...rows.map(r=>r.index));
+ const widths=config.widths.map((width,i)=>`<col min="${i+1}" max="${i+1}" width="${width}" customWidth="1"/>`).join('');
+ const content=rows.map(r=>excelRow(r.index,r.values,r.styleFor)).join('');
+ const freeze=config.freeze?`<sheetViews><sheetView workbookViewId="0"><pane ySplit="${config.freeze}" topLeftCell="A${config.freeze+1}" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>`:'<sheetViews><sheetView workbookViewId="0"/></sheetViews>';
+ const merge=(config.merge&&config.merge.length)?`<mergeCells count="${config.merge.length}">${config.merge.map(m=>`<mergeCell ref="${m}"/>`).join('')}</mergeCells>`:'';
+ const filter=(Number.isInteger(config.filterRow)&&lastRow>=config.filterRow)?`<autoFilter ref="A${config.filterRow}:${excelCol(config.widths.length-1)}${lastRow}"/>`:'';
+ return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><dimension ref="A1:${excelCol(config.widths.length-1)}${lastRow}"/>${freeze}<sheetFormatPr defaultRowHeight="16"/><cols>${widths}</cols><sheetData>${content}</sheetData>${filter}${merge}<pageMargins left="0.5" right="0.5" top="0.7" bottom="0.7" header="0.3" footer="0.3"/></worksheet>`;
+}
+const EXCEL_STYLES=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="2"><numFmt numFmtId="164" formatCode="0.0000"/><numFmt numFmtId="165" formatCode="0.0%"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Aptos"/></font><font><b/><sz val="15"/><color rgb="FF153043"/><name val="Aptos"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Aptos"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF195A94"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFill="1" applyFont="1"/><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="165" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+// Minimálny ZIP (bez kompresie) — Excel štandardne podporuje ZIP STORE.
+function excelCRC(bytes){let crc=0xffffffff;for(let j=0;j<bytes.length;j++){crc^=bytes[j];for(let b=0;b<8;b++)crc=(crc>>>1)^((crc&1)?0xedb88320:0)}return(crc^0xffffffff)>>>0}
+function excelZip(files){
+ const enc=new TextEncoder(),chunks=[],central=[];let offset=0;
+ function header(size){const a=new Uint8Array(size);return {a,d:new DataView(a.buffer)}}
+ for(const [name,source] of files){
+  const nameBytes=enc.encode(name),data=enc.encode(source),crc=excelCRC(data);
+  const {a,d}=header(30);d.setUint32(0,0x04034b50,true);d.setUint16(4,20,true);d.setUint16(6,0x0800,true);d.setUint16(8,0,true);d.setUint32(14,crc,true);d.setUint32(18,data.length,true);d.setUint32(22,data.length,true);d.setUint16(26,nameBytes.length,true);
+  chunks.push(a,nameBytes,data);
+  const entry=header(46);entry.d.setUint32(0,0x02014b50,true);entry.d.setUint16(4,20,true);entry.d.setUint16(6,20,true);entry.d.setUint16(8,0x0800,true);entry.d.setUint32(16,crc,true);entry.d.setUint32(20,data.length,true);entry.d.setUint32(24,data.length,true);entry.d.setUint16(28,nameBytes.length,true);entry.d.setUint32(42,offset,true);central.push(entry.a,nameBytes);
+  offset+=a.length+nameBytes.length+data.length;
+ }
+ const cdStart=offset;for(const chunk of central){chunks.push(chunk);offset+=chunk.length}
+ const end=header(22);end.d.setUint32(0,0x06054b50,true);end.d.setUint16(8,files.length,true);end.d.setUint16(10,files.length,true);end.d.setUint32(12,offset-cdStart,true);end.d.setUint32(16,cdStart,true);chunks.push(end.a);
+ return new Blob(chunks,{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+}
+// Explicit column definitions prevent accidental mismatches between headers and data.
+// Every selected column is included with its proper Excel numeric type.
+const EXCEL_COLUMNS=[
+ {key:'index',label:()=> 'Poradie',width:12,get:(m,i)=>i+1},
+ {key:'t',label:()=> 't (s)',width:16,get:m=>m.t},
+ {key:'videoT',label:()=> 'Čas vo videu (s)',width:22,get:m=>m.videoT},
+ {key:'pX',label:u=>`x (${u})`,width:19,get:m=>m.pX},
+ {key:'pY',label:u=>`y (${u})`,width:19,get:m=>m.pY},
+ {key:'vX',label:u=>`vₓ (${u}/s)`,width:19,get:m=>m.vX},
+ {key:'vY',label:u=>`vᵧ (${u}/s)`,width:19,get:m=>m.vY},
+ {key:'magV',label:u=>`|v| (${u}/s)`,width:19,get:m=>m.magV},
+ {key:'aX',label:u=>`aₓ (${u}/s²)`,width:19,get:m=>m.aX},
+ {key:'aY',label:u=>`aᵧ (${u}/s²)`,width:19,get:m=>m.aY},
+ {key:'magA',label:u=>`|a| (${u}/s²)`,width:19,get:m=>m.magA},
+ {key:'conf',label:()=> 'Istota',width:16,get:m=>m.valid?m.conf:null},
+ {key:'status',label:()=> 'Stav',width:23,get:m=>m.manual?'Ručná oprava':m.valid?'Rozpoznané':'Chýba / neisté'}
+];
+const excelChecks=()=>[...document.querySelectorAll('#exportColumns input[data-excel-col]')];
+function selectedExcelColumns(){
+ const keys=new Set(excelChecks().filter(input=>input.checked).map(input=>input.dataset.excelCol));
+ return EXCEL_COLUMNS.filter(col=>keys.has(col.key));
+}
+function refreshExcelSelection(){
+ const count=selectedExcelColumns().length;
+ $('exportCount').textContent=`${count} z ${EXCEL_COLUMNS.length}`;
+ $('exportNote').textContent=count===0?'Vyber aspoň jeden stĺpec, aby bolo možné uložiť merania.':count===EXCEL_COLUMNS.length?'Všetky stĺpce sú vybrané. Rozsah merania sa prevezme z analýzy.':`Do Excelu sa exportuje ${count} ${count===1?'stĺpec':count<5?'stĺpce':'stĺpcov'}.`;
+ const n=selectedPointSet===null?computed.length:computed.filter(m=>m.valid&&selectedPointSet.has(m.i)).length;
+ $('excelDownload').disabled=!computed.length||tracking||count===0||($('excelSubsetOnly').checked&&selectedPointSet!==null&&n===0);
+}
+excelChecks().forEach(input=>input.addEventListener('change',refreshExcelSelection));
+$('excelAll').addEventListener('click',()=>{excelChecks().forEach(input=>input.checked=true);refreshExcelSelection()});
+$('excelNone').addEventListener('click',()=>{excelChecks().forEach(input=>input.checked=false);refreshExcelSelection()});
+$('excelVelocity').addEventListener('click',()=>{const subset=new Set(['t','vX','vY','magV']);excelChecks().forEach(input=>input.checked=subset.has(input.dataset.excelCol));refreshExcelSelection()});
+$('excelPosition').addEventListener('click',()=>{const subset=new Set(['t','pX','pY']);excelChecks().forEach(input=>input.checked=subset.has(input.dataset.excelCol));refreshExcelSelection()});
+function makeExcel(){
+ const unit=calibration?'m':'px',vUnit=unit+'/s',aUnit=unit+'/s²';
+ const columns=selectedExcelColumns();
+ if(!columns.length)throw new Error('Vyber aspoň jeden stĺpec.');
+ if(!computed.length)throw new Error('Najprv dokonči analýzu videa.');
+ const dataForExcel=$('excelSubsetOnly').checked&&selectedPointSet!==null?computed.filter(m=>m.valid&&selectedPointSet.has(m.i)):computed;
+ if(!dataForExcel.length)throw new Error('Žiadne merania neboli vybrané na export.');
+ const endColumn=excelCol(columns.length-1);
+ const dataRows=[
+  {index:1,values:['VideoMotion Lab — namerané údaje'],styleFor:()=>1},
+  {index:2,values:['Jednotlivé vzorky bez interpolácie. Rýchlosť a zrýchlenie sú numerické odhady.']},
+  {index:4,values:columns.map(col=>col.label(unit)),styleFor:()=>2}
+ ];
+ dataForExcel.forEach((m,i)=>{
+  const values=columns.map(col=>col.get(m,i));
+  dataRows.push({index:5+i,values,styleFor:(columnIndex,val)=>columns[columnIndex].key==='conf'?4:(typeof val==='number'&&columns[columnIndex].key!=='index'?3:0)});
+ });
+ // Fixed: a valid autoFilter reference is A4:M31, never A4:M:31.
+ const sheet1=excelSheet(dataRows,{widths:columns.map(c=>c.width),freeze:4});
+ const first=dataForExcel[0],last=dataForExcel.at(-1);
+ const info=[
+  ['Zdrojové video',originalFile?.name||activeFile?.name||'Neznámy súbor'],
+  ['Počet exportovaných vzoriek',dataForExcel.length],
+  ['Platné merania v exporte',dataForExcel.filter(m=>m.valid).length],
+  ['Prvý meraný čas vo videu (s)',first?.videoT??''],
+  ['Posledný meraný čas vo videu (s)',last?.videoT??''],
+  ['Čas od prvej vzorky (s)',last?.t??''],
+  ['Počet meraní za sekundu (nastavenie)',Number($('fps').value)],
+  ['Zistené FPS videa',fpsOrigin==='fallback'?'Nezistené':detectedVideoFps],
+  ['Metóda určenia FPS',fpsOrigin==='mp4'?'MP4 časová tabuľka':fpsOrigin==='playback'?'Odhad počas prehrávania':'Predbežná hodnota 30'],
+  ['Premenlivé FPS videa',fpsVariable?'Áno':'Nie / nezistené'],
+  ['Počet snímok na krok',numberOfStepFrames()],
+  ['Kalibrácia',calibration?'Áno':'Nie — údaje sú v pixeloch'],
+  ['Jednotka polohy',unit],
+  ['Jednotka rýchlosti',vUnit],
+  ['Jednotka zrýchlenia',aUnit],
+  ['Orientácia osi +x (°)',axisAngle*180/Math.PI],
+  ['Vyhladenie (polomer)',Number($('smooth').value)],
+  ['Exportované stĺpce',columns.map(col=>col.label(unit)).join('; ')],
+  ['Export len vybraných bodov',$('excelSubsetOnly').checked&&selectedPointSet!==null?'Áno':'Nie'],
+  ['Poznámka','Prázdne bunky znamenajú, že údaj nie je k dispozícii.'],
+  ['Poznámka k výpočtu','Rýchlosť a zrýchlenie sú odhadované z diskrétnych polôh, nie merané spojito.']
+ ];
+ const infoRows=[{index:1,values:['Informácie o meraní'],styleFor:()=>1},{index:3,values:['Parameter','Hodnota'],styleFor:()=>2},...info.map((pair,i)=>({index:4+i,values:pair,styleFor:(c,v)=>c===1&&typeof v==='number'?3:0}))];
+ const sheet2=excelSheet(infoRows,{widths:[43,95],freeze:3});
+ const ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>';
+ const rels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>';
+ const book='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Merania" sheetId="1" r:id="rId1"/><sheet name="Informacie" sheetId="2" r:id="rId2"/></sheets></workbook>';
+ const bookRels='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
+ return excelZip([['[Content_Types].xml',ct],['_rels/.rels',rels],['xl/workbook.xml',book],['xl/_rels/workbook.xml.rels',bookRels],['xl/styles.xml',EXCEL_STYLES],['xl/worksheets/sheet1.xml',sheet1],['xl/worksheets/sheet2.xml',sheet2]]);
+}
+$('excel').addEventListener('click',()=>{
+ if(!computed.length||tracking)return;
+ refreshExcelSelection();
+ $('excelDialog').showModal();
+});
+$('excelCancel').addEventListener('click',()=>$('excelDialog').close());
+$('excelCancelBottom').addEventListener('click',()=>$('excelDialog').close());
+$('excelDownload').addEventListener('click',()=>{
+ if(!computed.length||tracking)return;
+ try{
+  const blob=makeExcel();
+  if(blob.size<1000)throw new Error('Vytvorený súbor je neúplný.');
+  downloadBlob(blob,'VideoMotion_Lab_merania_v12.xlsx');
+  $('excelDialog').close();
+  const exportN=$('excelSubsetOnly').checked&&selectedPointSet!==null?computed.filter(m=>m.valid&&selectedPointSet.has(m.i)).length:computed.length;
+  notice('Excel bol pripravený na stiahnutie: '+exportN+' meraní a '+selectedExcelColumns().length+' stĺpcov.','ok');
+ }catch(e){$('exportNote').textContent='Chyba exportu: '+err(e);notice('Nepodarilo sa pripraviť Excel súbor: '+err(e),'error')}
+});
+refreshExcelSelection();
+$('excelSubsetOnly').addEventListener('change',refreshExcelSelection);
+$('png').addEventListener('click',()=>{if(!computed.length)return;chart.toBlob(blob=>{if(blob)downloadBlob(blob,'videomotion_graf_'+graphKind+'.png')},'image/png')});
+function downloadBlob(blob,name){const link=document.createElement('a');const url=URL.createObjectURL(blob);link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+window.addEventListener('resize',resizeCanvases);$('showMag').disabled=true;updateFitSeries();updatePointSelectionInfo();ui();drawChart();
+// Diagnostics for an automated reproducible in-browser check (does not transmit data).
+window.__labTest={getState:()=>({workW,workH,duration,target,calibration,origin,axisAngle,zoom,panX,panY,mode,measurements,computed,tracking,rangeStart,rangeEnd,detectedVideoFps,fpsOrigin,fpsVariable,numberOfStepFrames:numberOfStepFrames(),measurementFps:Number($('fps').value),effectiveStart:effectiveStart(),effectiveEnd:effectiveEnd()}),scoreAt,sampleTemplate,findBest,solve3,localRegression,fitPolynomial,fitSine,solveFitSystem,selectedRows,applyGraphFit,getFit:()=>fitResult,getSelection:()=>selectedPointSet===null?null:[...selectedPointSet],setTestRows:(rows)=>{measurements=rows.map((r,i)=>({videoT:r.videoT??r.t,t:r.t,px:r.px??0,py:r.py??0,valid:r.valid!==false,conf:1}));computed=rows.map((r,i)=>({i,videoT:r.videoT??r.t,valid:r.valid!==false,conf:1,manual:false,...r}));resetAnalysisSelection();updatePointSelectionInfo();renderTable();drawChart();ui();},estimateStraightAxis,setZoom,showConversionPanel,conversionProgress};
+</script></body></html>
