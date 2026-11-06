@@ -2,7 +2,7 @@
 <html lang="sk">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0e2637"><title>VideoMotion Lab v12 — automatická videoanalýza pohybu</title>
+<meta name="theme-color" content="#0e2637"><title>VideoMotion Lab v13 — automatická videoanalýza pohybu</title>
 <style>
 :root{--ink:#153043;--muted:#597182;--blue:#195a94;--teal:#008b7d;--line:#dbe6ed;--bg:#f2f7fa;--card:#fff;--orange:#d27d2d;--red:#b54747;--radius:17px}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.45}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,.video-overlay:focus-visible{outline:3px solid #f09e37;outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}header{background:#0e2637;color:#fff;padding:22px max(18px,calc((100vw - 1320px)/2));display:flex;justify-content:space-between;align-items:center;gap:20px}header h1{font-size:clamp(23px,3vw,32px);margin:0;font-weight:800;letter-spacing:-.6px}header p{margin:3px 0 0;color:#afcbd7;font-size:14px}.tag{color:#99e8dc;background:#204553;border:1px solid #3c6b74;padding:8px 12px;border-radius:30px;font-size:13px;white-space:nowrap}main{max-width:1360px;padding:24px 18px 55px;margin:auto}.top{display:grid;grid-template-columns:1fr 310px;gap:18px;align-items:stretch}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 22px #12344d0b;overflow:hidden}.card.pad{padding:20px}.sectiontitle{font-size:20px;line-height:1.2;margin:0 0 14px}.desc{font-size:14px;color:var(--muted);margin:6px 0 13px}.badge{border-radius:99px;background:#eaf3f8;color:#2a5872;padding:4px 9px;display:inline-flex;font-size:12px;font-weight:700}.upload{display:flex;flex-wrap:wrap;align-items:center;gap:11px}.upload input{max-width:100%;font-size:14px}.pill{border:1px solid #c8d8e2;background:#fff;color:#21516c;border-radius:9px;padding:10px 12px;min-height:44px;font-weight:700}.pill.active{border-color:#008b7d;background:#e2f6f1;color:#006c61}.pill:hover:not(:disabled){filter:brightness(.97)}.primary{background:#087b72;color:white;border-color:#087b72}.danger{border-color:#f0c1c1;color:#a23a3a;background:#fff6f6}.btnbar{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}.meter{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:650}.field input,.field select{width:100%;color:var(--ink);background:#fff;border-radius:9px;border:1px solid #cbdce5;padding:9px 10px;min-height:42px}.field input[type=range]{padding:0;min-height:24px;accent-color:#078777}.field label{display:block}.workspace{margin-top:17px;display:grid;grid-template-columns:minmax(0,1.62fr) minmax(300px,.82fr);align-items:start;gap:18px}.videohead{padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.videohead h2{margin:0;font-size:19px}.viewer{background:#122936;padding:13px;position:relative}.video-box{position:relative;max-width:100%;margin:auto;min-height:230px;display:grid;place-items:center;overflow:hidden;background:#07151f;border-radius:10px}.video-box.loaded{min-height:0}.video-box video{width:100%;height:auto;display:block;max-height:65vh}.video-overlay{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:none}.video-box.loaded .video-overlay{display:block}.empty{min-height:240px;display:grid;place-items:center;text-align:center;color:#b0cbd5;padding:30px}.empty strong{display:block;color:white;font-size:20px}.empty svg{width:50px;height:50px;opacity:.55}.belowvideo{padding:12px 18px 18px}.timeline{display:grid;grid-template-columns:58px 1fr 58px;gap:8px;align-items:center;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}.timeline input{width:100%;accent-color:var(--teal)}.status{padding:10px 13px;background:#edf6f9;border-radius:9px;color:#31546a;font-size:14px;min-height:43px}.status.warn{background:#fff3df;color:#835617}.status.error{background:#fff0f0;color:#9a2c36}.controls{padding:18px}.controls h3,.results h3{font-size:16px;margin:0 0 12px}.howto{padding:11px 12px;border-left:3px solid #0b998b;background:#f0f9f7;color:#1c5660;border-radius:6px;font-size:14px;margin:10px 0}.small{font-size:12px;color:var(--muted)}.settings{margin-top:12px;display:grid;gap:11px}.bararea{height:8px;border-radius:99px;background:#e0eaf0;overflow:hidden;margin-top:10px}.bararea>div{height:100%;width:0;background:linear-gradient(90deg,#148c7c,#4fbba8);transition:width .2s}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.summary .metric{border:1px solid var(--line);border-radius:9px;padding:9px;text-align:center}.summary b{display:block;font-size:17px;font-variant-numeric:tabular-nums}.summary span{font-size:11px;color:var(--muted)}.results{margin-top:18px;padding:20px}.result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.results h2{font-size:21px;margin:0}.tabs{display:flex;gap:6px;flex-wrap:wrap}.chart-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}.chart-controls label{display:flex;align-items:center;gap:4px;font-size:14px}.chart-controls input{accent-color:var(--teal)}.plot-wrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}.plot-wrap canvas{width:100%;height:335px;display:block;cursor:crosshair;touch-action:pan-y}.plot-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);pointer-events:none;background:#fff9}.legend{display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:13px}.swatch{width:9px;height:9px;display:inline-block;vertical-align:middle;margin-right:7px;border-radius:50%}.tablehead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}.tablehead h3{margin:0}.table-wrap{max-height:265px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:9px}.table-wrap table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}.table-wrap th{position:sticky;top:0;background:#eaf2f7;color:#274b60;padding:9px;z-index:1}.table-wrap td{padding:7px 9px;border-top:1px solid #e7eff3}.table-wrap tr:nth-child(even){background:#f9fcfd}.table-wrap td:first-child,.table-wrap th:first-child{text-align:left}.table-wrap tr.selected{background:#ddf5ee}footer{font-size:13px;color:var(--muted);padding:22px 0;line-height:1.6}.hidden{display:none!important}.checkrow{display:flex;align-items:center;gap:9px;font-size:13px}.checkrow input{width:18px;height:18px;accent-color:#087b72}kbd{font-family:inherit;background:#e6edf2;border-radius:3px;padding:2px 5px}.info-line{font-size:13px;color:var(--muted);margin-top:10px}.alert{background:#fff5df;padding:12px 15px;border-radius:11px;color:#72561f;border:1px solid #f4dfac;font-size:13px;margin-top:13px}@media(max-width:900px){.top,.workspace{grid-template-columns:1fr}.video-box video{max-height:55vh}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.controls .full{grid-column:1/-1}}@media(max-width:540px){header{padding:18px}header .tag{display:none}main{padding:12px 10px 38px}.card.pad,.results{padding:15px}.videohead{padding:13px}.viewer{padding:7px}.belowvideo{padding:12px}.controls{display:block}.controls>*{margin-bottom:14px}.plot-wrap canvas{height:280px}.meter{grid-template-columns:1fr 1fr}.summary{grid-template-columns:repeat(3,minmax(0,1fr))}.summary b{font-size:15px}.btnbar .pill{flex:1}header h1{font-size:23px}}
 
@@ -86,6 +86,8 @@
 .fit-result{border:1px solid #c8dfdc;background:#fff;border-radius:10px;padding:10px 12px;line-height:1.6;font-size:14px;overflow-wrap:anywhere}
 .fit-result strong{display:block;color:#11695e}
 .fit-result code{font-size:14px;white-space:normal;color:#173b51;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.fit-result .fit-equation{display:block;font-size:clamp(15px,2vw,19px);font-weight:700;color:#153952;letter-spacing:.01em;margin:6px 0;line-height:1.7;overflow-wrap:anywhere}
+.fit-meaning{font-size:13px;color:#23576b;background:#edf8f5;border-left:3px solid #13887b;padding:7px 10px;margin:7px 0 9px;line-height:1.5}
 .fit-sample-info{margin:0;color:var(--muted);font-size:13px}
 .plot-wrap canvas.select-mode{cursor:cell}
 .selection-readout{font-size:13px;font-weight:650;color:#195b66}
@@ -98,7 +100,7 @@
 @media(max-width:540px){.analysis-tools{padding:11px}.selection-toolbar .pill,.fit-toolbar .pill{flex:1}.selection-toolbar label.checkrow{width:100%}}
 </style>
 </head><body>
-<header><div><h1>◉ VideoMotion Lab <span class="version-chip">v12</span></h1><p>Meranie pohybu z videa · poloha, rýchlosť, zrýchlenie</p></div><span class="tag">Lokálne spracovanie · bez servera</span></header>
+<header><div><h1>◉ VideoMotion Lab <span class="version-chip">v13</span></h1><p>Meranie pohybu z videa · poloha, rýchlosť, zrýchlenie</p></div><span class="tag">Lokálne spracovanie · bez servera</span></header>
 <main>
 <section class="top">
  <div class="card pad"><h2 class="sectiontitle">1. Nahraj video</h2><div class="upload"><input id="file" type="file" accept="video/*" aria-label="Vybrať video"><span id="fileDetail" class="badge">Zatiaľ bez videa</span></div><p class="desc">Bežné MP4/H.264 sa spracujú okamžite. Pri nepodporovanom H.265/HEVC alebo HDR možno zapnúť konverziu priamo v prehliadači. Najlepšie funguje kamera na statíve, kontrastný predmet a nemenné osvetlenie. Video neopúšťa tvoje zariadenie. Rozšírený prevod vyžaduje internet na prvé načítanie knižnice, nie odoslanie videa.</p><div id="conversionPanel" class="conversion-panel hidden" aria-live="polite">
@@ -147,7 +149,7 @@
 <span id="selectedCount" class="selection-readout" role="status">Najprv analyzuj video.</span>
 </div></div>
 <div><h3>Fitovanie funkcie</h3>
-<p class="fit-hint">Fit sa počíta iba z vybraných bodov. Namerané body sa nespájajú; model je odlíšený prerušovanou čiarou. Sínusový fit zahŕňa aj kosínus prostredníctvom fázového posunu.</p>
+<p class="fit-hint">Fit sa počíta iba z vybraných bodov. Rovnica sa vypíše v školskom tvare podľa času t (bez posunu t − t₀). Namerané body sa nespájajú; fitovaná funkcia je odlíšená prerušovanou čiarou. Sínusový fit zahŕňa aj kosínus prostredníctvom fázového posunu.</p>
 <div class="fit-toolbar" style="margin-top:9px">
 <label class="field" style="max-width:215px">Veličina<select id="fitSeries"><option value="pX">Poloha x</option><option value="pY">Poloha y</option></select></label>
 <label class="field" style="max-width:220px">Typ funkcie<select id="fitType"><option value="linear">Lineárna</option><option value="quadratic">Kvadratická</option><option value="cubic">Kubická</option><option value="sine">Sínusová (s fázou)</option></select></label>
@@ -711,10 +713,57 @@ function fitSine(points){if(points.length<6)return null;const start=points[0].t,
  if(!bb||(aa&&aa.sse<bb.sse))right=b;else left=a}
  let refined=evaluate((left+right)/2);return refined&&refined.sse<=best.sse?refined:best;}
 function signedFit(x,d=4){if(!Number.isFinite(x))return '?';let a=Math.abs(x),txt=(a>1e5||(a!==0&&a<1e-4))?x.toExponential(3):Number(x.toFixed(d)).toString();return txt.replace('.',',')}
-function fitFormula(f){const subject={pX:'x',pY:'y',vX:'vₓ',vY:'vᵧ',magV:'|v|',aX:'aₓ',aY:'aᵧ',magA:'|a|'}[fitTarget]||'f';if(f.kind==='sine')return `${subject}(t) = ${signedFit(f.offset)} + ${signedFit(f.amplitude)}·sin(${signedFit(f.omega)}·(t − ${signedFit(f.t0,3)}) ${f.phase>=0?'+':'−'} ${signedFit(Math.abs(f.phase))})`;
- let out=subject+'(t) = '+signedFit(f.coeff[0]);for(let i=1;i<f.coeff.length;i++){
- let val=f.coeff[i];out+=' '+(val>=0?'+':'−')+' '+signedFit(Math.abs(val))+'·(t − '+signedFit(f.t0,3)+')'+(i>1?'^'+i:'')}
- return out;}
+// Regresia zostáva numericky stabilná v posunutej súradnici (t − t0).
+// IBA ZÁPIS rovnice pre žiaka rozvinieme na bežné mocniny času t.
+function standardPolyCoefficients(f){
+ if(!f||f.kind!=='poly')return null;
+ const binom=[[1],[1,1],[1,2,1],[1,3,3,1]];
+ const std=Array(f.degree+1).fill(0);
+ for(let i=0;i<=f.degree;i++)for(let k=0;k<=i;k++)std[k]+=f.coeff[i]*binom[i][k]*((-f.t0)**(i-k));
+ return std;
+}
+function formatFitPolynomial(coeff,subject){
+ const parts=[];
+ for(let i=coeff.length-1;i>=0;i--){
+  const x=coeff[i];if(!Number.isFinite(x))return subject+'(t) = neurčené';
+  // Úplne zanedbateľné numerické zvyšky nezobrazujeme ako fyzikálne členy.
+  if(Math.abs(x)<1e-12)continue;
+  const factor=signedFit(Math.abs(x));
+  const monomial=i===0?'':i===1?'·t':`·t${['','', '²','³'][i]||'^'+i}`;
+  const term=factor+monomial;
+  if(!parts.length)parts.push((x<0?'−':'')+term);
+  else parts.push((x<0?' − ':' + ')+term);
+ }
+ return subject+'(t) = '+(parts.join('')||'0');
+}
+function normalizeFitPhase(p){return Math.atan2(Math.sin(p),Math.cos(p))}
+function fitFormula(f){
+ const subject={pX:'x',pY:'y',vX:'vₓ',vY:'vᵧ',magV:'|v|',aX:'aₓ',aY:'aᵧ',magA:'|a|'}[fitTarget]||'f';
+ if(f.kind==='sine'){
+  const phase=normalizeFitPhase(f.phase-f.omega*f.t0),phasePart=Math.abs(phase)<1e-10?'':(phase>=0?' + ':' − ')+signedFit(Math.abs(phase));
+  const shift=Math.abs(f.offset)<1e-12?'':(f.offset>=0?' + ':' − ')+signedFit(Math.abs(f.offset));
+  return `${subject}(t) = ${signedFit(f.amplitude)}·sin(${signedFit(f.omega)}·t${phasePart})${shift}`;
+ }
+ return formatFitPolynomial(standardPolyCoefficients(f),subject);
+}
+// Užitočné fyzikálne vyjadrenie parametrov, ak má fit skutočný pohybový význam.
+function fitPhysicalInterpretation(f){
+ if(f.kind!=='poly')return '';
+ const c=standardPolyCoefficients(f),unit=calibration?'m':'px';
+ if(f.degree===1&&['vX','vY'].includes(fitTarget)){
+  const a=fitTarget==='vX'?'aₓ':'aᵧ',v0=fitTarget==='vX'?'v₀ₓ':'v₀ᵧ';
+  return `Fyzikálny tvar: ${fitTarget==='vX'?'vₓ':'vᵧ'}(t) = ${a}·t + ${v0}. Z fitu: ${a} ≈ ${signedFit(c[1])} ${unit}/s², ${v0} ≈ ${signedFit(c[0])} ${unit}/s.`;
+ }
+ if(f.degree===1&&['pX','pY'].includes(fitTarget)){
+  const v0=fitTarget==='pX'?'v₀ₓ':'v₀ᵧ',p0=fitTarget==='pX'?'x₀':'y₀';
+  return `Fyzikálny tvar: ${fitTarget==='pX'?'x':'y'}(t) = ${v0}·t + ${p0}. Z fitu: ${v0} ≈ ${signedFit(c[1])} ${unit}/s, ${p0} ≈ ${signedFit(c[0])} ${unit}.`;
+ }
+ if(f.degree===2&&['pX','pY'].includes(fitTarget)){
+  const a=fitTarget==='pX'?'aₓ':'aᵧ',v0=fitTarget==='pX'?'v₀ₓ':'v₀ᵧ',p0=fitTarget==='pX'?'x₀':'y₀';
+  return `Pri konštantnom zrýchlení: ${a} ≈ ${signedFit(2*c[2])} ${unit}/s², ${v0} ≈ ${signedFit(c[1])} ${unit}/s, ${p0} ≈ ${signedFit(c[0])} ${unit}.`;
+ }
+ return '';
+}
 function applyGraphFit(silent){const pts=selectedRows().filter(m=>Number.isFinite(m[fitTarget])).map(m=>({t:m.t,y:m[fitTarget]})).sort((a,b)=>a.t-b.t);
  const degree={linear:1,quadratic:2,cubic:3}[fitKind],min=fitKind==='sine'?6:degree+1;
  if(pts.length<min){fitResult=null;fitIsActive=false;$('fitInfo').textContent=`Na tento fit potrebuješ aspoň ${min} platných vybraných bodov. Aktuálne máš ${pts.length}.`;updatePointSelectionInfo();drawChart();return}
@@ -722,7 +771,12 @@ function applyGraphFit(silent){const pts=selectedRows().filter(m=>Number.isFinit
  if(!fitResult){$('fitInfo').textContent='Fit sa nedá spoľahlivo určiť. Vybrané body majú príliš malé časové rozpätie alebo sa model nedá odhadnúť.';updatePointSelectionInfo();drawChart();return}
  const f=fitResult,quality=Number.isFinite(f.r2)?signedFit(f.r2,5):'nedefinované (rovnaké hodnoty)',period=f.kind==='sine'?` · perióda T = ${signedFit(1/f.f,4)} s`:'',note=f.kind==='sine'&&f.f*(f.tmax-f.tmin)<.9?' Pozor: výber zachytáva menej než jednu periódu; frekvencia môže byť nejednoznačná.':'';
  $('fitInfo').replaceChildren();let b=document.createElement('strong');b.textContent=`${fitSeriesLabels[fitTarget]} — ${f.n} bodov · R² = ${quality} · RMSE = ${signedFit(f.rmse,5)}${period}`;
- let code=document.createElement('code');code.textContent=fitFormula(f);let p=document.createElement('div');p.textContent='Model je odhad z vybraných bodov, nie nové meranie.'+note;$('fitInfo').append(b,code,p);updatePointSelectionInfo();drawChart()}
+ let code=document.createElement('code');code.className='fit-equation';code.textContent=fitFormula(f);
+ let p=document.createElement('div');p.textContent='Model je odhad z vybraných bodov, nie nové meranie.'+note;
+ $('fitInfo').append(b,code);
+ const interpretation=fitPhysicalInterpretation(f);
+ if(interpretation){const meaning=document.createElement('div');meaning.className='fit-meaning';meaning.textContent=interpretation;$('fitInfo').append(meaning)}
+ $('fitInfo').append(p);updatePointSelectionInfo();drawChart()}
 function renderTable(){const body=$('rows');body.replaceChildren();if(!computed.length){const tr=document.createElement('tr');const td=document.createElement('td');td.colSpan=9;td.style.cssText='text-align:center;padding:24px';td.textContent='Zatiaľ žiadne merania';tr.append(td);body.append(tr);return}let frag=document.createDocumentFragment();for(let m of computed){const tr=document.createElement('tr');if(m.i===selectedIndex)tr.classList.add('selected');if(m.valid&&isSelectedRow(m))tr.classList.add('included');else tr.classList.add('excluded');
  const tdPick=document.createElement('td');tdPick.className='pickcell';const input=document.createElement('input');input.type='checkbox';input.className='rowpick';input.checked=m.valid&&isSelectedRow(m);input.disabled=!m.valid||tracking;input.setAttribute('aria-label',`Zahrnúť meranie ${m.i+1} do výberu`);
  input.addEventListener('click',e=>e.stopPropagation());input.addEventListener('change',()=>toggleSelectedIndex(m.i));tdPick.append(input);tr.append(tdPick);
@@ -895,7 +949,7 @@ $('excelDownload').addEventListener('click',()=>{
  try{
   const blob=makeExcel();
   if(blob.size<1000)throw new Error('Vytvorený súbor je neúplný.');
-  downloadBlob(blob,'VideoMotion_Lab_merania_v12.xlsx');
+  downloadBlob(blob,'VideoMotion_Lab_merania_v13.xlsx');
   $('excelDialog').close();
   const exportN=$('excelSubsetOnly').checked&&selectedPointSet!==null?computed.filter(m=>m.valid&&selectedPointSet.has(m.i)).length:computed.length;
   notice('Excel bol pripravený na stiahnutie: '+exportN+' meraní a '+selectedExcelColumns().length+' stĺpcov.','ok');
@@ -907,5 +961,5 @@ $('png').addEventListener('click',()=>{if(!computed.length)return;chart.toBlob(b
 function downloadBlob(blob,name){const link=document.createElement('a');const url=URL.createObjectURL(blob);link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
 window.addEventListener('resize',resizeCanvases);$('showMag').disabled=true;updateFitSeries();updatePointSelectionInfo();ui();drawChart();
 // Diagnostics for an automated reproducible in-browser check (does not transmit data).
-window.__labTest={getState:()=>({workW,workH,duration,target,calibration,origin,axisAngle,zoom,panX,panY,mode,measurements,computed,tracking,rangeStart,rangeEnd,detectedVideoFps,fpsOrigin,fpsVariable,numberOfStepFrames:numberOfStepFrames(),measurementFps:Number($('fps').value),effectiveStart:effectiveStart(),effectiveEnd:effectiveEnd()}),scoreAt,sampleTemplate,findBest,solve3,localRegression,fitPolynomial,fitSine,solveFitSystem,selectedRows,applyGraphFit,getFit:()=>fitResult,getSelection:()=>selectedPointSet===null?null:[...selectedPointSet],setTestRows:(rows)=>{measurements=rows.map((r,i)=>({videoT:r.videoT??r.t,t:r.t,px:r.px??0,py:r.py??0,valid:r.valid!==false,conf:1}));computed=rows.map((r,i)=>({i,videoT:r.videoT??r.t,valid:r.valid!==false,conf:1,manual:false,...r}));resetAnalysisSelection();updatePointSelectionInfo();renderTable();drawChart();ui();},estimateStraightAxis,setZoom,showConversionPanel,conversionProgress};
+window.__labTest={getState:()=>({workW,workH,duration,target,calibration,origin,axisAngle,zoom,panX,panY,mode,measurements,computed,tracking,rangeStart,rangeEnd,detectedVideoFps,fpsOrigin,fpsVariable,numberOfStepFrames:numberOfStepFrames(),measurementFps:Number($('fps').value),effectiveStart:effectiveStart(),effectiveEnd:effectiveEnd()}),scoreAt,sampleTemplate,findBest,solve3,localRegression,fitPolynomial,fitSine,solveFitSystem,standardPolyCoefficients,formatFitPolynomial,normalizeFitPhase,fitFormula,fitPhysicalInterpretation,selectedRows,applyGraphFit,getFit:()=>fitResult,getSelection:()=>selectedPointSet===null?null:[...selectedPointSet],setTestRows:(rows)=>{measurements=rows.map((r,i)=>({videoT:r.videoT??r.t,t:r.t,px:r.px??0,py:r.py??0,valid:r.valid!==false,conf:1}));computed=rows.map((r,i)=>({i,videoT:r.videoT??r.t,valid:r.valid!==false,conf:1,manual:false,...r}));resetAnalysisSelection();updatePointSelectionInfo();renderTable();drawChart();ui();},estimateStraightAxis,setZoom,showConversionPanel,conversionProgress};
 </script></body></html>
