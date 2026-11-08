@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interaktívna príprava na slovenskú maturitu z matematiky. Od jednotkovej kružnice po goniometrické rovnice a aplikácie.">
+<title>Goniometria na maturitu</title>
+<style>
+:root{color-scheme:light;--ink:#14273c;--muted:#45596b;--blue:#153dc1;--pale:#e9edff;--line:#bdc9d5;--paper:#f6f8fb;--white:#fff;--mint:#c8f5d8;--green:#136243;--lemon:#e9fc82;--error:#9c2353;--rose:#fcebf1;--radius:20px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper);font-size:16px}
+*{box-sizing:border-box}body{margin:0}a{color:var(--blue);text-underline-offset:.18em}a:hover{text-decoration-thickness:2px}button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:default;opacity:.5}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,[tabindex="0"]:focus-visible{outline:3px solid var(--blue);outline-offset:3px}.skip{position:absolute;top:-6rem;left:1rem;background:var(--white);padding:.5rem;z-index:3}.skip:focus{top:1rem}.site-head{border-bottom:1px solid var(--line);background:#fff}.top{max-width:1200px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin:auto;padding:.85rem clamp(1rem,4vw,2rem)}.brand{display:flex;align-items:center;gap:.55rem;color:var(--ink);font-size:1.15rem;font-weight:900;text-decoration:none;letter-spacing:-.04em}.brand-mark{display:grid;place-items:center;width:33px;height:33px;background:var(--lemon);border-radius:9px;font:700 1.5rem Georgia,serif}.top nav{display:flex;gap:.25rem;flex-wrap:wrap}.top nav a{font-weight:700;font-size:.89rem;color:var(--ink);text-decoration:none;padding:.4rem .6rem;border-radius:8px}.top nav a:hover,.top nav [aria-current=page]{background:var(--pale);color:var(--blue)}
+main,footer{width:min(1120px,calc(100% - 2rem));margin-inline:auto}main{padding-block:clamp(1.4rem,4vw,3.4rem);min-height:72vh}footer{padding:1.1rem 0 2rem;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem;display:flex;gap:.8rem;justify-content:space-between;flex-wrap:wrap}.hero{display:grid;grid-template-columns:1.08fr 1fr;gap:1rem;align-items:center;background:#132a73;color:white;border-radius:30px;padding:clamp(1.15rem,4vw,3rem);margin-bottom:2.1rem;overflow:hidden}.hero .lead,.hero .eyebrow{color:#e8edff}.hero h1{margin:.35rem 0 .75rem}.hero .accent{color:var(--lemon)}.hero .btn{background:var(--lemon);border-color:var(--lemon);color:var(--ink)}.hero .btn.secondary{background:transparent;color:white;border-color:#d1d9fc}.hero-diagram{min-width:0}.hero-diagram svg{display:block;width:100%;max-height:300px;height:auto}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(2rem,5.6vw,4.25rem);line-height:1.03;letter-spacing:-.06em;margin-bottom:.7rem}h2{font-size:clamp(1.42rem,3vw,2.3rem);line-height:1.12;letter-spacing:-.035em;margin-bottom:.65rem}h3{font-size:1.15rem;line-height:1.2;margin-bottom:.55rem}p,li{line-height:1.59}p{margin-bottom:.78rem}.eyebrow,.pill,.chapter-num{font:800 .75rem ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase}.eyebrow{color:var(--blue);margin-bottom:.65rem}.lead{color:var(--muted);max-width:70ch;font-size:clamp(1rem,2.5vw,1.22rem)}.pill{display:inline-block;border-radius:20px;background:var(--pale);color:#1336aa;padding:.28rem .58rem}.pill.pass{background:var(--mint);color:var(--green)}.chapter-num{color:var(--blue);font-size:1rem}.section{margin:1.7rem 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card{border:1px solid var(--line);border-radius:var(--radius);background:var(--white);padding:clamp(.88rem,2.5vw,1.35rem);min-width:0}.card.chapter{display:flex;flex-direction:column;gap:.3rem}.chapter .row:last-child{margin-top:auto}.callout{border-left:4px solid var(--blue);background:var(--pale)}.warning{border-left:4px solid var(--error);background:var(--rose)}.worked{border-left:4px solid var(--green);background:#effbf2}.row{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;margin:.65rem 0}.between{justify-content:space-between}.btn{display:inline-block;border:1.5px solid var(--blue);border-radius:10px;background:var(--blue);color:#fff;text-decoration:none;padding:.58rem .82rem;font-weight:800;line-height:1.25}.btn:hover{filter:brightness(.94)}.btn.secondary{background:#fff;color:#153dc1}.btn[aria-pressed=true]{background:var(--blue);color:white}.muted,small{color:var(--muted)}.crumb{font-size:.9rem;margin-bottom:1rem}.tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}.tabs a{text-decoration:none;color:var(--ink);font-weight:780;border:1px solid var(--line);border-radius:10px;background:white;padding:.6rem .8rem}.tabs a[aria-current=page]{background:var(--pale);border-color:var(--blue);color:var(--blue)}.steps{padding-left:1.45rem;margin:.5rem 0}.steps li{padding:.3rem .2rem}.quiz{max-width:890px}.question{margin:.8rem 0}.question h3{line-height:1.45}.option{display:flex;align-items:baseline;gap:.62rem;margin:.43rem 0;padding:.56rem .7rem;border:1px solid var(--line);border-radius:9px;line-height:1.45}.option:has(:checked){border-color:var(--blue);background:var(--pale)}.option input{accent-color:var(--blue);flex:none}.field{display:grid;gap:.28rem;max-width:320px;font-weight:700}.field input,.field select{padding:.53rem;border:1px solid #657890;background:white;border-radius:8px;color:var(--ink);width:100%}.answer-note{display:block;margin:.35rem 0}.feedback{padding:.65rem .8rem;border-left:4px solid var(--blue);background:var(--pale);border-radius:8px;margin:.75rem 0;line-height:1.55}.feedback.good{border-color:var(--green);background:#e7f9eb}.feedback.bad{border-color:var(--error);background:var(--rose)}.score{font-size:2.15rem;font-weight:900;letter-spacing:-.04em}.reorder{display:flex;gap:.5rem;align-items:center;border-bottom:1px solid var(--line);padding:.45rem 0}.reorder span{flex:1}.reorder button{min-width:2.45rem;padding:.28rem .45rem}.lab-controls{display:flex;gap:.8rem;flex-wrap:wrap;margin:.65rem 0}.lab-controls label{display:grid;gap:.26rem;font-weight:750;min-width:112px}.lab-controls input[type=range]{accent-color:var(--blue);max-width:100%}.lab-controls select{padding:.4rem;border-radius:7px;background:white;border:1px solid #657890;color:var(--ink)}.lab-diagram{min-width:0;margin:.9rem 0}.lab-diagram svg{display:block;width:100%;height:auto;border-radius:13px;background:#fbfcff;box-shadow:0 0 0 1px var(--line)}.lab-diagram .pair{display:grid;grid-template-columns:minmax(0,340fr) minmax(0,640fr);gap:.75rem}.diagram-scroll{overflow-x:auto;min-width:0;padding:1px}.diagram-scroll .wide{min-width:550px}.lab-output{line-height:1.55;font-weight:700;margin:.7rem 0}.lab-challenge{margin:.8rem 0}.angle-key{display:flex;gap:.35rem;flex-wrap:wrap}.angle-key button{min-height:2.6rem;padding:.25rem .56rem}.angle-key button[aria-pressed=true]{background:var(--mint);border-color:var(--green);color:var(--ink)}.value-table{width:100%;border-collapse:collapse;text-align:center}.value-table td,.value-table th{padding:.45rem .55rem;border:1px solid var(--line)}.value-table th{background:var(--pale)}.table-wrap{overflow-x:auto}details{border:1px solid var(--line);background:white;border-radius:11px;padding:.55rem .75rem;margin:.6rem 0}summary{font-weight:800;cursor:pointer}details[open] summary{margin-bottom:.5rem}progress{accent-color:var(--green);width:100%}math{font-size:1.12em}.mathline{font-size:1.12rem}.diagram-scroll:focus-visible{outline-offset:2px}.practice-list{display:grid;gap:.75rem}.mini{margin-top:.45rem;font-size:.89rem}.link-list li{margin:.6rem 0}.source-tags{display:flex;gap:.4rem;flex-wrap:wrap}.readable{max-width:78ch}.focus-target:focus{outline:none}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+@media(max-width:870px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.hero-diagram svg{max-height:220px}.lab-diagram .pair{grid-template-columns:minmax(0,1fr)}.pair .circle-panel{width:max(53.125%,292.1875px);max-width:100%}.pair .diagram-scroll .wide{min-width:550px}}
+@media(max-width:560px){.grid,.two{grid-template-columns:1fr}.top nav a{padding:.35rem .44rem}.top{gap:.35rem}.hero{border-radius:19px}.card{border-radius:15px}.lab-controls label{min-width:min(130px,100%)}.btn{padding:.5rem .68rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important}}
+.lab-diagram>svg,.lab-diagram>.circle-panel{max-width:480px}
+.drag-angle .circle-panel svg{cursor:grab;touch-action:none}
+.drag-angle .circle-panel svg:active{cursor:grabbing}
+  .task-text,.task-steps{max-width:76ch}
+  .task-steps{margin-bottom:1.1rem}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Preskočiť na obsah</a>
+<header class="site-head"><div class="top"><a class="brand" href="#uvod"><span class="brand-mark" aria-hidden="true">π</span> Goniometria na maturitu</a><nav id="nav" aria-label="Hlavná navigácia"></nav></div></header>
+<main id="main" tabindex="-1" class="focus-target"></main>
+<footer><span>Slovenská maturita z matematiky</span><span><a href="#zdroje">Podklady a ďalšie aktivity</a> · Pokrok sa ukladá v tomto prehliadači</span></footer>
+<noscript><p>Na interaktívne aktivity a testy je potrebné povoliť JavaScript.</p></noscript>
+<script>
+"use strict";
+const chapters = [
+{
+id:"trojuholnik", title:"Pravouhlý trojuholník", label:"POMERY STRÁN", time:20, lab:"triangle",
+goal:"Vybrať správny pomer, dopočítať stranu alebo uhol a vysvetliť, prečo pomer nezávisí od veľkosti trojuholníka.",
+lead:"Šikmá rampa, rebrík aj výška stromu sa dajú opísať jedným pravouhlým trojuholníkom. Začni označením uhla. Tá istá odvesna môže byť pri jednom uhle protiľahlá a pri druhom priľahlá.",
+concepts:[
+["Najprv označ referenčný uhol","Prepona leží oproti pravému uhlu a je najdlhšia. Protiľahlá odvesna leží oproti vyznačenému ostrému uhlu α. Priľahlá odvesna s ním susedí a nie je preponou."],
+["Tri pomery","sin α = protiľahlá odvesna / prepona. cos α = priľahlá odvesna / prepona. tg α = protiľahlá odvesna / priľahlá odvesna. Podobné trojuholníky majú rovnaké pomery. Pri doplnkovom uhle β = 90° − α sa odvesny vymenia, preto sin β = cos α."],
+["Od hodnoty späť k uhlu","Ak poznáš pomer strán, použi inverznú funkciu. Napríklad tg α = 3/4 dá α = arctg(3/4) ≈ 36,87° v režime DEG. Tlačidlo tan⁻¹ znamená arctg. Prevrátenú hodnotu vypočítaš ako 1/tg α."] ],
+example:{title:"Rebrík pri stene",prompt:"Rebrík dlhý 5 m je opretý o zvislú stenu a stojí na vodorovnej zemi. Medzi rebríkom a zemou je uhol 60°. Vypočítaj zvislú vzdialenosť od zeme po miesto, kde sa rebrík dotýka steny. Uveď presný výsledok aj približnú hodnotu v metroch na dve desatinné miesta.",steps:["Nakresli pravý uhol medzi zemou a stenou. Rebrík je prepona, výška je odvesna oproti 60°.","Napíš sin 60° = h/5 a vyjadri h.","h = 5·sin 60° = 5√3/2 m ≈ 4,33 m. Výsledok je menší ako dĺžka rebríka."]},
+trap:["Zameníš pomer strán, keď sa zmení označený uhol.","Najprv pri každom uhle nanovo označ protiľahlú odvesnu. Prepona ostáva tá istá."],
+oral:["Predstav si dva pravouhlé trojuholníky rôznych veľkostí. Oba majú jeden ostrý uhol 35°. Vysvetli, prečo je pomer odvesny oproti tomuto uhlu k odvesne pri ňom rovnaký v oboch trojuholníkoch. Pomenuj goniometrickú funkciu, ktorej hodnotu tento pomer vyjadruje.","Majú zhodné uhly, takže sú podobné. Obe odvesny sa menia tým istým násobkom a ich podiel sa nemení. Tento podiel je tangens uhla 35°."]
+},
+{
+id:"uhly", title:"Orientované uhly a radiány", label:"OTOČENIE", time:23, lab:"turn",
+goal:"Prevádzať medzi mierami, chápať radián ako pomer a nájsť uhol základnej veľkosti.",
+lead:"Predstav si stopu bodu pri otáčaní kolesa. Stupne aj radiány hovoria o tom istom otočení, iba používajú inú jednotku.",
+concepts:[
+["Radián z oblúka","Pre neorientovaný oblúk dĺžky s na kružnici s polomerom r platí α = s/r v radiánoch. Pri orientovanom uhle priraď smer a znamienko. Pri otočení o jeden radián je prejdená dĺžka oblúka rovná polomeru."],
+["Prevody","Celá otočka má 360° = 2π rad, polovica 180° = π rad. Stupne násob π/180. Radiány násob 180/π. Odhad pomôže: π/2 je 90° a π je 180°."],
+["Orientácia a základná veľkosť","Kladný uhol meriame proti smeru hodinových ručičiek, záporný v smere. Na ten istý koncový bod vedú uhly líšiace sa o 2kπ, k ∈ ℤ. Základný uhol vyber z [0; 2π), resp. [0°; 360°). Zachytený oblúk s = r·|α| platí aj pri viacerých otočeniach, ak počítaš celú prejdenú dĺžku."] ],
+example:{title:"Uhol −765°",prompt:"Rameno najprv smeruje doprava po kladnej vodorovnej polosi. Otočíme ho o −765°, teda v smere hodinových ručičiek. Nájdi uhol z intervalu [0°; 360°), ktorý pri štarte z rovnakej polohy vedie na to isté koncové rameno. Zapíš ho v stupňoch aj presne v radiánoch.",steps:["Pridaj 2·360°. Dostaneš −45°, čo je ešte mimo [0°; 360°).","Pridaj ďalších 360°. Základný uhol je 315°.","315·π/180 = 7π/4. Koncové rameno leží v IV. kvadrante."]},
+trap:["Záporný uhol premeníš na kladný odstránením znamienka.","Použi násobky celej otočky. Uhly −45° a 45° majú rôzne koncové ramená."],
+oral:["Predstav si dve kružnice, pričom druhá má dvojnásobný polomer. Na oboch vyznačíme oblúky prislúchajúce rovnakému stredovému uhlu. Porovnaj dĺžky oblúkov a vysvetli, či sa pri zdvojnásobení polomeru zmení radiánová miera uhla.","Dĺžka oblúka sa zdvojnásobí. Pomer s/r, a teda uhol, zostane rovnaký."]
+},
+{
+id:"kruznica", title:"Jednotková kružnica a presné hodnoty", label:"SÚRADNICE", time:28, lab:"circle",
+goal:"Odvodiť význačné hodnoty a určiť sínus, kosínus aj tangens ľubovoľného uhla pomocou kvadrantu a referenčného uhla.",
+lead:"Otáčaj bod P okolo počiatku. Jeho vodorovná súradnica je kosínus uhla a zvislá sínus. Vďaka tomu majú funkcie zmysel aj mimo ostrých uhlov.",
+concepts:[
+["Súradnice a znamienka","P = (cos x; sin x). V I. kvadrante sú obe súradnice kladné, v II. je záporný kosínus, v III. sú obe záporné, v IV. je záporný sínus. Tangens je sin x/cos x, ak cos x ≠ 0."],
+["Odkiaľ sú odmocniny","Rovnoramenný pravouhlý trojuholník s preponou 1 má odvesny √2/2. Rozdelením rovnostranného trojuholníka so stranou 1 dostaneš odvesny 1/2 a √3/2 pri uhloch 30° a 60°. Hodnoty na osiach odčítaj priamo zo súradníc."],
+["Referenčný uhol a súmernosti","Najprv nájdi kvadrant a ostrý uhol k osi x. Z neho získaš absolútnu hodnotu a znamienko doplníš podľa kvadrantu. Na osiach rozhoduje poloha bodu. sin(−x) = −sin x, cos(−x) = cos x, tg(−x) = −tg x, ak je definovaný."] ],
+example:{title:"Hodnoty pri 7π/6",prompt:"Na jednotkovej kružnici odmeriame proti smeru hodinových ručičiek uhol 7π/6 radiánu od kladnej vodorovnej polosi. Urči kvadrant koncového bodu a vypočítaj presné hodnoty sínusu, kosínusu a tangensu tohto uhla.",steps:["7π/6 = π + π/6. Bod je v III. kvadrante, referenčný uhol je π/6.","Obe súradnice sú záporné. sin(7π/6) = −1/2 a cos(7π/6) = −√3/2.","Podiel je kladný. tg(7π/6) = 1/√3 = √3/3."]},
+trap:["Pri 150° dosadíš hodnoty z 30° vrátane oboch znamienok.","Referenčný uhol určuje iba absolútne hodnoty. V II. kvadrante je sínus kladný a kosínus záporný."],
+oral:["Koncový bod uhla π/2 leží hore na jednotkovej kružnici. Vysvetli pomocou jeho vodorovnej a zvislej súradnice, prečo je sin(π/2) = 1, no tg(π/2) nemá definovanú hodnotu.","Tangens je podiel sínusu a kosínusu. V π/2 je kosínus nulový, takže podiel nie je definovaný."]
+},
+{
+id:"vztahy", title:"Vzťahy, identity a úpravy", label:"ZDÔVODŇOVANIE", time:32, lab:"identity",
+goal:"Použiť základnú identitu, doplnkové uhly, posuny a dvojnásobný uhol. Kontrolovať znamienka a definičný obor.",
+lead:"Väčšina vzťahov sa dá znovu odvodiť z jednotkovej kružnice. Keď upravuješ výraz, najprv si ujasni, pre ktoré argumenty existuje.",
+concepts:[
+["Pytagorova identita a doplnkové uhly","sin²x + cos²x = 1, lebo P leží na jednotkovej kružnici. Súmernosť podľa priamky y = x dá cos(π/2 − x) = sin x a sin(π/2 − x) = cos x. Posun o π zmení znamienko sínusu aj kosínusu; pri tangense sa obe znamienka vykrátia."],
+["Dvojnásobný uhol","sin(2x) = 2 sin x cos x. cos(2x) = cos²x − sin²x = 2cos²x − 1 = 1 − 2sin²x. Štvorec hodnoty sin²x a sínus argumentu sin(2x) sú rôzne veci. Pri x = π/2 dostaneš 1 a 0."],
+["Súčtové vzťahy ako odôvodnenie","Otočenie bodu (cos x; sin x) o y dá súradnice cos(x+y) = cos x cos y − sin x sin y a sin(x+y) = sin x cos y + cos x sin y. Dosadením y = x odvodíš vzorce pre dvojnásobný uhol. Dosadením y = π/2 dostaneš cos x = sin(x+π/2)."],
+["Rovnosť iba tam, kde má zmysel","Napríklad (1 − cos²x)/sin x = sin x platí iba pre sin x ≠ 0. Pri odmocnení sin²x dostaneš |sin x|. Ak poznáš len jednu hodnotu funkcie a kvadrant nie je určený, uvažuj všetky prípustné znamienka."],
+["Rozdiel uhlov a presná hodnota","Súčtový vzorec s druhým argumentom −y a párnosť či nepárnosť dajú sin(x−y) = sin x cos y − cos x sin y a cos(x−y) = cos x cos y + sin x sin y. Napríklad 15° = 45° − 30°, preto sin 15° = (√6 − √2)/4."] ],
+example:{title:"Poznáme kosínus a kvadrant",prompt:"Koncové rameno uhla x leží v druhom kvadrante a cos x = −3/5. Urči presné hodnoty sin x, tg x a sin(2x), teda sínus uhla, tangens uhla a sínus jeho dvojnásobku. Zdôvodni výber znamienka pri výpočte sínusu.",steps:["sin²x = 1 − 9/25 = 16/25. V II. kvadrante je sin x kladný, takže sin x = 4/5.","tg x = (4/5)/(−3/5) = −4/3.","sin(2x) = 2·(4/5)·(−3/5) = −24/25."]},
+trap:["Z identity rovno odčítaš kladný sínus alebo pri krátení zabudneš na pôvodný menovateľ.","Pri odmocnení urči znamienko z polohy bodu. Pri zlomku zapíš podmienku ešte pred krátením."],
+oral:["Na jednotkovej kružnici vyznač bod, ku ktorému vedie rameno uhla x. Potom si predstav, že ho otočíš o ďalších π radiánov. Vysvetli, ako sa zmení jeho zvislá súradnica a prečo z toho vyplýva sin(x+π) = −sin x.","Otočenie o π zobrazí bod na protiľahlý bod. Jeho zvislá súradnica zmení znamienko."]
+},
+{
+id:"grafy", title:"Grafy sínusu, kosínusu a tangensu", label:"VLASTNOSTI FUNKCIÍ", time:32, lab:"graph",
+goal:"Načrtnúť tri základné grafy a určiť ich obor, nulové body, najmenšiu periódu, extrémy, monotónnosť a ohraničenosť.",
+lead:"Na osi x grafu je uhol. Na osi y je hodnota funkcie. Graf vzniká tak, že pri každom uhle zaznamenáš príslušnú hodnotu z kružnice.",
+concepts:[
+["Sínus a kosínus","Obe funkcie majú D = ℝ, H = [−1; 1] a najmenšiu kladnú periódu 2π. Sínus je nepárny, kosínus párny. Nuly sin x sú kπ, nuly cos x sú π/2 + kπ. Sínus dosahuje 1 pri π/2 + 2kπ a −1 pri 3π/2 + 2kπ. Kosínus má maximum pri 2kπ a minimum pri π + 2kπ."],
+["Monotónnosť","Sínus rastie na [−π/2 + 2kπ; π/2 + 2kπ] a klesá na [π/2 + 2kπ; 3π/2 + 2kπ]. Kosínus klesá na [2kπ; π + 2kπ] a rastie na [π + 2kπ; 2π + 2kπ]. Pre zadaný interval vezmi prieniky s týmito úsekmi."],
+["Tangens má vetvy","tg x má D = ℝ ∖ {π/2 + kπ}, H = ℝ, nuly kπ a najmenšiu kladnú periódu π. Je nepárny a rastie na každej vetve (−π/2 + kπ; π/2 + kπ). Na celej vetve je neohraničený. Na uzavretom intervale vnútri vetvy je ohraničený."],
+["Asymptoty a perióda","Pri x = π/2 + kπ graf tangensu nemá bod. Ani dva rastúce úseky na opačných stranách asymptoty netvoria jeden rastúci interval. Perióda T musí zachovať definičný obor a spĺňať f(x+T) = f(x) pre každé x z oboru. Rovnaká hodnota v dvoch bodoch sama nestačí."] ],
+example:{title:"Kde je tangens ohraničený?",prompt:"Graf tangensu sleduj najprv na uzavretom intervale [0; π/4] a potom na intervale [0; π/2), v ktorom pravý koniec nepatrí do intervalu. Rozhodni, či na každom z nich existuje konečné číslo, ktoré je aspoň také veľké ako všetky hodnoty funkcie. Rozdiel medzi intervalmi zdôvodni.",steps:["Na oboch intervaloch sa pohybuješ v jednej rastúcej vetve.","Na [0; π/4] prejdeš od tg 0 = 0 po tg(π/4) = 1.","Na [0; π/2) sa cos x blíži k nule z kladnej strany, sin x k 1. Tangens teda rastie bez hornej hranice."]},
+trap:["Nazveš π periódou sínusu, lebo sin 0 = sin π.","Porovnaj napríklad π/2 a 3π/2. Funkčné hodnoty sú 1 a −1. Perióda musí fungovať pre každé x."],
+oral:["Na každom súvislom úseku medzi dvoma susednými asymptotami je tangens rastúci. Posúď, či je rastúci aj na celom svojom definičnom obore. Na zdôvodnenie porovnaj hodnoty tg(π/4) a tg(3π/4), pričom π/4 je menšie ako 3π/4.","Napríklad π/4 < 3π/4, ale tg(π/4) = 1 > −1 = tg(3π/4). Medzi bodmi je asymptota."]
+},
+{
+id:"posuny", title:"Premeny grafov a nulové body", label:"ČÍTANIE PREDPISU", time:36, lab:"transform",
+goal:"Rozlíšiť účinok koeficientov a určiť periódu, obor hodnôt, extrémy, obor a priesečníky transformovaných funkcií.",
+lead:"Porovnaj 2 sin x so sin(2x). Prvý predpis mení zvislý rozmer, druhý mení vzdialenosť na osi x. Túto dvojicu treba vedieť rozlíšiť z grafu aj z predpisu.",
+concepts:[
+["Čítaj zvonka aj zvnútra","V zápise A·f(B(x−C)) + D mení A zvislú mierku a pri A < 0 aj znamienko výstupu pred posunom. D je zvislý posun. C je vodorovný posun. B mení vodorovnú mierku, pri B < 0 obráti smer argumentu. Zo zápisu Bx+b najprv vyber B: C = −b/B."],
+["Perióda a extrémy","Ak A·B ≠ 0, najmenšia kladná perióda je T₀/|B|. Pre sínus a kosínus je H = [D−|A|; D+|A|]. Pre tangens je H = ℝ a asymptoty určuje B(x−C) = π/2+kπ. Polohy extrémov zisti zo základného argumentu a pri zápornom A vymeň maximum s minimom."],
+["Nuly a konštantné prípady","Nulu hľadaj z f(B(x−C)) = −D/A a započítaj iba riešenia z pôvodného oboru. Ak B = 0 a vnútorná konštanta je v obore f, vznikne konštanta na ℝ, ktorá nemá najmenšiu kladnú periódu. Ak A = 0, predpis sa na pôvodnom obore zjednoduší na D; body s nedefinovaným tangensom zostávajú vylúčené. Na takomto dierkovanom obore má konštanta s B ≠ 0 najmenšiu kladnú periódu π/|B|."],
+["Náčrt cez body","Načrtni strednú čiaru y = D a vyznač charakteristické argumenty základnej funkcie. Pri sínuse a kosínuse pomáha päť bodov po štvrťperióde. Pri tangense najprv zakresli asymptoty."] ],
+example:{title:"Posunutý kosínus",prompt:"Funkcia je daná predpisom y = 2cos(3x − π) − 1. Urči najmenšiu kladnú periódu v radiánoch a zapíš interval všetkých hodnôt y. Potom nájdi súradnice jedného bodu grafu, v ktorom funkcia dosahuje najväčšiu hodnotu.",steps:["3x − π = 3(x − π/3). Vodorovný posun je π/3 doprava.","T = 2π/3. Stredná čiara je y = −1 a amplitúda 2, teda H = [−3; 1].","Maximum je pri argumente 0, napríklad v bode (π/3; 1). Ďalšie maximá sú posunuté o násobky periódy."]},
+trap:["Vo výraze sin(2x−π) posunieš graf o π.","Najprv vytkni 2. Argument sa rovná nule pri x = π/2, preto je posun π/2 doprava."],
+oral:["Porovnaj grafy funkcií y = sin(2x) a y = 2sin x na intervale [0; 2π). V oboch prípadoch počítaj nuly od 0 vrátane, ale bez 2π. Vysvetli, ako sa zmení graf pri násobení argumentu dvoma a pri násobení funkčnej hodnoty dvoma, a koľko nulových bodov preto vidíš na každom grafe.","sin(2x) vykoná dve periódy a má štyri nuly. Funkcia 2sin x vykoná jednu periódu a má dve nuly. Pravý koniec sa do intervalu nezapočítava."]
+}
+];
+chapters.push(
+{
+id:"rovnice",title:"Goniometrické rovnice",label:"VŠETKY KORENE",time:42,lab:"equation",
+goal:"Riešiť základné aj upravené rovnice, pracovať s kalkulačkou, počítať korene a overovať úplnosť.",
+lead:"Kalkulačka zvyčajne vráti jeden uhol. Kružnica a graf ti povedia, či existuje ďalšia vetva a ako sa riešenia opakujú.",
+concepts:[
+["Tri základné tvary","Pre |a| ≤ 1 nech α = arcsin a. Riešenia sin x = a sú α + 2kπ alebo π − α + 2kπ. Pre β = arccos a má cos x = a riešenia ±β + 2kπ. Pre γ = arctg a platí tg x = a práve pre x = γ + kπ. Všade k ∈ ℤ. Pri a = ±1 sa dve vetvy sínusu alebo kosínusu zlúčia; pri |a| > 1 tieto dve rovnice riešenie nemajú."],
+["Kalkulačka a chýbajúca funkcia","V RAD vypočítaš radiánový argument, v DEG stupňový. Ak máš k dispozícii arcsin, zvyšné dve funkcie prepočítaš cez arccos a = π/2 − arcsin a a arctg a = arcsin(a/√(1+a²)). Ak máš len arccos, použi arcsin a = π/2 − arccos a a potom vzťah pre arctg. Ak máš len arctg, pre |a| < 1 platí arcsin a = arctg(a/√(1−a²)); hodnoty ±1 rieš presne. Ak chýba priamo tangens, použi sin/cos. Inverzné funkcie dávajú hlavné hodnoty, nie všetky korene."],
+["Substitúcia a interval","Pri sin(ax+b) = c zaveď t = ax+b. Prenes interval, pri zápornom a sa krajné body vymenia aj s príslušnou otvorenosťou. Nájdi všetky t a vráť sa k x. Pri nelineárnom argumente, napr. cos(x²) = 1, najprv nájdi prípustné t = x², potom rieš x² = t a skontroluj oba korene."],
+["Rozklad, podmienky a skúška","Pri súčine nulových činiteľov zjednoť obe vetvy. Pri kvadratickej rovnici v sin x zaveď u = sin x a vyraď hodnoty mimo [−1; 1]. Pri tg x zapíš podmienky pred úpravou. Delenie možnou nulou môže stratiť korene. Umocnenie môže pridať cudzie korene, preto ich over. Rovnicu |sin x| = a pre a ≥ 0 rozdeľ na sin x = a a sin x = −a."],
+["Dve rôzne funkcie v jednej rovnici","Napríklad pri sin x = cos x najprv skontroluj cos x = 0. Vtedy má sínus hodnotu ±1, takže rovnica neplatí. Na zvyšnom obore môžeš deliť kosínusom a dostaneš tg x = 1, teda x = π/4 + kπ. Priesečníky grafov ukazujú, prečo riešenia ležia každú polotočku."] ],
+example:{title:"Druhá vetva po zmene argumentu",prompt:"Hľadaj všetky uhly x, pri ktorých je kosínus dvojnásobku uhla rovný jednej polovici, teda cos(2x) = 1/2. Uvažuj iba x z intervalu [0; 2π), v ktorom 0 patrí do intervalu a 2π doň nepatrí. Všetky riešenia zapíš presne v radiánoch.",steps:["Zaveď t = 2x. Nový interval je [0; 4π).","V jednej otočke dostaneš t = π/3 a t = 5π/3. Pridaj 2π k obom. Získaš ešte 7π/3 a 11π/3.","Vydeľ všetky hodnoty dvoma. S = {π/6; 5π/6; 7π/6; 11π/6}."]},
+trap:["Zapíšeš len hodnotu z kalkulačky alebo posunieš o 2π už po vydelení 2x.","Vyrieš celý argument. Ak prevádzaš všeobecný zápis späť na x, deľ aj periodický člen."],
+oral:["Spolužiak pri rovnici 2 sin x + tg x = 0 navrhuje vydeliť obe strany výrazom sin x. Vysvetli, ktoré hodnoty x treba vylúčiť kvôli tangensu, prečo by delenie mohlo stratiť platný koreň a ktorou úpravou sa tomu dá predísť.","Mohla by sa stratiť vetva sin x = 0. Najprv vylúč cos x = 0, potom prepíš tg a vyber sin x pred zátvorku."]
+},
+{
+id:"nerovnice",title:"Goniometrické nerovnice",label:"OBLÚKY A INTERVALY",time:35,lab:"inequality",
+goal:"Nájsť celé množiny riešení na intervale aj v ℝ. Rozlišovať hraničný bod, priesečník a asymptotu.",
+lead:"Rovnica hľadá body, v ktorých nastane rovnosť. Nerovnica hľadá celé časti grafu nad alebo pod hranicou.",
+concepts:[
+["Od hranice k oblúku","Pre sin x ≥ a kresli vodorovnú priamku y = a na jednotkovej kružnici. Vyber časť nad ňou. Pre cos x < a kresli zvislú priamku x = a a vyber ľavú časť. Over výber jedným skúšobným bodom."],
+["Zátvorky a zadanie","Pri ≤ alebo ≥ môže byť bod rovnosti zahrnutý, ak leží v zadanom intervale a definičnom obore. Pri < alebo > ho vylúč. Oblúk cez začiatok otočky môže dať dva intervaly. Pri riešení v ℝ posúvaj celé intervaly o príslušnú periódu."],
+["Tangens a asymptota","Na vetve (−π/2+kπ; π/2+kπ) tangens rastie. Preto tg x > a znamená x ∈ (arctg a+kπ; π/2+kπ). Pravý koniec je vždy otvorený. Pri ≥ uzavri hranicu rovnosti, nie asymptotu."],
+["Mimo oboru hodnôt a úpravy","Pre sin a cos sú hranice ±1. Napríklad cos x > 1 nemá riešenie, cos x ≤ 1 platí pre všetky x. Pri delení záporným číslom obráť smer nerovnosti. Ak násobíš výrazom s neznámym znamienkom, rozlíš prípady alebo zostroj tabuľku znamienok."],
+["Súčin, podiel a sústava","Pre sin x·cos x ≥ 0 na [0; 2π) vyhovujú I. a III. kvadrant aj hraničné body v zadanom intervale. Vyjde [0; π/2] ∪ [π; 3π/2]. Pri podiele sin x/cos x ≥ 0 vylúč body π/2 a 3π/2. Pri sústave sin x ≥ 0 a cos x ≥ 0 hľadaj prienik podmienok. Vyjde [0; π/2]."] ],
+example:{title:"Oblúk cez začiatok otočky",prompt:"Na jednotkovej kružnici hľadaj uhly, pri ktorých je vodorovná súradnica koncového bodu väčšia než √2/2, teda cos x > √2/2. Rieš iba na intervale [0; 2π). Zapíš všetky vyhovujúce uhly pomocou intervalov s presnými hranicami v radiánoch a rozhodni, ktoré krajné body do nich patria.",steps:["Hranice rovnosti sú π/4 a 7π/4. Na kružnici sleduj vodorovnú súradnicu.","Skús x = 0. Platí 1 > √2/2, takže hľadaný oblúk prechádza nulou.","S = [0; π/4) ∪ (7π/4; 2π). Nula patrí do riešenia. Pravý koniec 2π je v zadaní vylúčený."]},
+trap:["Správne nájdeš hraničné uhly, ale vyberieš opačný oblúk alebo uzavrieš asymptotu.","Skontroluj znamienko vo vnútri každého úseku a samostatne každý koniec."],
+oral:["Pre reálne číslo a medzi −1 a 1 porovnaj nerovnice cos x > a a cos x ≥ a na intervale [0; 2π). Vysvetli, ktoré uhly sa do množiny riešení pridajú pri prechode od ostrej nerovnosti k neostrej.","Pribudnú hraničné body, v ktorých cos x = a, ak patria do zadaného intervalu."]
+},
+{
+id:"vseobecny",title:"Všeobecný trojuholník",label:"SÍNUSOVÁ A KOSÍNUSOVÁ VETA",time:34,lab:"ssa",
+goal:"Vybrať vhodnú vetu podľa údajov, zistiť počet možných trojuholníkov a vypočítať stranu, uhol, obsah aj výšku.",
+lead:"V trojuholníku ABC leží strana a oproti uhlu α, strana b oproti β a strana c oproti γ. Správne spárovanie je dôležitejšie než poradie písmen vo vzorci.",
+concepts:[
+["Sínusová veta","a/sin α = b/sin β = c/sin γ. Použi ju, ak poznáš dvojicu strana a protiľahlý uhol. Pri dvoch stranách a uhle oproti jednej z nich môže existovať 0, 1 alebo 2 riešenia. Pre vypočítaný sínus uhla skontroluj aj jeho doplnok do 180° a súčet uhlov."],
+["Kosínusová veta","c² = a² + b² − 2ab cos γ. Použi ju pri dvoch stranách a uhle medzi nimi alebo pri troch stranách. Pri hľadaní uhla vyjadri cos γ a použi arccos v intervale (0°; 180°). Pre γ = 90° sa vzorec zmení na Pytagorovu vetu."],
+["Obsah, výška a kontrola","S = (ab sin γ)/2, kde γ leží medzi použitými stranami. Výška na stranu c je v_c = 2S/c. Skontroluj trojuholníkovú nerovnosť, súčet uhlov 180° a to, že oproti dlhšej strane leží väčší uhol. Zaokrúhľuj až na konci."],
+["Polomer opísanej kružnice","Rozšírená sínusová veta dáva a/sin α = 2R, kde R je polomer kružnice opísanej trojuholníku. Napríklad a = 10 cm a α = 30° dajú R = 10 cm. Platí aj pri tupom uhle, lebo uhly nad tou istou tetivou na opačných oblúkoch majú súčet 180° a rovnaký sínus."] ],
+example:{title:"Dve strany a uhol medzi nimi",prompt:"V trojuholníku ABC má strana a dĺžku 7 cm a strana b dĺžku 5 cm. Uhol γ medzi nimi meria 60°. Vypočítaj dĺžku strany c v centimetroch a obsah trojuholníka v štvorcových centimetroch. Oba výsledky zapíš presne aj približne na dve desatinné miesta.",steps:["Použi kosínusovú vetu. c² = 49 + 25 − 2·7·5·(1/2) = 39.","c = √39 cm ≈ 6,24 cm. Použi kladnú odmocninu, lebo počítaš dĺžku.","S = (7·5·sin 60°)/2 = 35√3/4 cm² ≈ 15,16 cm²."]},
+trap:["Pri vypočítanom sin β = 0,8 automaticky použiješ iba ostrý uhol.","V trojuholníku môže byť aj tupý uhol s rovnakým sínusom. Over 180° − β aj zostávajúci uhol."],
+oral:["V trojuholníku sú strany a a b odvesny a uhol γ medzi nimi je pravý. Ukáž, ako sa pri dosadení γ = 90° do kosínusovej vety pre stranu c zmení vzorec a ktorú známu vetu dostaneš.","Ak je uhol medzi stranami a a b pravý, cos γ = 0, takže c² = a² + b²."]
+},
+{
+id:"modely",title:"Maturitné aplikácie a argumentácia",label:"MODEL A INTERPRETÁCIA",time:38,lab:"model",
+goal:"Rozpoznať vhodný trojuholník či periodický model, presne zapísať výsledok a slovne zdôvodniť postup.",
+lead:"V zadaní nemusí byť napísané slovo sínus. Rozhodujú údaje a to, čo treba nájsť. Najprv si vyznač uhol alebo urči, ktorá veličina sa opakuje.",
+concepts:[
+["Výšky, dotyčnice a priestor","Uhol stúpania meraj od vodorovného smeru. Pri dotyčnici je polomer v bode dotyku kolmý na dotyčnicu. Uhol priamky s rovinou je uhol priamky s jej kolmým priemetom do roviny. V kvádri použiješ výšku a uhlopriečku podstavy."],
+["Periodický model","Pri pravidelnom otáčaní opisuj výšku funkciou h(t) = D + A cos(2πt/T + φ) alebo sínusom. T je čas jedného cyklu, D je výška stredu, |A| je najväčšia odchýlka od stredu. Začiatočná poloha určí fázu φ. Riešenie nerovnice potom prelož späť na čas."],
+["Presnosť a forma odpovede","Pri krátkej odpovedi rozlíš presný výsledok, približnú hodnotu, jednotku a počet koreňov. Použi správny režim kalkulačky a nezaokrúhľuj medzivýsledky. Pri ústnom vysvetlení uveď model, podmienky, zdôvodnenie aj kontrolu výsledku."],
+["Kužeľ a jeho osový rez","Rež kužeľ rovinou cez os. Dostaneš rovnoramenný trojuholník a po rozdelení osou pravouhlý trojuholník s odvesnami r a v a preponou s. Pre polovičný vrcholový uhol α platí tg α = r/v. Napríklad pri r = v je α = 45° a celý vrcholový uhol 90°."] ],
+example:{title:"Uhlopriečka kvádra",prompt:"Podstava kvádra je vodorovný obdĺžnik s rozmermi 6 m a 8 m. Zvislá hrana kvádra má dĺžku 10 m. Telesová uhlopriečka vedie z jedného vrcholu podstavy do protiľahlého vrcholu hornej steny. Vypočítaj ostrý uhol, ktorý táto uhlopriečka zviera s rovinou podstavy, a vyjadri ho v stupňoch.",steps:["Kolmý priemet telesovej uhlopriečky je uhlopriečka podstavy, d = √(6²+8²) = 10 m.","S výškou 10 m tvorí pravouhlý trojuholník. Tangens hľadaného uhla je 10/10 = 1.","α = 45°. Výsledok kontroluje aj rovnosť oboch odvesien."]},
+trap:["Za uhol priamky s rovinou vezmeš uhol priamky so zvislicou.","Nájdi kolmý priemet priamky do roviny. Uhol so zvislicou je v tomto pravouhlom trojuholníku doplnkový."],
+oral:["Stred vyhliadkového kolesa je 16 m nad zemou, polomer je 12 m a jedna rovnomerná otáčka trvá 40 sekúnd. Na začiatku merania je kabínka v najvyššej polohe. Navrhni predpis jej výšky h(t) v metroch pre čas t v sekundách. Over predpis na začiatku, po polovici otáčky a po celej otáčke.","h(t) = 16 + 12 cos(πt/20). Pri t = 0 je výška 28 m, pri t = 20 s je 4 m a pri t = 40 s opäť 28 m."]
+}
+);
+"use strict";
+const C=(prompt,options,correct,why,errors={})=>({type:"choice",prompt,options,correct,why,errors});
+const N=(prompt,value,answer,why,format="exact",tol=1e-8)=>({type:"number",prompt,value,answer,why,format,tol});
+const M=(prompt,options,correct,why)=>({type:"many",prompt,options,correct,why});
+const O=(prompt,options,why)=>({type:"order",prompt,options,correct:options.map((_,i)=>i),why});
+const Q={
+trojuholnik:{practice:[
+C("V pravouhlom trojuholníku označíme jeden z ostrých uhlov písmenom α. Odvesna oproti tomuto uhlu má dĺžku 5 cm a prepona má dĺžku 13 cm. Vyber rovnosť, ktorú možno zapísať priamo z týchto dvoch údajov, bez výpočtu druhej odvesny.",["cos α = 5/13","sin α = 5/13","tg α = 5/13","sin α = 13/5"],1,"Sínus používa protiľahlú odvesnu a preponu.",{0:"Kosínus potrebuje priľahlú odvesnu.",2:"Tangens nepoužíva preponu.",3:"Odvesna je kratšia než prepona, takže sínus ostrého uhla nepresiahne 1."}),
+N("Odvesny pravouhlého trojuholníka merajú 9 cm a 12 cm. Uhol α leží oproti kratšej odvesne, takže dlhšia odvesna je pri ňom priľahlá. Vypočítaj hodnotu tg α a zapíš ju ako číslo alebo zlomok.",.75,"3/4","tg α = 9/12 = 3/4.")
+],test:[
+C("V pravouhlom trojuholníku meria odvesna oproti ostrému uhlu α 8 cm, odvesna pri tomto uhle meria 15 cm a prepona 17 cm. Zo zadaných dĺžok urči hodnotu cos α a vyber správny zlomok.",["8/17","15/8","17/15","15/17","8/15"],3,"Kosínus je priľahlá odvesna delená preponou."),
+N("Priama rampa vedie od vodorovného chodníka k vyvýšenému vchodu. Meria 12 m po šikmej ploche a s chodníkom zviera uhol 30°. Vypočítaj zvislý výškový rozdiel medzi dolným a horným koncom rampy a uveď ho v metroch.",6,"6","h = 12·sin 30° = 6 m."),
+N("V pravouhlom trojuholníku meriame ostrý uhol α. Odvesna oproti tomuto uhlu má dĺžku 8 cm a odvesna pri ňom má dĺžku 11 cm. Vypočítaj veľkosť uhla α v stupňoch a výsledok zaokrúhli na dve desatinné miesta.",36.03,"36,03","α = arctg(8/11) ≈ 36,03° v režime DEG.","decimal",.00001),
+M("Pravouhlý trojuholník má ostré uhly α a β. Oba uhly patria tomu istému trojuholníku, takže ich súčet je 90°. Označ všetky rovnosti, ktoré platia pri ľubovoľnom takomto trojuholníku.",["sin α = cos β","tg α = tg β vždy","cos α = sin β","sin α + sin β = 1 vždy"],[0,2],"Platí β = 90° − α. Doplnkové uhly si vymenia úlohy odvesien."),
+O("Priamy rebrík je opretý o zvislú stenu a jeho spodný koniec stojí na vodorovnej zemi. Poznáš dĺžku rebríka a ostrý uhol, ktorý rebrík zviera so zemou. Zoraď uvedené kroky od náčrtu situácie po výpočet výšky, v ktorej sa rebrík dotýka steny.",["Označ uhol pri zemi a pravý uhol pri stene.","Urči, že rebrík je prepona a výška protiľahlá odvesna.","Zapíš sínus ako podiel výšky a dĺžky rebríka.","Vyjadri výšku, dosaď a skontroluj jednotku."],"Označenie strán musí predchádzať výberu pomeru.")
+]},
+uhly:{practice:[
+N("Otáčavé rameno sa otočí o 210° v kladnom smere. Vyjadri veľkosť tohto otočenia v radiánoch a výsledok zapíš presne pomocou π.",7*Math.PI/6,"7π/6","Vynásob 210 číslom π/180 a skráť zlomok."),
+C("Z kladnej vodorovnej polosi sa rameno otočí o −π/3 radiánu, teda v smere hodinových ručičiek. Vyber kladný uhol menší ako 2π, po ktorého odmeraní z rovnakej polohy bude rameno smerovať k tomu istému bodu kružnice.",["π/3","2π/3","4π/3","5π/3"],3,"Pripočítaj celú otočku. −π/3 + 2π = 5π/3.",{0:"Zmena znamienka zrkadlí bod podľa osi x, spravidla ho nezachová."})
+],test:[
+N("Uhol je zadaný v stupňovej miere a jeho veľkosť je 135°. Vyjadri ten istý uhol v radiánoch a výsledok zapíš presne pomocou π.",3*Math.PI/4,"3π/4","135·π/180 = 3π/4."),
+N("Rameno sa z počiatočnej polohy otočilo o 11π/6 radiánu proti smeru hodinových ručičiek. Vyjadri veľkosť toho istého otočenia v stupňoch a zapíš počet stupňov.",330,"330","Vynásob 11π/6 číslom 180/π."),
+N("Rameno začína na kladnej vodorovnej polosi a otočí sa o −17π/6 radiánu. Nájdi jediný uhol v intervale [0; 2π), ktorý z rovnakej východiskovej polohy vedie na to isté koncové rameno. Výsledok zapíš presne v radiánoch.",7*Math.PI/6,"7π/6","Pripočítaj 4π = 24π/6. Výsledok patrí do [0; 2π)."),
+N("Kružnica má polomer 9 cm. Dva polomery vyznačia oblúk dlhý 6 cm. Vypočítaj veľkosť stredového uhla, ktorý patrí k tomuto oblúku, a uveď ju v radiánoch.",2/3,"2/3","α = s/r = 6/9 = 2/3."),
+C("Na kružnici s polomerom 5 cm vyznačíme oblúk medzi dvoma polomermi. Potom zakreslíme tie isté smery polomerov na kružnicu s polomerom 15 cm a vyznačíme zodpovedajúci oblúk. Vyber tvrdenie, ktoré správne porovnáva dĺžky oboch oblúkov aj radiánové miery ich stredových uhlov.",["Obe sa strojnásobia.","Oblúk sa strojnásobí, miera ostane rovnaká.","Obe ostanú rovnaké.","Oblúk ostane rovnaký, miera sa zmenší.","Oblúk sa zmenší, miera ostane rovnaká."],1,"s = r·α pre kladný uhol. Pri pevnom α je s priamo úmerné r.")
+]},
+kruznica:{practice:[
+C("Na jednotkovej kružnici meriame uhol od kladnej vodorovnej polosi proti smeru hodinových ručičiek. Rameno uhla 2π/3 pretína kružnicu v bode P. Vyber dvojicu súradníc bodu P v poradí vodorovná a zvislá.",["(−1/2; √3/2)","(√3/2; −1/2)","(1/2; √3/2)","(−√3/2; 1/2)"],0,"Uhol 120° leží v II. kvadrante. Vodorovná súradnica je cos x.",{1:"Prvá súradnica bodu je kosínus, druhá sínus.",2:"Kosínus je v II. kvadrante záporný.",3:"Referenčný uhol je π/3, pri ktorom je kosínus 1/2."}),
+N("Na jednotkovej kružnici odmeriame od kladnej vodorovnej polosi uhol 3π/4 radiánu. Vypočítaj tangens tohto uhla a zapíš jeho presnú hodnotu.",-1,"−1","V II. kvadrante je sínus √2/2 a kosínus −√2/2.")
+],test:[
+N("Na jednotkovej kružnici odmeriame od kladnej vodorovnej polosi uhol 5π/6 radiánu. Urči presnú hodnotu sínusu tohto uhla a uveď aj správne znamienko.",.5,"1/2","Uhol má referenčný uhol π/6. Sínus je v II. kvadrante kladný."),
+N("Na jednotkovej kružnici odmeriame od kladnej vodorovnej polosi uhol 7π/4 radiánu. Urči presnú hodnotu kosínusu tohto uhla a zapíš ju s odmocninou.",Math.SQRT1_2,"√2/2","Referenčný uhol je π/4 a vodorovná súradnica je v IV. kvadrante kladná."),
+C("Koncové rameno uhla x pretína jednotkovú kružnicu vo vnútri tretieho kvadrantu, teda naľavo od zvislej osi a pod vodorovnou osou. Vyber správnu trojicu znamienok v poradí sin x, cos x a tg x.",["−, +, −","+,+,+","−, −, +","+ , −, −","−, −, −"],2,"Obe súradnice sú záporné, preto je ich podiel kladný."),
+C("V možnostiach je päť výrazov so sínusom, kosínusom alebo tangensom. Pri každom si predstav bod jednotkovej kružnice prislúchajúci zadanému uhlu. Vyber jediný výraz, ktorý pri svojom argumente nie je definovaný.",["cos π","sin(π/2)","tg π","tg(3π/2)","cos 0"],3,"V 3π/2 je cos x = 0, a preto tg x neexistuje."),
+N("Na jednotkovej kružnici odmeriame od kladnej vodorovnej polosi uhol π/3 radiánu. Vypočítaj tangens tohto uhla a jeho presnú hodnotu zapíš pomocou odmocniny.",Math.sqrt(3),"√3","tg(π/3) = (√3/2)/(1/2) = √3.")
+]},
+vztahy:{practice:[
+N("Koncové rameno uhla x smeruje do druhého kvadrantu. Vieme, že sin x = 5/13. Urči presnú hodnotu cos x vrátane znamienka.",-12/13,"−12/13","Z identity získaš cos²x = 144/169. V II. kvadrante je cos x záporný."),
+C("Porovnaj zlomok (1−cos²x)/sin x s výrazom sin x. Vyber najväčšiu množinu reálnych čísel x, pre ktoré má pôvodný zlomok zmysel a oba výrazy sú si rovné. V možnostiach označuje k ľubovoľné celé číslo.",["Na ℝ.","Na ℝ bez bodov kπ.","Na ℝ bez bodov π/2+kπ.","Iba pre x = 0."],1,"Pôvodný menovateľ je sin x. Nuly kπ sú vylúčené aj po úprave.",{0:"Vykrátením výrazu sa jeho pôvodný definičný obor nerozšíri."})
+],test:[
+C("Chceme prepísať cos(2x) pomocou výrazu s jednoduchším argumentom. Vyber možnosť, ktorá má rovnakú hodnotu ako cos(2x) pre každé reálne číslo x.",["2cos x","1−2cos²x","2cos²x−1","cos²x","2sin x cos x"],2,"Použi cos²x−sin²x a sin²x = 1−cos²x."),
+N("Pre ten istý uhol x platí sin x = 3/5 a cos x = −4/5. Z týchto dvoch údajov vypočítaj presnú hodnotu sínusu dvojnásobného uhla, teda sin(2x).",-24/25,"−24/25","Dvojnásobný uhol vyžaduje 2·sin x·cos x."),
+C("Od pravého uhla π/2 odčítame reálne číslo x a vypočítame sínus výsledku. Vyber výraz, ktorý sa rovná sin(π/2 − x) pre každé reálne číslo x.",["−cos x","sin x","1−sin x","cos x","−sin x"],3,"Doplnkové uhly si na jednotkovej kružnici vymenia súradnice."),
+M("Každá z ponúknutých rovností porovnáva dva goniometrické výrazy. Označ všetky rovnosti, ktoré platia pre každé x zo spoločného definičného oboru oboch strán. Rovnosť platná iba pri niektorých uhloch nestačí.",["cos(−x) = cos x","tg(−x) = tg x","sin(x+π) = −sin x","sin²x = sin(2x)","tg(x+π) = tg x"],[0,2,4],"Kosínus je párny. Polotočka zmení znamienka oboch súradníc, ich podiel ostáva rovnaký."),
+N("Pre uhol x je známa hodnota cos x = 1/4, no veľkosť samotného uhla nepoznáme. Urči presnú hodnotu cos(2x), teda kosínusu dvojnásobného uhla.",-.875,"−7/8","cos(2x) = 2·(1/4)² − 1 = −7/8. Kvadrant netreba poznať.")
+]},
+grafy:{practice:[
+C("Spolužiak tvrdí, že posunutie argumentu o π nemení hodnotu sínusu, a preto je π jeho periódou. Vyber výpočet alebo tvrdenie, ktoré jeho záver skutočne vyvracia.",["sin 0 = sin π","sin(π/2) = 1, ale sin(3π/2) = −1","Sínus má dve nuly za otočku.","π je kladné číslo."],1,"Na vyvrátenie stačí jeden bod, kde sa hodnota po posune o π zmení."),
+C("Uvažuj funkciu f(x) = tg x. Vyber interval, na ktorom hodnoty tejto funkcie nemožno zhora ohraničiť žiadnym konečným číslom. Konce intervalov posudzuj podľa uvedených zátvoriek.",["[0; π/4]","[−π/4; π/4]","[0; π/2)","[π; 5π/4]"],2,"Pri x → π/2 zľava je cos x kladný a blíži sa k nule.")
+],test:[
+N("Hľadáme najkratší kladný posun argumentu, po ktorom sa graf funkcie y = tg x presne zopakuje. Urči najmenšiu kladnú periódu tangensu a zapíš ju presne v radiánoch.",Math.PI,"π","Polotočka zmení obom súradniciam znamienko, podiel je rovnaký."),
+C("Tangens nie je definovaný pri niektorých reálnych hodnotách argumentu x. Vyber všeobecný zápis všetkých hodnôt x, ktoré z definičného oboru tg x treba vylúčiť. V možnostiach označuje k ľubovoľné celé číslo.",["kπ","2kπ","π/2 + kπ","π/4 + kπ","Žiadne"],2,"Tangens nie je definovaný tam, kde cos x = 0."),
+C("Na grafe funkcie y = cos x sledujeme, či pri zväčšovaní argumentu x hodnota funkcie rastie. Vyber interval, na ktorom je kosínus rastúci po celom uvedenom intervale.",["[0; π]","[π; 2π]","[0; 2π]","[−π/2; π/2]","[2π; 3π]"],1,"Od minima pri π rastie až po maximum pri 2π."),
+M("Posudzuj základnú funkciu y = sin x na jej prirodzenom definičnom obore. Označ všetky tvrdenia, ktoré správne opisujú jej obor hodnôt, súmernosť, nulové body, maximum alebo monotónnosť. Písmeno k znamená ľubovoľné celé číslo.",["Jeho obor hodnôt je [−1; 1].","Je párny.","Má nuly kπ.","V π/2 má maximum.","Je rastúci na celom ℝ."],[0,2,3],"Sínus je nepárny a monotónnosť sa strieda."),
+C("Uvažuj základnú funkciu y = tg x. Niektoré výroky opisujú celú funkciu, iné iba jej správanie na uvedenom intervale. Vyber jediný správny výrok o definičnom obore, ohraničenosti alebo monotónnosti tangensu.",["Na ℝ je definovaný všade.","Na [0; π/3] je neohraničený.","Na [0; π/2) je zhora neohraničený.","Na celom definičnom obore je rastúci.","Na [0; π/3] je klesajúci."],2,"Ohraničenosť sa mení podľa toho, či sa interval približuje k asymptote.")
+]},
+posuny:{practice:[
+C("Porovnaj graf funkcie y = sin x s grafom y = sin(3x). Číslo 3 je vo vnútri argumentu sínusu. Vyber správne tvrdenie o tom, ako sa po tejto zmene správa graf.",["Perióda sa skráti na tretinu.","Amplitúda sa strojnásobí.","Graf sa posunie o 3 doprava.","Obor hodnôt je [−3; 3]."],0,"Násobenie argumentu zrýchľuje priebeh v smere osi x."),
+N("Funkciu y = cos(4x−π) môžeš dostať vodorovným posunutím grafu y = cos(4x) doprava. Vypočítaj veľkosť tohto posunu a zapíš ju presne v radiánoch.",Math.PI/4,"π/4","4x−π = 4(x−π/4).")
+],test:[
+N("Je daná funkcia f(x) = 4 tg(2x−1) + 2. Urči najmenší kladný posun po osi x, po ktorom sa zopakuje celý jej graf vrátane polohy výluk. Výsledok zapíš presne v radiánoch.",Math.PI/2,"π/2","Pre tangens je T₀ = π a |B| = 2."),
+C("Funkcia je daná predpisom g(x) = −3sin(2x)+4 pre všetky reálne x. Vyber interval, ktorý obsahuje práve všetky hodnoty g(x), od najmenšej po najväčšiu vrátane.",["[−3; 3]","[−7; −1]","[1; 7]","[2; 6]","ℝ"],2,"Stredná čiara je 4, amplitúda je |−3| = 3."),
+N("Na grafe y = sin(3x) sleduj iba časť s argumentom x v intervale [0; 2π). Ľavý koniec 0 započítaj, ak leží na osi x, a pravý koniec 2π vynechaj. Uveď počet bodov, v ktorých táto časť grafu pretína os x.",6,"6","3x prejde tromi otočkami. Každá má dve nuly v intervale s vylúčeným pravým koncom."),
+C("Graf funkcie f(x) = 2tg(x−π/4) má zvislé asymptoty. Vyber rovnicu, ktorá opisuje polohy všetkých týchto priamok, pričom k je ľubovoľné celé číslo.",["x = π/4+kπ","x = π/2+kπ","x = 3π/4+kπ","x = kπ","x = π/4+2kπ"],2,"Argument x−π/4 sa rovná π/2+kπ."),
+C("Uvažuj graf funkcie y = −2cos(x−π/2)+3. Vyber bod, v ktorom táto funkcia nadobúda najmenšiu hodnotu. V každej dvojici je prvá súradnica argument x a druhá hodnota y.",["(π/2; 1)","(π/2; 5)","(0; 1)","(π; 5)","(3π/2; 1)"],0,"Najmenší výstup nastane pri cos(x−π/2) = 1. Záporný koeficient obracia extrémy.")
+]}
+};
+Object.assign(Q,{
+rovnice:{practice:[
+C("Rieš rovnicu sin x = 1/2 pre všetky reálne x. Vyber zápis, ktorý zahŕňa všetky riešenia a žiadne navyše. V možnostiach je k ľubovoľné celé číslo a uhly sú v radiánoch.",["x = π/6 + 2kπ","x = π/6 + kπ","x = π/6 + 2kπ alebo x = 5π/6 + 2kπ","x = ±π/6 + 2kπ"],2,"Na kružnici sú dva body s rovnakou zvislou súradnicou.",{0:"Na jednej otočke ešte chýba druhý kvadrant.",1:"Pripočítanie π zmení sínus na opačné znamienko.",3:"Záporný uhol −π/6 má sínus −1/2."}),
+N("Hľadáme hodnoty x, pre ktoré platí sin(2x) = 0 a zároveň x patrí do uzavretého intervalu [0; 2π]. Do počtu zahrň každý koniec intervalu, ktorý je riešením. Zapíš počet rôznych riešení.",5,"5","Riešenia sú 0, π/2, π, 3π/2 a 2π. Tento interval obsahuje oba konce.")
+],test:[
+N("Rovnica sin(2x) = 1/2 má v otvorenom intervale (0; π/2) presne dva korene. Jeden z nich je x = π/12. Vypočítaj druhý koreň a zapíš jeho hodnotu v radiánoch ako desatinné číslo zaokrúhlené na stotiny.",1.31,"1,31","Pre t = 2x v (0; π) je druhý koreň t = 5π/6. Preto x = 5π/12 ≈ 1,31.","decimal",.00001),
+N("Uvažuj rovnicu sin(2x) − sin x = 0. Hľadaj jej korene iba v intervale [0; 2π), teda od 0 vrátane po 2π bez pravého konca. Zapíš počet rôznych koreňov, ktoré patria do tohto intervalu.",4,"4","Rozlož na sin x·(2cos x−1) = 0. Dostaneš 0, π, π/3 a 5π/3."),
+C("Rieš rovnicu tg(3x) = 1 pre reálne x. Vyber všeobecný zápis všetkých riešení v radiánoch. V každej možnosti môže k nadobúdať ľubovoľnú celočíselnú hodnotu.",["π/4+kπ","π/12+kπ","π/12+kπ/3","±π/12+2kπ/3","π/4+kπ/3"],2,"Najprv 3x = π/4+kπ. Celú pravú stranu vydeľ tromi."),
+C("Na jednej otočke hľadáme riešenia rovnice 2sin²x − 3sin x + 1 = 0, kde sin²x označuje druhú mocninu hodnoty sin x. Uvažuj iba x z intervalu [0; 2π) a vyber množinu všetkých jeho riešení.",["{π/6; 5π/6}","{π/2}","{π/6; π/2; 5π/6}","{π/6; π/2; 5π/6; 3π/2}","∅"],2,"Substitúcia u = sin x dá (2u−1)(u−1)=0. Hodnoty 1/2 a 1 vedú na tri rôzne body."),
+C("Pri riešení rovnice 3sin x − tg x = 0 chceme najprv určiť prípustné hodnoty x a potom rovnicu upraviť tak, aby sme nestratili žiadny koreň. Vyber postup, ktorý spĺňa obe podmienky.",["Vydelím sin x bez podmienky.","Vylúčim cos x = 0 a vytknem sin x po prepísaní tg x.","Vylúčim sin x = 0.","Vynásobím sin x a odmocním.","Použijem najmenšiu periódu π pre oba členy."],1,"Tangens vyžaduje cos x ≠ 0. Vytknutie zachová aj vetvu sin x = 0.")
+]},
+nerovnice:{practice:[
+C("Chceme na jednotkovej kružnici znázorniť všetky uhly x, pre ktoré platí sin x < −1/2. Najprv treba nakresliť priamku oddeľujúcu body s hodnotami väčšími a menšími než −1/2. Vyber priamku, ktorú treba zakresliť, pričom x a y v možnostiach označujú vodorovnú a zvislú súradnicu.",["Vyznač zvislú priamku s x = −1/2.","Vyznač vodorovnú priamku s y = −1/2.","Označ iba bod v I. kvadrante.","Označ asymptotu."],1,"Sínus je zvislá súradnica, preto hranicu predstavuje vodorovná priamka."),
+C("Uvažuj nerovnicu tg x ≥ 1 iba na hlavnej vetve tangensu, teda pre x z intervalu (−π/2; π/2). Vyber interval všetkých vyhovujúcich hodnôt x. Skontroluj, ktoré konce doň patria.",["(π/4; π/2]","[π/4; π/2)","[π/4; π/2]","(−π/2; π/4]"],1,"Hranica rovnosti patrí do riešenia, asymptota nie.")
+],test:[
+C("Nájdi všetky hodnoty x z intervalu [0; 2π), pri ktorých je sínus aspoň 1/2. Vyber presný interval alebo množinu riešení nerovnice sin x ≥ 1/2 a venuj pozornosť aj bodom rovnosti.",["(π/6; 5π/6)","[π/6; 5π/6]","[0; π/6] ∪ [5π/6; 2π)","[7π/6; 11π/6]","{π/6; 5π/6}"],1,"Vyber horný oblúk nad y = 1/2 aj s hraničnými bodmi."),
+C("Na jednej otočke s x v intervale [0; 2π) hľadáme uhly, ktorých kosínus je menší alebo rovný číslu −√2/2. Vyber množinu všetkých riešení v radiánoch a rozhodni aj o oboch hraničných bodoch.",["[π/4; 7π/4]","[3π/4; 5π/4]","(3π/4; 5π/4)","[π/4; 3π/4]","[5π/4; 7π/4]"],1,"Vodorovná súradnica je najviac −√2/2 na ľavom oblúku vrátane hraníc."),
+C("Hľadáme všetky reálne hodnoty x, pre ktoré je tg x definovaný a záporný. Vyber zápis, ktorý zachytáva riešenia nerovnice tg x < 0 na všetkých vetvách. Písmeno k označuje ľubovoľné celé číslo.",["(−π/2+kπ; kπ), k ∈ ℤ","[−π/2+kπ; kπ], k ∈ ℤ","(kπ; π/2+kπ), k ∈ ℤ","(−π/2; 0)","(−π+kπ; kπ), k ∈ ℤ"],0,"Na každej vetve je tangens záporný naľavo od nuly. Asymptota aj bod rovnosti sú vylúčené."),
+C("Rieš nerovnicu −2sin x > 1 pre x z intervalu [0; 2π). Vyber množinu všetkých riešení a rozlíš, či do nej patria body, v ktorých je výraz −2sin x presne rovný 1.",["(π/6; 5π/6)","[7π/6; 11π/6]","(7π/6; 11π/6)","[0; 7π/6) ∪ (11π/6; 2π)","∅"],2,"Delenie číslom −2 obráti znamienko. Riešiš sin x < −1/2."),
+M("V každej možnosti je nerovnosť so sínusom alebo kosínusom. Označ všetky nerovnosti, ktoré platia pri každom reálnom čísle x. Nerovnosť nevyber, ak zlyhá čo i len pri jednom uhle.",["sin x ≤ 1","cos x > −1","sin x ≥ −1","cos x < 1","cos x ≤ 2"],[0,2,4],"Sínus aj kosínus nadobúdajú obe hraničné hodnoty ±1.")
+]},
+vseobecny:{practice:[
+C("Pri meraní trojuholníkového pozemku poznáme dĺžky dvoch jeho strán a veľkosť vnútorného uhla medzi nimi. O tretej strane ani o ostatných uhloch nemáme žiadny údaj. Vyber vetu, pomocou ktorej možno priamo vypočítať tretiu stranu.",["Pytagorovou vetou vždy","Sínusovou vetou bez ďalších údajov","Kosínusovou vetou","Z obsahu bez ďalších údajov"],2,"Kosínusová veta potrebuje práve dve strany a ich vnútorný uhol."),
+N("Dve strany trojuholníka majú dĺžky 6 cm a 8 cm. Vnútorný uhol medzi týmito stranami má 30°. Vypočítaj obsah celého trojuholníka a uveď ho v štvorcových centimetroch.",12,"12","S = (6·8·sin 30°)/2 = 12 cm².")
+],test:[
+N("V trojuholníku ABC majú strany a a b dĺžky 5 cm a 7 cm. Uhol γ medzi týmito stranami meria 60°. Vypočítaj dĺžku protiľahlej strany c a zapíš jej presnú hodnotu v centimetroch pomocou odmocniny.",Math.sqrt(39),"√39","c² = 25+49−2·5·7·1/2 = 39."),
+N("V trojuholníku ABC je uhol α pri vrchole A rovný 30° a uhol β pri vrchole B rovný 45°. Strana a oproti uhlu α meria 10 cm. Vypočítaj dĺžku strany b oproti uhlu β a zapíš presný výsledok v centimetroch pomocou odmocniny.",10*Math.sqrt(2),"10√2","b = a·sin β/sin α = 10·(√2/2)/(1/2)."),
+N("Chceme zostrojiť trojuholník ABC, v ktorom má strana a oproti uhlu α dĺžku 8 cm, strana b má dĺžku 10 cm a uhol α má 30°. Urči, koľko navzájom nezhodných trojuholníkov spĺňa tieto údaje. Kópie, ktoré sa dajú prekryť posunutím, otočením alebo zrkadlením, rátaj iba raz.",2,"2","sin β = (10/8)·1/2 = 5/8. Ostré β ≈ 38,68° aj tupé β ≈ 141,32° dávajú kladný tretí uhol."),
+C("V trojuholníku ABC majú strany a a b dĺžky 4 cm a 6 cm a uhol γ medzi nimi meria 120°. Chceme vypočítať druhú mocninu dĺžky strany c. Vyber zápis, ktorý vznikne správnym dosadením zadaných údajov do kosínusovej vety.",["16+36−24","16+36+24","16+36−48","16+36","16+36+48"],1,"cos 120° = −1/2. Člen −2·4·6·(−1/2) je +24."),
+N("Dve strany trojuholníka merajú 10 cm a 12 cm a uhol medzi nimi je 30°. Ako základňu zvoľ stranu dlhú 12 cm. Vypočítaj výšku kolmú na túto základňu a uveď ju v centimetroch.",5,"5","S = 10·12·sin 30°/2 = 30 cm². Výška v = 2S/12 = 5 cm.")
+]},
+modely:{practice:[
+C("Telesová uhlopriečka kvádra vedie z jedného vrcholu dolnej obdĺžnikovej podstavy do protiľahlého vrcholu hornej podstavy. Oba konce premietneme kolmo do roviny dolnej podstavy. Vyber úsečku, ktorú v tejto rovine dostaneme.",["Výška kvádra","Uhlopriečka podstavy","Krátka hrana podstavy vždy","Stenová uhlopriečka zvislej steny"],1,"Pri premietaní sa zmení iba zvislá súradnica koncového bodu."),
+N("Kabínka vyhliadkového kolesa sa pravidelne pohybuje medzi výškami 3 m a 27 m nad zemou. Amplitúda je najväčšia odchýlka výšky od strednej úrovne. Vypočítaj amplitúdu a uveď ju v metroch.",12,"12","Amplitúda je polovica rozdielu extrémnych výšok, teda (27−3)/2.")
+],test:[
+N("Dolná podstava kvádra je obdĺžnik so stranami 9 cm a 12 cm. Zvislá hrana kvádra má 15 cm. Telesová uhlopriečka vedie z dolného vrcholu do protiľahlého horného vrcholu. Vypočítaj ostrý uhol medzi uhlopriečkou a rovinou dolnej podstavy a uveď ho v stupňoch.",45,"45","Uhlopriečka podstavy je 15 cm. Tangens uhla je výška delená priemetom, čiže 1."),
+N("Kabínka vyhliadkového kolesa je v najnižšej polohe 2 m a v najvyššej 26 m nad zemou. Koleso sa otáča rovnomerne a jedna otáčka trvá 32 sekúnd. Meranie začína v najvyššej polohe kabínky. Vypočítaj jej výšku nad zemou po 8 sekundách a uveď ju v metroch.",14,"14","Po štvrtine periódy je sedadlo na úrovni stredu, teda (2+26)/2."),
+C("Stred vyhliadkového kolesa je 15 m nad zemou a koleso má polomer 10 m. Jedna rovnomerná otáčka trvá 20 sekúnd. V čase t = 0 je kabínka v najnižšom bode. Vyber predpis pre výšku h(t) v metroch, keď t vyjadruje čas v sekundách.",["h(t)=15+10cos(πt/10)","h(t)=15−10cos(πt/10)","h(t)=10−15cos(πt/10)","h(t)=15−10cos(20t)","h(t)=15+10sin(πt/10)"],1,"Koeficient pri t je 2π/20 a pri t = 0 musí vyjsť najnižšia výška 5 m."),
+N("Kružnica má polomer 5 cm. Bod M leží mimo nej, 10 cm od stredu. Z bodu M vedieme obe dotyčnice ku kružnici. Vypočítaj menší uhol, ktorý tieto dotyčnice zvierajú pri bode M, a uveď ho v stupňoch.",60,"60","Polomer je kolmý na dotyčnicu. Polovica uhla pri M má sínus 5/10, takže je 30°. Celý uhol je 60°."),
+O("Priama horská cesta stúpa z dolnej stanice k hornej. Poznáš vodorovnú vzdialenosť medzi stanicami a uhol, ktorý cesta zviera s vodorovným smerom. Chceš určiť zvislý výškový rozdiel. Zoraď uvedené kroky tak, aby vznikol zrozumiteľný postup od náčrtu až po kontrolu výsledku.",["Nakresli situáciu a označ uhol od vodorovného smeru.","Priraď známe a neznáme dĺžky stranám vhodného trojuholníka.","Zvoľ goniometrický pomer, zostav rovnicu a vypočítaj neznámu.","Skontroluj, či výsledok zodpovedá zadaniu, a doplň jednotku."],"Voľba pomeru vyplýva z údajov a polohy uhla.")
+]}
+});
+const esc = value => String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+const PI = Math.PI;
+const circleTicks = [0,2,3,4,6,8,9,10,12,14,15,16,18,20,21,22,24];
+const dec = (n,d=3) => Number(n.toFixed(d)).toLocaleString("sk-SK",{maximumFractionDigits:d});
+const gcd = (a,b) => b ? gcd(b,a%b) : a;
+function angleText(n) {
+  if (!n) return "0";
+  const g=gcd(Math.abs(n),12), p=Math.abs(n)/g, q=12/g;
+  return (n<0?"−":"")+(p===1?"":p)+"π"+(q===1?"":"/"+q);
+}
+function atom(s) {
+  const chars=s.match(/√\d+|\d+(?:[,.]\d+)?|./gu) || [];
+  return chars.map(c=> c.startsWith("√") ? '<msqrt><mn>'+esc(c.slice(1))+'</mn></msqrt>' :
+    /^\d/.test(c) ? '<mn>'+esc(c)+'</mn>' :
+    /^[πa-z]$/i.test(c) ? '<mi>'+esc(c)+'</mi>' : '<mo>'+esc(c)+'</mo>').join("");
+}
+function rich(s) {
+  const safe=esc(s);
+  return safe.replace(/(?:[−+-]?(?:(?:\d+)?(?:π|√\d+)|\d+))\s*\/\s*(?:\d+|√\d+)|(?:\d+)?√\d+/gu, match=>{
+    const parts=match.split("/").map(p=>p.trim());
+    const inner=parts.length===2 ? '<mfrac><mrow>'+atom(parts[0])+'</mrow><mrow>'+atom(parts[1])+'</mrow></mfrac>' : atom(parts[0]);
+    return '<math aria-label="'+esc(match)+'">'+inner+'</math>';
+  });
+}
+const labSvg = (w,h,label,inner) => '<svg viewBox="0 0 '+w+' '+h+'" role="img" aria-label="'+esc(label)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
+const line=(x,y,X,Y,c="#788ca1",w=1.4,d="")=>'<line x1="'+x+'" y1="'+y+'" x2="'+X+'" y2="'+Y+'" stroke="'+c+'" stroke-width="'+w+'"'+(d?' stroke-dasharray="'+d+'"':"")+'/>';
+const dot=(x,y,r=4,c="#1746cb",edge="")=>'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c+'"'+(edge?' stroke="'+edge+'" stroke-width="2.3"':"")+'/>';
+const svgText=(x,y,s,c="#21354a",size=13,anchor="middle")=>'<text x="'+x+'" y="'+y+'" text-anchor="'+anchor+'" fill="'+c+'" font-size="'+size+'" font-family="system-ui,sans-serif">'+esc(s)+'</text>';
+const path=(d,c,w=2.8,fill="none")=>'<path d="'+d+'" fill="'+fill+'" stroke="'+c+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round"/>';
+const colors={main:"#1746cb",other:"#137955",point:"#b93464",light:"#dfe7f2",axis:"#63788f"};
+const fn={sin:Math.sin,cos:Math.cos,tg:x=>Math.abs(Math.cos(x))<1e-10?NaN:Math.tan(x)};
+function graphLabel(x,y,n) {
+  const [a,b]=angleText(n).split("/");
+  return b ? svgText(x,y,a,colors.axis,10)+line(x-7,y+2,x+7,y+2,colors.axis,1)+svgText(x,y+13,b,colors.axis,10) : svgText(x,y+3,a,colors.axis,11);
+}
+function curve(f,lo,hi,X,Y,low,high) {
+  let d="",prev=null;
+  for(let i=0;i<=720;i++){
+    const x=lo+(hi-lo)*i/720, v=f(x);
+    if(!Number.isFinite(v)||v<low||v>high){prev=null;continue;}
+    d+=(prev===null||Math.abs(prev-v)>(high-low)*.47?"M":"L")+X(x).toFixed(2)+" "+Y(v).toFixed(2)+" ";
+    prev=v;
+  }
+  return d;
+}
+function plot({f,other,lo=0,hi=2*PI,unit=88,limit,asym=[],points=[],threshold,selected,showTicks=true,model=false,label="Graf funkcie"}){
+  const w=640,h=264, left=38,right=623,origin=model?215:132;
+  const X=x=>left+(x-lo)/(hi-lo)*(right-left), Y=y=>origin-unit*y;
+  const low=model?0:-(limit||109/unit), high=limit||(model?190/unit:109/unit);
+  let s=line(left,20,left,224,colors.axis)+line(left,Y(0),right,Y(0),colors.axis);
+  const step=model?Math.max(1,Math.ceil(high/5)):1;
+  for(let j=Math.ceil(low/step)*step;j<=high+1e-8;j+=step){
+    if(!j)continue;
+    s+=line(left,Y(j),right,Y(j),colors.light)+svgText(left-7,Y(j)+4,dec(j),colors.axis,11,"end");
+  }
+  const ticks=model?[0,1,2,3,4].map(i=>hi*i/4):circleTicks.map(n=>n*PI/12);
+  for(const x of ticks){
+    if(x<lo-1e-8||x>hi+1e-8)continue;
+    const dx=X(x), n=Math.round(x*12/PI);
+    s+=line(dx,21,dx,224,colors.light)+line(dx,Y(0)-3,dx,Y(0)+3,colors.axis,1);
+    if(showTicks)s+=model?svgText(dx,Y(0)+18,dec(x,1),colors.axis,11):graphLabel(dx,Y(0)+14+(n%3===0?0:16),n);
+  }
+  s+=svgText(14,23,model?"h":"y",colors.axis,13)+svgText(629,model?245:Y(0)-9,model?"t":"x",colors.axis,13);
+  for(const x of asym)if(x>=lo&&x<=hi)s+=line(X(x),21,X(x),223,colors.point,1.6,"5 5");
+  if(threshold!==undefined&&threshold>=low&&threshold<=high)s+=line(left,Y(threshold),right,Y(threshold),colors.point,1.8,"6 4");
+  if(other)s+=path(curve(other,lo,hi,X,Y,low,high),"#7d8b9d",1.8);
+  s+=path(curve(f,lo,hi,X,Y,low,high),colors.main);
+  if(selected!==undefined){
+    const x=X(selected),v=f(selected);
+    s+=line(x,22,x,223,colors.other,1.6,"4 4");
+    if(Number.isFinite(v)&&v>=low&&v<=high)s+=dot(x,Y(v),5,colors.other);
+  }
+  for(const [x,y] of points)if(y>=low&&y<=high)s+=dot(X(x),Y(y),4.5,colors.point);
+  return '<div class="diagram-scroll" tabindex="0" aria-label="Posúvateľný graf"><div class="wide">'+labSvg(w,h,label,s)+'</div></div>';
+}
+function circle(n,{kind="sin",sectors=[],marks=[],visiblePoint=true}={}){
+  const cx=170,cy=132,r=88,t=n*PI/12, x=cx+r*Math.cos(t),y=cy-r*Math.sin(t);
+  const coord=k=>[cx+r*Math.cos(k*PI/12),cy-r*Math.sin(k*PI/12)];
+  let s=line(33,cy,309,cy,colors.axis)+line(cx,17,cx,244,colors.axis)+dot(cx,cy,r,"none",colors.axis);
+  for(const [a,b,on] of sectors){
+    const A=coord(a),B=coord(b);
+    s+=path("M"+A.join(" ")+" A"+r+" "+r+" 0 "+(b-a>12?1:0)+" 0 "+B.join(" "),on?colors.other:"#9fa9bd",on?8:4);
+  }
+  for(const k of circleTicks.slice(0,-1)){
+    const p=coord(k), a=k*PI/12, lx=cx+(r+20)*Math.cos(a),ly=cy-(r+20)*Math.sin(a);
+    s+=dot(...p,2.3,colors.axis)+graphLabel(lx,ly-1,k);
+  }
+  for(const [k,filled] of marks)s+=dot(...coord(k),6,filled?colors.point:"#fff",colors.point);
+  if(visiblePoint){
+    s+=line(cx,cy,x,y,colors.other,2.4)+line(x,y,x,cy,colors.main,1.2,"4 3")+line(x,y,cx,y,colors.point,1.2,"4 3")+dot(x,y,5.5,colors.other);
+    if(kind==="tg"&&Math.abs(Math.tan(t))<=1.22&&Math.abs(Math.cos(t))>1e-8){
+      s+=line(cx+r,18,cx+r,246,colors.point,1.4,"4 3")+line(cx,cy,cx+r,cy-r*Math.tan(t),colors.point,2)+dot(cx+r,cy-r*Math.tan(t),4,colors.point);
+    }
+  }
+  return '<div class="circle-panel">'+labSvg(340,264,"Jednotková kružnica so špeciálnymi uhlami",s)+'</div>';
+}
+const absoluteValues=[[0,"0"],[.5,"1/2"],[1/Math.sqrt(2),"√2/2"],[Math.sqrt(3)/2,"√3/2"],[1,"1"],[1/Math.sqrt(3),"√3/3"],[Math.sqrt(3),"√3"]];
+function exactValue(v){
+  if(!Number.isFinite(v))return "nedefinovaný";
+  const found=absoluteValues.find(([a])=>Math.abs(a-Math.abs(v))<1e-7);
+  return found?(v< -1e-8?"−":"")+found[1]:"≈ "+dec(v);
+}
+function valueTable(){
+  const rows=circleTicks.map(n=>{
+    const a=n*PI/12;
+    return '<tr><th scope="row">'+(n*15)+'°</th><td>'+rich(angleText(n))+'</td>'+Object.values(fn).map(f=>'<td>'+rich(exactValue(f(a)))+'</td>').join("")+'</tr>';
+  }).join("");
+  return '<details><summary>Tabuľka všetkých význačných uhlov od 0° do 360°</summary><div class="table-wrap"><table class="value-table"><thead><tr><th>Stupne</th><th>Radiány</th><th>Sínus</th><th>Kosínus</th><th>Tangens</th></tr></thead><tbody>'+rows+'</tbody></table></div><p>Pri ďalších otáčkach pripočítaj alebo odpočítaj 2kπ. Tangens sa opakuje už po π.</p></details>';
+}
+function range(k,label,min,max,value,step=1){
+  return '<label>'+label+'<input type="range" data-control="'+k+'" min="'+min+'" max="'+max+'" value="'+value+'" step="'+step+'"></label>';
+}
+function select(k,label,options){
+  return '<label>'+label+'<select data-control="'+k+'">'+options.map(([v,t])=>'<option value="'+esc(v)+'">'+esc(t)+'</option>').join("")+'</select></label>';
+}
+const functionSelect=()=>select("kind","Funkcia",[["sin","Sínus"],["cos","Kosínus"],["tg","Tangens"]]);
+const degreeAngle=()=>range("n","Uhol na kružnici",0,24,4);
+const labInfo = {
+  triangle: ["Zmeň veľkosť rampy", "Na obrázku je pravouhlý trojuholník ABC s pravým uhlom pri C. Úsečka AB je šikmá rampa a zároveň prepona. Úsečka AC leží vodorovne a BC znázorňuje výšku rampy. Preskúmaš, čo sa stane s dĺžkami a ich pomermi, keď rampu zväčšíš bez zmeny sklonu.", ["Pri uhle 35° a referenčnom uhle „Pri A“ si všimni dĺžky odvesien aj hodnoty sin, cos a tg pod obrázkom.", "Posuň ovládač „Prepona“ z 9 cm na 12 cm. Uhol nechaj bez zmeny. Povedz, ktoré zobrazené čísla sa zmenili a ktoré ostali rovnaké.", "Pri rovnakej rampe vyber v ponuke „Referenčný uhol“ možnosť „Pri B“ a vysvetli, prečo sa priľahlá a protiľahlá odvesna vymenili."]],
+  turn: ["Zmeraj uhol oblúkom", "Na obrázku začína rameno na pravej vodorovnej polosi a farebná čiara ukazuje dráhu bodu po kružnici. Zobrazí sa otočenie v stupňoch aj radiánoch a dĺžka prejdeného oblúka v centimetroch.", ["Nastav otočenie 60° a polomer 3 cm. Potom pri rovnakom otočení zmeň polomer na 6 cm. Porovnaj radiánovú mieru a dĺžku oblúka pri oboch polomeroch.", "Zmeň otočenie na −60°. Vysvetli, čo sa zmenilo na smere pohybu a prečo je prejdená dĺžka aj pri zápornom uhle kladná.", "Nastav 420°. Porovnaj konečnú polohu ramena a prejdenú dĺžku s otočením o 60° na kružnici s rovnakým polomerom."]],
+  circle: ["Presuň bod po kružnici", "Bod na jednotkovej kružnici sa pohybuje podľa uhla x meraného od kladnej vodorovnej polosi. Pod obrázkom čítaš jeho vodorovnú súradnicu ako cos x a zvislú ako sin x.", ["Ťahaj bod po kružnici, posuň ovládač uhla alebo použi tlačidlá s radiánmi. Nastav najprv π/6 a prečítaj hodnotu sin x.", "Nájdi iný uhol medzi 0 a 2π, pri ktorom má bod rovnakú zvislú súradnicu. Zapíš obe hodnoty x v radiánoch a porovnaj ich kosínusy.", "Vysvetli pomocou polohy oboch bodov, prečo majú rovnaký sínus, hoci ide o rôzne uhly."]],
+  identity: ["Vyskúšaj vzťah na pohyblivom bode", "V tejto dielni overíš goniometrické vzťahy na bode jednotkovej kružnice. Uhol meníš posuvníkom, ťahaním bodu alebo výberom jednej z presných hodnôt. Ponuka „Vzťah“ mení výpočet zobrazený pod kružnicou.", ["Zvoľ súčet sin² x + cos² x a nastav najprv π/6, potom 2π/3. Porovnaj súčet pri oboch uhloch a vysvetli, ako súvisí s dĺžkou polomeru.", "Zvoľ vzťah pre sin 2x. Pri x = π/4 porovnaj sínus dvojnásobného uhla so súčinom 2·sin x·cos x.", "Nakoniec zvoľ tg x = sin x/cos x a nastav π/2. Povedz, ktorá hodnota v podiele spôsobuje, že tangens pri tomto uhle nie je definovaný."]],
+  graph: ["Prenes súradnicu do grafu", "Naľavo je jednotková kružnica a napravo graf vybranej funkcie. Poloha bodu na kružnici určuje uhol x. Zvislá poloha zvýrazneného bodu na grafe ukazuje hodnotu funkcie pri tomto uhle.", ["V ponuke „Funkcia“ vyber kosínus. Pohybuj bodom od 0 smerom k π a nájdi prvý uhol, pri ktorom zvýraznený bod na grafe leží na vodorovnej osi. Uveď uhol v radiánoch a povedz, ktorá súradnica bodu na kružnici je vtedy nulová.", "Prejdi na tangens a približuj sa k π/2 najprv zľava, potom sprava. Prečítaj aj hodnoty tangensu pod grafom a porovnaj správanie na oboch stranách a vysvetli, prečo pri π/2 na grafe chýba bod."]],
+  transform: ["Uprav predpis grafu", "Modrá krivka zobrazuje upravenú funkciu y = A·f(B(x−C)) + D. Sivá krivka ukazuje pôvodnú funkciu f, ktorú vyberieš z ponuky. Ovládače menia jednotlivé čísla vo vzorci.", ["Vyber sínus a nastav A = 1, B = 1, C = 0, D = 0. Potom zmeň iba B na 2. Porovnaj počet celých opakovaní oboch kriviek od 0 po 2π a urči periódu modrej krivky.", "Vráť B na 1 a nastav A na −1. Opíš, čo sa stane s bodom, v ktorom mal pôvodný sínus maximum.", "Vráť A na 1 a nastav D na 1. Urči, o koľko sa graf posunul a aký je nový interval hodnôt y."]],
+  equation: ["Zostroj priesečníky", "Modrý graf ukazuje hodnoty funkcie zvolenej v ponuke „Funkcia“. Prerušovaná vodorovná priamka predstavuje číslo na pravej strane rovnice. Riešením je súradnica x každého priesečníka, ktorá leží v intervale [0; 2π).", ["Zvoľ sínus, pravú stranu 1/2 a B = 1. Urči z grafu, koľko priesečníkov očakávaš pre sin x = 1/2. Potom stlač „Odhaľ všetky korene“ a porovnaj svoj odhad s vyznačenými bodmi.", "Zmeň iba B na 2, čím dostaneš rovnicu sin(2x) = 1/2. Znova odhadni počet riešení a over ho. Vysvetli, prečo sa počet zmenil, hoci vodorovná priamka ostala na tom istom mieste."]],
+  inequality: ["Vyber oblúky a krajné body", "Na jednotkovej kružnici zodpovedá jedna otočka intervalu [0; 2π). Model rozdelí kružnicu na oblúky a pri hraniciach ukáže samostatné body. Tvojou úlohou je označiť celú množinu vyhovujúcich uhlov, teda vnútro oblúkov aj prípadné krajné body.", ["V ponuke „Nerovnica“ vyber sin x ≥ √3/2. Hľadáš uhly, pri ktorých je zvislá súradnica bodu aspoň √3/2. V časti „Vnútro oblúkov“ vyber každý úsek, ktorého vnútorné uhly vyhovujú.", "V časti „Krajné body“ označ samostatne každý hraničný uhol, ktorý spĺňa nerovnicu a patrí do zadaného intervalu. Uhol 2π do intervalu nepatrí. Potom stlač „Over zostrojenie“.", "Zvoľ sin x > 1/2 a postup zopakuj. Vysvetli, ako ostré znamienko ovplyvní zahrnutie bodov, kde je sínus presne 1/2."]],
+  ssa: ["Rozhodni, koľko trojuholníkov vznikne", "Zostrojuješ trojuholník ABC. Uhol α je pri vrchole A, strana b je úsečka AC a strana a je úsečka BC. Vrchol B hľadáš na vodorovnej polpriamke z bodu A. Od C musí byť vzdialený presne a centimetrov, preto ho hľadáš v priesečníku polpriamky a kružnice so stredom C.", ["Nastav α = 30°, a = 8 cm a b = 10 cm. Zisti, koľko bodov B môžeš zvoliť, a prečítaj dĺžky AB pri oboch možnostiach.", "Ponechaj α a b bez zmeny. Zmeň a najprv na 5 cm a potom na 4 cm. Pri každej hodnote uveď počet trojuholníkov a vysvetli ho polohou kružnice voči polpriamke."]],
+  model: ["Modeluj výšku kabínky", "Kabínka vyhliadkového kolesa sa pohybuje po kružnici. Graf zobrazuje výšku kabínky nad zemou v závislosti od času. Posuvník „Uplynutá časť otáčky“ určuje okamih merania. Perióda je čas jednej celej otáčky.", ["Nastav polomer 6 m, výšku stredu nad polomerom 2 m a periódu 12 sekúnd. V ponuke vyber začiatočnú polohu „Hore“. Posuň čas z 0 % na 25 % a potom na 50 %. Pri každom nastavení odčítaj čas v sekundách a výšku kabínky v metroch.", "Prepni začiatočnú polohu na „Dole“. Odhadni, po koľkých sekundách kabínka prvý raz dosiahne najväčšiu výšku. Potom svoj odhad skontroluj posuvníkom.", "Zmeň periódu z 12 na 24 sekúnd. Vysvetli, ako sa zmení čas do dosiahnutia najvyššieho bodu a či sa zmení aj samotná najväčšia výška."]]
+};
+function labSetup(id,root){
+  const [title,intro,steps]=labInfo[id];
+  const phaseKeys='<div class="angle-key" data-extra="angles" aria-label="Význačné uhly">'+circleTicks.map(n=>'<button type="button" class="btn secondary" data-angle="'+n+'" aria-label="'+n*15+' stupňov">'+rich(angleText(n))+'</button>').join("")+'</div>';
+  const controls={
+    triangle:()=>range("angle","Uhol pri A (°)",10,80,35)+range("hyp","Prepona (cm)",4,16,9)+select("ref","Referenčný uhol",[["a","Pri A"],["b","Pri B"]]),
+    turn:()=>range("n","Otočenie (po 15°)",-48,48,4)+range("radius","Polomer (cm)",1,8,3),
+    circle:degreeAngle,
+    identity:()=>degreeAngle()+select("relation","Vzťah",[["sum","sin² x + cos² x"],["double","sin 2x"],["parity","sin(−x), cos(−x)"],["tan","tg x = sin x/cos x"]]),
+    graph:()=>functionSelect()+degreeAngle(),
+    transform:()=>functionSelect()+range("a","A",-3,3,1)+range("b","B",-3,3,1)+range("c","C v násobkoch π/12",-12,12,0)+range("d","D",-2,2,0,.5),
+    equation:()=>functionSelect()+select("v","Pravá strana",[["0.5","1/2"],["0","0"],["0.7071067811865476","√2/2"],["0.8660254037844386","√3/2"],["1","1"],["-0.5","−1/2"],["2","2"]])+range("b","B v argumente Bx",1,3,1),
+    inequality:()=>select("case","Nerovnica",[["0","sin x ≥ √3/2"],["1","cos x < −√2/2"],["2","sin x > 1/2"],["3","cos x ≥ 1/2"],["4","tg x > 1"]]),
+    ssa:()=>range("angle","Uhol α (°)",15,135,30)+range("a","Strana a (cm)",2,14,8)+range("b","Strana b (cm)",2,14,10),
+    model:()=>range("r","Polomer (m)",2,15,6)+range("d","Výška stredu nad polomerom (m)",0,10,2)+range("t","Perióda (s)",6,36,12)+range("p","Uplynutá časť otáčky (%)",0,100,25)+select("start","Začiatočná poloha",[["1","Hore"],["-1","Dole"]])
+  }[id]();
+  const phase=["circle","identity","graph"].includes(id);
+  const instructions='<p class="task-text">'+rich(intro)+'</p><h3>Čo urobíš</h3><ol class="steps task-steps">'+steps.map(step=>'<li>'+rich(step)+'</li>').join("")+'</ol>';
+  root.innerHTML='<p class="eyebrow">INTERAKTÍVNA DIELŇA</p><h2>'+title+'</h2>'+instructions+'<div class="lab-controls">'+controls+'</div>'+
+    (phase?phaseKeys:"")+'<div class="lab-diagram" data-view></div><div class="lab-output" data-output></div><div data-actions></div>'+
+    (phase?valueTable():"");
+  const fields=Array.from(root.querySelectorAll("[data-control]"));
+  const view=root.querySelector("[data-view]"), output=root.querySelector("[data-output]"), actions=root.querySelector("[data-actions]");
+  const state={reveal:false,sectors:new Set(),ends:new Set(),checked:false};
+  const angleInput=fields.find(el=>el.dataset.control==="n");
+  function update(){
+    const v=Object.fromEntries(fields.map(el=>[el.dataset.control,el.type==="range"?Number(el.value):el.value]));
+    root.querySelectorAll("[data-angle]").forEach(el=>el.setAttribute("aria-pressed",String(Number(el.dataset.angle)===v.n)));
+    const [diagram,summary,tools=""]=labFrames[id](v,state);
+    view.innerHTML=diagram;
+    output.innerHTML=summary;
+    if(actions.innerHTML!==tools)actions.innerHTML=tools;
+  }
+  root.addEventListener("input",()=>{
+    state.reveal=false;state.sectors.clear();state.ends.clear();state.checked=false;update();
+  });
+  root.addEventListener("click",event=>{
+    const b=event.target.closest("button"); if(!b)return;
+    if(b.dataset.angle!==undefined)angleInput.value=b.dataset.angle;
+    if(b.dataset.action==="reveal")state.reveal=!state.reveal;
+    if(b.dataset.action==="check")state.checked=true;
+    for(const [key,set] of [["sector",state.sectors],["end",state.ends]]){
+      if(b.dataset[key]!==undefined){
+        const k=Number(b.dataset[key]); if(set.has(k))set.delete(k);else set.add(k);
+        state.checked=false;
+      }
+    }
+    const focus=[...b.attributes].find(attr=>["data-action","data-sector","data-end"].includes(attr.name));
+    update();
+    if(focus)actions.querySelector("["+focus.name+'="'+focus.value+'"]')?.focus({preventScroll:true});
+  });
+  if(phase){
+    view.classList.add("drag-angle");
+    let pointer=null;
+    function rotate(event){
+      const svg=view.querySelector(".circle-panel svg");
+      const point=svg.createSVGPoint();
+      const matrix=svg.getScreenCTM();
+      if(!matrix)return;
+      point.x=event.clientX;
+      point.y=event.clientY;
+      const p=point.matrixTransform(matrix.inverse()), dx=p.x-170, dy=132-p.y;
+      if(Math.hypot(dx,dy)<16)return;
+      const angle=(Math.atan2(dy,dx)+2*PI)%(2*PI);
+      angleInput.value=String(Math.round(angle*12/PI));
+      update();
+    }
+    view.addEventListener("pointerdown",event=>{
+      if(!event.isPrimary||event.button!==0||!event.target.closest(".circle-panel svg"))return;
+      pointer=event.pointerId;
+      view.setPointerCapture(pointer);
+      rotate(event);
+    });
+    view.addEventListener("pointermove",event=>{if(event.pointerId===pointer)rotate(event);});
+    view.addEventListener("lostpointercapture",()=>{pointer=null;});
+  }
+  update();
+}
+const asymptotes = (b=1,c=0) => Array.from({length:25},(_,i)=>c+(PI/2+(i-12)*PI)/b);
+const paired = (n,kind) => '<div class="pair">'+circle(n,{kind})+plot({f:fn[kind],selected:n*PI/12,asym:kind==="tg"?asymptotes():[],label:"Graf funkcie "+kind+" prepojený s jednotkovou kružnicou"})+'</div>';
+const trigReadout = n => rich("x = "+angleText(n)+" rad ("+(n*15)+"°) · sin x = "+exactValue(fn.sin(n*PI/12))+" · cos x = "+exactValue(fn.cos(n*PI/12))+" · tg x = "+exactValue(fn.tg(n*PI/12)));
+function roots(kind,v,b){
+  if(kind!=="tg"&&Math.abs(v)>1)return [];
+  const a=kind==="sin"?Math.asin(v):kind==="cos"?Math.acos(v):Math.atan(v);
+  const base=kind==="sin"?[a,PI-a]:kind==="cos"?[a,-a]:[a], p=kind==="tg"?PI:2*PI;
+  const result=[];
+  for(const alpha of base)for(let k=-2;k<=2*b+2;k++){
+    const x=(alpha+k*p)/b;
+    if(x>=-1e-8&&x<2*PI-1e-8&&!result.some(y=>Math.abs(y-x)<1e-8))result.push(Math.max(0,x));
+  }
+  return result.sort((a,b)=>a-b);
+}
+function rootText(x){
+  const p=Math.round(x*72/PI), g=gcd(p,72), top=p/g, bottom=72/g;
+  if(Math.abs(x-p*PI/72)>1e-8)return "≈ "+dec(x,5);
+  if(!p)return "0";
+  return (top===1?"":top)+"π"+(bottom===1?"":"/"+bottom);
+}
+const inequalityCases=[
+  {edges:[0,4,8,24],s:[1],ends:[1,2],solution:"[π/3; 2π/3]"},
+  {edges:[0,9,15,24],s:[1],ends:[],solution:"(3π/4; 5π/4)"},
+  {edges:[0,2,10,24],s:[1],ends:[],solution:"(π/6; 5π/6)"},
+  {edges:[0,4,20,24],s:[0,2],ends:[0,1,2],solution:"[0; π/3] ∪ [5π/3; 2π)"},
+  {edges:[0,3,6,15,18,24],s:[1,3],ends:[],solution:"(π/4; π/2) ∪ (5π/4; 3π/2)"}
+];
+const labFrames={
+  triangle({angle,hyp,ref}){
+    const a=angle*PI/180, factor=12*hyp, A=[45,228], B=[45+factor*Math.cos(a),228-factor*Math.sin(a)], C=[B[0],228], atA=ref==="a", x=atA?a:PI/2-a;
+    let s=path("M"+A.join(" ")+" L"+B.join(" ")+" L"+C.join(" ")+" Z",colors.main,3,"#e9edff");
+    s+=path("M"+(C[0]-9)+" 228 v-9 h9",colors.axis,1.2);
+    s+=dot(...(atA?A:B),5,colors.point)+svgText(A[0]-13,A[1]+6,"A")+svgText(B[0]+13,B[1]-4,"B")+svgText(C[0]+12,C[1]+13,"C");
+    return [labSvg(300,264,"Pravouhlý trojuholník; zvýraznený je referenčný uhol",s),
+      "Referenčný uhol "+(atA?angle:90-angle)+"° · protiľahlá "+dec(hyp*Math.sin(x))+" cm · priľahlá "+dec(hyp*Math.cos(x))+" cm · prepona "+hyp+" cm<br>sin ≈ "+dec(Math.sin(x))+" · cos ≈ "+dec(Math.cos(x))+" · tg ≈ "+dec(Math.tan(x))];
+  },
+  turn({n,radius}){
+    const x=n*PI/12, r=27+radius*7, cx=149,cy=131;
+    let s=dot(cx,cy,r,"none",colors.axis)+line(cx,cy,cx+r,cy,colors.axis,1.6);
+    let d="M"+(cx+r)+" "+cy;
+    for(let i=1;i<=Math.max(1,Math.abs(n)*3);i++){
+      const t=x*i/Math.max(1,Math.abs(n)*3);
+      d+=" L"+(cx+r*Math.cos(t)).toFixed(2)+" "+(cy-r*Math.sin(t)).toFixed(2);
+    }
+    s+=path(d,n<0?colors.point:colors.main,4)+line(cx,cy,cx+r*Math.cos(x),cy-r*Math.sin(x),colors.other,2.6)+dot(cx+r*Math.cos(x),cy-r*Math.sin(x),5,colors.other);
+    return [labSvg(300,264,"Polomer a orientované otočenie po kružnici",s),
+      rich(n*15+"° = "+angleText(n)+" rad · r = "+radius+" cm · dĺžka prejdeného oblúka r·|x| ≈ "+dec(radius*Math.abs(x))+" cm · orientovaný oblúk r·x ≈ "+dec(radius*x)+" cm")];
+  },
+  circle({n}){return [circle(n),trigReadout(n)];},
+  graph({n,kind}){return [paired(n,kind),trigReadout(n)];},
+  identity({n,relation}){
+    const t=n*PI/12;
+    const msg={
+      sum:()=> "Súčet druhých mocnín je "+dec(Math.sin(t)**2+Math.cos(t)**2)+". Súradnice sú od stredu vzdialené jednu jednotku podľa Pytagorovej vety.",
+      double:()=> "Pre 2x = "+angleText(n*2)+" rad vyjde sin 2x = "+exactValue(Math.sin(2*t))+". Súčin 2·sin x·cos x má tú istú hodnotu.",
+      parity:()=> "sin(−x) = "+exactValue(Math.sin(-t))+" · cos(−x) = "+exactValue(Math.cos(-t))+". Pri zrkadlení podľa vodorovnej osi sa mení zvislá súradnica.",
+      tan:()=> Number.isFinite(fn.tg(t))?"Hodnota podielu sin x / cos x je "+exactValue(fn.tg(t))+".":"Pri cos x = 0 podiel ani tangens nie sú definované."
+    }[relation]();
+    return [circle(n,{kind:relation==="tan"?"tg":"sin"}),trigReadout(n)+"<br>"+rich(msg)];
+  },
+  transform({kind,a,b,c,d}){
+    const C=c*PI/12, f=x=>{const v=fn[kind](b*(x-C));return Number.isFinite(v)?a*v+d:NaN;};
+    const asym=kind==="tg"&&b?asymptotes(b,C):[], lim=5.5;
+    const period=b&&a?rootText((kind==="tg"?PI:2*PI)/Math.abs(b)):"konštantná funkcia nemá najmenšiu kladnú periódu";
+    const values=!a?"{"+dec(d)+"}":!b?"{"+dec(f(0))+"}":kind==="tg"?"ℝ":"["+dec(d-Math.abs(a))+"; "+dec(d+Math.abs(a))+"]";
+    const domain=asym.length?" · Pri dierkach vo funkcii ostáva pôvodná výluka tangensu.":"";
+    return [plot({f,other:fn[kind],unit:19.5,limit:lim,asym,label:"Referenčný a transformovaný graf"}),rich("A = "+a+" · B = "+b+" · C = "+angleText(c)+" · D = "+dec(d)+" · Najmenšia kladná perióda: "+(!a&&b&&kind==="tg"?rootText(PI/Math.abs(b))+" (kvôli výlukám v definičnom obore)":period)+" · Obor hodnôt "+values+domain)];
+  },
+  equation({kind,v,b},state){
+    const k=Number(v), xs=roots(kind,k,b), asym=kind==="tg"?asymptotes(b):[];
+    const summary="Rovnica "+kind+"("+ (b===1?"x":b+"x")+") = "+exactValue(k)+" na [0; 2π). "+(state.reveal?(xs.length?"Korene v radiánoch: "+xs.map(rootText).join(", ")+".":"V intervale nie je žiadny koreň."):"Odhadni počet koreňov podľa priesečníkov grafov.");
+    return [plot({f:x=>fn[kind](b*x),unit:46,threshold:k,asym,points:state.reveal?xs.map(x=>[x,k]):[]}),rich(summary),'<button type="button" class="btn secondary" data-action="reveal" aria-pressed="'+state.reveal+'">'+(state.reveal?"Skry riešenia":"Odhaľ všetky korene")+'</button>'];
+  },
+  inequality(v,state){
+    const task=inequalityCases[Number(v.case)], {edges}=task;
+    const sectors=edges.slice(0,-1).map((a,i)=>[a,edges[i+1],state.sectors.has(i)]);
+    const btn=(key,i,chosen,label)=>'<button type="button" class="btn secondary" data-'+key+'="'+i+'" aria-pressed="'+chosen+'">'+rich(label)+'</button>';
+    const as=sectors.map(([a,b],i)=>btn("sector",i,state.sectors.has(i),"("+angleText(a)+"; "+angleText(b)+")")).join("");
+    const bs=edges.slice(0,-1).map((a,i)=>btn("end",i,state.ends.has(i),angleText(a))).join("");
+    const same=(key,expected)=>key.size===expected.length&&expected.every(i=>key.has(i));
+    let check="";
+    if(state.checked){
+      const arcs=same(state.sectors,task.s), ends=same(state.ends,task.ends);
+      check='<p role="status" class="feedback '+(arcs&&ends?"good":"bad")+'">'+(arcs&&ends?rich("Správne. Riešenie je "+task.solution+"."):(arcs?"Oblúky sú správne. ":"Prever hodnotu vo vnútri každého oblúka. ")+(ends?"Krajné body sú správne.":"Prever ostrú alebo neostrú nerovnosť aj definičný obor. Bod 2π je mimo intervalu."))+'</p>';
+    }
+    return [circle(0,{visiblePoint:false,sectors,marks:edges.slice(0,-1).map((a,i)=>[a,state.ends.has(i)])}),
+      "Pracuj na intervale [0; 2π). Obvod predstavuje jednu otočku. Na kružnici sa 0 a 2π zobrazia v tom istom bode.",
+      '<h3>Vnútro oblúkov</h3><div class="angle-key">'+as+'</div><h3 class="lab-challenge">Krajné body</h3><div class="angle-key">'+bs+'</div><div class="row"><button type="button" class="btn" data-action="check">Over zostrojenie</button></div>'+check];
+  },
+  ssa({angle,a,b}){
+    const t=angle*PI/180, x=b*Math.cos(t), y=b*Math.sin(t), h=a*a-y*y, f=9;
+    const roots=h< -1e-8?[]:Math.abs(h)<1e-8?[x]:[x-Math.sqrt(h),x+Math.sqrt(h)];
+    const bs=roots.filter(v=>v>1e-8), A=[146,178], C=[A[0]+f*x,A[1]-f*y];
+    let s=line(A[0],A[1],427,A[1],colors.axis,2)+dot(...C,f*a,"none",colors.axis)+line(...A,...C,colors.main,2.6)+dot(...A,4)+dot(...C,4);
+    for(const [i,v] of bs.entries()){
+      const B=[A[0]+f*v,A[1]];
+      s+=line(...C,...B,i?colors.point:colors.other,2.8)+dot(...B,5,i?colors.point:colors.other)+svgText(B[0],B[1]+20,"B"+(i+1));
+    }
+    s+=svgText(A[0]-10,A[1]+17,"A")+svgText(C[0],C[1]-10,"C");
+    return [labSvg(440,325,"Priesečníky kružnice s polpriamkou určujú počet trojuholníkov",s),
+      "α = "+angle+"° · a = "+a+" cm · b = "+b+" cm · b·sin α ≈ "+dec(y)+" cm<br>Počet trojuholníkov: "+bs.length+". "+(bs.length?"Možné dĺžky AB v cm: "+bs.map(v=>dec(v)).join(" a ")+".":"Chýba priesečník s kladnou dĺžkou AB.")];
+  },
+  model({r,d,t,p,start}){
+    const sign=Number(start), D=r+d, time=p*t/100, angle=2*PI*time/t, f=x=>D+sign*r*Math.cos(2*PI*x/t), unit=178/(D+r);
+    const cx=170,cy=132, sr=r*unit, dy=sign*sr*Math.cos(angle), dx=sr*Math.sin(angle);
+    const wheel='<div class="circle-panel">'+labSvg(340,264,"Koleso s kabínkou",dot(cx,cy,sr,"none",colors.axis)+line(cx,cy,cx+dx,cy-dy,colors.other,2.6)+dot(cx+dx,cy-dy,6,colors.point)+dot(cx,cy,3))+'</div>';
+    return ['<div class="pair">'+wheel+plot({f,hi:t,unit,model:true,selected:time,label:"Výška kabínky počas jednej otáčky"})+'</div>',
+      rich("h(t) = "+D+(sign>0?" + ":" − ")+r+" cos(2π·t/"+t+") · Čas "+dec(time)+" s · Výška "+dec(f(time))+" m · Rozsah výšok ["+d+"; "+(D+r)+"] m")];
+  }
+};
+const main=document.getElementById("main");
+const nav=document.getElementById("nav");
+const storageKey="goniometria-na-maturitu-progress-v1";
+let progressData={};
+try {progressData=JSON.parse(localStorage.getItem(storageKey)||"{}")||{};} catch {}
+const saved=id=>Number(progressData[id])||0;
+const btn=(href,label,secondary=false)=>'<a class="btn'+(secondary?' secondary':'')+'" href="'+href+'">'+label+'</a>';
+const lessonHref=(c,part="")=>"#"+c.id+(part?"/"+part:"");
+const heading=(over,title,lead="")=>'<p class="eyebrow">'+over+'</p><h1>'+title+'</h1>'+(lead?'<p class="lead">'+lead+'</p>':'');
+const lessonNav=[
+  ["","Výklad a dielňa"],["cvic","Tréning"],["test","Test kapitoly"]
+];
+const chapterPosition=c=>chapters.indexOf(c)+1;
+const resultPill=c=>saved(c.id)?'<span class="pill'+(saved(c.id)>=4?' pass':'')+'">'+saved(c.id)+'/5 v teste</span>':'';
+function chapterCard(c){
+  return '<article class="card chapter"><p class="chapter-num">'+String(chapterPosition(c)).padStart(2,"0")+' · '+c.label+'</p><h3><a href="'+lessonHref(c)+'">'+c.title+'</a></h3><p>'+c.goal+'</p><div class="row"><small>Približne '+c.time+' min</small>'+resultPill(c)+'</div></article>';
+}
+function home(){
+  const next=chapters.find(c=>saved(c.id)<4)||chapters[0];
+  const art=labSvg(480,270,"Kružnica a sínusoida",dot(92,134,58,"none","#a8bafe")+line(14,134,451,134,"#97adf5")+line(92,57,92,210,"#97adf5")+line(175,57,175,210,"#97adf5")+path(curve(Math.sin,0,2*PI,x=>175+43*x,y=>134-58*y,-1,1),"#e9fc82",4)+line(92,134,121,84,"#e9fc82",3)+line(121,84,221,84,"#a8bafe",1.5,"4 5")+dot(121,84,5,"#e9fc82")+dot(221,84,5,"#e9fc82")+svgText(280,226,"od uhla k funkcii","#e8edff",14));
+  return '<section class="hero"><div><p class="eyebrow">MATURITA Z MATEMATIKY</p><h1>Goniometria<br><span class="accent">od kružnice ku koreňom</span></h1><p class="lead">Zisti, prečo vzťahy platia. Potom si na pohyblivých modeloch precvič to, čo využiješ v teste aj pri ústnom vysvetľovaní.</p><div class="row">'+btn(lessonHref(next),next===chapters[0]?"Začni prvou kapitolou":"Pokračuj v učení")+btn("#kapitoly","Pozri kapitoly",true)+'</div></div><div class="hero-diagram">'+art+'</div></section>'+
+    '<section class="section"><p class="eyebrow">CESTA K MATURITE</p><h2>Uč sa v štyroch krokoch</h2><div class="grid two">'+[
+    ["1. Predpovedz a vyskúšaj","Najprv odhadni, čo sa stane. Potom pohni bodom, zmeň predpis alebo označ oblúky."],
+    ["2. Zdôvodni","Porovnaj vlastný postup s riešeným príkladom. Ústne vysvetli, odkiaľ sa výsledok berie."],
+    ["3. Získaj spätnú väzbu","V tréningu si hneď overíš odpoveď a zistíš, kde hľadať chybu."],
+    ["4. Otestuj kapitolu","Výsledky a vysvetlenia dostaneš až po odovzdaní. Test môžeš zopakovať."]].map(([a,b])=>'<div class="card"><h3>'+a+'</h3><p>'+b+'</p></div>').join("")+'</div></section>'+
+    '<section class="section"><h2>Prvé tri kapitoly</h2><div class="grid">'+chapters.slice(0,3).map(chapterCard).join("")+'</div></section>';
+}
+function overview(){
+  return heading("10 KAPITOL","Tvoja mapa učenia","Pri prvom prechode postupuj od začiatku. Pri opakovaní si otvor konkrétnu zručnosť. Každá kapitola má dielňu, tréning a vlastný test.")+'<div class="grid">'+chapters.map(chapterCard).join("")+'</div>';
+}
+function progressPage(){
+  const completed=chapters.filter(c=>saved(c.id)>=4).length;
+  return heading("MÔJ POKROK","Čo už ovládaš","Za zvládnutú sa počíta kapitola s aspoň 4 bodmi z 5. Zobrazuje sa najlepší výsledok uložený v tomto prehliadači.")+
+    '<div class="card"><div class="row between"><strong>Zvládnuté kapitoly</strong><span class="score">'+completed+'/10</span></div><progress max="10" value="'+completed+'" aria-label="Počet zvládnutých kapitol"></progress></div><div class="section grid">'+chapters.map(chapterCard).join("")+'</div>';
+}
+function lessonHeader(c,part){
+  return '<p class="crumb"><a href="#kapitoly">Kapitoly</a> / '+chapterPosition(c)+' z '+chapters.length+'</p>'+
+    heading("KAPITOLA "+String(chapterPosition(c)).padStart(2,"0")+" / "+c.label,c.title,c.goal)+
+    '<nav class="tabs" aria-label="Časti kapitoly">'+lessonNav.map(([id,label])=>'<a href="'+lessonHref(c,id)+'"'+(id===part?' aria-current="page"':'')+'>'+label+'</a>').join("")+'</nav>';
+}
+function lesson(c){
+  const {example}=c;
+  return '<p class="lead">'+rich(c.lead)+'</p><div class="section card" id="lab"></div>'+
+    '<section class="section"><h2>Čo si z toho odniesť</h2><div class="grid two">'+c.concepts.map(([a,b])=>'<article class="card"><h3>'+a+'</h3><p>'+rich(b)+'</p></article>').join("")+'</div></section>'+
+    '<section class="section card worked"><p class="eyebrow">RIEŠENÝ PRÍKLAD</p><h2>'+example.title+'</h2><p class="task-text">'+rich(example.prompt)+'</p><details><summary>Rozbaliť postup</summary><ol class="steps">'+example.steps.map(s=>'<li>'+rich(s)+'</li>').join("")+'</ol></details></section>'+
+    '<section class="section grid two"><article class="card warning"><h3>Častá chyba</h3><p>'+rich(c.trap[0])+'</p><p>'+rich(c.trap[1])+'</p></article><article class="card"><h3>Vysvetli nahlas</h3><p class="task-text">'+rich(c.oral[0])+'</p><details><summary>Porovnaj so vzorovým vysvetlením</summary><p>'+rich(c.oral[1])+'</p></details></article></section>'+
+    '<div class="row">'+btn(lessonHref(c,"cvic"),"Vyskúšaj tréning")+btn(lessonHref(c,"test"),"Prejdi na test",true)+'</div>';
+}
+function sources(){
+  const link=(url,text,desc)=>'<li><a href="'+url+'" target="_blank" rel="noopener noreferrer">'+text+'</a> · '+desc+'</li>';
+  return heading("PODKLADY A ĎALŠIE AKTIVITY","Odporúčané zdroje","Použi ich na overenie maturitných požiadaviek, tréning na skutočných zadaniach a ďalšie objavovanie.")+
+  '<section class="card section readable"><h2>Slovenská maturita</h2><ul class="link-list">'+
+  link("https://www.statpedu.sk/files/articles/dokumenty/inovovany-statny-vzdelavaci-program/matematika_g_4_5_r.pdf","Vzdelávací štandard pre gymnáziá","Rámec predmetu v štvorročných a päťročných gymnáziách.")+
+  link("https://www.statpedu.sk/files/articles/nove_dokumenty/cielove-poziadavky-pre-mat-skusky/matematika.pdf","Cieľové požiadavky na maturitu z matematiky","Pozri najmä čísla a vzťahy, funkcie a planimetriu. Pri funkciách si odškrtni aj to, čo dokážeš zdôvodniť.")+
+  link("https://www2.nucem.sk/dl/6545/Specifikacia_testu_MAT_MS_2026_2027_web_final.pdf","Špecifikácia externej časti 2026/2027","Formát úloh a podmienky testu.")+
+  link("https://nivam.sk/wp-content/uploads/MP_Maturita_MAT_FINAL_obalka_ISBN_aktualizacia_mar2025.pdf","NIVaM · Interná časť maturity","Ukážky zadania, v ktorom treba postup vysvetliť a zdôvodniť.")+'</ul></section>'+
+  '<section class="card section readable"><h2>Archív skutočných maturitných testov</h2><p>Všetky zadania potrebné na prácu v kurze nájdeš priamo v jednotlivých kapitolách. Nasledujúce odkazy otvoria celé oficiálne testy, ak si chceš pozrieť aj pôvodné zadania.</p><ul class="link-list">'+
+  link("https://www2.nucem.sk/dl/5853/24%201447_RT_MAT.pdf","Maturita 2024","Porovnanie počtu nulových bodov grafov je v úlohe 22.")+
+  link("https://www2.nucem.sk/dl/6154/251447_RT_MAT.pdf","Maturita 2025","Výpočet druhého koreňa v radiánoch je v úlohe 9. Geometrická úloha o kužeľoch má číslo 15.")+
+  link("https://www2.nucem.sk/dl/6450/261447_RT_MAT.pdf","Maturita 2026","Úlohy 8, 9, 15 a 17 pracujú s výškou trojuholníka, uhlom v kvádri, dotyčnicami ku kružnici a počtom riešení rovnice.")+'</ul></section>'+
+  '<section class="card section readable"><h2>Zahraničné applety a výzvy</h2><p>Ide o dobrovoľné doplnky k dielňam. Pri každom odkaze je vysvetlené, čo na obrázku alebo grafe preskúmať.</p><ul class="link-list">'+
+  link("https://nrich.maths.org/problems/trig-reps","NRICH, University of Cambridge · Trig Reps","Pri každom zobrazení goniometrickej funkcie si všimni, ako sa mení jej hodnota s uhlom. Priraď predpis k zodpovedajúcemu grafu a polohám na kružnici. Svoje priradenie zdôvodni aspoň jednou konkrétnou hodnotou.")+
+  link("https://www.geogebra.org/m/cHQqbyfK","GeoGebra · Jednotková kružnica","Otoč bod raz okolo jednotkovej kružnice. Pre každý kvadrant zisti, či je vodorovná súradnica bodu, teda kosínus, kladná alebo záporná. To isté urob so zvislou súradnicou, teda sínusom.")+
+  link("https://www.geogebra.org/m/MyHjUR3x","GeoGebra · Cercle trigonométrique","Na jednotkovej kružnici vyber dva rôzne body, ktoré majú rovnakú vodorovnú súradnicu. Zisti, ktoré dva uhly z jednej otočky k nim patria, a vysvetli ich vzťah pomocou súmernosti podľa vodorovnej osi.")+
+  link("https://www.geogebra.org/m/cNEtsbvC","GeoGebra · Prepojenie znázornení","Sleduj, ako pohyb bodu po kružnici súvisí s hodnotou na grafe goniometrickej funkcie. Najprv odhadni, pri ktorom uhle bude táto hodnota nulová. Potom presuň bod k zvolenému uhlu a over, či zodpovedajúci bod grafu leží na vodorovnej osi.")+'</ul></section>'+
+  '<section class="card section readable"><h2>Ako je postavené učenie</h2><p>Dielne prepájajú trojuholník, kružnicu, predpis a graf. Pri každom prechode najprv predpovedáš výsledok. Nasleduje riešený príklad, samostatná úloha a vysvetlenie častej chyby.</p><ul class="link-list">'+
+  link("https://www.ind.ku.dk/publikationer/studenterserien/studenterserien-publikationer/trigonometry-in-upper-secondary-school-context-identities-and-functions/","University of Copenhagen · Trigonometry in Upper Secondary School","Prechody medzi rôznymi znázorneniami a kontextmi.")+
+  link("https://doi.org/10.1080/0020739X.2017.1357846","Kamber a Takači · On problematic aspects in learning trigonometry","Ťažkosti pri učení goniometrie na strednej škole.")+
+  link("https://doi.org/10.1103/t2fv-2spd","Physical Review Physics Education Research · Výskum porozumenia radiánom","Podnet na rozlíšenie číselnej hodnoty uhla a dĺžky oblúka.")+'</ul></section>';
+}
+function parseNumber(s) {
+  const raw=s.trim().toLowerCase().replace(/[−–]/g,"-").replace(/[·×]/g,"*").replace(/÷/g,"/").replace(/,/g,".").replace(/\s+/g,"");
+  if(!raw||raw.length>100)return NaN;
+  const tokens=raw.match(/sqrt|pi|π|√|\d+(?:\.\d+)?|\.\d+|[-+*/()]/g);
+  if(!tokens||tokens.join("")!==raw)return NaN;
+  let i=0;
+  function unary(){
+    const t=tokens[i++];
+    if(t==="-")return -unary();
+    if(t==="+")return unary();
+    if(t==="sqrt"||t==="√")return Math.sqrt(unary());
+    if(t==="("){
+      const result=sum();
+      return tokens[i++]===")"?result:NaN;
+    }
+    if(t==="π"||t==="pi")return PI;
+    return t!==undefined&&/^\d|^\.\d/.test(t)?Number(t):NaN;
+  }
+  function product(){
+    let value=unary();
+    while(i<tokens.length){
+      const t=tokens[i];
+      if(t==="*"||t==="/"){
+        i++;const right=unary();value=t==="*"?value*right:value/right;
+      }else if(["(","π","pi","√","sqrt"].includes(t)){
+        value*=unary();
+      }else break;
+    }
+    return value;
+  }
+  function sum(){
+    let value=product();
+    while(tokens[i]==="+"||tokens[i]==="-"){
+      const t=tokens[i++], right=product();
+      value+=t==="+"?right:-right;
+    }
+    return value;
+  }
+  const value=sum();
+  return i===tokens.length&&Number.isFinite(value)?value:NaN;
+}
+function shuffled(list){
+  const items=list.slice();
+  for(let i=items.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [items[i],items[j]]=[items[j],items[i]];
+  }
+  return items;
+}
+function quiz(c,part){
+  const practice=part==="cvic", questions=Q[c.id][practice?"practice":"test"];
+  const el=document.getElementById("quiz");
+  function start(){
+    const orders=questions.map(q=>{
+      if(!q.options)return [];
+      const indexes=q.options.map((_,i)=>i);
+      const order=shuffled(indexes);
+      if(q.type==="order"&&order.every((v,i)=>v===i))order.push(order.shift());
+      return order;
+    });
+    const keys=questions.map((q,i)=>{
+      const name="q"+i;
+      if(q.type==="number"){
+        return '<label class="field">Tvoja odpoveď<input type="text" autocomplete="off" maxlength="100" inputmode="text" name="'+name+'" aria-describedby="hint'+i+'"></label><small class="answer-note" id="hint'+i+'">'+(q.format==="decimal"?"Zadaj desatinné číslo bez jednotky. Bodka aj čiarka fungujú.":"Zadaj hodnotu bez jednotky. Pre π použi aj pi, pre odmocninu napríklad sqrt(2).")+'</small>';
+      }
+      if(q.type==="order")return '<p class="mini">Presúvaj kroky šípkami. Po zoradení označ, že je postup pripravený.</p><div data-order="'+i+'"></div><label class="option"><input type="checkbox" name="'+name+'" value="ok"> Poradie je pripravené</label>';
+      return '<div role="group" aria-label="'+(q.type==="many"?"Vyber všetky správne možnosti":"Vyber jednu možnosť")+'">'+
+        (q.type==="many"?'<p class="mini">Vyber všetky správne možnosti.</p>':"")+
+        orders[i].map(j=>'<label class="option"><input type="'+(q.type==="many"?"checkbox":"radio")+'" name="'+name+'" value="'+j+'"><span>'+rich(q.options[j])+'</span></label>').join("")+'</div>';
+    });
+    el.innerHTML='<h2>'+(practice?"Tréning so spätnou väzbou":"Test kapitoly")+'</h2><form novalidate><p>'+ (practice?"Dve krátke úlohy. Odpoveď si môžeš hneď overiť.":"Päť úloh. Každá je za jeden bod. Vyhodnotenie sa zobrazí po odovzdaní všetkých odpovedí.")+'</p>'+
+      questions.map((q,i)=>'<article class="card question" aria-labelledby="question'+i+'" aria-describedby="prompt'+i+'"><h3 id="question'+i+'">Úloha '+(i+1)+'</h3><p class="task-text" id="prompt'+i+'">'+rich(q.prompt)+'</p>'+keys[i]+(practice?'<button class="btn secondary" type="button" data-practice="'+i+'">Over odpoveď</button>':'')+'<div data-feedback="'+i+'" aria-live="polite"></div></article>').join("")+
+      (practice?'<div class="row">'+btn(lessonHref(c,"test"),"Začni test kapitoly")+'</div>':'<button type="submit" class="btn">Odovzdaj test</button><p class="mini" data-status role="status"></p>')+'</form><div data-result tabindex="-1" class="focus-target"></div>';
+    const form=el.querySelector("form");
+    function reorder(i){
+      const holder=form.querySelector('[data-order="'+i+'"]');
+      holder.innerHTML=orders[i].map((j,k)=>'<div class="reorder"><span>'+rich(questions[i].options[j])+'</span>'+[-1,1].map(d=>'<button type="button" class="btn secondary" data-move="'+i+'" data-index="'+k+'" data-delta="'+d+'" aria-label="Krok '+(k+1)+(d<0?' vyššie':' nižšie')+'"'+(k+d<0||k+d>=orders[i].length?' disabled':'')+'>'+(d<0?'↑':'↓')+'</button>').join("")+'</div>').join("");
+    }
+    questions.forEach((q,i)=>{if(q.type==="order")reorder(i);});
+    function assess(i,data){
+      const q=questions[i], key="q"+i, raw=data.get(key);
+      if(q.type==="number"){
+        const value=parseNumber(raw||"");
+        const answer=q.answer;
+        if(!Number.isFinite(value))return {invalid:true,hint:"Zadaj čitateľnú číselnú odpoveď bez jednotky."};
+        const wrongFormat=q.format==="decimal"?!/^[+−-]?\d+[,.]\d{2}$/.test(raw.trim()):(/[π√]|pi|sqrt/.test(answer)&&!/[π√]|pi|sqrt/i.test(raw));
+        return {ok:!wrongFormat&&Math.abs(value-q.value)<=q.tol,answer,hint:wrongFormat?(q.format==="decimal"?"Zápis má mať presne dve desatinné miesta.":"Zadanie vyžaduje presnú hodnotu so symbolom π alebo odmocninou."):""};
+      }
+      if(raw===null)return {invalid:true,hint:"Najprv vyber alebo potvrď odpoveď."};
+      if(q.type==="choice")return {ok:Number(raw)===q.correct,answer:q.options[q.correct],hint:q.errors[raw]};
+      const got=q.type==="order"?orders[i]:data.getAll(key).map(Number).sort((a,b)=>a-b);
+      const expected=q.type==="order"?q.correct:q.correct.slice().sort((a,b)=>a-b);
+      return {ok:got.length===expected.length&&got.every((v,j)=>v===expected[j]),answer:expected.map(v=>q.options[v]).join(q.type==="order"?" → ":" · ")};
+    }
+    function show(i,grade){
+      form.querySelector('[data-feedback="'+i+'"]').innerHTML='<div class="feedback '+(grade.ok?"good":"bad")+'"><strong>'+(grade.ok?"Správne":grade.invalid?"Doplň odpoveď":"Skontroluj postup")+'</strong>'+
+        (grade.hint&&!grade.ok?'<p>'+rich(grade.hint)+'</p>':'')+
+        (grade.invalid?'':'<p><strong>Správna odpoveď</strong> '+rich(grade.answer)+'</p><p>'+rich(questions[i].why)+'</p>')+'</div>';
+    }
+    form.addEventListener("click",e=>{
+      const b=e.target.closest("button");if(!b)return;
+      if(b.dataset.move!==undefined){
+        const i=Number(b.dataset.move), j=Number(b.dataset.index), d=Number(b.dataset.delta), newIndex=j+d, arr=orders[i];
+        [arr[j],arr[newIndex]]=[arr[newIndex],arr[j]];
+        form.elements["q"+i].checked=false;
+        reorder(i);
+        const moved=form.querySelector('[data-move="'+i+'"][data-index="'+newIndex+'"][data-delta="'+d+'"]:not(:disabled)')||
+          form.querySelector('[data-move="'+i+'"][data-index="'+newIndex+'"]:not(:disabled)');
+        moved?.focus({preventScroll:true});
+      }
+      if(b.dataset.practice!==undefined){
+        const i=Number(b.dataset.practice);
+        show(i,assess(i,new FormData(form)));
+      }
+    });
+    form.addEventListener("submit",e=>{
+      e.preventDefault();
+      if(practice)return;
+      const data=new FormData(form), grades=questions.map((_,i)=>assess(i,data)), missing=grades.findIndex(g=>g.invalid);
+      if(missing!==-1){
+        form.querySelector("[data-status]").textContent="Doplň úlohu "+(missing+1)+". "+grades[missing].hint;
+        form.querySelector('[name="q'+missing+'"]').focus();
+        return;
+      }
+      grades.forEach((g,i)=>show(i,g));
+      const score=grades.filter(g=>g.ok).length;
+      progressData[c.id]=Math.max(saved(c.id),score);
+      try{localStorage.setItem(storageKey,JSON.stringify(progressData));}catch{}
+      form.querySelectorAll("button,input").forEach(control=>control.disabled=true);
+      form.querySelector("[data-status]").textContent="";
+      const next=chapters[chapterPosition(c)], result=el.querySelector("[data-result]");
+      result.innerHTML='<section class="section card '+(score>=4?"worked":"callout")+'"><h2>Výsledok kapitoly</h2><p class="score">'+score+'/5</p><p>'+
+        (score>=4?"Máš zvládnutú väčšinu zručností tejto kapitoly. Prejdi si vysvetlenia a pokračuj.":"Pozri si vysvetlenia pri odpovediach. Potom si zopakuj dielňu alebo tréning.")+
+        '</p><div class="row"><button type="button" class="btn secondary" data-again>Zopakuj test</button>'+btn(lessonHref(c),"Otvor výklad",true)+(next?btn(lessonHref(next),"Ďalšia kapitola"):btn("#pokrok","Pozri svoj pokrok"))+'</div></section>';
+      result.querySelector("[data-again]").addEventListener("click",()=>{start();el.focus();});
+      result.focus();
+    });
+  }
+  start();
+}
+function render(){
+  const [raw,part=""]=(location.hash.slice(1)||"uvod").split("/");
+  if(raw==="main"){main.focus();return;}
+  const c=chapters.find(v=>v.id===raw), tab=lessonNav.some(([id])=>id===part)?part:"";
+  const category=c?"kapitoly":raw;
+  nav.innerHTML=[["uvod","Úvod"],["kapitoly","Kapitoly"],["pokrok","Môj pokrok"],["zdroje","Zdroje"]].map(([id,t])=>'<a href="#'+id+'"'+(id===category?' aria-current="page"':'')+'>'+t+'</a>').join("");
+  document.title=c?c.title+" · Goniometria na maturitu":"Goniometria na maturitu";
+  if(c){
+    main.innerHTML=lessonHeader(c,tab)+(tab?'<div class="quiz focus-target" id="quiz" tabindex="-1"></div>':lesson(c));
+    if(tab)quiz(c,tab);else labSetup(c.lab,document.getElementById("lab"));
+  }else{
+    const pages={uvod:home,kapitoly:overview,pokrok:progressPage,zdroje:sources};
+    main.innerHTML=(Object.hasOwn(pages,raw)?pages[raw]:home)();
+  }
+}
+window.addEventListener("hashchange",()=>{render();main.focus();window.scrollTo(0,0);});
+render();
+
+</script>
+</body>
+</html>
