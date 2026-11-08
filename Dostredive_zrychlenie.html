@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101a2c">
+  <title>Uhlová rýchlosť a dostredivé zrýchlenie • mobilné laboratórium</title>
+  <style>
+    :root{--bg:#0c1424;--panel:#142238;--panel2:#182a43;--line:#31425b;--fg:#edf5ff;--muted:#afc0d5;--cyan:#52d4e6;--blue:#7eacff;--orange:#ffbd76;--green:#86e4b9;--violet:#bba6ff;--red:#ff8996;--radius:17px; color-scheme:dark}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(ellipse at 40% -20%,#203e65 0,transparent 54%),var(--bg);color:var(--fg);font:17px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif}
+    .shell{max-width:1220px;margin:auto;padding:28px 18px 65px}
+    h1,h2,h3,p{margin-top:0}h1{font-size:clamp(1.75rem,3.7vw,2.7rem);line-height:1.15;letter-spacing:-.04em;margin-bottom:8px}h2{font-size:1.24rem;letter-spacing:-.018em;margin-bottom:14px}h3{font-size:1rem;margin-bottom:8px}
+    .lead{max-width:770px;color:var(--muted);margin:0 0 18px}
+    .eyebrow{font-size:.77rem;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--cyan);margin-bottom:8px}
+    .panel{background:linear-gradient(155deg,var(--panel),#102035);border:1px solid #33445d;border-radius:var(--radius);padding:20px;min-width:0}
+    .toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:16px}
+    .segmented{display:flex;gap:5px;padding:5px;border-radius:14px;background:#0a1626;border:1px solid var(--line);width:max-content;max-width:100%}
+    button,input,select{font:inherit}
+    button{cursor:pointer;border:1px solid #4c6787;border-radius:11px;padding:11px 14px;background:#233752;color:#eff8ff;min-height:44px;font-weight:700;transition:background .12s,transform .12s}button:hover:not(:disabled){background:#365477}button:active:not(:disabled){transform:translateY(1px)}button:disabled{opacity:.43;cursor:not-allowed}
+    button.primary{background:#1b96b0;border-color:#38d5e6;color:#061723}button.primary:hover:not(:disabled){background:#5acadb}
+    button.warn{border-color:#85604c;background:#453225}button.ghost{background:transparent}
+    button.active{background:#265a72;border-color:var(--cyan);color:white}
+    :focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+    .segmented button{border:0;background:transparent;color:var(--muted);padding:9px 15px}.segmented button.active{background:#315a72;color:white}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:15px;margin-bottom:16px}
+    .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+    .metric{background:linear-gradient(180deg,#1c314e,#13243b);border:1px solid var(--line);border-radius:14px;padding:14px;min-width:0}
+    .metric small{display:block;color:var(--muted);font-size:.81rem;font-weight:650;min-height:24px}
+    .value{display:block;font-size:clamp(1.38rem,2.6vw,2.03rem);font-weight:750;letter-spacing:-.035em;white-space:nowrap;font-variant-numeric:tabular-nums}
+    .value span{font-size:.76rem;letter-spacing:0;color:var(--muted);font-weight:500}
+    .metric em{display:block;color:var(--muted);font-size:.73rem;font-style:normal;min-height:20px}
+    label{display:block;font-size:.89rem;font-weight:700;margin-bottom:5px;color:#d2e3f7}
+    input[type=number],select{width:100%;background:#0b1a2e;color:var(--fg);border:1px solid #4c6582;border-radius:10px;padding:11px;min-height:44px}
+    input[type=range]{width:100%;accent-color:var(--cyan);min-height:40px;cursor:pointer}
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .help,.micro{color:var(--muted);font-size:.84rem}.micro{font-size:.76rem}
+    .note{border:1px solid #496681;border-left:4px solid var(--cyan);border-radius:10px;background:#142d47;padding:10px 13px;color:#dceaf8;font-size:.89rem}
+    .note.warning{border-color:#805c38;border-left-color:var(--orange);background:#35281e;color:#ffe8c8}
+    .note.danger{border-color:#873e4c;border-left-color:var(--red);background:#341f30}
+    .status{display:flex;align-items:center;gap:10px;min-height:40px;font-size:.86rem;color:#d9ebfb}
+    .dot{width:10px;height:10px;flex-shrink:0;border-radius:50%;background:#7890a7;box-shadow:0 0 0 3px #7890a722}.dot.good{background:var(--green);box-shadow:0 0 0 3px #86e4b925}.dot.bad{background:var(--red);box-shadow:0 0 0 3px #ff899625}
+    .actions{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 0}
+    .visual{min-height:246px;position:relative;overflow:hidden;background:radial-gradient(circle at 33% 50%,#203853,#102139 70%);border:1px solid var(--line);border-radius:14px}
+    .visual svg{display:block;width:100%;max-height:265px;min-height:220px}
+    .visual-caption{font-size:.77rem;color:#bdd0e7;padding:5px 10px 10px;text-align:center}
+    .equation{font-weight:750;color:#d8efff;font-size:1.16rem;text-align:center;letter-spacing:.012em;margin:6px 0 9px}
+    .explain{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+    .explain>div{background:#0b1b30;border:1px solid #30425a;border-radius:11px;padding:11px;font-size:.86rem}
+    .explain strong{display:block;color:var(--cyan)}
+    .plots{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:16px}
+    .plot{position:relative;min-width:0}.plot canvas{display:block;width:100%;height:300px;touch-action:pan-y}
+    .legend{display:flex;gap:15px;flex-wrap:wrap;font-size:.81rem;color:var(--muted)}
+    .legend b{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+    .fit{margin-top:11px;border-top:1px solid var(--line);padding-top:10px;min-height:52px;font-size:.86rem;color:#dceaf9}
+    .lastpoints{width:100%;border-collapse:collapse;font-size:.86rem} .lastpoints th,.lastpoints td{padding:7px 8px;text-align:right;border-bottom:1px solid #34465d;font-variant-numeric:tabular-nums}.lastpoints th:first-child,.lastpoints td:first-child{text-align:left}.tablewrap{overflow-x:auto}
+    .details{font-size:.9rem;color:var(--muted)}details{border-top:1px solid #354b64;padding-top:12px}summary{cursor:pointer;color:#deedfd;font-weight:700;min-height:40px}
+    .simlabel{font-size:.96rem}.slide-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+    .quiz{border:1px solid #455f7f;border-radius:12px;padding:14px;margin-top:16px;background:#101e34}
+    .quiz button{margin:5px 5px 0 0}.feedback{font-size:.88rem;min-height:25px;margin-top:10px}
+    .hidden{display:none!important}
+    .footer{color:#a6bdd6;font-size:.8rem;margin-top:15px}
+    @media(max-width:890px){.grid{grid-template-columns:1fr}.plots{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.explain{grid-template-columns:1fr 1fr}}
+    @media(max-width:480px){.shell{padding:18px 10px 40px}.panel{padding:14px}.fields{grid-template-columns:1fr}.metric{padding:10px}.metrics{gap:8px}.value{font-size:1.45rem}.segmented{width:100%}.segmented button{flex:1;padding:9px 5px;font-size:.87rem}.explain{grid-template-columns:1fr}.plot canvas{height:250px}.actions button{flex:1 1 43%}.toolbar{align-items:stretch}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header>
+    <div class="eyebrow">Fyzikálne laboratórium • pohyb po kružnici</div>
+    <h1>Uhlová rýchlosť a dostredivé zrýchlenie</h1>
+    <p class="lead">Sleduj, ako závisí dostredivé zrýchlenie od <strong>uhlovej rýchlosti ω</strong>. Polomer pri meraní <strong>netreba poznať</strong> – zo vzťahu <strong>a<sub>d</sub> = rω²</strong> ho možno približne odhadnúť až z grafu. Skutočné dáta a simulácia sú oddelené.</p>
+  </header>
+
+  <nav class="toolbar" aria-label="Režim aplikácie">
+    <div class="segmented" role="group" aria-label="Typ práce">
+      <button id="tab-measure" class="active" aria-pressed="true" type="button">Meranie mobilom</button>
+      <button id="tab-sim" aria-pressed="false" type="button">Simulácia</button>
+    </div>
+    <span id="top-status" class="help" role="status">Pripravené na nastavenie pokusu</span>
+  </nav>
+
+  <section class="grid">
+    <article class="panel" aria-labelledby="setup-title">
+      <h2 id="setup-title">1. Nastavenie pokusu</h2>
+      <div class="fields">
+        <div><label for="radius" id="radius-label">Polomer r (m) • nepovinný</label><input id="radius" type="number" min="0.05" max="200" step="0.05" placeholder="Neznámy – nechaj prázdne"><div class="micro" id="radius-help">Na meranie ω a zrýchlenia ho nepotrebuješ. Ak je známy, zobrazí sa aj teoretická krivka.</div></div>
+        <div id="method-wrap"><label for="method">Zdroj uhlovej rýchlosti ω</label><select id="method"><option value="gyro">Gyroskop (bez polomeru)</option><option value="gps">GPS (potrebuje polomer)</option></select><div class="micro">Gyroskop meria otáčanie telefónu priamo. GPS je len náhradný režim pri veľkých kruhoch.</div></div>
+      </div>
+      <div id="measure-tools">
+        <div class="actions">
+          <button type="button" id="enable-motion" class="primary">Povoliť senzory</button>
+          <button type="button" id="calibrate">Kalibrovať v pokoji</button>
+          <button type="button" id="enable-gps">Zapnúť GPS</button>
+        </div>
+        <div class="status"><span id="sensor-dot" class="dot"></span><span id="sensor-status">Zatiaľ neboli získané žiadne údaje zo senzorov.</span></div>
+        <div class="status"><span id="gps-dot" class="dot"></span><span id="gps-status">GPS vypnuté. Pre malé kruhy nie je odporúčané.</span></div>
+        <div class="actions">
+          <button type="button" id="start" class="primary">Spustiť záznam</button>
+          <button type="button" id="stop" disabled>Pozastaviť</button>
+          <button type="button" id="clear" class="ghost">Vymazať údaje</button>
+          <button type="button" id="csv">Export CSV</button>
+        </div>
+        <p class="micro" id="record-info">Záznam: 0 bodov • približne každých 0,8 s. Meraj niekoľko rôznych ustálených rýchlostí.</p>
+      </div>
+      <div id="sim-tools" class="hidden">
+        <div class="slide-top"><label for="sim-speed" class="simlabel">Uhlová rýchlosť ω</label><strong id="sim-speed-val">1,00 rad/s</strong></div>
+        <input type="range" id="sim-speed" min="0" max="5" step="0.05" value="1">
+        <div class="actions"><button type="button" id="sim-capture" class="primary">Pridať modelový bod</button><button type="button" id="sim-clear" class="ghost">Vymazať modelové body</button><button type="button" id="sim-csv" class="ghost">Export modelových bodov CSV</button></div>
+        <div class="note" style="margin-top:12px">Simulácia používa vzorec a = rω², pri zvolenom polomere. Jej body <strong>nie sú namerané údaje</strong>.</div>
+      </div>
+      <div id="experiment-warning" class="note warning" style="margin-top:14px">Experiment predpokladá približne <strong>vodorovnú kruhovú dráhu</strong>, telefón <strong>pevne otočený spolu s plošinou</strong> a viacero <strong>ustálených uhlových rýchlostí</strong>. Pri rozbiehaní, nakláňaní a vibráciách nemeria akcelerometer iba dostredivú zložku.</div>
+    </article>
+
+    <article class="panel" aria-labelledby="viz-title">
+      <h2 id="viz-title">2. Prečo vzniká zrýchlenie?</h2>
+      <div class="visual">
+        <svg viewBox="0 0 560 255" role="img" aria-label="Ilustrácia kruhovej dráhy. Rýchlosť smeruje dotyčnicou a dostredivé zrýchlenie do stredu kružnice.">
+          <defs>
+            <marker id="arrowV" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#52d4e6"/></marker>
+            <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#ffbd76"/></marker>
+          </defs>
+          <circle cx="158" cy="126" r="83" fill="none" stroke="#4b7895" stroke-width="2" stroke-dasharray="6 7"/>
+          <circle cx="158" cy="126" r="3" fill="#e7f5ff"/>
+          <path id="radius-line" d="M158 126 L241 126" stroke="#9fb8cf" stroke-width="1.6" stroke-dasharray="5 4"/>
+          <circle id="phone" cx="241" cy="126" r="13" fill="#a1cbff" stroke="#e5f3ff" stroke-width="2.5"/>
+          <path id="speed-arrow" d="M241 126 L241 60" fill="none" stroke="#52d4e6" stroke-width="4" marker-end="url(#arrowV)" stroke-linecap="round"/>
+          <path id="acc-arrow" d="M241 126 L186 126" fill="none" stroke="#ffbd76" stroke-width="4" marker-end="url(#arrowA)" stroke-linecap="round"/>
+          <text x="158" y="145" text-anchor="middle" font-size="13" fill="#cfdef0">os</text>
+          <text x="290" y="53" fill="#52d4e6" font-size="18" font-weight="bold">v • dotyčnica</text>
+          <text x="290" y="95" fill="#ffbd76" font-size="17" font-weight="bold">a • do stredu</text>
+          <text x="290" y="139" fill="#dceaf9" font-size="15">r = <tspan id="svg-radius">?</tspan> m</text>
+          <text x="290" y="171" fill="#b2c8df" font-size="14">Pre daný polomer:</text>
+          <text x="290" y="195" fill="#dceaf9" font-size="17" font-weight="bold">a = r · ω²</text>
+        </svg>
+        <div class="visual-caption">Schematická animácia smerov; nepredstavuje nasnímanú trajektóriu telefónu.</div>
+      </div>
+      <div class="equation">a<sub>d</sub> = rω²</div>
+      <p class="help" style="margin-bottom:0">Pri rovnakom polomere dvojnásobná <strong>uhlová rýchlosť</strong> znamená <strong>štvornásobné</strong> dostredivé zrýchlenie.</p>
+      <div class="quiz"><h3>Mini-predpoveď</h3><div class="help">Ak sa uhlová rýchlosť ω zdvojnásobí a polomer sa nemení, čo sa stane so zrýchlením?</div><div id="quiz-buttons"><button data-answer="2" type="button">2×</button><button data-answer="4" type="button">4×</button><button data-answer="8" type="button">8×</button></div><div id="quiz-feedback" class="feedback" aria-live="polite"></div></div>
+    </article>
+  </section>
+
+  <section class="metrics" aria-label="Aktuálne hodnoty">
+    <div class="metric"><small>Uhlová rýchlosť ω</small><strong class="value" id="metric-omega">— <span>rad/s</span></strong><em id="metric-omega-src">Z gyroskopu / výpočtu</em></div>
+    <div class="metric"><small>Odhad zrýchlenia zo senzora</small><strong class="value" id="metric-meas">— <span>m/s²</span></strong><em id="metric-meas-src">Nezávislé meranie</em></div>
+    <div class="metric"><small>Modelové zrýchlenie a = rω²</small><strong class="value" id="metric-theory">— <span>m/s²</span></strong><em id="metric-theory-src">Zobrazí sa pri známom polomere</em></div>
+    <div class="metric"><small>Obvodová rýchlosť v</small><strong class="value" id="metric-v">— <span>m/s</span></strong><em id="metric-v-src">Zobrazí sa pri známom polomere</em></div>
+  </section>
+
+  <section class="panel" style="margin-bottom:16px">
+    <h2>3. Grafy: závislosť od uhlovej rýchlosti</h2>
+    <div class="legend" style="margin-bottom:15px"><span><b style="background:var(--blue)"></b>Teória (ak je známy r)</span><span id="legend-data"><b style="background:var(--orange)"></b>Body z akcelerometra</span><span id="legend-active"><b style="background:var(--cyan)"></b>Aktuálny modelový bod</span></div>
+    <div class="plots" style="margin-bottom:0">
+      <div class="plot"><h3>Parabola • a<sub>d</sub> od ω</h3><canvas id="chart-v" aria-label="Graf dostredivého zrýchlenia od uhlovej rýchlosti" role="img"></canvas></div>
+      <div class="plot"><h3>Priamka • a<sub>d</sub> od ω²</h3><canvas id="chart-v2" aria-label="Graf dostredivého zrýchlenia od druhej mocniny uhlovej rýchlosti" role="img"></canvas></div>
+    </div>
+    <div class="fit" id="fit-info">Keď nazbieraš body pri viacerých uhlových rýchlostiach, priamka a ≈ kω² + b umožní odhadnúť polomer: r ≈ k.</div>
+  </section>
+
+  <section class="grid">
+    <article class="panel"><h2>4. Zaznamenané údaje</h2><div class="tablewrap"><table class="lastpoints"><thead><tr><th>Čas (s)</th><th>ω (rad/s)</th><th>ω² (rad²/s²)</th><th>a zo senzora (m/s²)</th></tr></thead><tbody id="data-body"><tr><td colspan="4" style="text-align:center;color:#afc0d5">Zatiaľ žiadne body</td></tr></tbody></table></div><p class="micro">Zobrazí sa posledných 8 bodov. CSV obsahuje všetky údaje a označenie zdroja.</p></article>
+    <article class="panel"><h2>5. Uhol a fyzikálny význam</h2>
+      <p class="help">Pri rovnomernom pohybe po <strong>vodorovnej</strong> kružnici možno z dostredivého zrýchlenia odhadnúť uhol, ktorý zviera ťah reťaze so zvislicou na reťazovom kolotoči. V meraní je to orientačný odhad zo senzora.</p>
+      <div class="equation">tan θ = a<sub>d</sub> / g</div>
+      <div class="metric" style="margin-top:9px"><small>Odhad uhla θ</small><strong class="value" id="metric-angle">— <span>°</span></strong><em>Vypočítaný zo zrýchlenia, nie priamo zmeraný uhol</em></div>
+      <div class="note warning" style="margin-top:14px">Pri <strong>klasickej hojdačke, ktorá sa kýva dopredu a dozadu</strong>, tento jednoduchý postup neplatí. Aj na reťazovom kolotoči môže naklonenie alebo rozbiehanie výrazne skresliť hodnoty.</div>
+    </article>
+  </section>
+
+  <section class="panel details">
+    <h2>Postup a presnosť</h2>
+    <div class="explain">
+      <div><strong>1. Uchytenie, nie meranie polomeru</strong>Telefón pevne a bezpečne uchyť tak, aby sa otáčal spolu s plošinou. Polomer môže zostať neznámy; nie je nutné hľadať gyroskop vo vnútri telefónu.</div>
+      <div><strong>2. Prístup a kalibrácia</strong>V mobilnom prehliadači cez HTTPS povoľ senzory. V pokoji kalibruj približne 2,5 s. Až potom spusti otáčanie a záznam.</div>
+      <div><strong>3. Viac ustálených ω</strong>Postupne skús pomalšie a rýchlejšie otáčanie, vždy chvíľu rovnomerne. Po meraní sleduj závislosť a(ω²), regresiu a exportuj CSV.</div>
+    </div>
+    <details style="margin-top:16px"><summary>Ako presne sa počítajú hodnoty?</summary>
+      <p><strong>Gyroskop a polomer:</strong> meria uhlovú rýchlosť pevného telesa v stupňoch za sekundu (applet prevádza na rad/s). <strong>Umiestnenie gyroskopu v mobile neovplyvňuje meranú ω</strong>: každý bod tuhého telesa má rovnakú uhlovú rýchlosť. Umiestnenie <strong>akcelerometra</strong> však môže mierne ovplyvniť jeho zrýchlenie, keď je os otáčania blízko mobilu. Gyroskop tu meria veľkosť trojrozmernej uhlovej rýchlosti. Ak sa telefón po dráhe pohybuje, ale pritom zostáva stále natočený jedným smerom, gyroskop neodmeria uhlovú rýchlosť obiehania.</p>
+      <p><strong>Akcelerometer:</strong> ak prehliadač poskytuje lineárne zrýchlenie bez gravitácie, používame jeho veľkosť |a|. Inak pri <strong>vodorovnom rovnomernom</strong> otáčaní približne odhadujeme a ≈ √max(0, |f|² − g₀²), kde f je údaj zahŕňajúci gravitáciu a g₀ je jeho pokojová veľkosť. Tento náhradný vzťah nie je všeobecne platný pri náklone alebo zvislej kružnici. Veľkosť zrýchlenia zahŕňa aj tečnú zložku pri rozbiehaní a vibrácie. Dáta sa vyhladzujú mediánom; zlá kalibrácia a filtre zariadenia môžu odhad skresliť.</p>
+      <p><strong>GPS:</strong> je iba alternatíva. Meria obvodovú rýchlosť v, takže na získanie ω = v/r <strong>musíš poznať polomer r</strong>. Pri malých kruhoch je GPS spravidla nepresné. Pri hlavnom gyroskopickom meraní GPS vôbec nepotrebuješ.</p>
+      <p><strong>Grafy:</strong> namerané body majú súradnice (ω, a<sub>senzor</sub>) a (ω², a<sub>senzor</sub>). Regresia a ≈ kω² + b má pri rovnomernom pohybe s pevným polomerom smernicu <strong>k ≈ r</strong> (jednotka m), pokiaľ senzor skutočne odhaduje dostredivé zrýchlenie. Prítomnosť b a nízke R² upozorňujú na šum či chyby modelu. Modrá teoretická čiara sa zobrazuje iba vtedy, keď je r známe. Pri neznámom polomere sa nepredstiera teoretické zrýchlenie ako meranie.</p>
+      <p><strong>Ochrana súkromia:</strong> všetko sa spracúva iba v prehliadači. Poloha sa nikam neodosiela; CSV vzniká až po stlačení Export CSV. Internet je potrebný iba na prípadné sprístupnenie stránky cez HTTPS, nie na výpočty.</p>
+    </details>
+  </section>
+  <p class="footer">Mobilné laboratórium • hlavné meranie nepotrebuje znalosť polomeru • bez externých knižníc • funguje aj ako simulácia. Veličiny v SI jednotkách.</p>
+</main>
+<script>
+'use strict';
+(() => {
+  const $ = id => document.getElementById(id);
+  const RAD = Math.PI / 180, G = 9.81;
+  const state = {
+    mode:'measure', radius:2, knownRadius:null, speedMode:'gyro', simOmega:1,
+    simPoints:[], realPoints:[], running:false, startTime:0, elapsed:0, recTimer:null,
+    motionListening:false, geoWatch:null, motionSeenAt:0, gyroSeenAt:0, linSeenAt:0, rawSeenAt:0,
+    gyroVec:[0,0,0], gyroBias:[0,0,0], g0:G,
+    gyroHistory:[], linHistory:[], rawHistory:[], gpsHistory:[], gpsFix:null,
+    gpsSpeed:null, gpsSpeedAt:0, gpsAccuracy:null, gpsMethod:'', gpsError:'',
+    calibrating:false, calibration:[], calibTimer:null, angle:0, lastFrame:performance.now(),
+    lastSource:'', sensorMessage:'',
+  };
+  const fmt = (n, d=2) => Number.isFinite(n) ? n.toLocaleString('sk-SK',{minimumFractionDigits:d,maximumFractionDigits:d}) : '—';
+  const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
+  const median = a => { if (!a.length) return null; const sorted=[...a].sort((x,y)=>x-y); const mid=sorted.length>>1; return sorted.length%2?sorted[mid]:(sorted[mid-1]+sorted[mid])/2; };
+  const vec3 = a => a && [a.x,a.y,a.z].every(Number.isFinite) ? [a.x,a.y,a.z] : null;
+  const norm = arr => Math.hypot(...arr);
+  const active = (t,max=2500) => t>0 && performance.now()-t<max;
+  const prune = (a, now,windowMs=2500)=>{while(a.length && now-a[0].t>windowMs) a.shift();};
+  const speedMethodText={gyro:'gyroskop',gps:'GPS',sim:'simulácia'};
+
+  function onMotion(event){
+    const now=performance.now(); state.motionSeenAt=now;
+    const rr=event.rotationRate;
+    if(rr && [rr.alpha,rr.beta,rr.gamma].every(Number.isFinite)){
+      const vec=[rr.alpha,rr.beta,rr.gamma]; state.gyroVec=vec;
+      state.gyroSeenAt=now;
+      state.gyroHistory.push({t:now,val:norm(vec.map((x,i)=>(x-state.gyroBias[i])*RAD))});
+      prune(state.gyroHistory,now);
+    }
+    const la=vec3(event.acceleration);
+    if(la){state.linSeenAt=now;state.linHistory.push({t:now,val:norm(la)});prune(state.linHistory,now);}
+    const raw=vec3(event.accelerationIncludingGravity);
+    if(raw){state.rawSeenAt=now;state.rawHistory.push({t:now,val:norm(raw)});prune(state.rawHistory,now);}
+    if(state.calibrating){state.calibration.push({gyro:rr && [rr.alpha,rr.beta,rr.gamma].every(Number.isFinite) ? [rr.alpha,rr.beta,rr.gamma]:null, f:raw?norm(raw):null});}
+  }
+
+  async function enableMotion(){
+    $('sensor-status').textContent='Žiadosť o prístup k pohybovým senzorom…';
+    if(!window.isSecureContext){ state.sensorMessage='Použi HTTPS (prípadne localhost). Bez zabezpečeného kontextu prehliadač nemusí sprístupniť senzory.'; updateUI(); return; }
+    if(!('DeviceMotionEvent' in window)){state.sensorMessage='Tento prehliadač neposkytuje DeviceMotionEvent. Použi simuláciu.';updateUI();return;}
+    try {
+      if(typeof DeviceMotionEvent.requestPermission==='function'){
+        const result=await DeviceMotionEvent.requestPermission();
+        if(result!=='granted') throw Error('Prístup k pohybovým senzorom nebol povolený.');
+      }
+      if(!state.motionListening){window.addEventListener('devicemotion',onMotion);state.motionListening=true;}
+      state.sensorMessage='Čakám na údaje gyroskopu a akcelerometra…';
+      updateUI();
+    }catch(err){state.sensorMessage='Senzory: '+String(err.message||err);updateUI();}
+  }
+
+  function calibrate(){
+    if(state.running){state.sensorMessage='Na kalibráciu najprv pozastav záznam.';updateUI();return;}
+    if(!state.motionListening){state.sensorMessage='Najprv stlač „Povoliť senzory“.';updateUI();return;}
+    if(state.calibrating) return;
+    state.calibration=[];state.calibrating=true;
+    state.sensorMessage='Kalibrujem: nechaj mobil 2,5 sekundy v pokoji…';
+    $('calibrate').disabled=true;updateUI();
+    state.calibTimer=setTimeout(()=>{
+      state.calibrating=false;
+      const gyro=state.calibration.map(x=>x.gyro).filter(Boolean);
+      const force=state.calibration.map(x=>x.f).filter(Number.isFinite);
+      if(gyro.length>=4){state.gyroBias=[0,1,2].map(j=>median(gyro.map(x=>x[j])));}
+      if(force.length>=4){state.g0=median(force);}
+      state.gyroHistory=[];state.linHistory=[];state.rawHistory=[];
+      state.sensorMessage=(gyro.length>=4 || force.length>=4)
+        ? `Kalibrácia hotová • g₀ = ${fmt(state.g0,2)} m/s² • vzoriek: ${state.calibration.length}`
+        :'Bez dostatočných údajov. Skús povolenie a kalibráciu znova.';
+      state.calibration=[];$('calibrate').disabled=false;updateUI();
+    },2500);
+  }
+
+  const haversine=(a,b)=>{
+    const lat1=a.latitude*RAD,lat2=b.latitude*RAD;
+    const dl=(b.latitude-a.latitude)*RAD,do1=(b.longitude-a.longitude)*RAD;
+    const s=Math.sin(dl/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(do1/2)**2;
+    return 12742000*Math.asin(Math.min(1,Math.sqrt(s)));
+  };
+  function onGPS(pos){
+    const c=pos.coords, now=performance.now();
+    let v=null,method='';
+    if(Number.isFinite(c.speed) && c.speed>=0 && c.speed<60){v=c.speed;method='rýchlosť GPS';}
+    else if(state.gpsFix){
+      const dt=(pos.timestamp-state.gpsFix.timestamp)/1000;
+      if(dt>=1 && dt<30){v=haversine(state.gpsFix.coords,c)/dt;method='rozdiel polôh';}
+    }
+    state.gpsFix={coords:{latitude:c.latitude,longitude:c.longitude},timestamp:pos.timestamp};
+    state.gpsAccuracy=c.accuracy;
+    if(v!==null && Number.isFinite(v) && v<60){
+      state.gpsSpeedAt=now;state.gpsMethod=method;
+      state.gpsHistory.push({t:now,val:v});prune(state.gpsHistory,now,10000);
+      state.gpsSpeed=median(state.gpsHistory.slice(-5).map(x=>x.val));
+    }
+    state.gpsError='';updateUI();
+  }
+  function enableGPS(){
+    if(!window.isSecureContext){state.gpsError='GPS vyžaduje HTTPS alebo bezpečný lokálny kontext.';updateUI();return;}
+    if(!navigator.geolocation){state.gpsError='GPS v tomto prehliadači nie je dostupné.';updateUI();return;}
+    if(state.geoWatch!==null) return;
+    state.gpsError='Čakám na povolenie a presnú polohu…';
+    state.geoWatch=navigator.geolocation.watchPosition(onGPS,err=>{
+      state.gpsError='GPS: '+err.message;
+      if(err.code===1 && state.geoWatch!==null){navigator.geolocation.clearWatch(state.geoWatch);state.geoWatch=null;}
+      updateUI();
+    },{enableHighAccuracy:true,maximumAge:0,timeout:18000});
+    updateUI();
+  }
+
+  function recentMedian(history,within=900){
+    const now=performance.now();return median(history.filter(x=>now-x.t<=within).map(x=>x.val));
+  }
+  function getMeasurements(){
+    const r=state.knownRadius,method=state.speedMode;
+    const gyroOK=active(state.gyroSeenAt,2200),gpsOK=active(state.gpsSpeedAt,6500);
+    const omegaGyro=gyroOK?recentMedian(state.gyroHistory,1100):null;
+    const gpsReady=gpsOK&&state.gpsSpeed!==null;
+    let source=null,v=null,omega=null;
+    if(method==='gyro'&&omegaGyro!==null){
+      source='gyro';omega=omegaGyro;v=r===null?null:omega*r;
+    } else if(method==='gps'&&r!==null&&gpsReady){
+      source='gps';v=state.gpsSpeed;omega=v/r;
+    }
+    let acc=null,accMethod=null;
+    if(active(state.linSeenAt,2200)){
+      const a=recentMedian(state.linHistory,1100);
+      if(a!==null){acc=a;accMethod='|a| bez g';}
+    }
+    if(acc===null&&active(state.rawSeenAt,2200)){
+      const f=recentMedian(state.rawHistory,1100);
+      if(f!==null){acc=Math.sqrt(Math.max(0,f*f-state.g0*state.g0));accMethod='odhad z |f| a g₀';}
+    }
+    const accTheory=(omega===null||r===null)?null:omega*omega*r;
+    // In real measurement, theta is inferred from independently estimated acceleration.
+    const theta=acc===null?null:Math.atan2(acc,G)/RAD;
+    return {v,omega,acc,accMethod,accTheory,theta,source};
+  }
+  
+  function addMeasuredPoint(){
+    if(!state.running||state.mode!=='measure')return;
+    const m=getMeasurements();
+    if(m.omega===null||m.acc===null)return;
+    const t=(performance.now()-state.startTime)/1000+state.elapsed;
+    const point={t,v:m.v,omega:m.omega,aTheory:m.accTheory,aMeasured:m.acc,accMethod:m.accMethod,source:m.source,r:state.knownRadius,gpsAccuracy:m.source==='gps'?state.gpsAccuracy:null};
+    state.realPoints.push(point);
+    if(state.realPoints.length>4000)state.realPoints.shift();
+    state.lastSource=m.source;
+    redrawAll();
+  }
+  function startRecord(){
+    if(state.mode!=='measure'||state.running)return;
+    const m=getMeasurements();
+    if(m.omega===null||m.acc===null){
+      $('top-status').textContent=m.omega===null?'Chýba uhlová rýchlosť. Povoľ gyroskop; pri GPS zadaj aj polomer.':'Chýba signál akcelerometra. Povoľ senzory a over údaje.';
+      return;
+    }
+    state.running=true;state.startTime=performance.now();
+    state.recTimer=setInterval(addMeasuredPoint,800);
+    addMeasuredPoint();updateUI();
+  }
+  function stopRecord(){
+    if(!state.running)return;
+    state.elapsed+=(performance.now()-state.startTime)/1000;
+    state.running=false;clearInterval(state.recTimer);state.recTimer=null;updateUI();
+  }
+  function clearData(){stopRecord();state.elapsed=0;state.realPoints=[];state.lastSource='';redrawAll();}
+  function changeRadius(value){
+    const trimmed=String(value).trim();
+    const sim=state.mode==='sim';
+    if(!trimmed && !sim){
+      if(state.speedMode==='gps'&&state.realPoints.length){
+        if(!confirm('GPS potrebuje polomer. Vymazať body z GPS a ponechať polomer neznámy?')){refreshRadiusUI();return;}
+        clearData();
+      }
+      state.knownRadius=null;
+      for(const p of state.realPoints){
+        if(p.source==='gyro'){p.r=null;p.v=null;p.aTheory=null;}
+      }
+      refreshRadiusUI();redrawAll();return;
+    }
+    const next=Number(trimmed);
+    if(!Number.isFinite(next)||next<0.05||next>200){refreshRadiusUI();return;}
+    if(sim){
+      if(Math.abs(next-state.radius)<1e-9)return;
+      if(state.simPoints.length){
+        if(!confirm('Zmena polomeru vymaže modelové body simulácie, aby sa nemiešali rôzne polomery. Pokračovať?')){refreshRadiusUI();return;}
+        state.simPoints=[];
+      }
+      state.radius=next;
+    } else {
+      if(state.speedMode==='gps' && state.realPoints.length && next!==state.knownRadius){
+        if(!confirm('Zmena polomeru zneplatní staršie body merané pomocou GPS. Vymazať existujúce body?')){refreshRadiusUI();return;}
+        clearData();
+      }
+      state.knownRadius=next;
+      // Gyroscope angular rate and measured acceleration remain unchanged when r changes.
+      for(const p of state.realPoints){
+        if(p.source==='gyro'){
+          p.r=next;p.v=p.omega*next;p.aTheory=next*p.omega*p.omega;
+        }
+      }
+    }
+    refreshRadiusUI();redrawAll();
+  }
+  function refreshRadiusUI(){
+    const sim=state.mode==='sim',r=sim?state.radius:state.knownRadius;
+    $('radius').value=r===null?'':String(r);
+    $('radius-label').textContent=sim?'Polomer kruhovej dráhy r (m)':'Polomer r (m) • nepovinný';
+    $('radius-help').textContent=sim?'V simulácii určuje modelové zrýchlenie a = rω².':'Polomer netreba pre graf ω a a. Ak ho poznáš, zobrazí sa modelová krivka.';
+    $('svg-radius').textContent=r===null?'?':fmt(r,2);
+  }
+  
+  function switchMode(which){
+    if(which===state.mode)return;
+    if(state.running)stopRecord();
+    state.mode=which;
+    $('tab-measure').classList.toggle('active',which==='measure');$('tab-sim').classList.toggle('active',which==='sim');
+    $('tab-measure').setAttribute('aria-pressed',String(which==='measure'));$('tab-sim').setAttribute('aria-pressed',String(which==='sim'));
+    $('measure-tools').classList.toggle('hidden',which!=='measure');$('sim-tools').classList.toggle('hidden',which!=='sim');$('method-wrap').classList.toggle('hidden',which!=='measure');
+    $('legend-data').innerHTML=which==='measure'?'<b style="background:var(--orange)"></b>Body z akcelerometra':'<b style="background:var(--violet)"></b>Modelové body simulácie';
+    $('legend-active').classList.toggle('hidden',which!=='sim');
+    refreshRadiusUI();redrawAll();
+  }
+  function saveCSV(){
+    const arr=state.mode==='measure'?state.realPoints:state.simPoints;
+    if(!arr.length){$('top-status').textContent='Najprv pridaj alebo zaznamenaj aspoň jeden bod.';return;}
+    const lines=['rezim;cas_s;omega_rad_s;omega2_rad2_s2;zrychlenie_senzor_m_s2;polomer_zadany_m;zrychlenie_model_m_s2;obvodova_rychlost_m_s;metoda_senzora;zdroj_omega;gps_presnost_m'];
+    for(const p of arr){
+      const n=x=>Number.isFinite(x)?x.toFixed(5):'';
+      lines.push([state.mode==='sim'?'simulacia':'meranie',n(p.t),n(p.omega),n(p.omega*p.omega),n(p.aMeasured),n(p.r),n(p.aTheory),n(p.v),p.accMethod||'',p.source,n(p.gpsAccuracy)].join(';'));
+    }
+    // UTF-8 BOM helps spreadsheet apps recognize Slovak labels correctly.
+    const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+    const url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download='dostredive_zrychlenie_'+(state.mode==='measure'?'meranie':'simulacia')+'.csv';
+    document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+  }
+  function simulationReading(){const r=state.radius,omega=state.simOmega,v=r*omega,aTheory=omega*omega*r;return {v,omega,acc:null,accMethod:null,accTheory:aTheory,theta:Math.atan2(aTheory,G)/RAD,source:'sim'};}
+  function addSimPoint(){const m=simulationReading();state.simPoints.push({t:state.simPoints.length,r:state.radius,v:m.v,omega:m.omega,aTheory:m.accTheory,aMeasured:null,source:'sim',accMethod:null,gpsAccuracy:null});redrawAll();}
+  function readout(id,value,unit,decimals=2){$(id).innerHTML=(value===null?'—':fmt(value,decimals))+' <span>'+unit+'</span>';}
+
+  function fitMeasured(data){
+    const good=data.filter(p=>Number.isFinite(p.aMeasured)&&Number.isFinite(p.omega));
+    if(good.length<5)return null;
+    const xs=good.map(p=>p.omega*p.omega),ys=good.map(p=>p.aMeasured);
+    const mx=xs.reduce((a,b)=>a+b,0)/xs.length,my=ys.reduce((a,b)=>a+b,0)/ys.length;
+    const Sxx=xs.reduce((a,x)=>a+(x-mx)**2,0),Sxy=xs.reduce((a,x,i)=>a+(x-mx)*(ys[i]-my),0);
+    if(Sxx<1e-7 || Math.max(...xs)-Math.min(...xs)<.05)return null;
+    const k=Sxy/Sxx,b=my-k*mx,Syy=ys.reduce((a,y)=>a+(y-my)**2,0);
+    const r2=Syy>1e-9?1-ys.reduce((a,y,i)=>a+(y-(k*xs[i]+b))**2,0)/Syy:null;
+    return {k,b,r2,n:good.length,rEst:k>0?k:null};
+  }
+  
+  function plot(canvasId, squared, model, data, fit){
+    const canvas=$(canvasId),width=Math.max(250,Math.round(canvas.getBoundingClientRect().width)),height=Number.parseFloat(getComputedStyle(canvas).height)||300,dpr=Math.min(2.5,devicePixelRatio||1);
+    canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
+    const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
+    const left=57,right=13,top=12,bottom=52,w=width-left-right,h=height-top-bottom;
+    const vals=data.map(p=>p.omega).filter(Number.isFinite),mval=model.omega??0;
+    let maxOmega=Math.max(.5,...vals.map(x=>x*1.14),mval*1.14);
+    maxOmega=Math.min(30,maxOmega);
+    if(state.mode==='sim') maxOmega=5;
+    const maxX=squared?maxOmega*maxOmega:maxOmega;
+    const r=state.mode==='sim'?state.radius:state.knownRadius;
+    const teorMax=r===null?0:maxOmega*maxOmega*r;
+    const samplesMax=Math.max(0,...data.map(p=>Number.isFinite(p.aMeasured)?p.aMeasured:(p.aTheory??0)));
+    const maxY=Math.max(1,teorMax*1.12,samplesMax*1.14, (model.accTheory||0)*1.14, (model.acc||0)*1.14);
+    const X=x=>left+w*x/maxX,Y=y=>top+h-h*y/maxY;
+    ctx.font='12px system-ui,sans-serif';ctx.textBaseline='middle';
+    for(let i=0;i<=4;i++){
+      const x=maxX*i/4,y=maxY*i/4;
+      ctx.strokeStyle='#354b64';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(X(x),top);ctx.lineTo(X(x),top+h);ctx.moveTo(left,Y(y));ctx.lineTo(left+w,Y(y));ctx.stroke();
+      ctx.fillStyle='#a6bdd6';ctx.textAlign='center';ctx.fillText(fmt(x,x<12?2:1),X(x),top+h+15);
+      ctx.textAlign='right';ctx.fillText(fmt(y,y<10?1:0),left-7,Y(y));
+    }
+    ctx.strokeStyle='#91b0ce';ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,top+h);ctx.lineTo(left+w,top+h);ctx.stroke();
+    ctx.textAlign='center';ctx.fillStyle='#d5e5fa';ctx.font='13px system-ui,sans-serif';
+    ctx.fillText(squared?'ω² (rad²/s²)':'ω (rad/s)',left+w/2,height-9);
+    ctx.save();ctx.translate(15,top+h/2);ctx.rotate(-Math.PI/2);ctx.fillText('a (m/s²)',0,0);ctx.restore();
+    // Draw a model only with known radius (or in a separate simulation).
+    if(r!==null){
+      ctx.strokeStyle='#7eacff';ctx.lineWidth=2.8;ctx.beginPath();
+      for(let i=0;i<=140;i++){
+        const x=maxX*i/140,y=r*(squared?x:x*x);
+        if(i===0)ctx.moveTo(X(x),Y(y));else ctx.lineTo(X(x),Y(y));
+      }
+      ctx.stroke();
+    }
+    // Fit measured acceleration vs omega squared, not model-derived acceleration.
+    if(fit&&state.mode==='measure'){
+      ctx.save();ctx.beginPath();ctx.rect(left,top,w,h);ctx.clip();ctx.strokeStyle='#ffc68f';ctx.lineWidth=2;ctx.setLineDash([6,5]);ctx.beginPath();
+      const fitY=x=>fit.k*(squared?x:x*x)+fit.b;
+      for(let i=0;i<=140;i++){
+        const x=maxX*i/140;if(i===0)ctx.moveTo(X(x),Y(fitY(x)));else ctx.lineTo(X(x),Y(fitY(x)));
+      }
+      ctx.stroke();ctx.restore();
+    }
+    const isSim=state.mode==='sim';
+    ctx.save();ctx.beginPath();ctx.rect(left,top,w,h);ctx.clip();
+    for(const p of data){
+      const value=isSim?p.aTheory:p.aMeasured;
+      if(!Number.isFinite(value))continue;
+      const vx=squared?p.omega*p.omega:p.omega;
+      if(!Number.isFinite(vx)||vx>maxX)continue;
+      ctx.beginPath();ctx.arc(X(vx),Y(value),4.3,0,Math.PI*2);
+      ctx.fillStyle=isSim?'#bba6ff':'#ffbd76';ctx.fill();ctx.strokeStyle='#17253d';ctx.lineWidth=1;ctx.stroke();
+    }
+    if(isSim&&model.omega!==null){const xx=squared?model.omega*model.omega:model.omega;ctx.beginPath();ctx.arc(X(xx),Y(model.accTheory),7,0,Math.PI*2);ctx.fillStyle='#52d4e6';ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();}
+    ctx.restore();
+  }
+  
+  function drawTable(data){
+    if(!data.length){$('data-body').innerHTML='<tr><td colspan="4" style="text-align:center;color:#afc0d5">Zatiaľ žiadne body</td></tr>';return;}
+    $('data-body').innerHTML=data.slice(-8).reverse().map(p=>'<tr><td>'+fmt(p.t,1)+'</td><td>'+fmt(p.omega,3)+'</td><td>'+fmt(p.omega*p.omega,3)+'</td><td>'+(p.aMeasured===null?'—':fmt(p.aMeasured,2))+'</td></tr>').join('');
+  }
+  function updateUI(){
+    const sim=state.mode==='sim',m=sim?simulationReading():getMeasurements();
+    readout('metric-v',m.v,'m/s');readout('metric-omega',m.omega,'rad/s');
+    readout('metric-theory',m.accTheory,'m/s²');readout('metric-meas',sim?null:m.acc,'m/s²');
+    readout('metric-angle',m.theta,'°',1);
+    $('metric-v-src').textContent=sim?'Vypočítané v = rω':m.source==='gps'?'Priamo z GPS':m.v===null?'Nepotrebné – polomer neznámy':'Z polomeru a ω';
+    $('metric-theory-src').textContent=sim?'Simulácia • presný model':m.accTheory===null?'Neznámy polomer – bez modelu':'a = rω² • iba model';
+    $('metric-omega-src').textContent=sim?'Nastavené v simulácii':m.source==='gyro'?'Priamo z gyroskopu':m.source==='gps'?'Vypočítané v / r':'Čakám na gyroskop / GPS';
+    $('metric-meas-src').textContent=sim?'V simulácii sa nič nemeria':m.accMethod||'Nedostupné / čakám na akcelerometer';
+    const sensorGood=active(state.motionSeenAt,2200),gpsGood=active(state.gpsSpeedAt,6500);
+    $('sensor-dot').className='dot'+(sensorGood?' good':state.sensorMessage.startsWith('Senzory:')?' bad':'');
+    if(state.calibrating||!sensorGood){$('sensor-status').textContent=state.sensorMessage||'Zatiaľ neboli získané žiadne údaje zo senzorov.';}
+    else $('sensor-status').textContent=`Senzor aktívny • gyro ${active(state.gyroSeenAt)?'áno':'nie'} • akcelerometer ${active(state.linSeenAt)||active(state.rawSeenAt)?'áno':'nie'} • g₀ ${fmt(state.g0)} m/s²`;
+    $('gps-dot').className='dot'+(gpsGood?' good':state.gpsError&&!state.gpsError.startsWith('Čakám')?' bad':'');
+    $('gps-status').textContent=gpsGood?`GPS aktívne • presnosť polohy ±${fmt(state.gpsAccuracy,0)} m • ${state.gpsMethod}${state.knownRadius!==null&&state.knownRadius<15?' • malý kruh: nízka spoľahlivosť':''}`:(state.gpsError||'GPS vypnuté. Pre malé kruhy nie je odporúčané.');
+    $('start').disabled=state.running;$('stop').disabled=!state.running;
+    $('start').textContent=state.realPoints.length?'Pokračovať v zázname':'Spustiť záznam';
+    $('radius').disabled=state.running;
+    $('calibrate').disabled=state.running||state.calibrating;
+    $('method').disabled=state.running;
+    $('record-info').textContent=`${state.running?'Zaznamenávam':'Záznam pozastavený'} • ${state.realPoints.length} bodov • každých 0,8 s`;
+    if(sim)$('top-status').textContent=`Simulácia • ${state.simPoints.length} modelových bodov`;
+    else if(state.running)$('top-status').textContent=`Prebieha záznam • ${state.realPoints.length} bodov`;
+    else if(m.source)$('top-status').textContent=`Pripravené • ω: ${speedMethodText[m.source]} • polomer ${state.knownRadius===null?'neznámy':'zadaný'}`;
+    else if(state.speedMode==='gps'&&state.knownRadius===null)$('top-status').textContent='GPS potrebuje zadaný polomer; vyber gyroskop pre meranie bez polomeru';
+    else if(!state.motionListening&&state.geoWatch===null)$('top-status').textContent='Povoľ senzory, alebo prepni na simuláciu';
+    else $('top-status').textContent='Čakám na údaje uhlovej rýchlosti';
+  }
+  function redrawAll(){
+    updateUI();
+    const sim=state.mode==='sim',m=sim?simulationReading():getMeasurements(),data=sim?state.simPoints:state.realPoints;
+    const fit=sim?null:fitMeasured(data);
+    plot('chart-v',false,m,data,fit);plot('chart-v2',true,m,data,fit);drawTable(data);
+    if(sim){$('fit-info').textContent=`Simulácia: ${data.length} modelových bodov. Na grafe a(ω²) majú ležať na priamke so smernicou r = ${fmt(state.radius,3)} m.`;}
+    else if(fit){$('fit-info').innerHTML=`Experimentálna regresia: <strong>a = ${fmt(fit.k,3)} · ω² ${fit.b>=0?'+':'−'} ${fmt(Math.abs(fit.b),3)}</strong> (a v m/s²; ω v rad/s). `+
+      `Odhad efektívneho polomeru z kladnej smernice: <strong>${fit.rEst===null?'nemožno určiť':fmt(fit.rEst,2)+' m'}</strong> · R² = ${fmt(fit.r2,3)} · ${fit.n} bodov. `+
+      (state.knownRadius===null?'Zadaný polomer: neznámy. ':`Zadaný polomer: ${fmt(state.knownRadius,2)} m. `)+
+      '<span class="micro">Interpretuj iba pri ustálenej rotácii a dostatočne kvalitnom meraní.</span>';}
+    else $('fit-info').textContent=`Meranie: ${data.length} bodov (${data.filter(p=>p.aMeasured!==null).length} s odhadom zrýchlenia). Na regresiu treba aspoň 5 bodov s dostatočne rozdielnymi ω. Zadať polomer nie je potrebné.`;
+  }
+  
+  function paintGeometry(now){
+    let dt=Math.min(.07,(now-state.lastFrame)/1000);state.lastFrame=now;
+    const m=state.mode==='sim'?simulationReading():getMeasurements();
+    if(m.omega!==null)state.angle+=(m.omega*dt);
+    const ang=state.angle,x=158+83*Math.cos(ang),y=126-83*Math.sin(ang);
+    const ux=Math.cos(ang),uy=-Math.sin(ang),tx=-Math.sin(ang),ty=-Math.cos(ang);
+    $('phone').setAttribute('cx',x);$('phone').setAttribute('cy',y);
+    $('radius-line').setAttribute('d',`M158 126 L${x} ${y}`);
+    $('speed-arrow').setAttribute('d',`M${x} ${y} L${x+60*tx} ${y+60*ty}`);
+    $('acc-arrow').setAttribute('d',`M${x} ${y} L${x-55*ux} ${y-55*uy}`);
+    requestAnimationFrame(paintGeometry);
+  }
+  $('enable-motion').addEventListener('click',enableMotion);
+  $('calibrate').addEventListener('click',calibrate);
+  $('enable-gps').addEventListener('click',enableGPS);
+  $('start').addEventListener('click',startRecord);$('stop').addEventListener('click',stopRecord);
+  $('clear').addEventListener('click',clearData);$('csv').addEventListener('click',saveCSV);
+  $('radius').addEventListener('change',e=>changeRadius(e.target.value));
+  $('method').addEventListener('change',e=>{state.speedMode=e.target.value;if(state.realPoints.length){if(!confirm('Zmena zdroja ω vymaže doterajšie namerané body, aby sa nemiešali rôzne metódy. Pokračovať?')){$('method').value=state.speedMode==='gyro'?'gps':'gyro';return;}clearData();}redrawAll();});
+  $('tab-measure').addEventListener('click',()=>switchMode('measure'));
+  $('tab-sim').addEventListener('click',()=>switchMode('sim'));
+  $('sim-speed').addEventListener('input',e=>{state.simOmega=Number(e.target.value);$('sim-speed-val').textContent=fmt(state.simOmega,2)+' rad/s';redrawAll();});
+  $('sim-capture').addEventListener('click',addSimPoint);
+  $('sim-clear').addEventListener('click',()=>{state.simPoints=[];redrawAll();});
+  $('sim-csv').addEventListener('click',saveCSV);
+  $('quiz-buttons').addEventListener('click',e=>{
+    const b=e.target.closest('button[data-answer]');if(!b)return;
+    const ok=b.dataset.answer==='4';$('quiz-feedback').textContent=ok?'Správne! a = rω², preto r(2ω)² = 4a.':'Skús znova: r zostáva rovnaké, ale uhlová rýchlosť je v druhej mocnine.';
+    $('quiz-feedback').style.color=ok?'var(--green)':'var(--orange)';
+  });
+  window.addEventListener('resize',()=>redrawAll());
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.running){stopRecord();$('top-status').textContent='Záznam bol pozastavený po prepnutí aplikácie na pozadie.';}});
+  // Repaint numeric sensor readouts several times per second without constantly clearing the graphs.
+  setInterval(updateUI,400);
+  setInterval(()=>{if(state.mode==='measure'&&!state.running)redrawAll();},1600);
+  refreshRadiusUI();redrawAll();requestAnimationFrame(paintGeometry);
+})();
+</script>
+</body></html>
