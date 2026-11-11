@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="sk"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Polovodiče • od väzby k dióde</title><style>
+:root{color-scheme:dark;--bg:#0b1424;--panel:#132238;--text:#eef5ff;--muted:#acbfd7;--blue:#58d5ff;--gold:#ffc56e}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:18px/1.55 system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:28px}header{display:flex;justify-content:space-between;align-items:center;gap:24px}h1{font-size:clamp(28px,4vw,44px);line-height:1.15;margin:8px 0}h2{font-size:25px;margin:0 0 12px}p{margin:10px 0}.eyebrow{color:var(--blue);font-size:13px;letter-spacing:2px;text-transform:uppercase}.subtitle,small,.muted{color:var(--muted)}nav{display:flex;gap:9px;margin:24px 0;flex-wrap:wrap}button,select{font:inherit;color:inherit;background:#21364f;border:1px solid #38516d;border-radius:10px;min-height:44px;padding:9px 15px;cursor:pointer}button:hover{background:#304963}button.active{background:#a9eaff;color:#092235;border-color:#a9eaff}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:4px}.grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px}.panel{background:var(--panel);border:1px solid #294059;border-radius:18px;padding:22px;min-width:0}.stage{padding:0;overflow:hidden}.stagehead{padding:18px 22px 8px}.stagehead p{font-size:16px}canvas{display:block;width:100%;height:auto}#scene{aspect-ratio:1000/510;background:linear-gradient(160deg,#12253d,#0c182b)}.legend{display:flex;flex-wrap:wrap;gap:10px 22px;padding:14px 22px;font-size:15px;border-top:1px solid #294059}.dot{display:inline-block;width:10px;height:10px;border-radius:100%;background:var(--blue);margin-right:7px}.hole{color:var(--gold);font-weight:bold}.controls label{display:block;margin:16px 0 5px}.controls input[type=range]{width:100%;accent-color:var(--blue);min-height:32px}.controls select{width:100%}.readout{background:#0c1a2b;border-radius:10px;padding:12px;margin:14px 0;font-size:17px}.readout strong{display:block;font-size:25px;color:var(--blue)}.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:18px}.toolbar label{font-size:16px}.toolbar select{padding:8px}.explain{margin-top:20px;display:grid;grid-template-columns:1.25fr 1fr;gap:20px}.steps{padding-left:24px}.steps li{margin:10px 0}.task{border-left:3px solid var(--gold);padding-left:15px}details{margin-top:18px}summary{cursor:pointer;min-height:44px;padding-top:10px;color:var(--blue)}a{color:var(--blue)}#chart{margin-top:12px;background:#0b192b;border-radius:12px}.badge{color:#9ce0b8;font-size:15px}.foot{font-size:14px;margin:24px 0;color:var(--muted)}[hidden]{display:none!important}@media(max-width:1000px){.grid{grid-template-columns:1fr}.controls{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.controls h2,.controls .readout,.controls .action{grid-column:1/-1}}@media(max-width:600px){main{padding:12px}header{display:block}.panel{padding:16px}.stage{padding:0}nav button{flex:1 1 42%;font-size:16px}.explain{grid-template-columns:1fr}.controls{display:block}.legend{font-size:14px;padding:12px}.stagehead{padding:16px}body{font-size:17px}}
+</style><main><header><div><div class="eyebrow">Interaktívne fyzikálne laboratórium</div><h1>Polovodiče</h1><p class="subtitle">Od chýbajúceho elektrónu vo väzbe po svetlo z LED.</p></div><div class="badge">Si • P–N • LED<br><span class="muted">Názorný model, nie mikroskopický záznam</span></div></header><nav aria-label="Časti laboratória"><button data-tab="lattice" class="active">01 Väzby a nosiče</button><button data-tab="junction">02 Vznik prechodu</button><button data-tab="diode">03 Dióda a LED</button></nav><div class="grid"><section class="panel stage"><div class="stagehead"><h2 id="title"></h2><p id="caption"></p></div><div style="overflow-x:auto"><canvas id="scene" width="1000" height="510" role="img" aria-label="Animovaný model polovodiča; slovný opis je pod animáciou"></canvas></div><div class="legend"><span><i class="dot"></i>Elektrón e⁻</span><span><b class="hole">— · —</b> Neobsadené miesto vo väzbe = diera</span><span>⊕ / ⊖ Nepohyblivý ión prímesi</span></div></section><aside class="panel controls" id="controls"></aside></div><div class="toolbar"><button id="zoom">Zväčšiť detail</button><button id="pause">Pozastaviť</button><button id="step">Krok +0,2 s</button><button id="restart">Od začiatku</button><button id="reset">Obnoviť nastavenia</button><label for="speed">Rýchlosť animácie</label><select id="speed"><option value="0.35">0,35×</option><option value="1" selected>1×</option><option value="2">2×</option></select></div><div class="explain"><section class="panel"><h2>Čo sa deje a prečo</h2><div id="explanation"></div></section><section class="panel"><h2 id="sideTitle">Vyskúšaj a vysvetli</h2><div id="challenge"></div><canvas id="chart" width="600" height="300" aria-label="Voltampérová charakteristika diódy" role="img" hidden></canvas><details><summary>Hranice modelu a fyzikálne poznámky</summary><div id="limits"></div></details></section></div><details class="foot"><summary>Zdroje a modelové rovnice</summary><p>Vzdelávací schematický model: pohyb je výrazne spomalený, počty častíc a geometria nie sú v mierke. Štvorcová sieť je 2D náhradou tetraedrických väzieb kremíka. Diagramy ukazujú prevažne drift/difúziu, nie rýchly náhodný tepelný pohyb.</p><p>Dióda: I = Iₛ[exp(Uᴅ/(nUₜ)) − 1], Uₛ = Uᴅ + RI, Uₜ = 0,02585 V, n = 2, R = 220 Ω. Iₛ = 10⁻⁹ A (Si), 10⁻¹⁸ A (model červenej LED). Teplota diódy je pevná, prieraz nie je modelovaný.</p><p><a href="https://hyperphysics.gsu.edu/hbase/Solids/intrin.html" target="_blank" rel="noopener">Georgia State University: vlastné polovodiče</a> · <a href="https://hyperphysics.gsu.edu/hbase/Solids/pnjun.html" target="_blank" rel="noopener">Prechod P–N</a> · <a href="https://hyperphysics.gsu.edu/hbase/Electronic/led.html" target="_blank" rel="noopener">LED</a> · <a href="https://www.physics.wisc.edu/courses/home/spring2021/623/sn/3-PN_Junction_notes.pdf" target="_blank" rel="noopener">University of Wisconsin: P–N</a></p></details></main><script>
+'use strict';
+const $=id=>document.getElementById(id), C=$('scene'),g=C.getContext('2d');
+const defaults={tab:'lattice',kind:'i',temp:300,light:0,field:0,joined:false,device:'si',voltage:0,pairMode:'auto'};let s={...defaults},time=0,joinTime=0,paused=false,last=0,speed=1;
+C.width=2000;C.height=1020;g.scale(2,2);
+$('zoom').onclick=()=>{let on=C.style.minWidth==='900px';C.style.minWidth=on?'':'900px';$('zoom').textContent=on?'Zväčšiť detail':'Prispôsobiť šírke'};
+const blue='#58d5ff',gold='#ffc56e',muted='#acbfd7';const mod=(a,n)=>(a%n+n)%n;
+function text(t,x,y,color='#eef5ff',size=20,align='center'){g.fillStyle=color;g.font=`${size}px system-ui`;g.textAlign=align;g.fillText(t,x,y)}
+function line(x,y,X,Y,color='#55738d',w=2,dash=[]){g.beginPath();g.setLineDash(dash);g.moveTo(x,y);g.lineTo(X,Y);g.strokeStyle=color;g.lineWidth=w;g.stroke();g.setLineDash([])}
+function electron(x,y,r=5){g.beginPath();g.arc(x,y,r,0,7);g.fillStyle=blue;g.fill()}
+function atom(x,y,label='Si'){g.beginPath();g.arc(x,y,18,0,7);g.fillStyle=label==='Si'?'#203e58':'#3b3b52';g.fill();g.strokeStyle='#6b8aa2';g.stroke();text(label,x,y+6,'#dbe7f3',16)}
+function vacancy(x,y){g.fillStyle='#122238';g.fillRect(x-7,y-9,14,19);line(x-19,y,x-7,y,gold,3);line(x+7,y,x+19,y,gold,3);line(x-7,y-8,x-7,y+8,gold,2);line(x+7,y-8,x+7,y+8,gold,2);electron(x,y+7,3)}
+function arrow(x,y,X,Y,color=gold){line(x,y,X,Y,color,3);let a=Math.atan2(Y-y,X-x);line(X,Y,X-12*Math.cos(a-.5),Y-12*Math.sin(a-.5),color,3);line(X,Y,X-12*Math.cos(a+.5),Y-12*Math.sin(a+.5),color,3)}
+function region(x,w,label,color){g.fillStyle=color;g.fillRect(x,90,w,290);text(label,x+w/2,67)}
+function slider(id,label,min,max,step,value,unit){return `<div><label for="${id}">${label} <output id="${id}Val">${value}${unit}</output></label><input id="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${value}"></div>`}
+function select(id,label,options,value){return `<div><label for="${id}">${label}</label><select id="${id}">${options.map(([v,t])=>`<option value="${v}" ${v===value?'selected':''}>${t}</option>`).join('')}</select></div>`}
+function diode(v=s.voltage,dev=s.device){let Is=dev==='si'?1e-9:1e-18;let lo=-3,hi=5;for(let k=0;k<90;k++){let u=(lo+hi)/2;let i=Is*Math.expm1(u/.0517);if(u+220*i>v)hi=u;else lo=u}let u=(lo+hi)/2;return {u,i:Is*Math.expm1(u/.0517)}}
+function niceNumber(v){return (Math.abs(v)<.00001?0:v).toLocaleString('sk-SK',{maximumFractionDigits:2})}
+function niceCurrent(a){a=Math.abs(a);if(a===0)return '0 A';if(a<1e-9)return '< 1 nA';let unit=a>=.001?'mA':a>=1e-6?'µA':'nA',factor=unit==='mA'?1000:unit==='µA'?1e6:1e9;return niceNumber(a*factor)+' '+unit}
+function build(){let t=s.tab;document.querySelectorAll('[data-tab]').forEach(el=>{el.classList.toggle('active',el.dataset.tab===t);el.setAttribute('aria-pressed',el.dataset.tab===t)});$('chart').hidden=t!=='diode';$('sideTitle').textContent=t==='diode'?'Prúd a napätie na dióde':'Vyskúšaj a vysvetli';let controls='';
+if(t==='lattice'){controls=select('kind','Materiál',[['i','Čistý kremík'],['p','Typ P • bór'],['n','Typ N • fosfor']],s.kind)+slider('temp','Teplota',200,500,10,s.temp,' K')+slider('light','Osvetlenie (hν ≥ Eɡ)',0,100,10,s.light,' %')+slider('field','Elektrické pole →',-2,2,1,s.field,' rel. j.')+(s.kind==='i'?select('pairMode','Vznik párov',[['auto','Automaticky • teplo a svetlo'],['manual','Ručne • sledovať jeden pár']],s.pairMode):'')+`<button class="action" id="pair">Dodať energiu jednej väzbe</button>`;}
+if(t==='junction'){controls=`<p>Dve oblasti jedného kryštálu s odlišnými prímesami.</p><button class="action" id="join">${s.joined?'Znovu oddeliť':'Vytvoriť prechod P–N'}</button><p class="muted">Sleduj difúziu, rekombináciu a rast vnútorného elektrického poľa.</p>`;}
+if(t==='diode'){controls=select('device','Súčiastka',[['si','Kremíková dióda'],['led','Červená LED (model)']],s.device)+slider('voltage','Napätie zdroja Uₛ',-2,5,.05,s.voltage,' V')+`<p class="muted">Sériový rezistor R = 220 Ω obmedzuje prúd. Uₛ = Uᴅ + RI.</p>`;}
+$('controls').innerHTML='<h2>Ovládanie experimentu</h2>'+controls+'<div class="readout" id="readout" aria-live="polite"></div>';
+for(const id of ['kind','temp','light','field','device','voltage','pairMode'])if($(id))$(id).oninput=e=>{const v=e.target.value;s[id]=['temp','light','field','voltage'].includes(id)?+v:v;const out=$(id+'Val');if(out)out.textContent=v+({temp:' K',light:' %',field:' rel. j.',voltage:' V'}[id]||'');if(id==='kind'||id==='pairMode'){time=0;resetIntrinsic();build()}else{update();draw()}};
+if($('join'))$('join').onclick=()=>{s.joined=!s.joined;joinTime=time;build()};if($('pair'))$('pair').onclick=()=>{if(s.kind==='i')spawnPair(true);else eventStart=time;update();draw()};update();draw();}
+let eventStart=-100;
+function update(){let t=s.tab;let titles={lattice:'Elektrón chýba vo väzbe. Atóm zostáva.',junction:'Ako vzniká vnútorná bariéra',diode:'Napätie mení bariéru aj prúd'};$('title').textContent=titles[t];
+let cap='',exp='',task='',lim='',r='';
+if(t==='lattice'){cap='Detail väzieb: dva modré body tvoria väzbový pár. Zlaté prerušenie označuje jeden chýbajúci elektrón.';let excit=Math.max(0,(s.temp-200)/300)+s.light/100; r=`<strong>${s.kind==='i'?'Vlastný polovodič':s.kind==='p'?'Väčšinové nosiče: diery':'Väčšinové nosiče: elektróny'}</strong>${s.field===0?'Bez poľa: bez výsledného driftového prúdu.':'Elektróny driftujú proti poľu; diery v smere poľa.'}<br>${excit>1?'Výraznejšia tvorba párov elektrón–diera.':'Slabšia tvorba párov elektrón–diera.'}`;
+exp=`<ol class="steps"><li>Kremík vytvára štyri kovalentné väzby. Tepelná energia alebo absorbovaný fotón s dostatočnou energiou môže uvoľniť väzbový elektrón: vznikne <b>voľný elektrón aj diera</b>.</li><li>Do neobsadeného miesta môže preskočiť susedný väzbový elektrón. Pôvodne prázdna väzba sa doplní a neobsadené miesto vznikne vedľa. Takto sa pohybuje diera; atómy necestujú.</li><li>${s.kind==='p'?'Bór má tri valenčné elektróny. Ako akceptor prijme elektrón z valenčného pásu: zostane viazaný záporný ión B⁻ a pohyblivá diera.':s.kind==='n'?'Fosfor má päť valenčných elektrónov. Piaty je slabo viazaný a ľahko sa uvoľní: zostane nepohyblivý kladný ión P⁺ a voľný elektrón.':'Vo vlastnom polovodiči vznikajú elektróny a diery v pároch: n = p.'}</li><li>Elektrické pole usmerní pohyb nosičov. Viac nosičov obvykle znamená väčšiu vodivosť. Rekombinácia voľného elektrónu s dierou počet nosičov znižuje.</li></ol>`;task='Vypni pole a zvyšuj teplotu. Prečo pribúdajú nosiče, ale nevznikne usmernený driftový prúd? Potom obráť pole a sleduj elektróny aj neobsadené väzby.';lim='Vo vlastnom polovodiči sa v každom zobrazenom deji vytvorí jeden voľný elektrón a jedna diera; pri rekombinácii sa oba nosiče odstránia súčasne. Počet párov je výrazne zmenšený. Porušená väzba je názorné zobrazenie vybudenia elektrónu z valenčného do vodivostného pásu, nie trvalé poškodenie mriežky. Počty nosičov sú ilustračné, nie vypočítané koncentrácie. Model predpokladá ionizované prímesi. Pri dopovaní nepribúda celkový náboj materiálu: pohyblivý náboj kompenzujú ióny. Závislosť vodivosti od teploty dopovaného polovodiča nie je vždy monotónna; mení sa aj pohyblivosť. Fotonová energia je tu nad zakázaným pásom Si (~1,12 eV pri izbovej teplote).';}
+if(t==='junction'){cap='P je vľavo, N vpravo. Ióny prímesí zostávajú na svojich miestach aj po odchode pohyblivých nosičov.';r=`<strong>${s.joined?'Vzniká ochudobnená oblasť':'Oddelené oblasti'}</strong>${s.joined?'V rovnováhe: difúzny a driftový prúd sa vyrušia. Výsledný prúd = 0.':'P aj N sú ako celok elektricky neutrálne.'}`;exp='<ol class="steps"><li>Po vytvorení prechodu difundujú elektróny z N do P a diery z P do N kvôli rozdielu koncentrácií.</li><li>V blízkosti rozhrania rekombinujú. Ubúdajú pohyblivé nosiče; odkryjú sa nepohyblivé záporné akceptory na strane P a kladné donory na strane N.</li><li>Vzniknuté elektrické pole smeruje z N do P. Brzdí ďalšiu difúziu väčšinových nosičov.</li><li>Rovnováha je dynamická: driftový a difúzny prúd majú rovnakú veľkosť a opačné smery. Bez vonkajšieho zdroja nezískame trvalý výsledný prúd.</li></ol>';task='Pred spojením predpovedz smer pohybu elektrónov. Po spojení vysvetli, prečo zostane strana N pri rozhraní kladná, hoci sa volá N.';lim='Spojenie je didaktická animácia. Reálny prechod sa vytvára rôznym dopovaním v súvislom materiáli, nie obyčajným pritlačením dvoch kúskov. Mriežka a časy sú schematické; nejde o simuláciu jednotlivých kvantových stavov. Horné a dolné riadky striedavo ukazujú difúziu elektrónu a prenos diery. Počty prímesí a nosičov nie sú v mierke. V rovnováhe sa difúzny a driftový prúd vyrovnávajú; mikroskopické protitoky nie sú jednotlivo vykreslené.';}
+if(t==='diode'){let d=diode();cap='Rovnaká mriežka ako pri vzniku prechodu. Diera sa presúva dopĺňaním väzieb; voľný elektrón ju pri rekombinácii doplní. Zelený rámik označuje doplnenú väzbu.';r=`<strong>I = ${(d.i*1000).toFixed(3)} mA</strong>Uᴅ = ${d.u.toFixed(3)} V<br>Pᴅ = ${(d.u*d.i*1000).toFixed(3)} mW<br>${s.voltage<0?'Záverný prúd je v modeli veľmi malý.':s.voltage===0?'Bez vonkajšieho napätia: I = 0.':'Prúd narastá plynulo, bez ostrého prahu.'}`;exp=`<ol class="steps"><li>V priepustnom smere (+ na P) vonkajšie napätie znižuje bariéru. Elektróny sa injektujú z N do P a diery z P do N. Za prechodom rekombinujú.</li><li>V závernom smere (+ na N) sa bariéra a ochudobnená oblasť zväčšujú. Tečie len malý prúd menšinových nosičov; prieraz tu neskúmame.</li><li>${s.device==='led'?'V LED z vhodného polovodiča môže rekombinácia odovzdať energiu fotónu. Červené vlnovky znázorňujú svetlo; časť energie aj v LED končí ako teplo. Farbu určuje najmä materiál a energia prechodu, nie samotné napätie.':'V kremíkovej dióde sa energia odovzdáva prevažne mriežke (fonónom): dióda sa zahrieva. Kremík má nepriamy zakázaný pás, preto je veľmi neefektívnym zdrojom svetla.'}</li><li>Prúd nevznikne skokom pri jedinom napätí. Známe „0,7 V“ pre Si je iba typická hodnota pri určitom prúde. Rezistor bráni prudkému rastu prúdu.</li></ol>`;task='Zvyšuj napätie po malých krokoch. Porovnaj Si a LED pri rovnakom napätí zdroja. Bod na grafe používa napätie na dióde Uᴅ, nie Uₛ.';lim='Shockleyho rovnica s ilustračnými parametrami a sériovým rezistorom. Šírka oblasti, rýchlosť animácie a intenzita zábleskov sú schematické. Každý riadok sleduje vybraný pár nosičov; počty bodov nie sú skutočnou koncentráciou. Nový cyklus predstavuje ďalšie nosiče dodané kontaktmi z vonkajšieho obvodu. Pod 10 nA sa usmernený tok nekreslí, hoci prúd sa stále počíta. LED je z iného materiálu než kremík; spoločná mriežka je iba názorná 2D schéma. V LED aj v Si sa časť energie odovzdáva mriežke; svetelná účinnosť tu nie je kvantitatívne modelovaná. Graf zobrazuje priepustnú vetvu; záverný prúd je pod rozlíšením tejto mierky.';drawChart();}
+$('caption').textContent=cap;$('explanation').innerHTML=exp;$('challenge').innerHTML='<p class="task">'+task+'</p>';$('limits').textContent=lim;$('readout').innerHTML=r;}
+let intrinsic={pairs:[],last:0,budget:0,seed:127,serial:0};
+function resetIntrinsic(){intrinsic={pairs:[],last:time,budget:0,seed:127,serial:0}}
+function randPair(){intrinsic.seed=(1664525*intrinsic.seed+1013904223)>>>0;return intrinsic.seed/4294967296}
+function spawnPair(manual=false){
+ let free=[];for(let row=0;row<4;row++){let peers=intrinsic.pairs.filter(p=>p.row===row);if(peers.length>=3)continue;for(let slot=0;slot<7;slot++)if(!peers.some(p=>p.slot===slot||p.next===slot))free.push({row,slot});}
+ if(!free.length)return false;let {row,slot}=free[Math.floor(randPair()*free.length)],source=s.light>0&&randPair()<s.light/(s.light+30)?'fotón':'tepelná energia';
+ intrinsic.pairs.push({id:++intrinsic.serial,row,slot,origin:slot,age:0,hop:0,from:slot,next:slot,source,seed:randPair()*6,ex:170+slot*100,ey:110+row*75-5,rec:null,manual});return true;
+}
+function advanceIntrinsic(){
+ if(time<intrinsic.last)resetIntrinsic();let dt=Math.min(.25,Math.max(0,time-intrinsic.last));intrinsic.last=time;if(!dt)return;
+ const rate=.7+3.9*Math.pow((s.temp-200)/300,1.2)+s.light/100*3;
+ if(s.pairMode==='auto'){intrinsic.budget+=dt*rate;while(intrinsic.budget>=1){spawnPair();intrinsic.budget-=1}}
+ for(let p of intrinsic.pairs){p.age+=dt;let y=110+p.row*75;
+  if(p.age<1){p.ex=170+p.slot*100;p.ey=y-5;}
+  else if(p.age<1.8){let f=(p.age-1)/.8;p.ex=170+p.origin*100+20*f;p.ey=y-5-37*f;}
+  else if(p.age<7){p.ex=120+mod(p.ex-120+dt*(-s.field*85+18*Math.cos(p.age*2+p.seed)),700);p.ey=y-35+8*Math.sin(p.age*2+p.seed);
+   if(p.next===p.slot){let dir=s.field?Math.sign(s.field):(randPair()<.5?-1:1),next=mod(p.slot+dir,7);if(!intrinsic.pairs.some(q=>q!==p&&q.row===p.row&&(q.slot===next||q.next===next))){p.from=p.slot;p.next=next;p.hop=0;p.dir=dir;}}
+   if(p.next!==p.slot){p.hop+=dt*(.6+Math.abs(s.field)*1.2);if(p.hop>=1){p.slot=p.next;p.hop=0;}}
+  }else{if(!p.rec){p.rec={x:p.ex,y:p.ey};p.next=p.slot;p.from=p.slot;p.hop=0}let f=Math.min(1,(p.age-7)/1.3);p.ex=p.rec.x+(170+p.slot*100-p.rec.x)*f;p.ey=p.rec.y+(y-5-p.rec.y)*f;}
+ }
+ intrinsic.pairs=intrinsic.pairs.filter(p=>p.age<9.3);
+}
+function intrinsicCount(){return intrinsic.pairs.filter(p=>p.age>=1&&p.age<8.3).length}
+function lattice(){if(s.kind!=='i'){latticeDoped();return}advanceIntrinsic();
+ let n=intrinsicCount();text('Vznik páru: 1 elektrón opustí väzbu → 1 voľný e⁻ + 1 diera',500,30,'#eef5ff',21);
+ for(let row=0;row<4;row++){let y=110+row*75,peers=intrinsic.pairs.filter(a=>a.row===row),activePairs=peers.filter(p=>p.age>=1&&p.age<8.3);
+  for(let col=0;col<7;col++){let x=170+col*100;line(x-32,y,x+32,y,'#58758c',3);electron(x,y+5,4);
+   if(activePairs.some(p=>col===p.slot)){g.fillStyle='#122238';g.fillRect(x-7,y-10,14,14);line(x-7,y-9,x-7,y+3,gold,2);line(x+7,y-9,x+7,y+3,gold,2)}
+   else if(!activePairs.some(p=>p.age>=1.8&&p.age<7&&p.next!==p.slot&&col===p.next))electron(x,y-5,4);
+  }
+  for(let col=0;col<8;col++){let x=120+col*100;if(row<3){line(x,y+18,x,y+57);electron(x-4,y+37,3);electron(x+4,y+37,3)}atom(x,y)}
+  for(let p of peers){let x=170+p.slot*100,active=p.age>=1&&p.age<8.3,detail=p.manual;
+   if(p.age<1){g.strokeStyle=gold;g.lineWidth=2;g.strokeRect(x-19,y-17,38,34);arrow(x-38,y-44,x-5,y-13,gold);if(detail)text(p.source,x,y-48,gold,15)}
+   if(active){electron(p.ex,p.ey,6);if(detail)text('e⁻',p.ex+15,p.ey-7,blue,14);if(s.field&&p.age>=1.8&&p.age<7)arrow(p.ex+Math.sign(s.field)*25,p.ey,p.ex+Math.sign(s.field)*9,p.ey,blue);if(detail&&p.age<1.8)text('vznik páru',x,y+25,gold,15);if(p.age>=1.8&&p.age<7&&p.next!==p.slot)electron(120+mod(170+p.slot*100+p.dir*100*(1-p.hop)-120,700),y-5,5);}
+   if(detail&&p.age>=7&&p.age<8.3)text('rekombinácia',x+65,y+23,'#9ce0b8',15);
+   if(p.age>=8.3){g.strokeStyle='#9ce0b8';g.lineWidth=2;g.strokeRect(x-19,y-17,38,34);if(detail)text('väzba doplnená',x,y+25,'#9ce0b8',14)}
+  }
+ }
+ text('Voľné elektróny: '+n+'     |     Diery: '+n+'     |     Nosiče vznikajú aj zanikajú v pároch.',500,425,'#eef5ff',18);
+ if(s.field){arrow(310,465,310+Math.sign(s.field)*110,465,gold);arrow(700,465,700-Math.sign(s.field)*110,465,blue);text('pole E / prenos dier',310,495,gold,16);text('drift voľných e⁻',700,495,blue,16)}else{text('Bez poľa: neusporiadaný pohyb, bez výsledného driftového prúdu.',500,475,muted,18)}
+ $('readout').innerHTML='<strong>Voľné e⁻: '+n+' · diery: '+n+'</strong>Vlastný polovodič: každý nový voľný elektrón zanechá jednu dieru.<br><small>Počítame len nosiče v zobrazenom výreze, nie skutočnú koncentráciu. Viac energie zvyšuje frekvenciu vzniku párov. Okraje sú prepojené: nosič pokračuje zo susednej časti kryštálu, nejde o odraz ani vznik nového páru.</small>';
+}
+function latticeDoped(){let strength=Math.max(0,(s.temp-200)/300)+s.light/100,rows=Math.min(4,Math.ceil(strength*2)+(s.kind==='p'?2:0));let drift=s.field;for(let row=0;row<4;row++){let y=120+row*75,phase=time*(drift?Math.abs(drift)*.65:.5)+row*1.7,idx=mod(Math.floor(phase),7),f=phase%1,dir=drift?Math.sign(drift):(Math.floor(time/6)%2?1:-1);if(dir<0)idx=6-idx;let next=mod(idx+dir,7),hole=row<rows;for(let col=0;col<7;col++){let x=170+col*100;line(x-32,y,x+32,y,'#45617a',3);if(hole&&col===idx){vacancy(x,y);if(next!==0&&next!==6)electron(x+(next-idx)*100*(1-f),y-5)}else{electron(x-5,y-5,4);if(!(hole&&col===next&&next!==0&&next!==6))electron(x+5,y+5,4)}}for(let col=0;col<8;col++){let x=120+col*100;if(row<3){line(x,y+18,x,y+57);electron(x-5,y+37,3);electron(x+5,y+37,3)}atom(x,y,(row===1&&col===3&&s.kind!=='i')?(s.kind==='p'?'B⁻':'P⁺'):'Si')}}
+let n=2*Math.ceil(strength*2)+(s.kind==='n'?5:0);for(let j=0;j<n;j++){let x=120+mod(j*119-time*(drift||.15)*35,700),y=92+(j%4)*75+Math.sin(time+j)*9;electron(x,y,6)}
+if(drift){arrow(160,435,drift>0?380:80,435,gold);text('Pole E a konvenčný prúd',440,442,gold,18);arrow(800,435,800-Math.sign(drift)*140,435,blue);text('drift e⁻',800,478,blue,18)}else text('Bez poľa: náhodný pohyb, nulový výsledný drift',500,450,muted,20);
+let e=time-eventStart;if(e>=0&&e<6){let x=470,y=195;g.fillStyle='#0d192ae8';g.fillRect(215,125,570,240);text(e<1?'1. Absorpcia energie':e<3?'2. Vznik páru elektrón–diera':e<4.5?'3. Voľný elektrón a neobsadená väzba':'4. Rekombinácia: energia do mriežky',500,160,gold,20);atom(380,260);atom(620,260);line(400,260,600,260);let f=e<3?Math.max(0,(e-1)/2):e<4.5?1:Math.max(0,(6-e)/1.5);vacancy(500,260);electron(500+f*110,254-f*65,7);text('Atómy zostávajú na mieste.',500,330,muted,18);if(e<1)arrow(470,190,500,245,gold)}
+}
+function pn(isDiode){if(isDiode)diodeLattice();else junctionLattice()}
+let diodeMotion={last:0,phase:0,device:'si'};
+function diodeVisualState(){
+ const d=diode(),builtIn=s.device==='si'?.85:2.1;
+ const dep=Math.max(12,Math.min(185,85*Math.sqrt(Math.max(.02,1-d.u/builtIn))));
+ // Visual speed is compressed; it is not a microscopic transit time.
+ const rate=d.i>1e-8?Math.min(.65,.055+.12*Math.log10(1+d.i/1e-5)):0;
+ if(time<diodeMotion.last||diodeMotion.device!==s.device){diodeMotion.phase=0;diodeMotion.device=s.device;}
+ const dt=Math.min(.25,Math.max(0,time-diodeMotion.last));diodeMotion.last=time;diodeMotion.phase+=dt*rate;
+ return {...d,dep,rate};
+}
+function diodeLattice(){
+ const d=diodeVisualState(),flow=d.rate>0,led=s.device==='led';
+ region(48,452,'P · anóda'+(s.voltage>0?' +':s.voltage<0?' −':''),'#382e36');region(500,430,'N · katóda'+(s.voltage>0?' −':s.voltage<0?' +':''),'#123349');
+ text(led?'LED · model polovodiča s priamym zakázaným pásom':'Kremíková dióda · nepriamy zakázaný pás',500,28,muted,17);
+ g.fillStyle='#b6c5e222';g.fillRect(500-d.dep,99,d.dep*2,252);line(500,98,500,352,'#92a6bc',1,[4,5]);
+ for(let row=0;row<6;row++){
+  const y=125+row*40,phase=mod(diodeMotion.phase+row/6,1),target=row%2?650:350,steps=(target-300)/50;
+  const q=Math.min(steps,phase/.65*steps),hole=300+Math.floor(q)*50,next=q<steps?hole+50:hole,f=q%1;
+  const alive=flow&&phase<.82,glow=flow&&phase>=.82&&phase<.98,energy=glow?(phase-.82)/.16:0;
+  // In the conducting view each row follows one injected pair all the way to recombination.
+  let holes=flow?(alive?[100,200,hole]:[100,200]):[100,200,300,400].filter(x=>x<500-d.dep);
+  for(let col=0;col<17;col++){
+   const x=100+col*50;line(x-15,y,x+15,y,'#7890a5',2);electron(x,y+4,2.5);
+   if(holes.includes(x)){line(x-4,y-8,x-4,y,gold,2);line(x+4,y-8,x+4,y,gold,2);}
+   else if(!(alive&&phase<.65&&x===next))electron(x,y-4,2.5);
+  }
+  if(alive&&phase<.65)electron(next+(hole-next)*f,y-4,3.5);
+  for(let col=0;col<18;col++){
+   const x=75+col*50,dopant=(col%2===0&&x<500)||(col%2===1&&x>500),exposed=dopant&&Math.abs(x-500)<d.dep;
+   let shake=glow&&Math.abs(x-target)<80?Math.sin(energy*28+col)*2*(1-energy):0;
+   if(row<5){line(x,y+9,x,y+31,'#49657d',1);electron(x-3,y+20,2);electron(x+3,y+20,2);}
+   g.beginPath();g.arc(x+shake,y,9,0,7);g.fillStyle=exposed?(x<500?'#725269':'#295e79'):'#203e58';g.fill();g.strokeStyle=exposed?gold:'#62819a';g.lineWidth=1;g.stroke();
+   if(dopant)text(x<500?'−':'+',x+shake,y+4,exposed?'#fff0c1':muted,13);
+  }
+  if(alive){const k=phase/.82,ex=900+(target-900)*k,ey=y-18+14*Math.pow(k,5);electron(ex,ey,4.5);arrow(ex+22,ey,ex+8,ey,blue);}
+  for(let col=flow?1:0;col<4;col++){let x=600+col*85;if(x>500+d.dep)electron(x+4*Math.sin(time+row+col),y-16+3*Math.cos(time*1.4+col),4);}
+  if(glow){g.strokeStyle='#9ce0b8';g.lineWidth=2;g.strokeRect(target-11,y-10,22,20);
+   if(led){g.save();g.globalAlpha=1-energy;g.strokeStyle='#ff7b98';g.lineWidth=2;for(let sign of [-1,1]){g.beginPath();for(let k=0;k<24;k++){let x=target+sign*(12+energy*55+k),yy=y-8-energy*22+Math.sin(k*.6)*4;k?g.lineTo(x,yy):g.moveTo(x,yy)}g.stroke()}g.restore();}
+   else{g.strokeStyle='#ffbf6e';g.lineWidth=2;g.beginPath();g.arc(target,y,12+energy*20,0,Math.PI*2);g.stroke();}
+  }
+ }
+ arrow(500+d.dep,373,500-d.dep,373,gold);
+ text('Pole ochudobnenej oblasti N → P · '+(s.voltage<0?'záverné napätie bariéru zvyšuje':s.voltage>0?'priepustné napätie bariéru znižuje':'rovnovážna bariéra'),500,400,gold,16);
+ if(flow){arrow(170,430,830,430,gold);text('Konvenčný prúd P → N · I = '+niceCurrent(d.i),500,455,'#eef5ff',18);text(led?'Doplnenie väzby → svetlo (ružové vlnovky) + kmity mriežky':'Doplnenie väzby → energia do mriežky (oranžový impulz a kmity)',500,487,led?'#ff8eab':muted,16);}
+ else{text(s.voltage<0?'Záverný smer: väčšinové nosiče prechodom netečú.':s.voltage===0?'Bez vonkajšieho napätia: výsledný prúd I = 0.':'Prúd je zatiaľ veľmi malý; nejde o ostrý prah zapnutia.',500,445,'#eef5ff',18);text(s.voltage<0?'Malý záverný prúd menšinových nosičov je pod mierkou animácie.':'Modré body = elektróny · zlaté prerušenia väzieb = diery',500,479,muted,16);}
+}
+// Formation of a junction: fixed bond sites, diffusion, recombination, then space charge.
+function junctionState(){let t=s.joined?Math.max(0,time-joinTime):0;let done=0;for(let row=0;row<6;row++)if(s.joined&&t-row*.55>=5)done++;return {t,done,dep:85*done/6}}
+function junctionLattice(){
+ const {t,done,dep}=junctionState(),joined=s.joined,shift=x=>x+(joined?0:(x<500?-22:22));
+ region(48,joined?452:430,'P · väčšinové nosiče: diery','#382e36');region(joined?500:522,430,'N · väčšinové nosiče: elektróny','#123349');
+ if(dep){g.fillStyle='#b6c5e222';g.fillRect(500-dep,99,2*dep,252)}
+ if(joined)line(500,98,500,352,'#92a6bc',1,[4,5]);
+ for(let row=0;row<6;row++){
+  let y=125+row*40,u=joined?t-row*.55:-1,odd=row%2===1,filled=u>=5;
+  // Odd rows show hole diffusion as successive transfers of bound electrons.
+  let hole=450,next=450,f=0;
+  if(odd&&u>=0){let q=Math.min(2,Math.max(0,u-1));hole=450+50*Math.floor(q);if(q<2){next=hole+50;f=q%1}else next=hole;}
+  const holes=[100,200,300,400];if(!filled)holes.push(hole);
+  for(let col=0;col<17;col++){
+   let x=100+col*50;if(!joined&&x===500)continue;
+   let px=shift(x);line(px-15,y,px+15,y,'#7890a5',2);electron(px,y+4,2.5);
+   if(holes.includes(x)){line(px-4,y-8,px-4,y,gold,2);line(px+4,y-8,px+4,y,gold,2)}
+   else if(!(odd&&!filled&&u>=1&&u<3&&x===next))electron(px,y-4,2.5);
+  }
+  if(odd&&!filled&&u>=1&&u<3)electron(next+(hole-next)*f,y-4,3.5);
+  for(let col=0;col<18;col++){
+   let x=75+col*50,px=shift(x),dopant=x===475||x===525;
+   if(row<5){line(px,y+9,px,y+31,'#49657d',1);electron(px-3,y+20,2);electron(px+3,y+20,2)}
+   g.beginPath();g.arc(px,y,9,0,7);g.fillStyle=dopant&&filled?(x<500?'#725269':'#295e79'):'#203e58';g.fill();g.strokeStyle=dopant&&filled?gold:'#62819a';g.lineWidth=1;g.stroke();
+   if(dopant)text(x<500?'−':'+',px,y+4,filled?'#fff0c1':muted,13);
+  }
+  // Background majority electrons remain outside the developing depletion zone.
+  for(let col=0;col<4;col++){let x=660+col*65+5*Math.sin(time*1.4+row+col);electron(shift(x),y-15+3*Math.cos(time+row+col),4)}
+  if(!filled){let ex,ey;
+   if(!joined||u<0){ex=odd?610:580;ey=y-18;}
+   else if(!odd){let q=Math.min(1,Math.max(0,u)/5);ex=580+(450-580)*q;ey=y-18+14*q;}
+   else{let q=Math.min(1,Math.max(0,(u-3)/2));ex=610+(550-610)*q;ey=y-18+14*q;}
+   electron(shift(ex),ey,4.5);
+   if(joined&&u>0&&!odd&&u<4.5)arrow(ex+22,ey,ex+8,ey,blue);
+  }
+  if(joined&&filled&&u<6){let x=odd?550:450;g.strokeStyle='#9ce0b8';g.lineWidth=2;g.strokeRect(x-12,y-11,24,22);}
+ }
+ if(joined&&done){arrow(500+dep,375,500-dep,375,gold);text('Pole E: od kladných donorov N k záporným akceptorom P',500,403,gold,17);}
+ let stage=!joined?'1. Oblasti P a N: nosiče vyrovnávajú náboj prímesí.':done===6?'4. Bariéra: pole brzdí ďalšiu difúziu väčšinových nosičov.':done?'3. Rekombináciou ubúdajú nosiče → zostáva náboj pevných iónov.':'2. Difúzia: e⁻ z N do P; diery z P do N cez preskoky väzbových e⁻.';
+ text(stage,500,445,'#eef5ff',18);text('Modrý bod = elektrón · zlaté prerušenie väzby = diera · + / − = pevná prímes',500,477,muted,16);
+ $('readout').innerHTML='<strong>'+(!joined?'Pred vznikom prechodu':done===6?'Ustálený prechod · výsledný I = 0':'Vznik prechodu · difúzia a rekombinácia')+'</strong>'+(joined?'Pri rekombinácii elektrón doplní neobsadený stav vo väzbe. Zelený rámik ukazuje doplnenú väzbu.<br>':'')+'Prímesové ióny už existujú pred spojením. Po úbytku nosičov ich náboj pri rozhraní zostane nevykompenzovaný.';
+}
+
+function draw(){g.clearRect(0,0,1000,510);if(s.tab==='lattice')lattice();else pn(s.tab==='diode')}
+function drawChart(){let c=$('chart'),ctx=c.getContext('2d');ctx.clearRect(0,0,600,300);let maxU=s.device==='si'?1:2.3,maxI=25;let X=u=>65+u/maxU*495,Y=i=>250-i/maxI*205;ctx.font='16px system-ui';ctx.textAlign='right';for(let i=0;i<=25;i+=5){ctx.strokeStyle='#2b4058';ctx.beginPath();ctx.moveTo(65,Y(i));ctx.lineTo(560,Y(i));ctx.stroke();ctx.fillStyle=muted;ctx.fillText(i,54,Y(i)+5)}ctx.textAlign='center';for(let j=0;j<=4;j++){let u=j*maxU/4;ctx.fillText(u.toFixed(2),X(u),275)}ctx.fillText('Uᴅ (V)',510,298);ctx.fillText('I (mA)',53,25);ctx.strokeStyle=blue;ctx.lineWidth=3;ctx.beginPath();let Is=s.device==='si'?1e-9:1e-18;for(let k=0;k<=500;k++){let u=k/500*maxU,i=Is*Math.expm1(u/.0517)*1000;if(i>maxI)break;if(k===0)ctx.moveTo(X(u),Y(i));else ctx.lineTo(X(u),Y(i))}ctx.stroke();let d=diode();if(d.u>=0){ctx.fillStyle=gold;ctx.beginPath();ctx.arc(X(d.u),Y(d.i*1000),7,0,7);ctx.fill()}else{ctx.fillStyle=gold;ctx.fillText('Záverný bod mimo rozsahu grafu',320,45)}}
+for(let el of document.querySelectorAll('[data-tab]'))el.onclick=()=>{s.tab=el.dataset.tab;document.querySelectorAll('[data-tab]').forEach(b=>{b.classList.toggle('active',b===el);b.setAttribute('aria-pressed',b===el)});build()};
+$('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'Pokračovať':'Pozastaviť'};$('step').onclick=()=>{paused=true;$('pause').textContent='Pokračovať';time+=.2;draw()};$('restart').onclick=()=>{time=0;joinTime=0;eventStart=-100;resetIntrinsic();draw()};$('reset').onclick=()=>{s={...defaults,tab:s.tab};time=0;joinTime=0;eventStart=-100;resetIntrinsic();paused=false;speed=1;$('speed').value='1';$('pause').textContent='Pozastaviť';build()};$('speed').onchange=e=>speed=+e.target.value;
+function frame(ts){if(last&&!paused&&!document.hidden)time+=Math.min((ts-last)/1000,.08)*speed;last=ts;draw();requestAnimationFrame(frame)}document.addEventListener('visibilitychange',()=>last=0);build();requestAnimationFrame(frame);
+</script></html>
