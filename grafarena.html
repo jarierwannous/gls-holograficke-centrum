@@ -62,7 +62,12 @@ const shapes={quad:'Parabola · x²',abs:'Absolútna hodnota · |x|',cube:'Kubic
 function shapeKeys(mode){const f=mode.split('_')[0];return f==='power'?['pneg2','pneg1','quad','cube']:f==='trig'?['sin','cos','tan','cot']:f==='mix'?['exp','log']:f==='shape'?['quad','abs','cube']:shapes[f]?[f]:['quad']}
 function bValues(mode){return mode.endsWith('_easy')?[1]:mode.endsWith('_medium')?[-1]:mode==='mix_hard'?nonzero:mode.endsWith('_hard')?hardB:[1]}
 function label(t,expanded=false){let {family:f,a,h,k}=t;const inner=h===0?'x':`(x ${h>0?'−':'+'} ${fmt(Math.abs(h))})`, tail=term(k,'');if(f==='line')return 'f(x) = '+(a===0?fmt(k):term(a,'x',true)+term(k-a*h,''));if(f==='quad'&&expanded)return 'f(x) = '+(term(a,'x²',true)+term(-2*a*h,'x')+term(a*h*h+k,'')||'0');let g={quad:inner+'²',cube:inner+'³',pneg1:inner+'⁻¹',pneg2:inner+'⁻²',abs:`|x ${h>=0?'−':'+'} ${fmt(Math.abs(h))}|`}[f];const z=t.b===-1?'−'+inner:(t.b??1)===1?inner:fmt(t.b)+' · '+inner;if(f==='exp')g=`${t.r}^(${z})`;if(f==='log')g=`log${({2:'₂',3:'₃',4:'₄',5:'₅'})[t.r]}(${z})`;if(['sin','cos','tan','cot'].includes(f))g=`${{tan:'tg',cot:'cotg'}[f]||f}(${z})`;return 'f(x) = '+(a===0?'0·'+g:term(a,g,true))+tail}
-function formulaText(id,text){text=text.replace(/(\d)([2-5])(?=\^\()/g,'$1 · $2');const el=$(id),start=text.indexOf('^(');if(start<0){el.textContent=text;return}let depth=1,end=start+2;for(;end<text.length&&depth;end++){if(text[end]==='(')depth++;if(text[end]===')')depth--}if(depth){el.textContent=text;return}const before=document.createElement('span'),power=document.createElement('sup'),after=document.createElement('span');before.textContent=text.slice(0,start);power.textContent=text.slice(start+2,end-1);after.textContent=text.slice(end);el.replaceChildren(before,power,after)}
+// Older rooms retain the original task text, including explicit unit factors.
+function displayFormula(text){
+ return text.replace(/(\d)([2-5])(?=\^\()/g,'$1 · $2')
+   .replace(/(^|[=(+−-])(\s*)1\s*·\s*(?=[x(0-9|a-z])/g,'$1$2');
+}
+function formulaText(id,text){text=displayFormula(text);const el=$(id),start=text.indexOf('^(');if(start<0){el.textContent=text;return}let depth=1,end=start+2;for(;end<text.length&&depth;end++){if(text[end]==='(')depth++;if(text[end]===')')depth--}if(depth){el.textContent=text;return}const before=document.createElement('span'),power=document.createElement('sup'),after=document.createElement('span');before.textContent=text.slice(0,start);power.textContent=text.slice(start+2,end-1);after.textContent=text.slice(end);el.replaceChildren(before,power,after)}
 function generate(mode){const f=mode==='line'?'line':pick(shapeKeys(mode));const t={family:f,mode,a:pick(f==='line'?halves:nonzero),h:f==='line'?0:rand(),k:f==='line'?pick(halves):rand(),b:pick(bValues(mode)),r:pick([2,3,4,5])};t.label=label(t,$('quadForm').value==='expanded');return t}
 function selected(){const f=all('input[name=family]:checked').map(x=>x.value);if(!f.length)throw Error('Vyber aspoň jeden druh funkcie.');return f}
 function configure(mode){if(mode==='host'&&!teacher){openTeacher();return}if(mode==='host')$('hostIdentity').textContent='Vlastník hry: '+(teacher.user?.user_metadata?.display_name||teacher.user?.email||'prihlásený účet');practice=mode==='practice';configMode=mode;stopPoll();$('onlineOptions').hidden=practice;$('configTag').textContent=practice?'Tréning bez internetu':'Nastavenie súťaže';$('startConfig').textContent=practice?'Začať tréning':'Vytvoriť hru';show('configScreen')}
@@ -133,7 +138,33 @@ function handles(t=answer){
  let [z,v]=referencePoint(t);
  return [[t.h,t.k,'A'],[t.h+z/(t.b||1),t.k+v*t.a,'B']];
 }
-function draw(){if(!state||!answer||$('gameScreen').hidden)return;let dpr=Math.min(window.devicePixelRatio||1,2),size=Math.max(1,canvas.clientWidth);canvas.width=size*dpr;canvas.height=size*dpr;ctx.setTransform(size*dpr/W,0,0,size*dpr/W,0,0);ctx.clearRect(0,0,W,W);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,W);ctx.font='15px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';for(let i=-8;i<=8;i++){ctx.beginPath();ctx.strokeStyle=i===0?'#657385':'#e3e8ed';ctx.lineWidth=i===0?1.8:1;ctx.moveTo(X(i),Y(-8));ctx.lineTo(X(i),Y(8));ctx.moveTo(X(-8),Y(i));ctx.lineTo(X(8),Y(i));ctx.stroke();if(i%2===0&&i!==0){ctx.fillStyle='#596777';ctx.fillText(String(i),X(i),Y(0)+17);ctx.fillText(String(i),X(0)-18,Y(i))}}ctx.fillStyle='#212938';ctx.fillText(['sin','cos','tan','cot'].includes(answer.family)||state.task?.mode?.startsWith('trig')?'x (rad)':'x',W-30,Y(0)-17);ctx.fillText('y',X(0),17);ctx.fillText('0',X(0)-15,Y(0)+17);
+function radianLabel(halfTurns){
+ if(halfTurns===0)return '0';
+ const n=Math.abs(halfTurns), odd=n%2===1, coefficient=odd?n:n/2;
+ return (halfTurns<0?'−':'')+(coefficient===1?'':String(coefficient))+'π'+(odd?'/2':'');
+}
+function drawGrid(trig,size){
+ const dx=trig?Math.PI/2:1,limit=Math.floor(8/dx);
+ ctx.textAlign='center';ctx.textBaseline='middle';
+ ctx.font=(trig&&size<480?'19px':'15px')+' system-ui';
+ function line(x1,y1,x2,y2,axis){
+   ctx.beginPath();ctx.strokeStyle=axis?'#657385':'#e3e8ed';ctx.lineWidth=axis?1.8:1;
+   ctx.moveTo(X(x1),Y(y1));ctx.lineTo(X(x2),Y(y2));ctx.stroke();
+ }
+ for(let i=-8;i<=8;i++)line(-8,i,8,i,i===0);
+ for(let i=-limit;i<=limit;i++)line(i*dx,-8,i*dx,8,i===0);
+ ctx.fillStyle='#596777';
+ for(let i=-8;i<=8;i+=2)if(i!==0)ctx.fillText(String(i),X(0)-18,Y(i));
+ for(let i=-limit;i<=limit;i++){
+   if(i===0||(!trig&&i%2!==0))continue;
+   ctx.fillText(trig?radianLabel(i):String(i),X(i*dx),Y(0)+17);
+ }
+ ctx.fillStyle='#212938';ctx.fillText(trig?'x (rad)':'x',W-30,Y(0)-17);
+ ctx.fillText('y',X(0),17);ctx.fillText('0',X(0)-15,Y(0)+17);
+}
+function draw(){if(!state||!answer||$('gameScreen').hidden)return;let dpr=Math.min(window.devicePixelRatio||1,2),size=Math.max(1,canvas.clientWidth);canvas.width=size*dpr;canvas.height=size*dpr;ctx.setTransform(size*dpr/W,0,0,size*dpr/W,0,0);ctx.clearRect(0,0,W,W);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,W);const trig=['sin','cos','tan','cot'].includes(answer.family)||state.task?.mode?.startsWith('trig');
+ drawGrid(trig,size);
+ canvas.setAttribute('aria-label',trig?'Graf s osou x v radiánoch. Zvislé čiary mriežky sú po π/2. Graf nastavíš bodmi A a B.':'Súradnicová sústava od mínus 8 do 8. Graf nastavíš bodmi A a B.');
  const curve=(t,color,dash)=>{if(!t)return;ctx.save();ctx.beginPath();ctx.rect(pad,pad,W-2*pad,W-2*pad);ctx.clip();ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.setLineDash(dash);let prev=null;for(let i=0;i<=1600;i++){let x=-8+i/100,y=val(t,x),safe=Number.isFinite(y)&&Math.abs(y)<=8.3;const broken=prev&&crossesPole(t,prev.x,x);if(!safe){prev=null;continue}if(!prev||broken)ctx.moveTo(X(x),Y(y));else ctx.lineTo(X(x),Y(y));prev={x,y}}ctx.stroke();ctx.restore()};
  if(!state.host)curve(model(answer),'#6742c2',[]);if(state.solution)curve(state.solution,'#087c78',[9,7]);if(!state.host){for(let [x,y,n] of handles()){if(x<-8||x>8||y<-8||y>8)continue;ctx.beginPath();ctx.arc(X(x),Y(y),Math.max(9,7*W/size),0,Math.PI*2);ctx.fillStyle=n==='A'?'#6742c2':'#087c78';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#49318b';ctx.font='bold 18px system-ui';ctx.fillText(n,X(x)+(n==='A'?-16:16),Y(y)-16)}}}
 function canDraw(){return state&&!state.host&&state.phase==='active'&&!state.mine&&!$('answerFields').disabled}
