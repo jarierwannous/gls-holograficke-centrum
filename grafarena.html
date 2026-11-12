@@ -11,6 +11,7 @@
 .formula sup{font-size:.65em}.param label{overflow-wrap:anywhere}#configScreen legend{font-weight:700;margin-top:14px}#configScreen input[name=family]{flex-shrink:0}#modelNotice{overflow-wrap:anywhere}.music-volume{display:flex;align-items:center;gap:8px;font-size:14px}.music-volume input{width:90px;min-height:44px}.music-volume output{min-width:38px}header .wrap{flex-wrap:wrap}.header-actions{justify-content:flex-end}@media(max-width:800px){.header-actions{justify-content:flex-start}}#signupPanel{border-top:1px solid #d4cce0;margin-top:20px;padding-top:14px}#signupPanel summary{cursor:pointer;font-weight:700;padding:10px 0}#signupForm{display:grid;gap:12px}
 .finish-card,.race-dialog{background-color:#f1eeff;background-image:radial-gradient(ellipse at 0% 0%,#c6f5f2,transparent 42%),radial-gradient(ellipse at 100% 15%,#ddc7ff,transparent 45%),linear-gradient(125deg,transparent 48%,#ffffff77 49%,transparent 54%),repeating-linear-gradient(0deg,transparent 0 29px,#8172bb19 30px),repeating-linear-gradient(90deg,transparent 0 29px,#8172bb19 30px)}
 .race-dialog::backdrop{background:radial-gradient(ellipse at 20% 10%,#4d408bbd,transparent 55%),#111735bf}.race-dialog .leader,.finish-card .leader{background:#fffc;border-radius:16px;padding:8px 14px}.podium-block{box-shadow:inset -7px -6px 0 #5233541f,inset 3px 3px 0 #ffffff70,0 7px 12px #53487620}.podium{border-bottom:3px solid #70618f55;padding-bottom:6px}
+#plot{touch-action:none}.point-picker,.nudges{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.point-picker [aria-pressed="true"]{outline:2px solid var(--purple);background:#f3edff}.nudges button{min-width:44px;min-height:44px;padding:6px 10px}
 </style></head><body>
 <header><div class="wrap"><div class="brand">Graf<b>Arena</b><div class="tag" style="font-size:10px;letter-spacing:2px">Súboj funkcií</div></div><nav class="header-actions"><button id="homeBtn">Domov</button><button id="accountBtn">Učiteľský účet</button><button id="motionBtn" aria-pressed="true">Animácie: zap.</button><button id="musicBtn" aria-pressed="false" title="Hudba sa prehráva len na tomto zariadení">Hudba: vyp.</button><label class="music-volume" for="musicVolume">Hlasitosť <input id="musicVolume" type="range" min="0" max="100" step="5" value="30" aria-label="Hlasitosť hudby"><output id="musicVolumeLabel" for="musicVolume">30 %</output></label><button id="fullBtn" aria-label="Prepnúť celú obrazovku">Celá obrazovka</button></nav></div></header>
 <main class="wrap">
@@ -23,15 +24,11 @@
 </section>
 <section id="configScreen" class="screen panel" hidden><div class="card"><div class="tag" id="configTag">Nastavenie hry</div><h2 id="configTitle">Čo si dnes precvičíme?</h2><div class="form-grid"><div><h3>Druhy funkcií</h3><label class="check"><input type="checkbox" name="family" value="line" checked> Lineárne · ax + b</label><label class="check"><input type="checkbox" name="family" value="quad" checked> Kvadratické</label><label class="check"><input type="checkbox" name="family" value="power" > Mocninové · n = −2, −1, 2, 3</label><label class="check"><input type="checkbox" name="family" value="abs" > Absolútna hodnota (doplnkové)</label><fieldset><legend>Exponenciálne</legend><label class="check"><input type="checkbox" name="family" value="exp_easy"> Jednoduchá · b = 1</label><label class="check"><input type="checkbox" name="family" value="exp_medium"> Stredná · b = −1</label><label class="check"><input type="checkbox" name="family" value="exp_hard"> Ťažká · ostatné b</label></fieldset><fieldset><legend>Logaritmické</legend><label class="check"><input type="checkbox" name="family" value="log_easy"> Jednoduchá · b = 1</label><label class="check"><input type="checkbox" name="family" value="log_medium"> Stredná · b = −1</label><label class="check"><input type="checkbox" name="family" value="log_hard"> Ťažká · ostatné b</label></fieldset><fieldset><legend>Goniometrické · sin, cos, tg, cotg</legend><label class="check"><input type="checkbox" name="family" value="trig_easy"> Jednoduchá · b = 1</label><label class="check"><input type="checkbox" name="family" value="trig_medium"> Stredná · b = −1</label><label class="check"><input type="checkbox" name="family" value="trig_hard"> Ťažká · ostatné b</label></fieldset><label class="check"><input type="checkbox" name="family" value="mix_hard"> Exp + log · výber grafu a všetky koeficienty</label></div><div><label class="field">Zadanie kvadratickej funkcie<select id="quadForm"><option value="vertex">Vrcholový tvar</option><option value="expanded">Všeobecný tvar</option></select></label><div id="onlineOptions"><label class="field">Počet kôl<input id="roundCount" type="number" min="1" max="20" value="5"></label><label class="field">Čas na kolo (s)<input id="duration" type="number" min="20" max="300" step="10" value="90"></label><label class="check"><input type="checkbox" id="speed"> Bonus za rýchlosť</label><div class="notice" id="hostIdentity">Hra sa priradí k tvojmu účtu centra.</div></div></div></div><p class="method">Môžeš kombinovať druhy aj úrovne. Lineárne: a a b po 0,5 od −3 do 3. Ostatné: a po 0,5, posuny x₀ a y₀ po 1 od −3 do 3. Základ r: 2, 3, 4 alebo 5. Ťažká úroveň pridáva b ∈ {−3; −2,5; −2; −1,5; −0,5; 0,5; 1,5; 2; 2,5; 3}. Nelineárne zadania majú a ≠ 0 a b ≠ 0. Uhly sú v radiánoch. Vybrané možnosti sa striedajú; pre každú zvoľ aspoň jedno kolo.</p><button id="startConfig" class="primary">Vytvoriť hru</button></div></section>
 <section id="joinScreen" class="screen panel" hidden><div class="card"><div class="tag">Ideš do toho?</div><h2>Pripoj sa k triede</h2><form id="joinForm"><label class="field">Šesťmiestny kód<input id="joinCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="123456" required></label><label class="field" style="margin:16px 0">Prezývka<input id="nickname" maxlength="24" required placeholder="Napr. Modrá parabola" autocomplete="off"></label><div class="avatar-edit"><h3>Tvoja matematická postavička</h3><div class="avatar-stage"><div class="avatar-preview"><div id="avatarPreview"></div><button type="button" id="avatarDancePreview">Zatancuj!</button></div><div><span id="avatarLabel" class="tag">Pí</span><p class="method">Vyber symbol, farbu a doplnok. Rovnakú postavičku uvidia aj ostatní hráči.</p><div class="form-grid"><label class="field">Doplnok<select id="avatarAccessory"><option value="none">Bez doplnku</option><option value="glasses">Okuliare</option><option value="crown">Korunka</option><option value="bow">Motýlik</option></select></label><label class="field">Víťazný tanec<select id="avatarDance"><option value="bounce">Hop-hop</option><option value="swing">Hojdačka</option><option value="robot">Robot</option></select></label></div></div></div><div id="avatarSymbols" class="avatar-choices" role="group" aria-label="Matematický symbol"></div><div id="avatarColors" class="avatar-colors" role="group" aria-label="Farba postavičky"></div><small>Výber sa uloží pre ďalšie hry. V rozbehnutej hre zostáva postavička rovnaká.</small></div><button class="primary">Pripojiť sa</button></form><p class="method">Učiteľ musí najprv založiť hru. Pripojenie nových hráčov je možné, kým sa nezačne prvé kolo.</p></div></section>
-<section id="teacherScreen" class="screen panel" hidden><div class="card"><div class="tag">Holografické centrum</div><h2>Učiteľský účet</h2><div id="loginBox"><p>Prihlás sa rovnakým e-mailom a heslom ako do holografického centra. Ak ešte účet nemáš, môžeš si ho tu vytvoriť.</p><form id="teacherLogin"><label class="field">E-mail<input id="teacherEmail" type="email" autocomplete="username" required></label><label class="field" style="margin:14px 0">Heslo<input id="teacherPassword" type="password" autocomplete="current-password" required></label><button class="primary" id="loginSubmit">Prihlásiť sa</button></form><p class="method">Prístup má každý používateľ s bežným účtom centra. Žiaci účet nepotrebujú.</p><details id="signupPanel"><summary>Vytvoriť účet centra</summary><p>S účtom môžeš viesť hry. Právo pridávať obsah do centra prideľuje správca.</p><form id="signupForm"><label class="field">E-mail<input type="email" id="signupEmail" autocomplete="email" required></label><label class="field">Nové heslo<input type="password" id="signupPassword" autocomplete="new-password" minlength="6" required></label><button class="primary" id="signupSubmit">Zaregistrovať sa</button></form><p role="status" id="signupStatus"></p></details></div><div id="teacherLogged" hidden><div class="notice" id="teacherWho"></div><div class="row"><button id="newTeacherGame" class="primary">Vytvoriť súťaž</button><button id="refreshGames">Obnoviť moje hry</button><button id="logoutTeacher">Odhlásiť sa</button></div><div class="sep"></div><h3>Moje hry za posledných 7 dní</h3><p class="method">Svoju hru môžeš otvoriť aj na inom zariadení po prihlásení rovnakým účtom. Zobrazuje sa najviac 50 najnovších hier.</p><div id="myGames"></div></div></div></section>
+<section id="inviteScreen" class="screen panel" hidden><div class="card"><h2>Prijatie pozvánky do aplikácií</h2><form id="inviteForm"><label class="field">Vytvor si heslo<input id="invitePassword" type="password" autocomplete="new-password" minlength="6" required></label><button id="inviteSubmit" class="primary" style="margin-top:14px">Nastaviť heslo</button></form><p id="inviteStatus" role="status"></p></div></section><section id="teacherScreen" class="screen panel" hidden><div class="card"><div class="tag">Holografické centrum</div><h2>Učiteľský účet</h2><div id="loginBox"><p>Prihlás sa rovnakým e-mailom a heslom ako do holografického centra. Ak ešte účet nemáš, požiadaj o prístup do aplikácií.</p><form id="teacherLogin"><label class="field">E-mail<input id="teacherEmail" type="email" autocomplete="username" required></label><label class="field" style="margin:14px 0">Heslo<input id="teacherPassword" type="password" autocomplete="current-password" required></label><button class="primary" id="loginSubmit">Prihlásiť sa</button></form><p class="method">Prístup má každý používateľ s bežným účtom centra. Žiaci účet nepotrebujú.</p><details id="signupPanel"><summary>Požiadať o prístup do aplikácií</summary><p>Po schválení správcom dostaneš e-mail s pozvánkou. Cez ňu si nastavíš heslo na vedenie hier.</p><form id="signupForm"><label class="field">Tvoj e-mail<input type="email" id="signupEmail" autocomplete="email" maxlength="254" required></label><button class="primary" id="signupSubmit">Odoslať žiadosť</button></form><p role="status" id="signupStatus"></p></details></div><div id="teacherLogged" hidden><div class="notice" id="teacherWho"></div><div class="row"><button id="newTeacherGame" class="primary">Vytvoriť súťaž</button><button id="refreshGames">Obnoviť moje hry</button><button id="logoutTeacher">Odhlásiť sa</button></div><div class="sep"></div><h3>Moje hry za posledných 7 dní</h3><p class="method">Svoju hru môžeš otvoriť aj na inom zariadení po prihlásení rovnakým účtom. Zobrazuje sa najviac 50 najnovších hier.</p><div id="myGames"></div></div></div></section>
 <section id="lobbyScreen" class="screen panel" hidden><div class="card lobby"><div class="tag">Čakáreň</div><h2 id="lobbyTitle">Pripojte sa do hry</h2><div class="code" id="roomCode"></div><p id="lobbyHint" class="muted"></p><div class="name-list" id="players"></div><p id="playerCount"></p><button id="launchBtn" class="primary">Spustiť prvé kolo</button></div></section>
-<section id="gameScreen" class="screen" hidden><div class="meta"><div class="row"><span class="badge" id="roundLabel"></span><span class="muted" id="modeLabel"></span></div><span id="connection" class="method" role="status"></span></div><div class="game-grid"><div class="card graph-card"><div class="graph-head"><div><div class="tag">Zostroj graf</div><div class="formula" id="taskLabel"></div></div><div id="timer" class="timer"></div></div><div class="bar"><i id="timeBar"></i></div><canvas id="plot" width="640" height="640" aria-label="Súradnicová sústava od mínus 8 do 8. Graf nastavíte ťahaním bodov alebo číselnými poľami vedľa grafu." role="img"></canvas><div class="legend"><span id="yourLegend"><span class="dot"></span>Tvoj graf</span><span id="solLegend" hidden><span class="dot sol"></span>Správny graf (čiarkovaný)</span></div></div><aside><div class="card"><div id="studentControls"><h2 id="controlTitle">Dva body. Jedna priamka.</h2><p class="method" id="controlHint"></p><fieldset id="answerFields"><div id="lineControls"><div class="point-row"><b>A</b><label>x<input id="x1" type="number" min="-8" max="8" step="0.5" value="-2"></label><label>y<input id="y1" type="number" min="-8" max="8" step="0.5" value="0"></label></div><div class="point-row"><b>B</b><label>x<input id="x2" type="number" min="-8" max="8" step="0.5" value="2"></label><label>y<input id="y2" type="number" min="-8" max="8" step="0.5" value="0"></label></div></div><div id="shapeControls"><label class="field">Základný tvar<select id="shape"></select></label>
-<div class="param"><label for="coef">Koeficient a</label><input id="coef" type="number" min="-3" max="3" step="0.5" value="1"></div>
-<div class="param" id="baseRow"><label for="baseR">Základ r</label><select id="baseR"><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
-<div class="param" id="bRow"><label for="coefB">Koeficient b</label><select id="coefB"></select></div>
-<div class="param"><label for="shiftH">Posun x₀</label><input id="shiftH" type="number" min="-3" max="3" step="1" value="0"></div>
-<div class="param"><label for="shiftK">Posun y₀</label><input id="shiftK" type="number" min="-3" max="3" step="1" value="0"></div>
-<div class="notice" id="modelNotice"></div><p class="method" id="domainHint"></p></div></fieldset><button id="submitBtn" class="primary stretch">Odovzdať graf</button><button id="nextPractice" class="teal stretch" hidden style="margin-top:10px">Ďalšie zadanie</button></div><div id="teacherControls" hidden><h2>Prehľad kola</h2><p id="submissionCount"></p><p class="method">Premietaj zadanie. Riešenie sa zobrazí po vypršaní času alebo po uzavretí kola.</p><button id="revealBtn" class="primary stretch">Uzavrieť kolo</button><button id="nextRound" class="teal stretch" hidden>Ďalšie kolo</button></div><div id="feedback" class="notice" role="status" hidden></div></div><div class="card" id="boardCard" style="margin-top:20px"><h3>Priebežné poradie</h3><small id="boardHint">Pri rovnosti bodov je umiestnenie spoločné.</small><ol class="leader" id="leaderboard"></ol></div></aside></div></section>
+<section id="gameScreen" class="screen" hidden><div class="meta"><div class="row"><span class="badge" id="roundLabel"></span><span class="muted" id="modeLabel"></span></div><span id="connection" class="method" role="status"></span></div><div class="game-grid"><div class="card graph-card"><div class="graph-head"><div><div class="tag">Zostroj graf</div><div class="formula" id="taskLabel"></div></div><div id="timer" class="timer"></div></div><div class="bar"><i id="timeBar"></i></div><canvas id="plot" width="640" height="640" aria-label="Súradnicová sústava od mínus 8 do 8. Graf nastavíš ťahaním bodov A a B alebo ich výberom a šípkami." role="img"></canvas><div class="legend"><span id="yourLegend"><span class="dot"></span>Tvoj graf</span><span id="solLegend" hidden><span class="dot sol"></span>Správny graf (čiarkovaný)</span></div></div><aside><div class="card"><div id="studentControls"><h2 id="controlTitle">Dva body. Jedna priamka.</h2><p class="method" id="controlHint"></p><fieldset id="answerFields"><div id="shapeControls"><label class="field">Základný graf<select id="shape"></select></label></div>
+<div class="point-picker"><button type="button" id="pickA">A · posun</button><button type="button" id="pickB">B · tvar</button></div>
+<div class="nudges" aria-label="Jemný pohyb vybraného bodu"><button type="button" id="pointLeft" aria-label="Doľava">←</button><button type="button" id="pointRight" aria-label="Doprava">→</button><button type="button" id="pointUp" aria-label="Nahor">↑</button><button type="button" id="pointDown" aria-label="Nadol">↓</button></div><p class="method" id="pointHint"></p></fieldset><button id="submitBtn" class="primary stretch">Odovzdať graf</button><button id="nextPractice" class="teal stretch" hidden style="margin-top:10px">Ďalšie zadanie</button></div><div id="teacherControls" hidden><h2>Prehľad kola</h2><p id="submissionCount"></p><p class="method">Premietaj zadanie. Riešenie sa zobrazí po vypršaní času alebo po uzavretí kola.</p><button id="revealBtn" class="primary stretch">Uzavrieť kolo</button><button id="nextRound" class="teal stretch" hidden>Ďalšie kolo</button></div><div id="feedback" class="notice" role="status" hidden></div></div><div class="card" id="boardCard" style="margin-top:20px"><h3>Priebežné poradie</h3><small id="boardHint">Pri rovnosti bodov je umiestnenie spoločné.</small><ol class="leader" id="leaderboard"></ol></div></aside></div></section>
 <section id="finishScreen" class="screen panel" hidden><div class="card finish-card"><div class="tag">Finále GrafAreny</div><h1 class="winner-title" id="winnerTitle">Grafy hotové.</h1><p id="winnerSubtitle">Výsledky spoločnej hry</p><div id="podium" class="podium" aria-label="Stupne víťazov"></div><button id="replayCelebration">Zopakovať oslavu</button><h2 style="margin-top:28px">Konečné poradie</h2><ol id="finalBoard" class="leader"></ol><div class="row" id="finishHost"><button id="csvBtn" class="primary">Stiahnuť výsledky CSV</button><button id="deleteBtn" class="danger">Vymazať túto hru</button></div><p class="method">Pri rovnakom skóre hráči zdieľajú miesto. Ďalšiu súťaž založ cez Domov.</p></div></section>
 </main><dialog id="roundResults" class="race-dialog" aria-labelledby="resultsTitle"><div class="dialog-top"><span class="tag">Priebežné poradie</span><button id="closeResults" aria-label="Zavrieť priebežné poradie">Zavrieť</button></div><h2 id="resultsTitle">Kolo vyhodnotené</h2><div id="roundSpotlight" class="round-spotlight"></div><ol id="roundBoard" class="leader"></ol><small id="resultsNote">Najlepších päť hráčov. Pri rovnosti bodov je miesto spoločné.</small><button id="continueResults" class="primary" style="margin-top:18px">Späť ku grafu</button></dialog><div id="celebrationLayer" class="celebration-layer" aria-hidden="true"></div><div id="roundBanner" class="round-banner" hidden role="status"></div><div id="toast" role="status" hidden></div>
 <script src="./config.js"></script>
@@ -43,7 +40,7 @@ const storage={get(k,session=false){try{return JSON.parse((session?sessionStorag
 const centerCfg=window.HOLO_CONFIG?.supabaseUrl&&window.HOLO_CONFIG?.supabaseAnonKey?{url:String(window.HOLO_CONFIG.supabaseUrl).replace(/\/$/,''),key:String(window.HOLO_CONFIG.supabaseAnonKey)}:null;
 // Verejné údaje projektu načítava config.js centra; nič sa nezadáva v rozhraní.
 const cfg=centerCfg||JSON.parse($('embedded-config').textContent);
-let session=storage.get('ga-session-v2',true), state=null, practice=false, configMode='host', families=[], practiced=0, practiceScore=0, practiceTask=null, answer=null, currentRound='', poll=null, polling=false, busy=false, offset=0, drag=-1, toastTimeout;
+let session=storage.get('ga-session-v2',true), state=null, practice=false, configMode='host', families=[], practiced=0, practiceScore=0, practiceTask=null, answer=null, currentRound='', poll=null, polling=false, busy=false, offset=0, toastTimeout;
 let teacher=storage.get('ga-teacher-v2',true),refreshPromise=null,authGeneration=0;
 if(teacher?.url!==cfg.url)teacher=null;
 function show(id){musicScreen=id;syncMusic();if(id!=='gameScreen')closeRoundResults();if(id!=='finishScreen')clearConfetti();if(id!=='gameScreen')hideRoundBanner();all('.screen').forEach(e=>e.hidden=e.id!==id);$('globalError').hidden=true;requestAnimationFrame(draw)}
@@ -59,23 +56,47 @@ function startPoll(){stopPoll();poll=setInterval(async()=>{if(polling||busy||!se
 async function command(action,data={}){if(busy)return;busy=true;try{const s=await api(action,data);accept(s)}finally{busy=false}}
 const pick=a=>a[Math.floor(Math.random()*a.length)], rand=()=>Math.floor(Math.random()*7)-3;
 function fmt(v){return String(Object.is(v,-0)?0:v).replace('.',',').replace('-','−')}
-function term(c,s,first=false){if(c===0)return '';return (c<0?'−':first?'':'+')+(Math.abs(c)===1&&s?'':fmt(Math.abs(c)))+s}
+function term(c,s,first=false){if(c===0)return '';return (c<0?'−':first?'':'+')+(Math.abs(c)===1&&s?'':fmt(Math.abs(c))+(s?' · ':''))+s}
 const halves=Array.from({length:13},(_,i)=>(i-6)/2), nonzero=halves.filter(x=>x!==0), hardB=nonzero.filter(x=>Math.abs(x)!==1);
 const shapes={quad:'Parabola · x²',abs:'Absolútna hodnota · |x|',cube:'Kubická · x³',pneg2:'Mocninová · x⁻²',pneg1:'Hyperbola · x⁻¹',exp:'Exponenciálna · rˣ',log:'Logaritmická · logᵣ x',sin:'Sínus · sin x',cos:'Kosínus · cos x',tan:'Tangens · tg x',cot:'Kotangens · cotg x'};
 function shapeKeys(mode){const f=mode.split('_')[0];return f==='power'?['pneg2','pneg1','quad','cube']:f==='trig'?['sin','cos','tan','cot']:f==='mix'?['exp','log']:f==='shape'?['quad','abs','cube']:shapes[f]?[f]:['quad']}
 function bValues(mode){return mode.endsWith('_easy')?[1]:mode.endsWith('_medium')?[-1]:mode==='mix_hard'?nonzero:mode.endsWith('_hard')?hardB:[1]}
-function label(t,expanded=false){let {family:f,a,h,k}=t;const inner=h===0?'x':`(x ${h>0?'−':'+'} ${fmt(Math.abs(h))})`, tail=term(k,'');if(f==='line')return 'f(x) = '+(a===0?fmt(k):term(a,'x',true)+term(k-a*h,''));if(f==='quad'&&expanded)return 'f(x) = '+(term(a,'x²',true)+term(-2*a*h,'x')+term(a*h*h+k,'')||'0');let g={quad:inner+'²',cube:inner+'³',pneg1:inner+'⁻¹',pneg2:inner+'⁻²',abs:`|x ${h>=0?'−':'+'} ${fmt(Math.abs(h))}|`}[f];const z=fmt(t.b??1)+'·'+inner;if(f==='exp')g=`${t.r}^(${z})`;if(f==='log')g=`log${({2:'₂',3:'₃',4:'₄',5:'₅'})[t.r]}(${z})`;if(['sin','cos','tan','cot'].includes(f))g=`${{tan:'tg',cot:'cotg'}[f]||f}(${z})`;return 'f(x) = '+(a===0?'0·'+g:term(a,g,true))+tail}
-function formulaText(id,text){const el=$(id),start=text.indexOf('^(');if(start<0){el.textContent=text;return}let depth=1,end=start+2;for(;end<text.length&&depth;end++){if(text[end]==='(')depth++;if(text[end]===')')depth--}if(depth){el.textContent=text;return}const before=document.createElement('span'),power=document.createElement('sup'),after=document.createElement('span');before.textContent=text.slice(0,start);power.textContent=text.slice(start+2,end-1);after.textContent=text.slice(end);el.replaceChildren(before,power,after)}
+function label(t,expanded=false){let {family:f,a,h,k}=t;const inner=h===0?'x':`(x ${h>0?'−':'+'} ${fmt(Math.abs(h))})`, tail=term(k,'');if(f==='line')return 'f(x) = '+(a===0?fmt(k):term(a,'x',true)+term(k-a*h,''));if(f==='quad'&&expanded)return 'f(x) = '+(term(a,'x²',true)+term(-2*a*h,'x')+term(a*h*h+k,'')||'0');let g={quad:inner+'²',cube:inner+'³',pneg1:inner+'⁻¹',pneg2:inner+'⁻²',abs:`|x ${h>=0?'−':'+'} ${fmt(Math.abs(h))}|`}[f];const z=t.b===-1?'−'+inner:(t.b??1)===1?inner:fmt(t.b)+' · '+inner;if(f==='exp')g=`${t.r}^(${z})`;if(f==='log')g=`log${({2:'₂',3:'₃',4:'₄',5:'₅'})[t.r]}(${z})`;if(['sin','cos','tan','cot'].includes(f))g=`${{tan:'tg',cot:'cotg'}[f]||f}(${z})`;return 'f(x) = '+(a===0?'0·'+g:term(a,g,true))+tail}
+function formulaText(id,text){text=text.replace(/(\d)([2-5])(?=\^\()/g,'$1 · $2');const el=$(id),start=text.indexOf('^(');if(start<0){el.textContent=text;return}let depth=1,end=start+2;for(;end<text.length&&depth;end++){if(text[end]==='(')depth++;if(text[end]===')')depth--}if(depth){el.textContent=text;return}const before=document.createElement('span'),power=document.createElement('sup'),after=document.createElement('span');before.textContent=text.slice(0,start);power.textContent=text.slice(start+2,end-1);after.textContent=text.slice(end);el.replaceChildren(before,power,after)}
 function generate(mode){const f=mode==='line'?'line':pick(shapeKeys(mode));const t={family:f,mode,a:pick(f==='line'?halves:nonzero),h:f==='line'?0:rand(),k:f==='line'?pick(halves):rand(),b:pick(bValues(mode)),r:pick([2,3,4,5])};t.label=label(t,$('quadForm').value==='expanded');return t}
 function selected(){const f=all('input[name=family]:checked').map(x=>x.value);if(!f.length)throw Error('Vyber aspoň jeden druh funkcie.');return f}
 function configure(mode){if(mode==='host'&&!teacher){openTeacher();return}if(mode==='host')$('hostIdentity').textContent='Vlastník hry: '+(teacher.user?.email||'prihlásený účet');practice=mode==='practice';configMode=mode;stopPoll();$('onlineOptions').hidden=practice;$('configTag').textContent=practice?'Tréning bez internetu':'Nastavenie súťaže';$('startConfig').textContent=practice?'Začať tréning':'Vytvoriť hru';show('configScreen')}
 function options(id,values,names){$(id).replaceChildren(...values.map(v=>{const o=document.createElement('option');o.value=v;o.textContent=names?names[v]:fmt(v);return o}))}
-function setupControls(mode){options('shape',shapeKeys(mode),shapes);options('coefB',bValues(mode));$('bRow').hidden=bValues(mode).length===1}
-function resetAnswer(mode){setupControls(mode);answer=mode==='line'?{family:'line',x1:-2,y1:0,x2:2,y2:0}:{family:shapeKeys(mode)[0],a:1,h:0,k:0,b:bValues(mode)[0],r:2};syncInputs()}
-function syncInputs(){if(!answer)return;if(answer.family==='line'){for(const n of ['x1','y1','x2','y2'])$(n).value=answer[n]}else{$('shape').value=answer.family;for(const [id,key] of [['coef','a'],['shiftH','h'],['shiftK','k'],['coefB','b'],['baseR','r']])$(id).value=answer[key]??1;shapeHelp()}draw()}
-function shapeHelp(){const f=answer.family,extended=['exp','log','sin','cos','tan','cot'].includes(f);$('baseRow').hidden=!['exp','log'].includes(f);$('bRow').hidden=!extended||bValues(state?.task?.mode||'shape').length===1;formulaText('modelNotice',label(answer));$('domainHint').textContent=(f==='log'?'Definičný obor: b(x − x₀) > 0. ':['pneg1','pneg2'].includes(f)?'Definičný obor: x ≠ x₀. ':['tan','cot'].includes(f)?'Graf má póly; vetvy sa cez ne nespájajú. ':'')+(['sin','cos','tan','cot'].includes(f)?'Os x v radiánoch. ':'')+'Bod P je ovládač posunu [x₀; y₀], nemusí ležať na grafe.'}
+let selectedPoint=0,gesture=null;
+function setupControls(mode){
+ const values=[],names={};
+ for(const f of shapeKeys(mode)){
+   if(f==='exp'||f==='log')for(const r of [2,3,4,5]){
+     const key=f+'-'+r; values.push(key);
+     names[key]=f==='exp'?r+'ˣ':'log'+['₂','₃','₄','₅'][r-2]+' x';
+   }else{values.push(f);names[f]=shapes[f]}
+ }
+ options('shape',values,names);
+}
+function resetAnswer(mode){
+ gesture=null;selectedPoint=0;setupControls(mode);
+ answer=mode==='line'?{family:'line',x1:0,y1:0,x2:2,y2:0}:{family:shapeKeys(mode)[0],a:1,h:0,k:0,b:[1,.5,-1].find(value=>bValues(mode).includes(value))??bValues(mode)[0],r:2};
+ syncInputs();
+}
+function syncInputs(){
+ if(!answer)return;
+ const hasBase=['exp','log'].includes(answer.family);
+ $('shape').value=hasBase?answer.family+'-'+(answer.r||2):answer.family;
+ $('pickA').setAttribute('aria-pressed',String(selectedPoint===0));
+ $('pickB').setAttribute('aria-pressed',String(selectedPoint===1));
+ const horizontal=answer.family==='line'||widthChoices(answer).length>1;
+ $('pointLeft').disabled=$('pointRight').disabled=selectedPoint===1&&!horizontal;
+ $('pointHint').textContent=selectedPoint===0?'A posúva celý graf. Na presný krok použi šípky.':
+ answer.family==='line'?'B mení sklon priamky pri pevnom bode A.':
+ horizontal?'B mení výšku zvislo a šírku alebo smer grafu vodorovne. Šípky vyberú susedný krok.':'B mení výšku grafu. Potiahni ho zvislo alebo použi šípky ↑ a ↓.';
+ draw();
+}
 function saveDraft(){if(!practice&&session&&answer)storage.set('ga-draft',{code:session.code,round:state.round,answer},true)}
-function readInputs(){const snap=(v,step)=>Math.max(-3,Math.min(3,Math.round((Number(v)||0)/step)*step));if(answer.family==='line'){for(const n of ['x1','y1','x2','y2'])answer[n]=Math.max(-8,Math.min(8,Math.round((Number($(n).value)||0)*2)/2))}else{answer.family=$('shape').value;answer.a=snap($('coef').value,.5);answer.h=snap($('shiftH').value,1);answer.k=snap($('shiftK').value,1);answer.b=Number($('coefB').value);answer.r=Number($('baseR').value)}syncInputs();saveDraft()}
 function model(a){if(a.family==='line'){if(a.x1===a.x2)return null;return {family:'line',a:(a.y2-a.y1)/(a.x2-a.x1),h:0,k:a.y1-(a.y2-a.y1)/(a.x2-a.x1)*a.x1}}return a}
 function val(t,x){const z=x-t.h,b=t.b??1,r=t.r??2,w=b*z;let v;switch(t.family){case 'line':v=z;break;case 'quad':v=z*z;break;case 'cube':v=z*z*z;break;case 'abs':v=Math.abs(z);break;case 'pneg1':v=z===0?NaN:1/z;break;case 'pneg2':v=z===0?NaN:1/(z*z);break;case 'exp':v=r**w;break;case 'log':v=w>0?Math.log(w)/Math.log(r):NaN;break;case 'sin':v=Math.sin(w);break;case 'cos':v=Math.cos(w);break;case 'tan':v=Math.abs(Math.cos(w))<1e-10?NaN:Math.tan(w);break;case 'cot':v=Math.abs(Math.sin(w))<1e-10?NaN:1/Math.tan(w);break;default:return NaN}return t.a*v+t.k}
 // Canonical graph signatures include domains and trigonometric symmetries.
@@ -83,7 +104,7 @@ function signature(t){const {family:f,a,h,k}=t,b=t.b??1,r=t.r??2;if(f==='line')r
 function matches(a,t){let m=model(a);if(!m)return false;const x=signature(m),y=signature(t);return x.length===y.length&&x.every((v,i)=>typeof v==='string'?v===y[i]:Number.isFinite(v)&&Math.abs(v-y[i])<=1e-8*Math.max(1,Math.abs(v),Math.abs(y[i])))}
 function nextPractice(){practiceTask=generate(families[practiced%families.length]);practiced++;state={phase:'active',round:practiced,total:0,host:false,task:{label:practiceTask.label,mode:practiceTask.mode},solution:null,mine:null};resetAnswer(state.task.mode);renderGame();show('gameScreen')}
 function accept(s){if(s.deleted){session=null;state=null;stopPoll();persistSession();show('home');toast('Hra a jej odpovede boli vymazané.');return}state=s;practice=false;if(s.phase==='lobby'){show('lobbyScreen');$('roomCode').textContent=s.code;$('lobbyTitle').textContent=s.host?'Pripojte sa do hry':'Si v hre.';$('lobbyHint').textContent=s.host?'Žiaci otvoria rovnakú webovú stránku a zadajú tento kód.':'Počkaj, kým učiteľ spustí prvé kolo.';renderLobbyPlayers(s.board);$('playerCount').textContent=`Pripojení hráči: ${s.board.length}`;$('launchBtn').hidden=!s.host;$('launchBtn').disabled=!s.board.length;return}if(s.phase==='finished'){show('finishScreen');board('finalBoard',s.board);$('finishHost').hidden=!s.host;celebrateState(s);return}let key=s.code+':'+s.round;if(key!==currentRound){currentRound=key;resetAnswer(s.task.mode);let draft=storage.get('ga-draft',true);if(draft?.code===s.code&&draft.round===s.round){answer=draft.answer;syncInputs()}}if(s.mine?.answer){answer=s.mine.answer;syncInputs()}renderGame();show('gameScreen');celebrateState(s)}
-function renderGame(){syncMusic();let s=state,isHost=s.host,locked=s.phase!=='active'||!!s.mine;$('roundLabel').textContent=practice?`Tréning · zadanie ${s.round}`:`Kolo ${s.round} / ${s.total}`;$('modeLabel').textContent=practice?`Spolu ${practiceScore} bodov`:`Kód hry: ${s.code}`;formulaText('taskLabel',s.task.label);$('studentControls').hidden=isHost;$('teacherControls').hidden=!isHost;$('lineControls').hidden=s.task.mode!=='line';$('shapeControls').hidden=s.task.mode==='line';$('controlTitle').textContent=s.task.mode==='line'?'Dva body. Jedna priamka.':'Vyber tvar. Posuň graf.';$('controlHint').textContent=s.task.mode==='line'?'Potiahni body A a B alebo zadaj súradnice. Body musia mať rôzne x. Mriežka pri ťahaní: 0,5.':'Vyber základný graf a nastav koeficienty. Bod P posúva graf po celých jednotkách. Rozsahy koeficientov: −3 až 3.';$('answerFields').disabled=locked;$('submitBtn').disabled=locked;$('submitBtn').textContent=s.mine?'Graf odovzdaný':practice?'Skontrolovať graf':'Odovzdať graf';$('nextPractice').hidden=!practice||s.phase==='active';$('boardCard').hidden=practice;$('yourLegend').hidden=isHost;$('solLegend').hidden=!s.solution;$('revealBtn').hidden=s.phase!=='active';$('nextRound').hidden=s.phase!=='reveal';$('nextRound').textContent=s.round>=s.total?'Zobraziť konečné poradie':'Spustiť ďalšie kolo';$('submissionCount').textContent=`Odovzdalo ${s.board?.filter(x=>x.submitted).length||0} z ${s.board?.length||0} hráčov`;$('boardHint').textContent=s.phase==='active'?'Počas kola sa zobrazujú body z ukončených kôl.':'Pri rovnosti bodov je umiestnenie spoločné.';if(s.board)board('leaderboard',s.board);$('feedback').hidden=true;
+function renderGame(){syncMusic();let s=state,isHost=s.host,locked=s.phase!=='active'||!!s.mine;$('roundLabel').textContent=practice?`Tréning · zadanie ${s.round}`:`Kolo ${s.round} / ${s.total}`;$('modeLabel').textContent=practice?`Spolu ${practiceScore} bodov`:`Kód hry: ${s.code}`;formulaText('taskLabel',s.task.label);$('studentControls').hidden=isHost;$('teacherControls').hidden=!isHost;$('shapeControls').hidden=s.task.mode==='line';$('controlTitle').textContent=s.task.mode==='line'?'Zostroj priamku':'Zostroj graf';$('controlHint').textContent=s.task.mode==='line'?'Potiahni A na posun celej priamky. Bodom B nastav jej sklon.':'Vyber základný graf. Bod A posúva graf aj s bodom B. Bod B na krivke mení jej tvar.';$('answerFields').disabled=locked;$('submitBtn').disabled=locked;$('submitBtn').textContent=s.mine?'Graf odovzdaný':practice?'Skontrolovať graf':'Odovzdať graf';$('nextPractice').hidden=!practice||s.phase==='active';$('boardCard').hidden=practice;$('yourLegend').hidden=isHost;$('solLegend').hidden=!s.solution;$('revealBtn').hidden=s.phase!=='active';$('nextRound').hidden=s.phase!=='reveal';$('nextRound').textContent=s.round>=s.total?'Zobraziť konečné poradie':'Spustiť ďalšie kolo';$('submissionCount').textContent=`Odovzdalo ${s.board?.filter(x=>x.submitted).length||0} z ${s.board?.length||0} hráčov`;$('boardHint').textContent=s.phase==='active'?'Počas kola sa zobrazujú body z ukončených kôl.':'Pri rovnosti bodov je umiestnenie spoločné.';if(s.board)board('leaderboard',s.board);$('feedback').hidden=true;
  if(s.phase==='reveal'){let txt;if(isHost)txt='Kolo je uzavreté. Správny graf je vyznačený čiarkovane.';else if(s.mine)txt=s.mine.correct?`Správne! +${s.mine.points} bodov.`:'Tento graf nie je správny. +0 bodov. Porovnaj ho s čiarkovaným riešením.';else txt='Čas uplynul bez odovzdania. +0 bodov.';$('feedback').textContent=txt+(s.solution?' '+explain(s.solution):'');$('feedback').hidden=false}else if(s.mine){$('feedback').textContent='Odpoveď je uložená. Výsledok uvidíš po uzavretí kola.';$('feedback').hidden=false}tick();draw()}
 function explain(t){return label(t)+'; '+(t.family==='line'?'smernica a = '+fmt(t.a):'x₀ = '+fmt(t.h)+', y₀ = '+fmt(t.k)+', a = '+fmt(t.a))}
 function board(id,rows,options={}){animatedBoard(id,rows,options)}
@@ -91,17 +112,85 @@ function tick(){syncMusic();if(!state||$('gameScreen').hidden)return;let sec=pra
 setInterval(tick,200);
 const canvas=$('plot'),ctx=canvas.getContext('2d'),W=640,pad=35,scale=(W-2*pad)/16,X=x=>pad+(x+8)*scale,Y=y=>W-pad-(y+8)*scale;
 function crossesPole(t,x1,x2){const f=t.family;if(['pneg1','pneg2','log'].includes(f))return x1<=t.h&&x2>=t.h;if(f==='tan'||f==='cot'){const b=t.b??1,shift=f==='tan'?Math.PI/2:0;return Math.floor((b*(x1-t.h)-shift)/Math.PI)!==Math.floor((b*(x2-t.h)-shift)/Math.PI)}return false}
-function handles(){return answer.family==='line'?[[answer.x1,answer.y1,'A'],[answer.x2,answer.y2,'B']]:[[answer.h,answer.k,'P']]}
+// B lies on the graph at a fixed reference argument, away from poles.
+function referencePoint(t){
+ const r=t.r||2;
+ switch(t.family){
+ case 'exp':return [Math.log(1.5)/Math.log(r),1.5];
+ case 'log':return [Math.sqrt(r),.5];
+ case 'sin':return [Math.PI/2,1];
+ case 'cos':return [Math.PI/3,.5];
+ case 'tan':case 'cot':return [Math.PI/4,1];
+ default:return [1,1];
+ }
+}
+function widthChoices(t){
+ const [z]=referencePoint(t);
+ return bValues(state?.task?.mode||'').slice().sort((a,b)=>z/a-z/b);
+}
+function handles(t=answer){
+ if(t.family==='line')return [[t.x1,t.y1,'A'],[t.x2,t.y2,'B']];
+ let [z,v]=referencePoint(t);
+ return [[t.h,t.k,'A'],[t.h+z/(t.b||1),t.k+v*t.a,'B']];
+}
 function draw(){if(!state||!answer||$('gameScreen').hidden)return;let dpr=Math.min(window.devicePixelRatio||1,2),size=Math.max(1,canvas.clientWidth);canvas.width=size*dpr;canvas.height=size*dpr;ctx.setTransform(size*dpr/W,0,0,size*dpr/W,0,0);ctx.clearRect(0,0,W,W);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,W);ctx.font='15px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';for(let i=-8;i<=8;i++){ctx.beginPath();ctx.strokeStyle=i===0?'#657385':'#e3e8ed';ctx.lineWidth=i===0?1.8:1;ctx.moveTo(X(i),Y(-8));ctx.lineTo(X(i),Y(8));ctx.moveTo(X(-8),Y(i));ctx.lineTo(X(8),Y(i));ctx.stroke();if(i%2===0&&i!==0){ctx.fillStyle='#596777';ctx.fillText(String(i),X(i),Y(0)+17);ctx.fillText(String(i),X(0)-18,Y(i))}}ctx.fillStyle='#212938';ctx.fillText(['sin','cos','tan','cot'].includes(answer.family)||state.task?.mode?.startsWith('trig')?'x (rad)':'x',W-30,Y(0)-17);ctx.fillText('y',X(0),17);ctx.fillText('0',X(0)-15,Y(0)+17);
  const curve=(t,color,dash)=>{if(!t)return;ctx.save();ctx.beginPath();ctx.rect(pad,pad,W-2*pad,W-2*pad);ctx.clip();ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=3;ctx.setLineDash(dash);let prev=null;for(let i=0;i<=1600;i++){let x=-8+i/100,y=val(t,x),safe=Number.isFinite(y)&&Math.abs(y)<=8.3;const broken=prev&&crossesPole(t,prev.x,x);if(!safe){prev=null;continue}if(!prev||broken)ctx.moveTo(X(x),Y(y));else ctx.lineTo(X(x),Y(y));prev={x,y}}ctx.stroke();ctx.restore()};
- if(!state.host)curve(model(answer),'#6742c2',[]);if(state.solution)curve(state.solution,'#087c78',[9,7]);if(!state.host){for(let [x,y,n] of handles()){if(x<-8||x>8||y<-8||y>8)continue;ctx.beginPath();ctx.arc(X(x),Y(y),9,0,Math.PI*2);ctx.fillStyle='#6742c2';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#49318b';ctx.font='bold 18px system-ui';ctx.fillText(n,X(x)+16,Y(y)-16)}}}
+ if(!state.host)curve(model(answer),'#6742c2',[]);if(state.solution)curve(state.solution,'#087c78',[9,7]);if(!state.host){for(let [x,y,n] of handles()){if(x<-8||x>8||y<-8||y>8)continue;ctx.beginPath();ctx.arc(X(x),Y(y),Math.max(9,7*W/size),0,Math.PI*2);ctx.fillStyle=n==='A'?'#6742c2':'#087c78';ctx.fill();ctx.strokeStyle='white';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#49318b';ctx.font='bold 18px system-ui';ctx.fillText(n,X(x)+(n==='A'?-16:16),Y(y)-16)}}}
 function canDraw(){return state&&!state.host&&state.phase==='active'&&!state.mine&&!$('answerFields').disabled}
-canvas.addEventListener('pointerdown',e=>{if(!canDraw())return;let r=canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*W;let best=Infinity;handles().forEach(([a,b],i)=>{let d=Math.hypot(X(a)-x,Y(b)-y);if(d<best){best=d;drag=i}});if(best>44){drag=-1;return}canvas.setPointerCapture(e.pointerId)});
-canvas.addEventListener('pointermove',e=>{if(drag<0||!canDraw())return;let r=canvas.getBoundingClientRect(),x=Math.round((((e.clientX-r.left)/r.width*W-pad)/scale-8)*2)/2,y=Math.round((8-((e.clientY-r.top)/r.height*W-pad)/scale)*2)/2;x=Math.max(-8,Math.min(8,x));y=Math.max(-8,Math.min(8,y));if(answer.family==='line'){answer['x'+(drag+1)]=x;answer['y'+(drag+1)]=y}else{answer.h=Math.max(-3,Math.min(3,Math.round(x)));answer.k=Math.max(-3,Math.min(3,Math.round(y)))}syncInputs();saveDraft()});['pointerup','pointercancel','lostpointercapture'].forEach(n=>canvas.addEventListener(n,()=>drag=-1));window.addEventListener('resize',draw);
-all('#answerFields input,#answerFields select').forEach(e=>e.addEventListener('change',readInputs));
+const clip=(v,lo,hi)=>Math.min(hi,Math.max(lo,v));
+const half=v=>Math.round(v*2)/2;
+function movePoint(t,index,x,y){
+ const out={...t};
+ if(t.family==='line'){
+   if(index===0){
+     const dx=clip(half(x-t.x1),-8-Math.min(t.x1,t.x2),8-Math.max(t.x1,t.x2));
+     const dy=clip(half(y-t.y1),-8-Math.min(t.y1,t.y2),8-Math.max(t.y1,t.y2));
+     out.x1+=dx;out.x2+=dx;out.y1+=dy;out.y2+=dy;
+   }else{out.x2=clip(half(x),-8,8);out.y2=clip(half(y),-8,8)}
+ }else if(index===0){out.h=clip(Math.round(x),-3,3);out.k=clip(Math.round(y),-3,3)}
+ else{
+   const [z,v]=referencePoint(t);
+   out.a=clip(half((y-t.k)/v),-3,3);
+   const bs=widthChoices(t);
+   out.b=bs.reduce((best,b)=>Math.abs(t.h+z/b-x)<Math.abs(t.h+z/best-x)?b:best,t.b||bs[0]);
+ }
+ return out;
+}
+function adjust(dx,dy){
+ if(!canDraw())return;
+ const [x,y]=handles()[selectedPoint];
+ if(answer.family==='line')answer=movePoint(answer,selectedPoint,x+dx*.5,y+dy*.5);
+ else if(selectedPoint===0)answer=movePoint(answer,0,x+dx,y+dy);
+ else{
+   const bs=widthChoices(answer),[,v]=referencePoint(answer);
+   answer.b=bs[clip(bs.indexOf(answer.b)+dx,0,bs.length-1)];
+   answer.a=clip(answer.a+Math.sign(v)*dy*.5,-3,3);
+ }
+ syncInputs();saveDraft();
+}
+for(const [id,dx,dy] of [['pointLeft',-1,0],['pointRight',1,0],['pointUp',0,1],['pointDown',0,-1]])$(id).onclick=()=>adjust(dx,dy);
+for(const [i,id] of ['pickA','pickB'].entries())$(id).onclick=()=>{selectedPoint=i;syncInputs()};
+$('shape').onchange=()=>{if(!canDraw())return;const [family,r]=$('shape').value.split('-');answer.family=family;if(r)answer.r=Number(r);syncInputs();saveDraft()};
+canvas.addEventListener('pointerdown',e=>{
+ if(!canDraw()||gesture)return;
+ const rect=canvas.getBoundingClientRect(),points=handles();
+ const distances=points.map(([x,y])=>Math.hypot(rect.left+X(x)*rect.width/W-e.clientX,rect.top+Y(y)*rect.height/W-e.clientY));
+ const near=Math.min(...distances);
+ if(near>26)return;
+ selectedPoint=Math.abs(distances[0]-distances[1])<2?selectedPoint:distances.indexOf(near);
+ gesture={id:e.pointerId,point:selectedPoint,start:{...answer},pos:points[selectedPoint],cx:e.clientX,cy:e.clientY,unit:rect.width*scale/W};
+ canvas.setPointerCapture(e.pointerId);e.preventDefault();syncInputs();
+});
+canvas.addEventListener('pointermove',e=>{
+ const g=gesture;if(!g||g.id!==e.pointerId||!canDraw())return;
+ answer=movePoint(g.start,g.point,g.pos[0]+(e.clientX-g.cx)/g.unit,g.pos[1]-(e.clientY-g.cy)/g.unit);
+ syncInputs();saveDraft();
+});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,e=>{if(gesture?.id===e.pointerId)gesture=null});
+window.addEventListener('resize',draw);
 
 function persistTeacher(){storage.set('ga-teacher-v2',teacher,true);$('accountBtn').textContent=teacher?'Moje hry':'Učiteľský účet'}
-async function authRequest(path,body,bearer){const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);try{const headers={apikey:cfg.key,'Content-Type':'application/json'};if(bearer)headers.Authorization='Bearer '+bearer;const res=await fetch(cfg.url+'/auth/v1/'+path,{method:'POST',headers,body:body?JSON.stringify(body):undefined,signal:controller.signal});const data=res.status===204?{}:await res.json();if(!res.ok){let e=Error(res.status===400&&path.includes('password')?'Prihlásenie zlyhalo. Over e-mail a heslo centra; účet musí mať potvrdený e-mail.':data.msg||data.message||data.error_description||'Prihlásenie zlyhalo.');e.status=res.status;throw e}return data}finally{clearTimeout(timeout)}}
+async function authRequest(path,body,bearer,method='POST'){const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);try{const headers={apikey:cfg.key,'Content-Type':'application/json'};if(bearer)headers.Authorization='Bearer '+bearer;const res=await fetch(cfg.url+'/auth/v1/'+path,{method,headers,body:body?JSON.stringify(body):undefined,signal:controller.signal});const data=res.status===204?{}:await res.json();if(!res.ok){let e=Error(res.status===400&&path.includes('password')?'Prihlásenie zlyhalo. Over e-mail a heslo centra; účet musí mať potvrdený e-mail.':data.msg||data.message||data.error_description||'Prihlásenie zlyhalo.');e.status=res.status;throw e}return data}finally{clearTimeout(timeout)}}
 function saveAuth(data){if(!data.access_token||!data.refresh_token||data.user?.is_anonymous)throw Error('Použi bežný účet centra.');teacher={access_token:data.access_token,refresh_token:data.refresh_token,user:data.user,expires_at:Date.now()+Number(data.expires_in||3600)*1000,url:cfg.url};persistTeacher()}
 async function ensureTeacher(){if(!teacher||teacher.url!==cfg.url)throw Error('Najprv sa prihlás účtom centra cez Učiteľský účet.');if(Date.now()<teacher.expires_at-60000)return;if(!refreshPromise){const generation=authGeneration;refreshPromise=(async()=>{try{let data=await authRequest('token?grant_type=refresh_token',{refresh_token:teacher.refresh_token});if(generation!==authGeneration)throw Error('Prihlásenie sa zmenilo.');saveAuth(data)}catch(e){if(generation===authGeneration&&(e.status===400||e.status===401)){teacher=null;persistTeacher();throw Error('Prihlásenie vypršalo. Prihlás sa znova účtom centra.')}throw e}finally{refreshPromise=null}})()}return refreshPromise}
 function renderTeacher(){ $('loginBox').hidden=!!teacher;$('teacherLogged').hidden=!teacher;$('teacherWho').textContent=teacher?'Prihlásený účet: '+(teacher.user?.email||'učiteľ'):'';persistTeacher()}
@@ -111,18 +200,46 @@ $('accountBtn').onclick=safe(openTeacher);
 $('newTeacherGame').onclick=safe(async()=>{await ensureTeacher();configure('host')});
 $('refreshGames').onclick=safe(loadGames);
 $('teacherLogin').onsubmit=safe(async e=>{e.preventDefault();$('loginSubmit').disabled=true;try{authGeneration++;const data=await authRequest('token?grant_type=password',{email:$('teacherEmail').value.trim(),password:$('teacherPassword').value});saveAuth(data);$('teacherPassword').value='';renderTeacher();await loadGames();toast('Prihlásenie účtom centra bolo úspešné.')}finally{$('loginSubmit').disabled=false}});
-$('signupForm').onsubmit=safe(async e=>{
- e.preventDefault();
- const email=$('signupEmail').value.trim(), status=$('signupStatus');
- $('signupSubmit').disabled=true;
- status.textContent='Registrujem účet…';
+$('signupForm').onsubmit=safe(async event=>{
+ event.preventDefault();
+ const button=$('signupSubmit'),status=$('signupStatus');
+ button.disabled=true;status.textContent='Odosielam žiadosť…';
  try{
-   const result=await authRequest('signup',{email,password:$('signupPassword').value});
-   $('signupPassword').value=''; $('teacherEmail').value=email;
-   if(result.access_token){authGeneration++;saveAuth(result);status.textContent='Účet je pripravený.';renderTeacher();await loadGames()}
-   else status.textContent='Ak ti prišiel potvrdzovací e-mail, otvor odkaz a potom sa tu prihlás. Ak už účet máš, použi svoje pôvodné heslo.';
- }catch(e){status.textContent='Registráciu sa nepodarilo dokončiť.';throw e}
- finally{$('signupSubmit').disabled=false}
+   const response=await fetch(cfg.url+'/rest/v1/rpc/app_poziadat',{method:'POST',
+     headers:{apikey:cfg.key,'Content-Type':'application/json'},
+     body:JSON.stringify({p_email:$('signupEmail').value.trim()}),signal:AbortSignal.timeout(15000)});
+   if(!response.ok)throw Error();
+   status.textContent='Žiadosť bola prijatá. Po schválení ti príde pozvánka e-mailom.';
+ }catch{status.textContent='Odoslanie sa nepodarilo potvrdiť. Skús žiadosť odoslať znova.'}
+ finally{button.disabled=false}
+});
+// Keep the verified token in this tab for password-policy retries.
+let invitationHash='',inviteAccess='';
+function openInvite(){
+ const token=new URLSearchParams(window.location.hash.slice(1)).get('pozvanka');
+ if(!token)return false;
+ if(needsConfig())return true;
+ invitationHash=token;
+ history.replaceState(null,'',window.location.pathname+window.location.search);
+ show('inviteScreen');
+ return true;
+}
+$('inviteForm').onsubmit=safe(async event=>{
+ event.preventDefault();
+ const button=$('inviteSubmit'), status=$('inviteStatus');
+ button.disabled=true;status.textContent='Overujem pozvánku…';
+ try{
+   if(!inviteAccess){
+     const data=await authRequest('verify',{type:'invite',token_hash:invitationHash});
+     if(!data.access_token)throw Error('Pozvánka vypršala. Požiadaj správcu o nový odkaz.');
+     inviteAccess=data.access_token;invitationHash='';
+   }
+   const user=await authRequest('user',{password:$('invitePassword').value},inviteAccess,'PUT');
+   inviteAccess='';$('invitePassword').value='';$('teacherEmail').value=user.email||'';
+   teacher=null;authGeneration++;persistTeacher();show('teacherScreen');renderTeacher();
+   toast('Heslo je nastavené. Prihlás sa do aplikácií.');
+ }catch(e){status.textContent='Aktivácia sa nepodarila. '+e.message}
+ finally{button.disabled=false}
 });
 $('logoutTeacher').onclick=safe(async()=>{stopPoll();const access=teacher?.access_token;authGeneration++;teacher=null;persistTeacher();if(session?.role==='host'){session=null;state=null;persistSession()}renderTeacher();try{if(access)await authRequest('logout?scope=local',null,access);toast('Odhlásenie bolo úspešné.')}catch{toast('V tejto karte si odhlásený. Serverové odhlásenie sa nepodarilo potvrdiť.')}});
 persistTeacher();
@@ -218,7 +335,7 @@ $('startConfig').onclick=safe(async()=>{if(busy)return;families=selected();if(co
 $('joinForm').onsubmit=safe(async e=>{e.preventDefault();if(busy)return;let code=$('joinCode').value.trim(),name=$('nickname').value.trim();if(!/^\d{6}$/.test(code)||!name)throw Error('Vyplň šesťmiestny kód a prezývku.');let token=uid();busy=true;try{let s=await api('join',{name,avatar:chosenAvatar},code,token);session={code,token,role:'player'};persistSession();currentRound='';accept(s);startPoll()}finally{busy=false}});
 $('resume').onclick=safe(async()=>{if(needsConfig())return;practice=false;currentRound='';accept(await api('state'));startPoll()});
 $('launchBtn').onclick=safe(()=>command('next'));$('revealBtn').onclick=safe(()=>command('reveal'));$('nextRound').onclick=safe(()=>command('next'));
-$('submitBtn').onclick=safe(async()=>{if(!canDraw()||busy)return;readInputs();if(!model(answer))throw Error('Body A a B musia mať rôzne súradnice x.');if(practice){let correct=matches(answer,practiceTask),points=correct?1000:0;practiceScore+=points;state.phase='reveal';state.solution=practiceTask;state.mine={correct,points,answer:structuredClone(answer)};renderGame()}else{ $('submitBtn').disabled=true;try{await command('submit',{round:state.round,answer})}catch(e){$('submitBtn').disabled=false;throw e}}});$('nextPractice').onclick=nextPractice;
+$('submitBtn').onclick=safe(async()=>{if(!canDraw()||busy)return;if(!model(answer))throw Error('Body A a B musia mať rôzne súradnice x.');if(practice){let correct=matches(answer,practiceTask),points=correct?1000:0;practiceScore+=points;state.phase='reveal';state.solution=practiceTask;state.mine={correct,points,answer:structuredClone(answer)};renderGame()}else{ $('submitBtn').disabled=true;try{await command('submit',{round:state.round,answer})}catch(e){$('submitBtn').disabled=false;throw e}}});$('nextPractice').onclick=nextPractice;
 function download(name,text,type){let url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)}
 $('csvBtn').onclick=()=>{let rows=[['Poradie','Prezývka','Body']],last=null,rank=0;state.board.forEach((p,i)=>{if(last!==p.score)rank=i+1;last=p.score;rows.push([rank,p.name,p.score])});let csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/^[=+@\-]/,"'$&").replace(/"/g,'""')+'"').join(';')).join('\r\n');download('grafarena_vysledky_'+state.code+'.csv','\ufeff'+csv,'text/csv;charset=utf-8')};
 $('deleteBtn').onclick=safe(async()=>{if(confirm('Vymazať túto hru aj všetky jej odpovede? Najprv si prípadne stiahni CSV.'))await command('delete')});
@@ -285,6 +402,6 @@ $('musicVolume').addEventListener('input',()=>{musicVolume=Math.max(0,Math.min(1
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopMusic();musicKey=''}else syncMusic()});
 window.addEventListener('pagehide',stopMusic);
 musicUI();
-if(window.location?.search==='?ucet')safe(openTeacher)();
+if(window.location && !openInvite() && window.location.search==='?ucet')safe(openTeacher)();
 $('resume').hidden=!session;
 </script></body></html>
