@@ -50,6 +50,10 @@
 .cloud-box{padding:19px;margin:15px 0;border-top:4px solid #0b826b}.cloud-box h3{margin:0 0 9px;font-size:22px}.cloud-box h4{margin:12px 0;font-size:18px}.cloud-note{font-size:15px;color:var(--muted);line-height:1.52}.cloud-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;align-items:end}.cloud-field{display:flex;flex-direction:column;gap:5px;min-width:0}.cloud-field label{font-weight:800;font-size:14px}.cloud-span{grid-column:1/-1}.cloud-status{border-radius:11px;padding:12px 14px;margin:11px 0;background:#e9f5ef;border:1px solid #badbd0;color:#15564c;line-height:1.5;overflow-wrap:anywhere}.cloud-error{background:#fff3ed;border-color:#e9c0ad;color:#833c20}.cloud-code{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.09em;font-weight:850;font-size:20px}.cloud-code-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;margin:12px 0}.cloud-code-card{border:1px solid var(--line);border-radius:12px;background:#f9fcfb;padding:13px}.cloud-code-card strong{display:block;margin-bottom:5px}.cloud-summary{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.cloud-small{font-size:13px;color:var(--muted)}.cloud-activity{border:1px solid var(--line);padding:12px;border-radius:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:7px 0}.cloud-activity strong{flex:1;min-width:140px}.cloud-pill{background:#ebf5f3;border-radius:99px;padding:5px 9px;font-size:12px;font-weight:800}.cloud-closed{background:#ffece7;color:#9b4b32}.cloud-bottom{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}.cloud-tutorial{background:#f1f7f6;border-radius:10px;padding:12px 14px}.cloud-tutorial summary{cursor:pointer;font-weight:800}.cloud-tutorial p{font-size:14px;line-height:1.45}.cloud-lock{color:#005e56;font-weight:750}.cloud-refresh{font-size:13px;color:var(--muted)}
 @media(max-width:600px){.cloud-form{grid-template-columns:1fr}.cloud-span{grid-column:auto}.cloud-box{padding:13px}.cloud-code{font-size:18px}}
 @media print{#cloud-student,#cloud-teacher,.cloud-code-list,.cloud-tutorial{display:none!important}}
+.cloud-register-panel{margin-top:18px;padding:15px;border:1px solid #d3e3e2;border-radius:12px;background:#f6faf9}
+.cloud-register-panel summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:#124d57}
+.cloud-register-panel a,.cloud-note a{color:#005c8a;text-decoration:underline}
+.cloud-register-panel .cloud-form{margin-top:12px}
 </style>
 </head>
 <body>
@@ -280,6 +284,7 @@ const CLOUD_STUDENT_KEY='stats-det-student-code-v1';
 const CLOUD_TEACHER_KEY='stats-det-teacher-session-v1';
 let cloudStudent=null,cloudCode='',cloudStudentMessage='',cloudStudentError=false;
 let teacherSession=null,teacherActivities=[],cloudCurrent=null,cloudSlots=[],cloudSubmittedAt=new Map();
+const GRAFARENA_URL='https://jarierwannous.github.io/gls-holograficke-centrum/grafarena.html';
 let cloudTeacherMessage='',cloudTeacherError=false,teacherBusy=false,cloudFetchBusy=false;
 function cloudStatus(msg,err=false){cloudStudentMessage=msg;cloudStudentError=err;for(const el of [document.getElementById('cloud-submit-status'),document.getElementById('cloud-student-status')]){if(el)el.innerHTML=msg?`<div class="cloud-status ${err?'cloud-error':''}">${esc(msg)}</div>`:'';}}
 function cloudTeacherStatus(msg,err=false){cloudTeacherMessage=msg;cloudTeacherError=err;const el=document.getElementById('cloud-teacher-status');if(el)el.innerHTML=msg?`<div class="cloud-status ${err?'cloud-error':''}">${esc(msg)}</div>`:'';}
@@ -352,14 +357,56 @@ async function submitCloudTeam(){
   }catch(e){cloudStatus('Odoslanie sa nepodarilo: '+e.message+'. Vaša práca zostáva v tomto prehliadači.',true);}
   finally{document.getElementById('cloud-submit-button').disabled=false;}
 }
-async function loginTeacher(email,password){
+async function loginTeacher(identifier,password){
   try{
     cloudTeacherStatus('Prihlasujem...');
+    const account=String(identifier||'').trim();
+    if(!account||!password)throw new Error('Vyplňte prihlasovacie údaje.');
+    // Existujúci správca Holografického centra používa e-mail.
+    // Aktivovaný účet GrafAreny používa prihlasovacie meno a RPC ucet_adresa.
+    let email=account;
+    if(!account.includes('@')){
+      const resolved=await restCall('/rest/v1/rpc/ucet_adresa',{method:'POST',body:{p_login:account}});
+      if(typeof resolved!=='string'||!resolved.includes('@')){
+        throw new Error('Toto prihlasovacie meno zatiaľ nemá aktivovaný účet. Po schválení dokončite aktiváciu v GrafArene.');
+      }
+      email=resolved;
+    }
     const data=await restCall('/auth/v1/token?grant_type=password',{method:'POST',body:{email,password}});
-    teacherSession={access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+(data.expires_in||3600)*1000,email};persistTeacherSession();
-    teacherActivities=[];cloudTeacherStatus('Úspešné prihlásenie.');await loadTeacherActivities();
-  }catch(e){cloudTeacherStatus('Prihlásenie sa nepodarilo: '+e.message,true);}
+    teacherSession={access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+(data.expires_in||3600)*1000,email:account};
+    persistTeacherSession();
+    // Zobrazíme údaje iba používateľom s učiteľským oprávnením na serveri.
+    const authorized=await restCall('/rest/v1/rpc/stats_det_is_teacher',{method:'POST',body:{},teacher:true});
+    if(authorized!==true){
+      teacherSession=null;persistTeacherSession();
+      throw new Error('Účet nemá aktívne učiteľské oprávnenie. Počkajte na schválenie a dokončenie aktivácie v GrafArene.');
+    }
+    teacherActivities=[];
+    cloudTeacherStatus('Úspešné prihlásenie.');
+    await loadTeacherActivities();
+  }catch(e){teacherSession=null;persistTeacherSession();cloudTeacherStatus('Prihlásenie sa nepodarilo: '+e.message,true);}
   renderCloudTeacher();
+}
+async function requestSharedTeacherAccount(form){
+  const v=new FormData(form);
+  const login=String(v.get('login')||'').trim().toLowerCase();
+  const meno=String(v.get('meno')||'').trim();
+  const heslo=String(v.get('heslo')||'');
+  const confirmHeslo=String(v.get('potvrdenie')||'');
+  const poznamka=String(v.get('poznamka')||'').trim();
+  if(!login||!meno||!heslo)throw new Error('Vyplňte povinné polia.');
+  if(heslo!==confirmHeslo)throw new Error('Zadané heslá sa nezhodujú.');
+  if(new TextEncoder().encode(heslo).length>72)throw new Error('Heslo je príliš dlhé (najviac 72 bajtov).');
+  const submit=form.querySelector('button[type="submit"]');
+  if(submit)submit.disabled=true;
+  cloudTeacherStatus('Odosielam žiadosť o učiteľský účet...');
+  try{
+    await restCall('/rest/v1/rpc/ucet_poziadat',{
+      method:'POST',body:{p_login:login,p_meno:meno,p_heslo:heslo,p_poznamka:poznamka}
+    });
+    form.reset();
+    cloudTeacherStatus('Žiadosť bola odoslaná cez spoločný systém GrafAreny. Po schválení dokončite aktiváciu v GrafArene a potom sa tu prihláste prihlasovacím menom.');
+  }finally{if(submit&&submit.isConnected)submit.disabled=false;}
 }
 function signOutTeacher(){teacherSession=null;persistTeacherSession();cloudCurrent=null;teacherActivities=[];cloudSlots=[];onlineBoard=[];switchToOffline(false);renderTeacher();cloudTeacherStatus('Odhlásené.');}
 async function loadTeacherActivities(){
@@ -415,7 +462,15 @@ function switchToOffline(refresh=true){if(boardOrigin==='offline')return;boardOr
 function renderCloudTeacher(){
   const el=document.getElementById('cloud-teacher');if(!el)return;
   if(!configReady()){el.innerHTML=`<h3>Najprv pripojte Supabase</h3><p class="cloud-note">Príprava databázy je v priloženom súbore <b>Statisticki_detektivi_HOLO_Supabase.sql</b>. Do konfiguračného bloku <code>SUPABASE_CONFIG</code> v HTML doplňte projektovú URL a verejný publishable key, potom súbor nahrajte na GitHub Pages. <b>Nepoužívajte service_role ani secret key.</b></p><p class="cloud-note">Offline triedenie, sťahovanie a import súborov fungujú aj bez nastavenia.</p>`;return;}
-  if(!teacherSession){el.innerHTML=`<h3>Prihlásenie učiteľa</h3><p class="cloud-note">Prihláste sa svojím existujúcim administrátorským účtom Holografického centra (tabuľka <code>holo_admins</code>). Žiaci účet nepotrebujú.</p><form id="cloud-login-form" class="cloud-form"><div class="cloud-field"><label for="cloud-email">Učiteľský email</label><input type="email" class="textinput" id="cloud-email" name="email" autocomplete="username" required></div><div class="cloud-field"><label for="cloud-password">Heslo</label><input type="password" class="textinput" id="cloud-password" name="password" autocomplete="current-password" required></div><div class="cloud-span"><button type="submit" class="btn btn-primary">Prihlásiť sa</button></div></form><div id="cloud-teacher-status" role="status" aria-live="polite"></div>`;cloudTeacherStatus(cloudTeacherMessage,cloudTeacherError);return;}
+  if(!teacherSession){el.innerHTML=`<h3>Prihlásenie učiteľa</h3><p class="cloud-note">Účet je spoločný pre <strong>GrafArenu a Štatistických detektívov</strong>. Učiteľ s aktivovaným účtom GrafAreny použije prihlasovacie meno; správca Holografického centra môže použiť svoj e-mail. Žiaci účet nepotrebujú.</p><form id="cloud-login-form" class="cloud-form"><div class="cloud-field"><label for="cloud-email">Prihlasovacie meno alebo e-mail</label><input type="text" class="textinput" id="cloud-email" name="email" autocomplete="username" required></div><div class="cloud-field"><label for="cloud-password">Heslo</label><input type="password" class="textinput" id="cloud-password" name="password" autocomplete="current-password" required></div><div class="cloud-span"><button type="submit" class="btn btn-primary">Prihlásiť sa</button></div></form>
+  <details class="cloud-register-panel"><summary><strong>Požiadať o učiteľský účet</strong></summary><p class="cloud-note">Žiadosť sa odošle do toho istého schvaľovania ako v GrafArene. Po schválení treba <a href="${GRAFARENA_URL}" target="_blank" rel="noopener noreferrer">dokončiť aktiváciu v GrafArene</a>. Účet potom platí v oboch aplikáciách.</p><form id="cloud-register-form" class="cloud-form">
+  <div class="cloud-field"><label for="register-name">Meno učiteľa</label><input id="register-name" class="textinput" name="meno" maxlength="120" autocomplete="name" required></div>
+  <div class="cloud-field"><label for="register-login">Nové prihlasovacie meno</label><input id="register-login" class="textinput" name="login" maxlength="70" autocapitalize="none" spellcheck="false" autocomplete="off" required></div>
+  <div class="cloud-field"><label for="register-password">Heslo</label><input id="register-password" type="password" class="textinput" name="heslo" autocomplete="new-password" required></div>
+  <div class="cloud-field"><label for="register-repeat">Zopakovať heslo</label><input id="register-repeat" type="password" class="textinput" name="potvrdenie" autocomplete="new-password" required></div>
+  <div class="cloud-field cloud-span"><label for="register-note">Poznámka pre správcu (škola, odkiaľ ste sa o aplikácii dozvedeli...)</label><textarea class="textinput" id="register-note" name="poznamka" maxlength="500" rows="3"></textarea></div>
+  <div class="cloud-span"><button type="submit" class="btn btn-primary">Odoslať žiadosť</button></div></form></details>
+  <p class="cloud-note">Už máte schválenú žiadosť? <a href="${GRAFARENA_URL}" target="_blank" rel="noopener noreferrer">Otvoriť GrafArenu a dokončiť aktiváciu</a>.</p><div id="cloud-teacher-status" role="status" aria-live="polite"></div>`;cloudTeacherStatus(cloudTeacherMessage,cloudTeacherError);return;}
   const activity=cloudCurrent;
   const slots=activity?cloudSlots:[];
   const pending=slots.length-cloudSubmittedAt.size;
@@ -464,6 +519,7 @@ if(el.id==='team-number'){const old=st.teamNumber;st.teamNumber=clampInt(el.valu
 if(el.id==='teacher-card-select'){renderTeacherTable(el.value);return;}if(el.id==='pack'){if(PACKS[el.value]){st.level=el.value;st.selected=null;st.reveal=false;st.undo=[];save();renderTeamSetup();renderSort();renderMirror();renderQuiz();}}else if(el.id==='mirror-filter'){renderMirrorResults(el.value);}else if(el.id==='rewrite-choose'){st.remixId=el.value;save();renderRewrite();}});
 document.addEventListener('submit',e=>{if(e.target.id==='cloud-join-form'){e.preventDefault();joinCloudTeam(document.getElementById('cloud-code').value);}
 else if(e.target.id==='cloud-login-form'){e.preventDefault();loginTeacher(e.target.elements.email.value,e.target.elements.password.value);}
+else if(e.target.id==='cloud-register-form'){e.preventDefault();requestSharedTeacherAccount(e.target).catch(err=>cloudTeacherStatus('Žiadosť sa nepodarilo odoslať: '+err.message,true));}
 else if(e.target.id==='cloud-create-form'){e.preventDefault();createTeacherActivity(new FormData(e.target));}});
 document.getElementById('import-teams').addEventListener('change',e=>{importReports(e.target.files);e.target.value='';});
 document.addEventListener('dragstart',e=>{const item=e.target.closest('[data-card]');if(!item)return;dragId=item.dataset.card;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',dragId);item.classList.add('dragging');});
