@@ -357,35 +357,83 @@ async function submitCloudTeam(){
   }catch(e){cloudStatus('Odoslanie sa nepodarilo: '+e.message+'. Vaša práca zostáva v tomto prehliadači.',true);}
   finally{document.getElementById('cloud-submit-button').disabled=false;}
 }
-async function loginTeacher(identifier,password){
+// Spoločný systém GrafAreny: schválenie je samostatné, aktiváciu vie dokončiť AJ táto aplikácia.
+async function addressForSharedLogin(login){
+  const result=await restCall('/rest/v1/rpc/ucet_adresa',{
+    method:'POST',body:{p_login:login}
+  });
+  return typeof result==='string' && result.includes('@') ? result : null;
+}
+async function activateApprovedTeacher(login,password){
+  cloudTeacherStatus('Účet ešte nie je aktívny. Overujem schválenie a dokončujem aktiváciu…');
+  let recoverableError=null;
   try{
-    cloudTeacherStatus('Prihlasujem...');
+    // Bez tajného kľúča v HTML. Edge Function na serveri overí heslo AJ schválenie
+    // a až potom vytvorí prihlasovací účet. Legacy anon key potrebuje Bearer hlavičku.
+    const headers=SUPABASE_CONFIG.key.startsWith('sb_publishable_')
+      ? {} : {'Authorization':'Bearer '+SUPABASE_CONFIG.key};
+    const result=await restCall('/functions/v1/aktivacia-uctu',{
+      method:'POST',body:{login,password},headers
+    });
+    if(result?.ok!==true)throw new Error('Aktiváciu sa nepodarilo potvrdiť. Skúste to znova.');
+  }catch(error){
+    // Server mohol dokončiť aktiváciu, hoci klient dostal prechodnú chybu 503.
+    // Vtedy bezpečne znovu čítame verejnú adresu, nič ďalšie nevytvárame.
+    if(/aktivácia ešte nie je dokončená/i.test(error.message))recoverableError=error;
+    else throw error;
+  }
+  for(let attempt=0;attempt<4;attempt++){
+    const email=await addressForSharedLogin(login);
+    if(email)return email;
+    if(attempt<3)await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));
+  }
+  if(recoverableError)throw new Error('Aktivácia sa ešte dokončuje. Skúste sa o chvíľu prihlásiť znova.');
+  throw new Error('Aktivácia sa nepodarila potvrdiť. Skúste sa prihlásiť znova.');
+}
+let teacherLoginBusy=false;
+async function loginTeacher(identifier,password){
+  if(teacherLoginBusy)return;
+  teacherLoginBusy=true;
+  const submit=document.querySelector('#cloud-login-form button[type="submit"]');
+  if(submit)submit.disabled=true;
+  let success=false;
+  try{
+    cloudTeacherStatus('Prihlasujem…');
     const account=String(identifier||'').trim();
     if(!account||!password)throw new Error('Vyplňte prihlasovacie údaje.');
-    // Existujúci správca Holografického centra používa e-mail.
-    // Aktivovaný účet GrafAreny používa prihlasovacie meno a RPC ucet_adresa.
+    // Správca Holografického centra používa e-mail, učiteľ z GrafAreny login.
     let email=account;
     if(!account.includes('@')){
-      const resolved=await restCall('/rest/v1/rpc/ucet_adresa',{method:'POST',body:{p_login:account}});
-      if(typeof resolved!=='string'||!resolved.includes('@')){
-        throw new Error('Toto prihlasovacie meno zatiaľ nemá aktivovaný účet. Po schválení dokončite aktiváciu v GrafArene.');
-      }
-      email=resolved;
+      const login=account.toLowerCase();
+      email=await addressForSharedLogin(login);
+      if(!email)email=await activateApprovedTeacher(login,password);
     }
-    const data=await restCall('/auth/v1/token?grant_type=password',{method:'POST',body:{email,password}});
-    teacherSession={access_token:data.access_token,refresh_token:data.refresh_token,expires_at:Date.now()+(data.expires_in||3600)*1000,email:account};
+    cloudTeacherStatus('Aktivácia je pripravená. Prihlasujem učiteľský účet…');
+    const data=await restCall('/auth/v1/token?grant_type=password',{
+      method:'POST',body:{email,password}
+    });
+    teacherSession={access_token:data.access_token,refresh_token:data.refresh_token,
+      expires_at:Date.now()+(data.expires_in||3600)*1000,email:account};
     persistTeacherSession();
-    // Zobrazíme údaje iba používateľom s učiteľským oprávnením na serveri.
-    const authorized=await restCall('/rest/v1/rpc/stats_det_is_teacher',{method:'POST',body:{},teacher:true});
+    // Schválenie v GrafArene neudeľuje admin práva Holografického centra.
+    const authorized=await restCall('/rest/v1/rpc/stats_det_is_teacher',{
+      method:'POST',body:{},teacher:true
+    });
     if(authorized!==true){
-      teacherSession=null;persistTeacherSession();
-      throw new Error('Účet nemá aktívne učiteľské oprávnenie. Počkajte na schválenie a dokončenie aktivácie v GrafArene.');
+      throw new Error('Tento účet nemá aktívne učiteľské oprávnenie. Skontrolujte stav žiadosti.');
     }
     teacherActivities=[];
     cloudTeacherStatus('Úspešné prihlásenie.');
+    success=true;
     await loadTeacherActivities();
-  }catch(e){teacherSession=null;persistTeacherSession();cloudTeacherStatus('Prihlásenie sa nepodarilo: '+e.message,true);}
-  renderCloudTeacher();
+  }catch(e){
+    if(!success){teacherSession=null;persistTeacherSession();}
+    cloudTeacherStatus((success?'Aktivity sa nepodarilo načítať: ':'Prihlásenie sa nepodarilo: ')+e.message,true);
+  }finally{
+    teacherLoginBusy=false;
+    if(success)renderCloudTeacher();
+    else if(submit?.isConnected)submit.disabled=false;
+  }
 }
 async function requestSharedTeacherAccount(form){
   const v=new FormData(form);
@@ -405,7 +453,7 @@ async function requestSharedTeacherAccount(form){
       method:'POST',body:{p_login:login,p_meno:meno,p_heslo:heslo,p_poznamka:poznamka}
     });
     form.reset();
-    cloudTeacherStatus('Žiadosť bola odoslaná cez spoločný systém GrafAreny. Po schválení dokončite aktiváciu v GrafArene a potom sa tu prihláste prihlasovacím menom.');
+    cloudTeacherStatus('Žiadosť bola odoslaná do spoločného systému GrafAreny a Štatistických detektívov. Po schválení sa môžete prvýkrát prihlásiť priamo tu – účet sa automaticky aktivuje.');
   }finally{if(submit&&submit.isConnected)submit.disabled=false;}
 }
 function signOutTeacher(){teacherSession=null;persistTeacherSession();cloudCurrent=null;teacherActivities=[];cloudSlots=[];onlineBoard=[];switchToOffline(false);renderTeacher();cloudTeacherStatus('Odhlásené.');}
@@ -462,15 +510,15 @@ function switchToOffline(refresh=true){if(boardOrigin==='offline')return;boardOr
 function renderCloudTeacher(){
   const el=document.getElementById('cloud-teacher');if(!el)return;
   if(!configReady()){el.innerHTML=`<h3>Najprv pripojte Supabase</h3><p class="cloud-note">Príprava databázy je v priloženom súbore <b>Statisticki_detektivi_HOLO_Supabase.sql</b>. Do konfiguračného bloku <code>SUPABASE_CONFIG</code> v HTML doplňte projektovú URL a verejný publishable key, potom súbor nahrajte na GitHub Pages. <b>Nepoužívajte service_role ani secret key.</b></p><p class="cloud-note">Offline triedenie, sťahovanie a import súborov fungujú aj bez nastavenia.</p>`;return;}
-  if(!teacherSession){el.innerHTML=`<h3>Prihlásenie učiteľa</h3><p class="cloud-note">Účet je spoločný pre <strong>GrafArenu a Štatistických detektívov</strong>. Učiteľ s aktivovaným účtom GrafAreny použije prihlasovacie meno; správca Holografického centra môže použiť svoj e-mail. Žiaci účet nepotrebujú.</p><form id="cloud-login-form" class="cloud-form"><div class="cloud-field"><label for="cloud-email">Prihlasovacie meno alebo e-mail</label><input type="text" class="textinput" id="cloud-email" name="email" autocomplete="username" required></div><div class="cloud-field"><label for="cloud-password">Heslo</label><input type="password" class="textinput" id="cloud-password" name="password" autocomplete="current-password" required></div><div class="cloud-span"><button type="submit" class="btn btn-primary">Prihlásiť sa</button></div></form>
-  <details class="cloud-register-panel"><summary><strong>Požiadať o učiteľský účet</strong></summary><p class="cloud-note">Žiadosť sa odošle do toho istého schvaľovania ako v GrafArene. Po schválení treba <a href="${GRAFARENA_URL}" target="_blank" rel="noopener noreferrer">dokončiť aktiváciu v GrafArene</a>. Účet potom platí v oboch aplikáciách.</p><form id="cloud-register-form" class="cloud-form">
+  if(!teacherSession){el.innerHTML=`<h3>Prihlásenie učiteľa</h3><p class="cloud-note">Účet je spoločný pre <strong>GrafArenu a Štatistických detektívov</strong>. Po schválení žiadosti sa pri prvom prihlásení <strong>automaticky aktivuje aj v tejto aplikácii</strong>. Použite prihlasovacie meno; správca Holografického centra môže použiť svoj e-mail. Žiaci účet nepotrebujú.</p><form id="cloud-login-form" class="cloud-form"><div class="cloud-field"><label for="cloud-email">Prihlasovacie meno alebo e-mail</label><input type="text" class="textinput" id="cloud-email" name="email" autocomplete="username" required></div><div class="cloud-field"><label for="cloud-password">Heslo</label><input type="password" class="textinput" id="cloud-password" name="password" autocomplete="current-password" required></div><div class="cloud-span"><button type="submit" class="btn btn-primary">Prihlásiť sa</button></div></form>
+  <details class="cloud-register-panel"><summary><strong>Požiadať o učiteľský účet</strong></summary><p class="cloud-note">Žiadosť sa odošle do toho istého schvaľovania ako v GrafArene. Po schválení sa prihláste <strong>v ktorejkoľvek z oboch aplikácií</strong> – prvé prihlásenie účet automaticky aktivuje. Schválenie žiadosti spravuje správca v GrafArene.</p><form id="cloud-register-form" class="cloud-form">
   <div class="cloud-field"><label for="register-name">Meno učiteľa</label><input id="register-name" class="textinput" name="meno" maxlength="120" autocomplete="name" required></div>
   <div class="cloud-field"><label for="register-login">Nové prihlasovacie meno</label><input id="register-login" class="textinput" name="login" maxlength="70" autocapitalize="none" spellcheck="false" autocomplete="off" required></div>
   <div class="cloud-field"><label for="register-password">Heslo</label><input id="register-password" type="password" class="textinput" name="heslo" autocomplete="new-password" required></div>
   <div class="cloud-field"><label for="register-repeat">Zopakovať heslo</label><input id="register-repeat" type="password" class="textinput" name="potvrdenie" autocomplete="new-password" required></div>
   <div class="cloud-field cloud-span"><label for="register-note">Poznámka pre správcu (škola, odkiaľ ste sa o aplikácii dozvedeli...)</label><textarea class="textinput" id="register-note" name="poznamka" maxlength="500" rows="3"></textarea></div>
   <div class="cloud-span"><button type="submit" class="btn btn-primary">Odoslať žiadosť</button></div></form></details>
-  <p class="cloud-note">Už máte schválenú žiadosť? <a href="${GRAFARENA_URL}" target="_blank" rel="noopener noreferrer">Otvoriť GrafArenu a dokončiť aktiváciu</a>.</p><div id="cloud-teacher-status" role="status" aria-live="polite"></div>`;cloudTeacherStatus(cloudTeacherMessage,cloudTeacherError);return;}
+  <p class="cloud-note">Máte schválenú žiadosť? Prihláste sa priamo vyššie. Nie je potrebné otvárať GrafArenu; prvé prihlásenie účet aktivuje automaticky.</p><div id="cloud-teacher-status" role="status" aria-live="polite"></div>`;cloudTeacherStatus(cloudTeacherMessage,cloudTeacherError);return;}
   const activity=cloudCurrent;
   const slots=activity?cloudSlots:[];
   const pending=slots.length-cloudSubmittedAt.size;
